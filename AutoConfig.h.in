@@ -1,0 +1,22 @@
+#ifndef __AUTO_CONFIG_H__
+#define __AUTO_CONFIG_H__
+
+#define SEED_VERSION_MAJOR @Seed_VERSION_MAJOR@
+#define SEED_VERSION_MINOR @Seed_VERSION_MINOR@
+
+#cmakedefine01 _QT_ @ENABLE_QT@
+#cmakedefine01 _SDL_ @ENABLE_SDL@
+
+//================================================================================
+// CMAKE CONFIGURATION - FEATURES CAPPING
+//================================================================================
+#cmakedefine01 SEED_USE_YMALLOC @ENABLE_YMALLOC@
+#cmakedefine01 SEED_USE_LZF @ENABLE_LZF@
+#cmakedefine01 SEED_USE_THEORA @ENABLE_THEORA@
+
+/*
+If the Seed will be added to the game project.
+*/
+#cmakedefine SEED_BUILTIN @ENABLE_BUILTIN@
+
+#endif // __AUTO_CONFIG_H__
