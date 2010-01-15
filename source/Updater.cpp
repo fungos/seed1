@@ -45,12 +45,12 @@ void Updater::Run(f32 dt, f32 resolution)
 		fAccumulator -= resolution;
 	}
 
-	f32 alpha = fAccumulator / resolution;
+	/*f32 alpha = fAccumulator / resolution;
 	for(u32 i = 0; i < len; i++)
 	{
 		arUpdatable[i]->Update(resolution * alpha);
 	}
-	fAccumulator = 0.0f;
+	fAccumulator = 0.0f;*/
 }
 
 } // namespace

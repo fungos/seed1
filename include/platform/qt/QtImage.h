@@ -63,7 +63,7 @@ class Image : public IImage
 
 	private:
 		IMemoryPool *pPool;
-		QImage *pImage;
+		QImage image;
 
 		u32 iTextureId;
 

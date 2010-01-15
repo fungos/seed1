@@ -480,7 +480,7 @@ void Screen::SetupOpenGL()
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0); // Not in SDL 1.3 - 0 no vsync, 1 vsync
+	SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1); // Not in SDL 1.3 - 0 no vsync, 1 vsync
 	//SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 
 	/*SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);

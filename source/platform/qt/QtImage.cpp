@@ -31,7 +31,6 @@ IResource *ImageResourceLoader(const char *filename, ResourceManager *res, IMemo
 
 Image::Image()
 	: pPool(NULL)
-	, pImage(NULL)
 	, iTextureId(0)
 	, fWidth(0.0f)
 	, fHeight(0.0f)
@@ -50,9 +49,7 @@ Image::~Image()
 BOOL Image::Reset()
 {
 	this->UnloadTexture();
-	//if (pImage)
-	//	delete pImage;
-	pImage = NULL;
+
 	this->pPool = NULL;
 
 	this->fWidth = 0;
@@ -75,17 +72,18 @@ BOOL Image::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 
 	if (this->Unload())
 	{
-		QImage img(filename);
+		//QImage img(filename);
+		image = QImage(filename);
 
-		if (img.isNull())
+		if (image.isNull())
 		{
 			return FALSE;
 		}
 
-		img = img.convertToFormat(QImage::Format_ARGB32);
+		image = image.convertToFormat(QImage::Format_ARGB32);
 
-		iWidth = img.width();
-		iHeight = img.height();
+		iWidth = image.width();
+		iHeight = image.height();
 
 		iHalfWidth = iWidth >> 1;
 		iHalfHeight = iHeight >> 1;
@@ -96,7 +94,7 @@ BOOL Image::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		this->fWidth = (f32)iWidth / (f32)pScreen->GetWidth();
 		this->fHeight = (f32)iHeight / (f32)pScreen->GetHeight();
 
-		pImage = &img;
+		//pImage = &img;
 
 #if SEED_ENABLE_PRELOAD_TEXTURE == 1
 		this->LoadTexture();
@@ -113,7 +111,7 @@ BOOL Image::Unload()
 
 INLINE const void *Image::GetData() const
 {
-	return pImage->bits();
+	return image.bits();
 }
 
 INLINE void Image::PutPixel(u32 x, u32 y, PIXEL px)
@@ -127,16 +125,19 @@ INLINE PIXEL Image::GetPixel(u32 x, u32 y) const
 {
 	UNUSED(x);
 	UNUSED(y);
+
 	return 0;
 }
 
 INLINE u8 Image::GetPixelAlpha(u32 x, u32 y) const
 {
-	u8 a = 255;
 	UNUSED(x);
 	UNUSED(y);
 
-	return a;
+	QRgb px = image.pixel(x, y);
+
+	return (u8)(qAlpha(px));
+
 }
 
 INLINE u32 Image::GetWidthInPixel() const
@@ -161,22 +162,21 @@ INLINE f32 Image::GetHeight() const
 
 INLINE u32 Image::GetUsedMemory() const
 {
-	return pImage->byteCount() + sizeof(this);
+	return image.byteCount() + sizeof(this);
 }
 
 INLINE int Image::LoadTexture()
 {
-	bool a = (pImage != NULL);
-	bool b = !pImage->isNull();
-	bool c = (iTextureId == 0);
-	if (a && b && c)
+	bool a = !image.isNull();
+	bool b = (iTextureId == 0);
+	if (a && b)
 	{
 		glGenTextures(1, &iTextureId);
 		glBindTexture(GL_TEXTURE_2D, iTextureId);
 
 		// Works on x86, so probably works on all little-endian systems.
 		// Does it work on big-endian systems?
-		glTexImage2D(GL_TEXTURE_2D, 0, 4, pImage->width(), pImage->height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, pImage->bits());
+		glTexImage2D(GL_TEXTURE_2D, 0, 4, image.width(), image.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, image.bits());
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
