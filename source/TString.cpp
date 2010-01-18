@@ -54,6 +54,22 @@ INLINE String &String::Reset()
 	return *this;
 }
 
+INLINE String &String::operator=(const String &string)
+{
+	this->Reset();
+
+	iConstructedSize	= string.iConstructedSize;
+	bInitialized		= string.bInitialized;
+	pOriginalStr		= string.pOriginalStr;
+
+	pConstructedStr		= glStringPool.Alloc(iConstructedSize);
+	
+	this->Copy(pOriginalStr);
+
+	return *this;
+}
+
+
 INLINE String &String::Set()
 {
 	this->Copy(pOriginalStr);

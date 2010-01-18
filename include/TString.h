@@ -42,6 +42,8 @@ class String
 
 		const WideString GetData() const; // DO NOT USE!
 
+		String &operator=(const String &string);
+
 	private:
 		void Cut(u32 index, u32 size);
 		BOOL Copy(const u16 *src);

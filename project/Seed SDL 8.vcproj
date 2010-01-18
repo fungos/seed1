@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="Seed"
 	ProjectGUID="{D5B9F9EE-D553-47C6-B1E8-10D5145F6472}"
 	RootNamespace="Seed"
@@ -415,102 +415,6 @@
 					</File>
 					<File
 						RelativePath="..\source\platform\sdl\SdlTimer.cpp"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="wii"
-					>
-					<File
-						RelativePath="..\source\platform\wii\screenshot.c"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiAiLive.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiCartridge.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiFileSystem.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiHomeButton.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiImage.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiInput.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiLog.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiMemoryManager.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiMusic.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiMutex.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiRenderer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiRenderer2D.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiRenderer3D.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiScreen.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiSound.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiSoundSource.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiSoundSystem.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiSprite.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiSwizzle.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiSystem.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiThread.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\wii\WiiTimer.cpp"
 						>
 					</File>
 				</Filter>
