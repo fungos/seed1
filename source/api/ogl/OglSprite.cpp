@@ -145,6 +145,9 @@ void Sprite::Update(f32 delta)
 
 void Sprite::Render(f32 delta)
 {
+	if (!this->bInitialized)
+		return;
+
 	this->Update(delta);
 	UNUSED(delta);
 
