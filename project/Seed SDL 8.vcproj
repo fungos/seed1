@@ -113,7 +113,7 @@
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="0"
 				FavorSizeOrSpeed="0"
-				AdditionalIncludeDirectories="..\include;&quot;$(SEEDSDK)\Dependency\vc8\include&quot;"
+				AdditionalIncludeDirectories="..\include;&quot;$(SEEDSDK)\dependency\common\include&quot;;&quot;$(SEEDSDK)\dependency\vc8\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_SDL_;_CRT_SECURE_NO_WARNINGS"
 				ExceptionHandling="0"
 				RuntimeLibrary="2"
@@ -1383,102 +1383,6 @@
 					</File>
 					<File
 						RelativePath="..\include\platform\sdl\SdlTimer.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="wii"
-					>
-					<File
-						RelativePath="..\include\platform\wii\screenshot.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiAiLive.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiCartridge.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiDefines.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiFileSystem.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiHomeButton.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiImage.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiInput.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiMemoryManager.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiMusic.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiMutex.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiRenderer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiRenderer2D.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiRenderer3D.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiScreen.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiSound.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiSoundSource.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiSoundSystem.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiSprite.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiSwizzle.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiSystem.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiThread.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiTimer.h"
 						>
 					</File>
 				</Filter>

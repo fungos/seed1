@@ -224,7 +224,11 @@ INLINE void TextArea::SetText(u32 dictId)
 	if (!this->GetWidth())
 		this->SetWidth(cText.GetWidth());
 
-	this->bChanged = TRUE;
+	this->Rebuild();
+	this->bChanged = FALSE;
+
+
+//	this->bChanged = TRUE;
 }
 
 INLINE void TextArea::SetText(WideString str)
@@ -237,7 +241,9 @@ INLINE void TextArea::SetText(WideString str)
 	if (!this->GetWidth())
 		this->SetWidth(cText.GetWidth());
 
-	this->bChanged = TRUE;
+	this->Rebuild();
+	this->bChanged = FALSE;
+//	this->bChanged = TRUE;
 }
 
 INLINE void TextArea::SetText(const String &str)
@@ -250,7 +256,9 @@ INLINE void TextArea::SetText(const String &str)
 	if (!this->GetWidth())
 		this->SetWidth(cText.GetWidth());
 
-	this->bChanged = TRUE;
+	this->Rebuild();
+	this->bChanged = FALSE;
+//	this->bChanged = TRUE;
 }
 
 

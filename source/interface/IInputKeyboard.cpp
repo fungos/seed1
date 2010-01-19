@@ -403,7 +403,9 @@ INLINE void IInputKeyboard::SendEventKeyboardPress(const EventInputKeyboard *ev)
 {
 	ASSERT_NULL(ev);
 
+#ifdef DEBUG
 	Dbg(">>>> Key Press: %s Modifier: 0x%04x", keyName[ev->GetKey().GetValue()], ev->GetModifier());
+#endif
 
 	for (u32 i = 0; i < arKeyboardListeners.Size(); i++)
 	{
@@ -419,7 +421,9 @@ INLINE void IInputKeyboard::SendEventKeyboardRelease(const EventInputKeyboard *e
 {
 	ASSERT_NULL(ev);
 
+#ifdef DEBUG
 	Dbg(">>>> Key Release: %s Modifier: 0x%04x", keyName[ev->GetKey().GetValue()], ev->GetModifier());
+#endif
 
 	for (u32 i = 0; i < arKeyboardListeners.Size(); i++)
 	{
