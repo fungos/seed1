@@ -242,7 +242,8 @@ template <typename T> class StringPoolManager
 				(
 					int *fg = reinterpret_cast<int *>(bp);
 					*fg = STRING_POOL_FRONTGUARD;
-					int *bg = reinterpret_cast<int *>(bp + size * sizeof(T) + offset);
+
+					int *bg = reinterpret_cast<int *>(p + size);
 					*bg = STRING_POOL_BACKGUARD;
 				)
 			}

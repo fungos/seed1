@@ -33,19 +33,22 @@ void Updater::Remove(IUpdatable *obj)
 
 void Updater::Run(f32 dt, f32 resolution)
 {
-	fAccumulator += dt;
+	UNUSED(resolution)
+	//fAccumulator += dt;
 
 	u32 len = arUpdatable.Size();
-	do
-	{
+	//do
+	//{
 		for(u32 i = 0; i < len; i++)
 		{
-			arUpdatable[i]->Update(resolution);
+			arUpdatable[i]->Update(dt);
 		}
 
-		fAccumulator -= resolution;
-	}
-	while(fAccumulator >= resolution);
+	//	fAccumulator -= resolution;
+	//}
+	//while(fAccumulator >= resolution);
+
+	//Log("Accumulator at %f dt is %f", fAccumulator, dt);
 }
 
 } // namespace
