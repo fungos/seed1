@@ -3,6 +3,7 @@
 	\brief Module updater
 */
 
+#include <math.h>
 #include "Updater.h"
 
 namespace Seed {
@@ -35,7 +36,7 @@ void Updater::Run(f32 dt, f32 resolution)
 	fAccumulator += dt;
 
 	u32 len = arUpdatable.Size();
-	while(fAccumulator >= resolution)
+	do
 	{
 		for(u32 i = 0; i < len; i++)
 		{
@@ -44,13 +45,7 @@ void Updater::Run(f32 dt, f32 resolution)
 
 		fAccumulator -= resolution;
 	}
-
-	/*f32 alpha = fAccumulator / resolution;
-	for(u32 i = 0; i < len; i++)
-	{
-		arUpdatable[i]->Update(resolution * alpha);
-	}
-	fAccumulator = 0.0f;*/
+	while(fAccumulator >= resolution);
 }
 
 } // namespace
