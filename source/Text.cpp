@@ -285,7 +285,11 @@ INLINE void Text::SetChanged(BOOL bChanged)
 
 INLINE f32 Text::GetFontTracking() const
 {
-	return pFont->GetTracking();
+	f32 ret = 0.0f;
+	if (pFont)
+		ret = pFont->GetTracking();
+
+	return ret;
 }
 
 INLINE f32 Text::GetWidth() const
