@@ -48,6 +48,8 @@ namespace Private {
 
 ResourceManager glResourceManager("global");
 
+#define MAX_FRAME_DELTA (1.0f / 60.0f) * 5.0f
+
 #if SEED_USE_STRING_POOL == 1
 StringPoolManager<u16> glStringPool;
 #endif // SEED_USE_STRING_POOL
@@ -136,7 +138,9 @@ void Update()
 	f32 dt					= newTime - Private::fCurrentTime;
 	Private::fCurrentTime	= newTime;
 
-	pUpdater->Run(dt, (1000.0f / 60.0f / 1000.0f)); //60
+	if(dt > MAX_FRAME_DELTA) dt = MAX_FRAME_DELTA;
+
+	pUpdater->Run(dt, 1.0f / 60.0f); //60
 
 	//pInput->Update(dt);
 	//Private::pApplication->Update(dt);

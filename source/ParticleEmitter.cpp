@@ -36,6 +36,7 @@ ParticleEmitter::ParticleEmitter()
 	, nMinFilter(TextureFilterLinear)
 	, nMagFilter(TextureFilterLinear)
 	, arParticles()
+	, bParticlesFollowEmitter(FALSE)
 {
 }
 
@@ -128,7 +129,7 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 	{
 		fRespawnAge += deltaTime;
 
-		if (fRespawnAge >= fInterval) 
+		if (fRespawnAge >= fInterval)
 		{
 			fAge = 0.0f;
 			fRespawnAge = 0.0f;
@@ -139,7 +140,7 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 	if (fAge >= 0)
 	{
 		fAge += deltaTime;
-		if (fAge >= psInfo.fLifetime) 
+		if (fAge >= psInfo.fLifetime)
 			fAge = -2.0f;
 	}
 
@@ -185,16 +186,16 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 		par->fColorG += par->fColorDeltaG * deltaTime;
 		par->fColorB += par->fColorDeltaB * deltaTime;
 		par->fColorA += par->fColorDeltaA * deltaTime;
-		
+
 		par->SetColor(par->fColorR, par->fColorG, par->fColorB, par->fColorA);
 		//par->SetScale(par->fSize);
 		//par->AddPosition(par->ptVelocity * deltaTime);
 		par->fScaleX = par->fSize;
 		par->fScaleY = par->fSize;
 		par->fRotation += par->fSpin;
-		//if (par->fRotation >= 360.0f) 
+		//if (par->fRotation >= 360.0f)
 		//	par->fRotation -= 360.0f;
-		//if (par->fRotation < 0.0f) 
+		//if (par->fRotation < 0.0f)
 		//	par->fRotation += 360.0f;
 
 		par->ptPos += (par->ptVelocity * deltaTime);
@@ -245,7 +246,7 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 			{
 				pos.x += pRand->Get(psInfo.fWidth);
 			}
-	
+
 			if (!psInfo.fHeight)
 			{
 				pos.y += pRand->Get(-0.0002f, 0.0002f);
@@ -254,7 +255,7 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 			{
 				pos.y += pRand->Get(psInfo.fHeight);
 			}
-	
+
 			ang = psInfo.fDirection - kPiOver2 + pRand->Get(0, psInfo.fSpread) - psInfo.fSpread / 2.0f;
 
 			if (psInfo.bRelative)
@@ -314,6 +315,9 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 		img->SetFilter(TextureFilterTypeMin, nMinFilter);
 	}
 
+	if(bParticlesFollowEmitter)
+		MoveEverything(ptPos);
+
 	ptPrevLocation = location;
 	bTransformationChanged = FALSE;
 }
@@ -355,7 +359,7 @@ INLINE void ParticleEmitter::SetAnimation(u32 anim)
 	{
 		if (!arParticles[i].bActive)
 			continue;
-		
+
 		arParticles[i].SetAnimation(anim);
 	}
 }
@@ -371,7 +375,7 @@ INLINE void ParticleEmitter::Play()
 			ptPrevLocation = ptPos;
 			if (psInfo.fLifetime == -1.0f)
 				fAge = -1.0f;
-			else 
+			else
 				fAge = 0.0f;
 
 			fRespawnAge = 0.0f;
@@ -467,6 +471,11 @@ INLINE void ParticleEmitter::MoveEverything(const Point<f32> &pos)
 
 		arParticles[i].AddPosition(dpos);
 	}
+}
+
+INLINE void ParticleEmitter::SetParticlesFollowEmitter(BOOL bFollow)
+{
+	this->bParticlesFollowEmitter = bFollow;
 }
 
 INLINE ParticleEmitterInfo *ParticleEmitter::GetEmitterInfo()

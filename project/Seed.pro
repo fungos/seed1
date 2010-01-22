@@ -119,29 +119,6 @@ HEADERS += ../include/StateMachine.h \
 	../include/SpriteObject.h \
 	../include/Base.h \
 	../include/ParticleEmitter.h \
-	../include/platform/wii/WiiScreen.h \
-	../include/platform/wii/WiiHomeButton.h \
-	../include/platform/wii/WiiMusic.h \
-	../include/platform/wii/WiiSound.h \
-	../include/platform/wii/WiiSprite.h \
-	../include/platform/wii/WiiThread.h \
-	../include/platform/wii/WiiSwizzle.h \
-	../include/platform/wii/WiiSoundHelper.h \
-	../include/platform/wii/WiiMutex.h \
-	../include/platform/wii/WiiRenderer.h \
-	../include/platform/wii/WiiImage.h \
-	../include/platform/wii/WiiSoundSource.h \
-	../include/platform/wii/WiiTimer.h \
-	../include/platform/wii/WiiSystem.h \
-	../include/platform/wii/screenshot.h \
-	../include/platform/wii/WiiDefines.h \
-	../include/platform/wii/WiiMemoryManager.h \
-	../include/platform/wii/WiiInput.h \
-	../include/platform/wii/WiiSoundSystem.h \
-	../include/platform/wii/WiiRenderer2D.h \
-	../include/platform/wii/WiiAiLive.h \
-	../include/platform/wii/WiiCartridge.h \
-	../include/platform/wii/WiiFileSystem.h \
 	../include/platform/sdl/SdlSystem.h \
 	../include/platform/sdl/SdlScreen.h \
 	../include/platform/sdl/SdlImage.h \
@@ -292,28 +269,6 @@ SOURCES += ../source/EventInputPointer.cpp \
 	../source/EventMovie.cpp \
 	../source/Particle.cpp \
 	../source/ResourceManager.cpp \
-	../source/platform/wii/WiiSprite.cpp \
-	../source/platform/wii/WiiThread.cpp \
-	../source/platform/wii/WiiSoundSystem.cpp \
-	../source/platform/wii/WiiTimer.cpp \
-	../source/platform/wii/WiiSound.cpp \
-	../source/platform/wii/WiiSystem.cpp \
-	../source/platform/wii/WiiCartridge.cpp \
-	../source/platform/wii/WiiSoundHelper.cpp \
-	../source/platform/wii/WiiLog.cpp \
-	../source/platform/wii/WiiImage.cpp \
-	../source/platform/wii/WiiSoundSource.cpp \
-	../source/platform/wii/WiiMusic.cpp \
-	../source/platform/wii/WiiFileSystem.cpp \
-	../source/platform/wii/WiiAiLive.cpp \
-	../source/platform/wii/WiiRenderer.cpp \
-	../source/platform/wii/WiiMemoryManager.cpp \
-	../source/platform/wii/WiiSwizzle.cpp \
-	../source/platform/wii/WiiInput.cpp \
-	../source/platform/wii/WiiRenderer2D.cpp \
-	../source/platform/wii/WiiMutex.cpp \
-	../source/platform/wii/WiiHomeButton.cpp \
-	../source/platform/wii/WiiScreen.cpp \
 	../source/platform/sdl/SdlSystem.cpp \
 	../source/platform/sdl/SdlScreen.cpp \
 	../source/platform/sdl/SdlInput.cpp \

@@ -50,6 +50,8 @@ class ParticleEmitter : public ITransformable2D
 		virtual void Enable();
 		virtual BOOL IsEnabled() const;
 
+		virtual void SetParticlesFollowEmitter(BOOL bFollow);
+
 		// IRenderable
 		virtual void Update(f32 delta);
 		virtual void Render(f32 delta);
@@ -70,6 +72,7 @@ class ParticleEmitter : public ITransformable2D
 		IMemoryPool					*pPool;
 		const char					*pFilename;
 		const char					*pSpriteFilename;
+		BOOL						bParticlesFollowEmitter;
 
 		f32							fAge;
 		f32							fRespawnAge;
@@ -84,7 +87,7 @@ class ParticleEmitter : public ITransformable2D
 
 		//u32							iParticlesAlive;
 		u32							iAnimation;
-		
+
 		BOOL						bPaused;
 		BOOL						bEnabled;
 
