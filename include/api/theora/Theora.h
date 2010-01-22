@@ -20,7 +20,7 @@
 /* FIXME */
 
 #if defined(linux) || defined(SOLARIS) || defined(AIX) || defined(__FreeBSD__) || defined(LINUX)
-	#include <semaphore.h>
+/*	#include <semaphore.h>
 	#if defined(__FreeBSD__) 
 	#define SEM_CREATE(p,s) sem_init(&(p), 0, s)
 	#else
@@ -29,7 +29,15 @@
 	#define SEM_SIGNAL(p)   sem_post(&(p))
 	#define SEM_WAIT(p)     sem_wait(&(p))
 	#define SEM_CLOSE(p)    sem_destroy(&(p))
-	typedef sem_t           semaphore;
+	typedef sem_t           semaphore;*/
+	#include <SDL/SDL.h>
+	#include <SDL/SDL_thread.h>
+	#include <SDL/SDL_mutex.h>
+	#define SEM_CREATE(p,s)		(!(p = (void *)SDL_CreateSemaphore(s)))
+	#define SEM_SIGNAL(p)		SDL_SemPost((SDL_sem*)p)
+	#define SEM_WAIT(p)			SDL_SemWait((SDL_sem*)p)
+	#define SEM_CLOSE(p)		SDL_DestroySemaphore((SDL_sem*)p)
+	typedef void*				semaphore;
 #elif defined(WIN32)
 	#include <windows.h>
 	#define SEM_CREATE(p,s) (!(p = CreateSemaphore(NULL, (long)(s), (long)(s), NULL)))
