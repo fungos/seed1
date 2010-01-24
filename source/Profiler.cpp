@@ -1,4 +1,4 @@
-#include <sdl/sdl.h>
+#include "Timer.h"
 #include "Profiler.h"
 #include "Log.h"
 
@@ -155,7 +155,7 @@ void ProfileContext::RestorePrevious()
 
 void ProfileContext::StopAndCommit()
 {
-	int end = SDL_GetTicks();
+	int end = pTimer->GetMilliseconds();
 
 	int diff = 0;
 	diff = (end - beg);// / CLOCKS_PER_SEC;
@@ -166,7 +166,7 @@ void ProfileContext::StopAndCommit()
 
 void ProfileContext::StartOrContinue()
 {
-	beg = SDL_GetTicks();
+	beg = pTimer->GetMilliseconds();
 }
 
 void ProfileContext::Push()
