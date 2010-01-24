@@ -55,6 +55,7 @@ set (SEED_SRC_CORE
 	${SEED_SRC_DIR}/Timeline.cpp
 	${SEED_SRC_DIR}/Trigonometry.cpp
 	${SEED_SRC_DIR}/TString.cpp
+	${SEED_SRC_DIR}/Updater.cpp
 	${SEED_SRC_DIR}/gui/Button.cpp
 	${SEED_SRC_DIR}/gui/EventWidget.cpp
 	${SEED_SRC_DIR}/gui/GuiManager.cpp
@@ -169,6 +170,7 @@ set (SEED_SRC_CORE
 	${SEED_INC_DIR}/Trigonometry.h
 	${SEED_INC_DIR}/TString.h
 	${SEED_INC_DIR}/Vector.h
+	${SEED_INC_DIR}/Updater.h
 	${SEED_INC_DIR}/gui/Button.h
 	${SEED_INC_DIR}/gui/EventWidget.h
 	${SEED_INC_DIR}/gui/GuiManager.h

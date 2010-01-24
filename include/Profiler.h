@@ -1,7 +1,7 @@
 #ifndef __PROFILER_H__
 #define __PROFILER_H__
 
-#include "defines.h"
+#include "Defines.h"
 #include <map>
 #include <stack>
 #include <time.h>

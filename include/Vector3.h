@@ -20,6 +20,9 @@ template <typename T> class Vector3
 	public:
 		// Constructors
 		Vector3()
+			: x(0)
+			, y(0)
+			, z(0)
 		{
 		}
 

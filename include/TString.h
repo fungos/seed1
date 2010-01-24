@@ -10,6 +10,7 @@ class String
 	public:
 		String();
 		String(const WideString newStr);
+		String(const String &str);
 		virtual ~String();
 		
 		String &Initialize(const WideString newStr);
@@ -57,7 +58,6 @@ class String
 		const u16 *pOriginalStr;
 		u16 *pConstructedStr;
 		u32 iConstructedSize;
-		BOOL bInitialized;
 };
 
 

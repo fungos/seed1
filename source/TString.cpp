@@ -8,7 +8,6 @@ String::String()
 	: pOriginalStr(NULL)
 	, pConstructedStr(NULL)
 	, iConstructedSize(0)
-	, bInitialized(FALSE)
 {
 	this->Reset();
 }
@@ -17,9 +16,16 @@ String::String(const WideString newStr)
 	: pOriginalStr(NULL)
 	, pConstructedStr(NULL)
 	, iConstructedSize(0)
-	, bInitialized(FALSE)
 {
 	this->Initialize(newStr);
+}
+
+String::String(const String& str)
+	: pOriginalStr(NULL)
+	, pConstructedStr(NULL)
+	, iConstructedSize(0)
+{
+	*this = str;
 }
 
 String::~String()
@@ -59,7 +65,6 @@ INLINE String &String::operator=(const String &string)
 	this->Reset();
 
 	iConstructedSize	= string.iConstructedSize;
-	bInitialized		= string.bInitialized;
 	pOriginalStr		= string.pOriginalStr;
 
 	pConstructedStr		= glStringPool.Alloc(iConstructedSize);
