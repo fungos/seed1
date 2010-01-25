@@ -62,6 +62,9 @@ class ResourceLoader : public IModule, public IUpdatable, public Thread
 		virtual BOOL Shutdown();
 		virtual BOOL Reset();
 
+		// IObject
+		virtual const char *GetObjectName() const;
+
 	public:
 		static ResourceLoader instance;
 

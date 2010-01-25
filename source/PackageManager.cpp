@@ -22,12 +22,10 @@ PackageManager::PackageManager()
 {
 }
 
-
 PackageManager::~PackageManager()
 {
 	this->Clear();
 }
-
 
 void PackageManager::Clear()
 {
@@ -46,20 +44,17 @@ void PackageManager::Clear()
 	PackageMap().swap(mapPackage);
 }
 
-
 BOOL PackageManager::Reset()
 {
 	this->Clear();
 	return TRUE;
 }
 
-
 BOOL PackageManager::Shutdown()
 {
 	this->Reset();
 	return IModule::Shutdown();
 }
-
 
 void PackageManager::Remove(const char *fileName)
 {
@@ -74,7 +69,6 @@ void PackageManager::Remove(const char *fileName)
 	}
 }
 
-
 void PackageManager::AddRomPackage(const void *addr, const char *name)
 {
 	ASSERT_NULL(addr);
@@ -86,7 +80,6 @@ void PackageManager::AddRomPackage(const void *addr, const char *name)
 	Log(TAG "Adding package ROM.package.");
 	mapPackage[name] = p;
 }
-
 
 void PackageManager::Add(const char *fileName, IMemoryPool *pool, ResourceManager *res)
 {
@@ -100,7 +93,6 @@ void PackageManager::Add(const char *fileName, IMemoryPool *pool, ResourceManage
 	Log(TAG "Adding package %s.", fileName);
 	mapPackage[fileName] = p;
 }
-
 
 const void *PackageManager::GetFile(const char *fileName, u32 *fileSize)
 {
@@ -120,17 +112,19 @@ const void *PackageManager::GetFile(const char *fileName, u32 *fileSize)
 	return file;
 }
 
+INLINE const char *PackageManager::GetObjectName() const
+{
+	return "PackageManager";
+}
 
 void *PackageManager::operator new(size_t len)
 {
 	return pMemoryManager->Alloc(len, pDefaultPool);
 }
 
-
 void PackageManager::operator delete(void *ptr)
 {
 	pMemoryManager->Free(ptr, pDefaultPool);
 }
-
 
 } // namespace

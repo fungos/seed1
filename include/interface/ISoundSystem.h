@@ -51,6 +51,9 @@ class ISoundSystem : public IModule, public IUpdatable
 		virtual void Add(ISoundSource *src);
 		virtual void Remove(ISoundSource *src);
 
+		// IObject
+		virtual const char *GetObjectName() const;
+
 	protected:
 		f32 	fMusicVolume;
 		f32		fSfxVolume;

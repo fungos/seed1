@@ -306,4 +306,14 @@ INLINE void IFileSystem::MakeDirectory(const char *dir) const
 	UNUSED(dir);
 }
 
+INLINE BOOL IFileSystem::IsRequired() const
+{
+	return TRUE;
+}
+
+INLINE const char *IFileSystem::GetObjectName() const
+{
+	return "FileSystem";
+}
+
 } // namespace

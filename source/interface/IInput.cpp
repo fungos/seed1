@@ -37,5 +37,14 @@ INLINE BOOL IInput::IsKeyboard() const
 	return FALSE;
 }
 
+INLINE BOOL IInput::IsRequired() const
+{
+	return TRUE;
+}
+
+INLINE const char *IInput::GetObjectName() const
+{
+	return "Input";
+}
 
 } // namespace

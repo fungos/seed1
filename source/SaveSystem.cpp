@@ -23,6 +23,7 @@ BOOL SaveSystem::bIsSaving = FALSE;
 
 SaveSystem::SaveSystem()
 	: iTotalSlots(PLATFORM_SAVESYSTEM_SLOTS_MAX)
+	, iNumSlots(PLATFORM_SAVESYSTEM_SLOTS_MAX)
 	, iSlotDataSize(0)
 	, iSharedDataSize(0)
 	, iID(0)

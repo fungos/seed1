@@ -59,6 +59,11 @@ INLINE BOOL IModule::IsInitialized() const
 	return this->bInitialized;
 }
 
+INLINE BOOL IModule::IsRequired() const
+{
+	return FALSE;
+}
+
 INLINE const char *IModule::GetObjectName() const
 {
 	return "IModule";

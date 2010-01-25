@@ -45,6 +45,9 @@ class IModule : public IObject
 		/// Check if the module is initialized
 		BOOL IsInitialized() const;
 
+		/// If this module is mandatory (it is a base subsystem or critical one)
+		virtual BOOL IsRequired() const;
+
 		// IObject
 		virtual const char *GetObjectName() const;
 		virtual int GetObjectType() const;

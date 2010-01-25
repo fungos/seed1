@@ -170,5 +170,9 @@ INLINE void ISoundSystem::Resume()
 	this->bPaused = FALSE;
 }
 
+INLINE const char *ISoundSystem::GetObjectName() const
+{
+	return "SoundSystem";
+}
 
 } // namespace

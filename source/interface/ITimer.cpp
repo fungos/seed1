@@ -32,4 +32,14 @@ INLINE BOOL ITimer::Reset()
 	return TRUE;
 }
 
+INLINE BOOL ITimer::IsRequired() const
+{
+	return TRUE;
+}
+
+INLINE const char *ITimer::GetObjectName() const
+{
+	return "Timer";
+}
+
 } // namespace

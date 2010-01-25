@@ -26,7 +26,8 @@ SDL_Surface *Screen::pSurface = NULL;
 
 
 Screen::Screen()
-	: bFullScreen(FALSE)
+	: surfaceSize(0)
+	, bFullScreen(FALSE)
 	, iFadeStatus(0)
 	, fadeType(FADE_IN)
 	, iBPP(32)

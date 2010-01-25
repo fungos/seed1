@@ -73,5 +73,15 @@ INLINE f32 IScreen::GetAspectRatio() const
 	return this->fAspectRatio;
 }
 
+INLINE BOOL IScreen::IsRequired() const
+{
+	return TRUE;
+}
+
+INLINE const char *IScreen::GetObjectName() const
+{
+	return "Screen";
+}
+
 } // namespace
 

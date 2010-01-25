@@ -17,6 +17,14 @@ namespace Seed {
 IRenderer::IRenderer()
 	: vRenderables()
 	, vRenderablesStatic()
+	, vVisibleRenderables()
+	, vVisibleRenderablesStatic()
+	, vMaskRenderables()
+	, vMaskRenderablesStatic()
+	, vMaskedRenderables()
+	, vMaskedRenderablesStatic()
+	, vSpecialRenderables()
+	, vSpecialRenderablesStatic()
 {
 }
 

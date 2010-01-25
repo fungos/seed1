@@ -35,6 +35,12 @@ class IInput : public IModule, public IUpdatable
 		virtual BOOL IsJoystick() const;
 		virtual BOOL IsKeyboard() const;
 
+		// IModule
+		virtual BOOL IsRequired() const;
+
+		// IObject
+		virtual const char *GetObjectName() const;
+
 	protected:
 		virtual eInputButton GetButtonCode(u32 button) const = 0;
 		virtual u32 ConvertButtonFlags(u32 flags) = 0;

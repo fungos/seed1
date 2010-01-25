@@ -95,6 +95,12 @@ class IScreen : public IModule, public IUpdatable
 		/// Sets the actual 2d renderer
 		virtual void SetRenderer(IRenderer *renderer); // FIXME: RenderManager
 
+		// IModule
+		virtual BOOL IsRequired() const;
+
+		// IObject
+		virtual const char *GetObjectName() const;
+
 	protected:
 		BOOL		bFading;
 		u32			iMode;

@@ -39,6 +39,9 @@ class StringCache : public IModule
 		virtual BOOL Reset();
 		virtual BOOL Initialize();
 		virtual BOOL Shutdown();
+
+		// IObject
+		virtual const char *GetObjectName() const;
 		
 	public:
 		static StringCache instance;

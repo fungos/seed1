@@ -5,7 +5,7 @@ TARGET = ../$(PROJECT)
 
 GCC = g++
 CFLAGS = -Weffc++ -Wall -fPIC `sdl-config --cflags` $(CDEFS) -I/media/d/SDK/seed/include -I/media/d/SDK/seeddemos/common/sdl -g
-CDEFS = -D _SDL_ -D RELEASE #-D DEBUG
+CDEFS = -D _SDL_ -D DEBUG #-D RELEASE
 LFLAGS = `sdl-config --libs` -L/bin
 CPPFLAGS = $(CFLAGS)
 LIBS = -L/media/d/SDK/seed

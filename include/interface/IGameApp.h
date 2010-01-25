@@ -25,6 +25,8 @@ class IGameApp : public IUpdatable, public IModule
 		virtual void WriteErr(const char *msg);
 		virtual void WriteDbg(const char *msg);
 
+		virtual BOOL HasError() const;
+
 		// IObject
 		virtual const char *GetObjectName() const;
 		virtual int GetObjectType() const;

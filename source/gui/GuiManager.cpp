@@ -10,15 +10,13 @@
 #include "gui/GuiManager.h"
 #include "Enum.h"
 
-
 namespace Seed {
-
 
 GuiManager GuiManager::instance;
 
-
 GuiManager::GuiManager()
 	: pFocused(NULL)
+	, cContainer()
 	//, vWidget()
 {
 	//this->Reset();
@@ -104,6 +102,5 @@ INLINE int GuiManager::GetObjectType() const
 {
 	return Seed::ObjectGuiManager;
 }
-
 
 } // namespace

@@ -42,5 +42,14 @@ INLINE void IMemoryManager::Info()
 {
 }
 
+INLINE BOOL IMemoryManager::IsRequired() const
+{
+	return TRUE;
+}
+
+INLINE const char *IMemoryManager::GetObjectName() const
+{
+	return "MemoryManager";
+}
 
 } // namespace

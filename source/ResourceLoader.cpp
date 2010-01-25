@@ -3,7 +3,6 @@
 	\brief Defines the resource loader class
 */
 
-
 #include "Log.h"
 #include "ResourceLoader.h"
 #include "ResourceGroup.h"
@@ -11,15 +10,11 @@
 #include "interface/IEventResourceLoaderListener.h"
 #include <algorithm>
 
-
 #define TAG		"[ResourceLoader] "
-
 
 namespace Seed {
 
-
 ResourceLoader ResourceLoader::instance;
-
 
 ResourceLoader::ResourceLoader()
 	: vListeners()
@@ -29,18 +24,15 @@ ResourceLoader::ResourceLoader()
 {
 }
 
-
 ResourceLoader::~ResourceLoader()
 {
 }
-
 
 INLINE BOOL ResourceLoader::Reset()
 {
 	IModule::Reset();
 	return TRUE;
 }
-
 
 INLINE BOOL ResourceLoader::Initialize()
 {
@@ -53,7 +45,6 @@ INLINE BOOL ResourceLoader::Initialize()
 	return TRUE;
 }
 
-
 INLINE BOOL ResourceLoader::Shutdown()
 {
 	this->bRunning = FALSE;
@@ -62,7 +53,6 @@ INLINE BOOL ResourceLoader::Shutdown()
 
 	return TRUE;
 }
-
 
 BOOL ResourceLoader::Update(f32 dt)
 {
@@ -110,7 +100,6 @@ BOOL ResourceLoader::Update(f32 dt)
 	return TRUE;
 }
 
-
 BOOL ResourceLoader::Run()
 {
 	BOOL ret = Thread::Run();
@@ -146,7 +135,6 @@ BOOL ResourceLoader::Run()
 	return ret;
 }
 
-
 INLINE void ResourceLoader::Add(ResourceGroup *group)
 {
 	stMutex.Lock();
@@ -154,13 +142,11 @@ INLINE void ResourceLoader::Add(ResourceGroup *group)
 	stMutex.Unlock();
 }
 
-
 INLINE void ResourceLoader::AddListener(IEventResourceLoaderListener *listener)
 {
 	ASSERT_NULL(listener);
 	vListeners.push_back(listener);
 }
-
 
 INLINE void ResourceLoader::RemoveListener(IEventResourceLoaderListener *listener)
 {
@@ -177,7 +163,6 @@ INLINE void ResourceLoader::RemoveListener(IEventResourceLoaderListener *listene
 	}
 }
 
-
 INLINE void ResourceLoader::SendEventGroupLoaded(const EventResourceLoader *ev)
 {
 	ASSERT_NULL(ev);
@@ -191,7 +176,6 @@ INLINE void ResourceLoader::SendEventGroupLoaded(const EventResourceLoader *ev)
 		target->OnGroupLoaded(ev);
 	}
 }
-
 
 INLINE void ResourceLoader::SendEventQueueEmpty(const EventResourceLoader *ev)
 {
@@ -207,5 +191,9 @@ INLINE void ResourceLoader::SendEventQueueEmpty(const EventResourceLoader *ev)
 	}
 }
 
+INLINE const char *ResourceLoader::GetObjectName() const
+{
+	return "ResourceLoader";
+}
 
 } // namespace

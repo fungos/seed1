@@ -29,6 +29,12 @@ class IMemoryManager : public IModule
 
 		virtual u32 GetFreeMemory() const;
 
+		// IModule
+		virtual BOOL IsRequired() const;
+
+		// IObject
+		virtual const char *GetObjectName() const;
+
 	private:
 		SEED_DISABLE_COPY(IMemoryManager);
 };

@@ -40,6 +40,8 @@ IResource *ButtonResourceLoader(const char *filename, ResourceManager *res, IMem
 
 Button::Button()
 	: IWidget()
+	, cSprite()
+	, cLabel()
 	, pPreviousEnabledAnimation("idle")
 	, eButtonCollision(CollisionNone)
 	, bDisableHover(FALSE)

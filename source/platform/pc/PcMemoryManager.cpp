@@ -83,7 +83,6 @@ INLINE void MemoryManager::Info()
 	Log(TAG "Large Pool..: %d (Total allocations: %d Current: %d)", largePool.GetFreeMemory(), largePool.iTotalAllocations, largePool.iAllocations);
 }
 
-
 }} // namespace
 
 using namespace Seed::PC;

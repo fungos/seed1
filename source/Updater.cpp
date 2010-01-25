@@ -5,6 +5,7 @@
 
 #include <math.h>
 #include "Updater.h"
+#include "interface/IUpdatable.h"
 
 namespace Seed {
 
@@ -36,7 +37,7 @@ void Updater::Run(f32 dt, f32 resolution)
 	UNUSED(resolution)
 
 	u32 len = arUpdatable.Size();
-	for(u32 i = 0; i < len; i++)
+	for (u32 i = 0; i < len; i++)
 		arUpdatable[i]->Update(dt);
 }
 

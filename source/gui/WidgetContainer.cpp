@@ -44,6 +44,8 @@
 namespace Seed {
 
 WidgetContainer::WidgetContainer()
+	: bEventConsumed(FALSE)
+	, vWidget()
 {
 	this->Reset();
 }

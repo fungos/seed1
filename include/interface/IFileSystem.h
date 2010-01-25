@@ -60,6 +60,10 @@ class IFileSystem : public IModule, public IEventSystemListener
 
 		// IModule
 		virtual BOOL Initialize();
+		virtual BOOL IsRequired() const;
+
+		// IObject
+		virtual const char *GetObjectName() const;
 
 		/// Listeners pattern methods
 		void AddListener(IEventFileSystemListener *listener);

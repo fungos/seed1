@@ -59,9 +59,12 @@ struct block
 #define TAG "[YMemoryManager] "
 
 YMemoryManager::YMemoryManager(u32 nbytes)
+	: pPool(NULL)
+	, iSize(nbytes)
+	, iFreeMemory(0)
 {
 	this->pPool = (unsigned char *)malloc(nbytes);
-	this->iSize = nbytes;
+	//this->iSize = nbytes;
 
 	if (this->iSize <= SIZE_HEADER)
 	{

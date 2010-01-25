@@ -41,6 +41,11 @@ INLINE void IGameApp::WriteDbg(const char *msg)
 	fprintf(stdout, "%s\n", msg);
 }
 
+INLINE BOOL IGameApp::HasError() const
+{
+	return FALSE;
+}
+
 INLINE const char *IGameApp::GetObjectName() const
 {
 	return "IGameApp";

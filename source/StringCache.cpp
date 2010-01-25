@@ -12,7 +12,6 @@
 #define TAG	"[StringCache] "
 #define STRINGCACHE_TABLE_FILE	"strlist.data"
 
-
 namespace Seed {
 
 StringCache StringCache::instance;
@@ -108,6 +107,11 @@ INLINE u32 StringCache::GetIdByString(const char *str) const
 	}
 	
 	return r;
+}
+
+INLINE const char *StringCache::GetObjectName() const
+{
+	return "StringCache";
 }
 
 } // namespace

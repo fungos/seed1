@@ -32,7 +32,7 @@
 #include "ParticleManager.h"
 #include "StringPool.h"
 #include "Updater.h"
-
+#include "ModuleManager.h"
 
 namespace Seed {
 
@@ -79,7 +79,7 @@ INLINE void WriteErr(const char *msg)
 		Private::pApplication->WriteErr(msg);
 }
 
-void Initialize()
+BOOL Initialize()
 {
 	if (!Private::pApplication)
 	{
@@ -90,20 +90,22 @@ void Initialize()
 	Info(SEED_MESSAGE);
 	Info(SEED_TAG "Initializing...");
 
-	pSystem->Initialize();
-	pMemoryManager->Initialize();
-	pTimer->Initialize();
-	pPackageManager->Initialize();
-	pFileSystem->Initialize();
-	pScreen->Initialize();
-	pSoundSystem->Initialize();
-	pGuiManager->Initialize();
-	pResourceLoader->Initialize();
-	pInput->Initialize();
-	pDictionary->Initialize();
-	pStringCache->Initialize();
-	pParticleManager->Initialize();
+	BOOL ret = TRUE;
 
+	ret = ret && pModuleManager->Add(pSystem);
+	ret = ret && pModuleManager->Add(pMemoryManager);
+	ret = ret && pModuleManager->Add(pTimer);
+	ret = ret && pModuleManager->Add(pPackageManager);
+	ret = ret && pModuleManager->Add(pFileSystem);
+	ret = ret && pModuleManager->Add(pScreen);
+	ret = ret && pModuleManager->Add(pSoundSystem);
+	ret = ret && pModuleManager->Add(pGuiManager);
+	ret = ret && pModuleManager->Add(pResourceLoader);
+	ret = ret && pModuleManager->Add(pInput);
+	ret = ret && pModuleManager->Add(pDictionary);
+	ret = ret && pModuleManager->Add(pStringCache);
+	ret = ret && pModuleManager->Add(pParticleManager);
+	
 	pUpdater->Add(Private::pApplication);
 	pUpdater->Add(pInput);
 	pUpdater->Add(pGuiManager);
@@ -126,7 +128,13 @@ void Initialize()
 	//default error font was called and this is done at app->Initialize since the memory manager is not
 	//ready during Setup
 	Private::bInitialized = TRUE;
-	Private::pApplication->Initialize();
+
+	//Private::pApplication->Initialize();
+	ret = ret && pModuleManager->Add(Private::pApplication);
+
+	pModuleManager->Print();
+
+	return ret;
 }
 
 void Update()
@@ -167,12 +175,14 @@ void Shutdown()
 	if (!Private::bInitialized)
 		return;
 
-	Private::pApplication->Shutdown();
+//	Private::pApplication->Shutdown();
 
 	// Reset util classes
 	pDictionary->Reset();
 	glResourceManager.Reset();
 
+	pModuleManager->Shutdown();
+/*
 	pParticleManager->Shutdown();
 	pStringCache->Shutdown();
 	pDictionary->Shutdown();
@@ -187,7 +197,7 @@ void Shutdown()
 	pMemoryManager->Shutdown();
 	Info(SEED_TAG "Terminating...");
 	pSystem->Shutdown();
-
+*/
 	Private::bInitialized = FALSE;
 }
 

@@ -45,6 +45,8 @@ SoundSystem SoundSystem::instance;
 
 
 SoundSystem::SoundSystem()
+	: pDevice(NULL)
+	, pContext(NULL)
 {
 	this->Reset();
 }

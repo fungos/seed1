@@ -29,7 +29,6 @@ class PackageManager : public IModule
 		typedef std::map<const char *, Package *, LowerThanStringComparator> PackageMap;
 		typedef std::map<const char *, Package *, LowerThanStringComparator>::iterator PackageMapIterator;
 
-
 	public:
 		PackageManager();
 		virtual ~PackageManager();
@@ -43,9 +42,11 @@ class PackageManager : public IModule
 		virtual BOOL Reset();
 		virtual BOOL Shutdown();
 
+		// IObject
+		virtual const char *GetObjectName() const;
+
 	public:
 		static PackageManager instance;
-
 
 	protected:
 		void *operator new(size_t len);
@@ -54,7 +55,6 @@ class PackageManager : public IModule
 		void operator delete [](void *);
 
 		const void *GetFile(const char *fileName, u32 *fileSize);
-
 
 	private:
 		SEED_DISABLE_COPY(PackageManager);

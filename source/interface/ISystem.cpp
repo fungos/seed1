@@ -11,6 +11,16 @@
 
 namespace Seed {
 
+const char *pcLanguageTable[] = 
+{
+	"en_US", 
+	"pt_BR", 
+	"es_ES", 
+	"de_DE", 
+	"ja_JA", 
+	"cn_CN", 
+	"Unknown"
+};
 
 ISystem::ISystem()
 	: vListeners()
@@ -53,46 +63,9 @@ INLINE Seed::eLanguage ISystem::GetLanguage() const
 	return this->nLanguage;
 }
 
-const char *ISystem::GetLanguageString() const
+INLINE const char *ISystem::GetLanguageString() const
 {
-	const char *lang = "en_US";
-	switch (this->nLanguage)
-	{
-		case Seed::pt_BR:
-		{
-			lang = "pt_BR";
-		}
-		break;
-
-		case Seed::es_ES:
-		{
-			lang = "es_ES";
-		}
-		break;
-
-		case Seed::ja_JA:
-		{
-			lang = "ja_JA";
-		}
-		break;
-
-		case Seed::de_DE:
-		{
-			lang = "de_DE";
-		}
-		break;
-
-		case Seed::cn_CN:
-		{
-			lang = "cn_CN";
-		}
-		break;
-
-		default:
-		break;
-	}
-
-	return lang;
+	return pcLanguageTable[this->nLanguage];
 }
 
 INLINE const char *ISystem::GetUsername() const
@@ -250,5 +223,14 @@ INLINE void ISystem::SendEventLanguageChanged(const EventSystem *ev)
 	}
 }
 
+INLINE BOOL ISystem::IsRequired() const
+{
+	return TRUE;
+}
+
+INLINE const char *ISystem::GetObjectName() const
+{
+	return "System";
+}
 
 } // namespace

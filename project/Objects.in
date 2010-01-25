@@ -1,16 +1,9 @@
-OBJECTS = ../source/PackageManager.o \
-../source/api/oal_ogg/OalOggMusic.o \
-../source/api/oal_ogg/OalOggSound.o \
-../source/api/oal_ogg/OalOggSoundSource.o \
-../source/api/oal_ogg/OalOggSoundSystem.o \
-../source/api/oal_ogg/vorbis_util.o \
-../source/api/ogl/OglRenderer.o \
+OBJECTS = ../source/api/ogl/OglRenderer.o \
 ../source/api/ogl/OglRenderer2D.o \
 ../source/api/ogl/OglSprite.o \
 ../source/api/theora/Theora.o \
 ../source/Checksum.o \
 ../source/CollisionMask.o \
-../source/Dictionary.o \
 ../source/EventFileSystem.o \
 ../source/EventInputKeyboard.o \
 ../source/EventInputMotion.o \
@@ -133,4 +126,12 @@ OBJECTS = ../source/PackageManager.o \
 ../source/Timeline.o \
 ../source/Trigonometry.o \
 ../source/TString.o \
+../source/ModuleManager.o \
+../source/PackageManager.o \
+../source/api/oal_ogg/OalOggMusic.o \
+../source/api/oal_ogg/OalOggSound.o \
+../source/api/oal_ogg/OalOggSoundSource.o \
+../source/api/oal_ogg/OalOggSoundSystem.o \
+../source/api/oal_ogg/vorbis_util.o \
+../source/Dictionary.o \
 ../source/Updater.o

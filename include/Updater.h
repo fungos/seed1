@@ -6,12 +6,13 @@
 #ifndef __UPDATER_H__
 #define __UPDATER_H__
 
-#include "interface/IUpdatable.h"
 #include "Array.h"
+
+#define MAX_UPDATEABLES 32
 
 namespace Seed {
 
-#define MAX_UPDATEABLES 32
+class IUpdatable;
 
 class Updater
 {
@@ -31,7 +32,7 @@ class Updater
 
 	private:
 		f32 fAccumulator;
-		Array<IUpdatable*, MAX_UPDATEABLES> arUpdatable;
+		Array<IUpdatable *, MAX_UPDATEABLES> arUpdatable;
 };
 
 Updater *const pUpdater = &Updater::instance;

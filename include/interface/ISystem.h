@@ -266,6 +266,12 @@ class ISystem : public IModule, public IUpdatable
 		void AddListener(IEventSystemListener *listener);
 		void RemoveListener(IEventSystemListener *listener);
 
+		// IModule
+		virtual BOOL IsRequired() const;
+
+		// IObject
+		virtual const char *GetObjectName() const;
+
 	protected:
 		void SendEventReset(const EventSystem *ev);
 		void SendEventShutdown(const EventSystem *ev);

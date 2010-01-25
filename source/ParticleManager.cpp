@@ -8,12 +8,11 @@
 
 namespace Seed {
 
-
 ParticleManager ParticleManager::instance;
 
-
 ParticleManager::ParticleManager()
-	: bPaused(FALSE)
+	: vEmitter()
+	, bPaused(FALSE)
 	, bStopped(FALSE)
 {
 }

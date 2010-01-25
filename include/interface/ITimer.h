@@ -28,7 +28,10 @@ class ITimer : public IModule
 
 		// IModule
 		virtual BOOL Reset();
+		virtual BOOL IsRequired() const;
 
+		// IObject
+		virtual const char *GetObjectName() const;
 
 	private:
 		SEED_DISABLE_COPY(ITimer);

@@ -24,6 +24,11 @@ namespace Seed {
 
 
 Label::Label()
+	: iAlign(Seed::HorizontalAlignLeft)
+	, iColor(0)
+	, bAutoAdjust(FALSE)
+	, cText()
+	, pFont(NULL)
 {
 	this->Reset();
 }

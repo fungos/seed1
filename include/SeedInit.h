@@ -65,7 +65,7 @@ namespace Seed {
 	/**
  	This will initialize all Seed states and subsystems and must be called before anything and after Seed::SetGameApp.
  	*/
-	void Initialize();
+	BOOL Initialize();
 
 	/// Update Seed
 	/**
