@@ -320,13 +320,13 @@ INLINE void IRenderer::RemoveStatic(const IRenderable *obj)
 INLINE void IRenderer::Clear()
 {
 	vRenderables.clear();
-	RenderableVector().swap( vRenderables );
+	RenderableVector().swap(vRenderables);
 }
 
 INLINE void IRenderer::ClearStatic()
 {
 	vRenderablesStatic.clear();
-	RenderableVector().swap( vRenderablesStatic );
+	RenderableVector().swap(vRenderablesStatic);
 }
 
 

@@ -202,7 +202,7 @@ struct IRenderableDescendingPrioritySort
 {
 	bool operator()(IRenderable * const &left, IRenderable * const &right)
 	{
-		//return (left->GetPriority() < right->GetPriority());
+		//return (left->GetPriority() > right->GetPriority());
 		return (left->iPriority > right->iPriority);
 	}
 };

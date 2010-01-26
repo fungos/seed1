@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="Seed"
 	ProjectGUID="{D5B9F9EE-D553-47C6-B1E8-10D5145F6472}"
 	RootNamespace="Seed"
@@ -217,6 +217,10 @@
 			</File>
 			<File
 				RelativePath="..\source\Keyframe.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\ModuleManager.cpp"
 				>
 			</File>
 			<File
@@ -849,6 +853,10 @@
 			</File>
 			<File
 				RelativePath="..\include\MemoryManager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ModuleManager.h"
 				>
 			</File>
 			<File
