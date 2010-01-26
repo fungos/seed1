@@ -46,13 +46,16 @@ class TextArea : public IWidget
 		virtual const char *GetObjectName() const;
 		virtual int GetObjectType() const;
 
-	private:
+	protected:
 		SEED_DISABLE_COPY(TextArea);
 
-		void Rebuild();
-		virtual u32 CaculateLineCount();
+		virtual void Rebuild();
+		virtual u32 CalculateLineCount();
 
-	private:
+		virtual u32 TextArea::RebuildPosX();
+		virtual void TextArea::RebuildPosY(u32 usedLines);
+
+	protected:
 		struct sLineInfo
 		{
 			f32 fPosX;
@@ -61,7 +64,7 @@ class TextArea : public IWidget
 			u32 iSize;
 		};
 
-	private:
+	protected:
 		u32			iLines;
 
 		f32			fDiffX;

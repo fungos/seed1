@@ -90,7 +90,7 @@ INLINE void ISprite::Reset()
 	this->iCurrentFrame = 0;
 	this->iFrames 		= 0;
 	//this->iCurrentFrameTime = SPRITE_GLOBAL_FRAME_TIME;
-	fCurrentFrameRate	= 1000.0f / SPRITE_GLOBAL_FRAME_TIME / 1000.0f;
+	fCurrentFrameRate	= 1.0f / SPRITE_GLOBAL_FRAME_TIME;
 	//this->iFrameCount 	= 0;
 	this->fFrameTime	= 0.0f;
 	this->iWidth 		= 0;
@@ -186,7 +186,7 @@ INLINE void ISprite::ReconfigureFrame()
 	ASSERT_NULL(pFrameImage);
 	
 	//this->iCurrentFrameTime = pFrame->iTime;
-	this->fCurrentFrameRate = 1000.0f / static_cast<f32>(pFrame->iTime) / 1000.0f;
+	this->fCurrentFrameRate = 1.0f / static_cast<f32>(pFrame->iTime);
 
 	if (this->bAnimation)
 		this->Play();
@@ -357,7 +357,7 @@ INLINE void ISprite::Stop()
 INLINE void ISprite::Play()
 {
 	//iCurrentFrameTime = pFrame->iTime;
-	fCurrentFrameRate = 1000.0f / static_cast<f32>(pFrame->iTime) / 1000.0f;
+	fCurrentFrameRate = 1.0f / static_cast<f32>(pFrame->iTime);
 	bPlaying = TRUE;
 	bChanged = TRUE;
 }

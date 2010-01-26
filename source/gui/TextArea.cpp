@@ -109,7 +109,7 @@ u32 TextArea::GetLineCount() const
 	return iLines;
 }
 
-u32 TextArea::CaculateLineCount()
+u32 TextArea::CalculateLineCount()
 {
 	u32 lines = 0;
 	if (bAutoAdjust)
@@ -139,7 +139,7 @@ u32 TextArea::CaculateLineCount()
 
 void TextArea::Rebuild()
 {
-	u32 lines = this->CaculateLineCount();
+	u32 lines = this->CalculateLineCount();
 	if (!lines)
 		return;
 
@@ -154,6 +154,13 @@ void TextArea::Rebuild()
 	}
 	MEMSET(pLines, '\0', sizeBuff);
 
+	u32 usedLines = RebuildPosX();
+
+	RebuildPosY(usedLines);
+}
+
+u32 TextArea::RebuildPosX()
+{
 	u32 index = 0;
 	u32 size = 0;
 	f32 lineWidth = 0.0f;
@@ -193,6 +200,11 @@ void TextArea::Rebuild()
 		usedLines++;
 	}
 
+	return usedLines;
+}
+
+void TextArea::RebuildPosY(u32 usedLines)
+{
 	f32 y = 0.0f;
 	f32 textHeight = ((cText.GetHeight() + cText.GetFontTracking()) * usedLines) * this->GetScaleY();
 	switch (eVAlign)
