@@ -258,42 +258,52 @@ INLINE void ISprite::ReconfigureFrame()
 	this->bChanged = TRUE;
 }
 
-INLINE void ISprite::SetAnimation(u32 index)
+INLINE BOOL ISprite::SetAnimation(u32 index)
 {
+	BOOL ret = FALSE;
 	if (pSprite)
 	{
 		const Animation *pNewAnimation = pSprite->GetAnimation(index);
-		if (!pNewAnimation)
+		if (pNewAnimation)
+		{
+			pAnimation = pNewAnimation;
+			pAnimationFrames = pSprite->GetFrames(pAnimation);
+			iCurrentAnimation = index;
+			iCurrentFrame = 0;
+			this->ReconfigureAnimation();
+
+			ret = TRUE;
+		}
+		else
 		{
 			//Log(TAG "Warning animation %d not found.", index);
-			return;
 		}
-
-		pAnimation = pNewAnimation;
-		pAnimationFrames = pSprite->GetFrames(pAnimation);
-		iCurrentAnimation = index;
-		iCurrentFrame = 0;
-		this->ReconfigureAnimation();
 	}
+	return ret;
 }
 
-INLINE void ISprite::SetAnimation(const char *name)
+INLINE BOOL ISprite::SetAnimation(const char *name)
 {
+	BOOL ret = FALSE;
 	if (pSprite)
 	{
 		const Animation *pNewAnimation = pSprite->GetAnimation(name);
-		if (!pNewAnimation)
+		if (pNewAnimation)
+		{
+			pAnimation = pNewAnimation;
+			pAnimationFrames = pSprite->GetFrames(pAnimation);
+			iCurrentAnimation = pAnimation->iIndex;
+			iCurrentFrame = 0;
+			this->ReconfigureAnimation();
+
+			ret = TRUE;
+		}
+		else
 		{
 			//Log(TAG "Warning animation '%s' not found.", name);
-			return;
 		}
-
-		pAnimation = pNewAnimation;
-		pAnimationFrames = pSprite->GetFrames(pAnimation);
-		iCurrentAnimation = pAnimation->iIndex;
-		iCurrentFrame = 0;
-		this->ReconfigureAnimation();
 	}
+	return ret;
 }
 
 INLINE u32 ISprite::GetNumAnimations() const

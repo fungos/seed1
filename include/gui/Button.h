@@ -229,6 +229,7 @@ class Button : public IWidget, public IResource
 		BOOL		bButtonChanged;
 		BOOL		bSpriteAutoUpdate;
 		BOOL		bCenterDrag;
+		BOOL		bOffsetPressed; // Has Offset Pressed added? - If button was disabled when pressed we need restore its position.
 		u32			iDraggingPriority;
 		u32			iOldPriority;
 		PIXEL		iLabelPressColor;
