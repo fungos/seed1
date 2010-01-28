@@ -90,7 +90,7 @@ INLINE void ISprite::Reset()
 	this->iCurrentFrame = 0;
 	this->iFrames 		= 0;
 	//this->iCurrentFrameTime = SPRITE_GLOBAL_FRAME_TIME;
-	fCurrentFrameRate	= 1000.0f / SPRITE_GLOBAL_FRAME_TIME / 1000.0f;
+	fCurrentFrameRate	= 1.0f / SPRITE_GLOBAL_FRAME_TIME;
 	//this->iFrameCount 	= 0;
 	this->fFrameTime	= 0.0f;
 	this->iWidth 		= 0;
@@ -186,7 +186,7 @@ INLINE void ISprite::ReconfigureFrame()
 	ASSERT_NULL(pFrameImage);
 	
 	//this->iCurrentFrameTime = pFrame->iTime;
-	this->fCurrentFrameRate = 1000.0f / static_cast<f32>(pFrame->iTime) / 1000.0f;
+	this->fCurrentFrameRate = 1.0f / static_cast<f32>(pFrame->iTime);
 
 	if (this->bAnimation)
 		this->Play();
@@ -258,42 +258,52 @@ INLINE void ISprite::ReconfigureFrame()
 	this->bChanged = TRUE;
 }
 
-INLINE void ISprite::SetAnimation(u32 index)
+INLINE BOOL ISprite::SetAnimation(u32 index)
 {
+	BOOL ret = FALSE;
 	if (pSprite)
 	{
 		const Animation *pNewAnimation = pSprite->GetAnimation(index);
-		if (!pNewAnimation)
+		if (pNewAnimation)
+		{
+			pAnimation = pNewAnimation;
+			pAnimationFrames = pSprite->GetFrames(pAnimation);
+			iCurrentAnimation = index;
+			iCurrentFrame = 0;
+			this->ReconfigureAnimation();
+
+			ret = TRUE;
+		}
+		else
 		{
 			//Log(TAG "Warning animation %d not found.", index);
-			return;
 		}
-
-		pAnimation = pNewAnimation;
-		pAnimationFrames = pSprite->GetFrames(pAnimation);
-		iCurrentAnimation = index;
-		iCurrentFrame = 0;
-		this->ReconfigureAnimation();
 	}
+	return ret;
 }
 
-INLINE void ISprite::SetAnimation(const char *name)
+INLINE BOOL ISprite::SetAnimation(const char *name)
 {
+	BOOL ret = FALSE;
 	if (pSprite)
 	{
 		const Animation *pNewAnimation = pSprite->GetAnimation(name);
-		if (!pNewAnimation)
+		if (pNewAnimation)
+		{
+			pAnimation = pNewAnimation;
+			pAnimationFrames = pSprite->GetFrames(pAnimation);
+			iCurrentAnimation = pAnimation->iIndex;
+			iCurrentFrame = 0;
+			this->ReconfigureAnimation();
+
+			ret = TRUE;
+		}
+		else
 		{
 			//Log(TAG "Warning animation '%s' not found.", name);
-			return;
 		}
-
-		pAnimation = pNewAnimation;
-		pAnimationFrames = pSprite->GetFrames(pAnimation);
-		iCurrentAnimation = pAnimation->iIndex;
-		iCurrentFrame = 0;
-		this->ReconfigureAnimation();
 	}
+	return ret;
 }
 
 INLINE u32 ISprite::GetNumAnimations() const
@@ -357,7 +367,7 @@ INLINE void ISprite::Stop()
 INLINE void ISprite::Play()
 {
 	//iCurrentFrameTime = pFrame->iTime;
-	fCurrentFrameRate = 1000.0f / static_cast<f32>(pFrame->iTime) / 1000.0f;
+	fCurrentFrameRate = 1.0f / static_cast<f32>(pFrame->iTime);
 	bPlaying = TRUE;
 	bChanged = TRUE;
 }

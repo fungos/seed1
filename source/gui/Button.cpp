@@ -52,6 +52,7 @@ Button::Button()
 	, bButtonChanged(TRUE)
 	, bSpriteAutoUpdate(FALSE)
 	, bCenterDrag(TRUE)
+	, bOffsetPressed(FALSE)
 	, iDraggingPriority(0)
 	, iOldPriority(0)
 	, iLabelPressColor(0)
@@ -121,6 +122,7 @@ void Button::Initialize(u32 id, eCollisionType type)
 	this->bDisableHover		= FALSE;
 	this->bFrameControl		= TRUE;
 	this->eButtonCollision	= type;
+	this->bOffsetPressed	= FALSE;
 
 	this->Update(0.0f);
 }
@@ -137,6 +139,7 @@ void Button::Initialize(u32 id, f32 posX, f32 posY, f32 width, f32 height)
 	this->bFrameControl		= TRUE;
 	this->bSpriteBased 		= FALSE;
 	this->bLabelBased		= FALSE;
+	this->bOffsetPressed	= FALSE;
 }
 
 BOOL Button::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
@@ -472,12 +475,12 @@ void Button::OnWidgetPress(const EventWidget *ev)
 	UNUSED(ev);
 
 	// drag n drop
-	this->iOldPriority = this->GetPriority();
+	iOldPriority = this->GetPriority();
 
 	if (bDraggable)
 	{
-		this->fDragOffsetX = ev->GetX() - this->GetX();
-		this->fDragOffsetY = ev->GetY() - this->GetY();
+		fDragOffsetX = ev->GetX() - this->GetX();
+		fDragOffsetY = ev->GetY() - this->GetY();
 	}
 
 	if (bFrameControl)
@@ -492,17 +495,18 @@ void Button::OnWidgetPress(const EventWidget *ev)
 			{
 				this->cSprite.SetCurrentFrame(2);
 			}*/
-			this->cSprite.SetAnimation("press");
-			this->cSprite.AddPosition(fSpritePressOffsetX, fSpritePressOffsetY);
+			bOffsetPressed = TRUE;
+			cSprite.SetAnimation("press");
+			cSprite.AddPosition(fSpritePressOffsetX, fSpritePressOffsetY);
 		}
 
 		if (bLabelBased)
 		{
-			this->cLabel.AddPosition(this->fLabelPressOffsetX, this->fLabelPressOffsetY);
-			if (this->iLabelPressColor)
+			cLabel.AddPosition(fLabelPressOffsetX, fLabelPressOffsetY);
+			if (iLabelPressColor)
 			{
-				this->cLabel.SetColor(this->iLabelPressColor);
-				this->cLabel.SetBlending(this->eLabelBlendOperation);
+				cLabel.SetColor(iLabelPressColor);
+				cLabel.SetBlending(eLabelBlendOperation);
 			}
 		}
 	}
@@ -682,12 +686,40 @@ INLINE void Button::SetDisabled(BOOL b)
 				if (strcmp(cSprite.GetAnimationName(), pPreviousEnabledAnimation) && strcmp(cSprite.GetAnimationName(), "disabled"))
 					this->pPreviousEnabledAnimation = cSprite.GetAnimationName();
 
-				this->cSprite.SetAnimation("disabled");
+				cSprite.SetAnimation("disabled");
 			}
 			else
 			{
+				if (bOffsetPressed)
+				{
+					cSprite.AddPosition(fSpritePressOffsetX * -1.0f, fSpritePressOffsetY * -1.0f);
+					bOffsetPressed = FALSE;
+				}
+
 				//this->cSprite.SetAnimation("idle");
-				this->cSprite.SetAnimation(pPreviousEnabledAnimation);
+				if (!strcmp(pPreviousEnabledAnimation, "selected"))
+				{
+					cSprite.SetAnimation("selected");
+				}
+				else
+				{
+					BOOL hasAnim = FALSE;
+					hasAnim = cSprite.SetAnimation("idle");
+					if (hasAnim) 
+					{
+						pPreviousEnabledAnimation = "idle";
+					}
+					else
+					{
+						hasAnim = cSprite.SetAnimation("rollout");
+						pPreviousEnabledAnimation = "rollout";
+					}
+
+					if (!hasAnim)
+					{
+						cSprite.SetAnimation(pPreviousEnabledAnimation);
+					}
+				}
 			}
 		}
 
@@ -733,28 +765,49 @@ INLINE void Button::Render(f32 delta)
 void Button::SetSprite(const char *spriteName, ResourceManager *res, IMemoryPool *pool)
 {
 	ASSERT_NULL(spriteName);
-	this->pstrSpriteFilename = spriteName;
+	pstrSpriteFilename = spriteName;
 	if (!pRes)
 	{
 		pRes = res;
-		this->cSprite.Load(spriteName, pRes, pool);
+		cSprite.Load(spriteName, pRes, pool);
 	}
 	else
 	{
-		this->cSprite.Load(spriteName, res, pool);
+		cSprite.Load(spriteName, res, pool);
 	}
 
 	//this->cSprite.SetX(IWidget::GetX());
 	//this->cSprite.SetY(IWidget::GetY());
-	this->cSprite.SetPosition(0.0f, 0.0f);
+	cSprite.SetPosition(0.0f, 0.0f);
 
 	if (cSprite.GetWidth() > this->GetWidth())
 		this->SetWidth(cSprite.GetWidth());
 	if (cSprite.GetHeight() > this->GetHeight())
 		this->SetHeight(cSprite.GetHeight());
 
-	this->bSpriteBased = TRUE;
-	this->bButtonChanged = TRUE;
+	bSpriteBased = TRUE;
+	bButtonChanged = TRUE;
+
+	BOOL hasAnim = FALSE;
+	if (!bSelected)
+	{
+		hasAnim = cSprite.SetAnimation("idle");
+		pPreviousEnabledAnimation = "idle";
+	}
+	else
+	{
+		hasAnim = cSprite.SetAnimation("selected");
+		pPreviousEnabledAnimation = "selected";
+	}
+
+	if (!hasAnim)
+	{
+		hasAnim = cSprite.SetAnimation("rollout");
+		pPreviousEnabledAnimation = "rollout";
+	}
+
+	if (!hasAnim)
+		cSprite.SetAnimation(0u);
 }
 
 INLINE void Button::SetVisible(BOOL b)

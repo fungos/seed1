@@ -86,8 +86,8 @@ class ISprite : public ITransformable2D
 		virtual u8 GetPixelAlpha(u32 x, u32 y) const;
 
 		virtual void SetLoop(BOOL loop);
-		virtual void SetAnimation(u32 index);
-		virtual void SetAnimation(const char *name);
+		virtual BOOL SetAnimation(u32 index);
+		virtual BOOL SetAnimation(const char *name);
 		virtual void SetCurrentFrame(u32 frame);
 		virtual void GotoAndStop(u32 frame);
 		virtual void GotoAndPlay(u32 frame);
