@@ -69,7 +69,7 @@ INLINE String &String::operator=(const String &string)
 
 	pConstructedStr		= glStringPool.Alloc(iConstructedSize);
 	
-	this->Copy(pOriginalStr);
+	this->Copy(string.pConstructedStr);
 
 	return *this;
 }
@@ -150,6 +150,15 @@ INLINE String &String::Set(const u16 *paramName, f32 paramVal)
 INLINE String &String::Set(const u16 *paramName, bool paramVal)
 {
 	this->Set(paramName, (paramVal ? "True" : "False"));
+	return *this;
+}
+
+INLINE String &String::Set(const u16 *paramName, String *paramVal)
+{
+	if (paramVal)
+	{
+		this->Set(paramName, paramVal->pConstructedStr);
+	}
 	return *this;
 }
 

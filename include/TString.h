@@ -25,6 +25,7 @@ class String
 		String &Set(const u16 *paramName, f32 paramVal);
 		String &Set(const u16 *paramName, bool paramVal);
 		String &Set(const u16 *paramName, const char paramVal);
+		String &Set(const u16 *paramName, String *paramVal);
 		
 		void SubString(u32 index, u32 size);
 		void Append(WideChar chr);
