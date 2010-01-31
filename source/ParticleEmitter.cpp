@@ -16,14 +16,17 @@ namespace Seed {
 
 ParticleEmitter::ParticleEmitter()
 	: pEmitterObject(NULL)
+	, psInfo()
 	//, psInfo(NULL)
 	, pRes(NULL)
 	, pPool(NULL)
 	, pFilename(NULL)
 	, pSpriteFilename(NULL)
+	, bParticlesFollowEmitter(FALSE)
 	, fAge(0.0f)
 	, fRespawnAge(0.0f)
 	, fEmissionResidue(0.0f)
+	, fInterval(0.0f)
 	, ptPrevLocation(0.0f, 0.0f)
 	//, ptLocation(0.0f, 0.0f)
 	, fTx(0.0f)
@@ -36,7 +39,6 @@ ParticleEmitter::ParticleEmitter()
 	, nMinFilter(TextureFilterLinear)
 	, nMagFilter(TextureFilterLinear)
 	, arParticles()
-	, bParticlesFollowEmitter(FALSE)
 {
 }
 
@@ -341,7 +343,7 @@ INLINE void ParticleEmitter::SetSprite(const char *filename)
 	if (bEnabled)
 	{
 		pSpriteFilename = filename;
-		for (u32 i = 0; i <SEED_PARTICLES_MAX; i++)
+		for (u32 i = 0; i < SEED_PARTICLES_MAX; i++)
 		{
 			if (!arParticles[i].bActive)
 				continue;
