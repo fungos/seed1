@@ -14,7 +14,7 @@
 
 
 #define DEFAULT_FADE_OUT		15
-#define SOUND_MAX_SOURCES		32
+#define SOUND_MAX_SOURCES		128
 
 
 namespace Seed {
