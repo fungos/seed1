@@ -115,6 +115,12 @@ INLINE void SoundSource::SetLoop(BOOL b)
 	alSourcei(iSource, AL_LOOPING, b);
 }
 
+INLINE void SoundSource::Stop(f32 ms)
+{
+	alSourceStop(this->iSource);
+	eState = Seed::SourceStop;
+}
+
 INLINE void SoundSource::Play()
 {
 	alSourceStop(this->iSource);
