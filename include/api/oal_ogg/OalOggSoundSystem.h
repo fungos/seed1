@@ -19,7 +19,6 @@
 
 #include <AL/al.h>
 
-#define SOUND_MAX_SOURCES		32
 #define SOUND_MASTER_VOLUME		0.2f
 
 
