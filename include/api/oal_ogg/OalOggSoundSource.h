@@ -36,6 +36,7 @@ class SoundSource : public ISoundSource
 
 		virtual void SetLoop(BOOL b);
 		virtual void Play();
+		virtual void Stop(f32 ms = 0.0f);
 		virtual void Resume();
 
 		virtual void SetVolume(f32 vol);

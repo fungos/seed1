@@ -9,14 +9,14 @@
 
 #include "interface/IModule.h"
 #include "interface/IUpdatable.h"
-#include <vector>
+#include "Array.h"
 
+
+#define MAX_PARTICLE_EMITTERS	128
 
 namespace Seed {
 
-
 class ParticleEmitter;
-
 
 class ParticleManager : public IModule, public IUpdatable
 {
@@ -62,10 +62,11 @@ class ParticleManager : public IModule, public IUpdatable
 		SEED_DISABLE_COPY(ParticleManager);
 
 	private:
-		typedef std::vector<ParticleEmitter *> EmitterVector;
-		typedef EmitterVector::iterator EmitterIterator;
+		//typedef std::vector<ParticleEmitter *> EmitterVector;
+		//typedef EmitterVector::iterator EmitterIterator;
+		//EmitterVector vEmitter;
 
-		EmitterVector vEmitter;
+		Array<ParticleEmitter *, MAX_PARTICLE_EMITTERS>	vEmitter;
 
 		BOOL	bPaused;
 		BOOL	bStopped;

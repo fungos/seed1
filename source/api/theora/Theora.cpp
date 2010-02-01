@@ -57,7 +57,6 @@ Theora::Theora()
 Theora::~Theora()
 {
 	this->Reset();
-	SEM_CLOSE(sem);
 }
 
 INLINE void Theora::Reset()
@@ -74,6 +73,14 @@ INLINE void Theora::Reset()
 
 INLINE BOOL Theora::Unload()
 {
+	if (sem)
+		SEM_CLOSE(sem);
+	sem = 0;
+
+	bFinished = TRUE;
+	bTerminateThread = TRUE;
+	bPlaying = FALSE;
+
 	if (pPlayer)
 		oggplay_close(pPlayer);
 
@@ -86,11 +93,6 @@ INLINE BOOL Theora::Unload()
 	iTextureId = 0;
 	pTexData = NULL;
 	pPlayer = NULL;
-	bTerminateThread = TRUE;
-
-	if (sem)
-		SEM_CLOSE(sem);
-	sem = 0;
 
 	return TRUE;
 }
@@ -102,11 +104,11 @@ BOOL Theora::Run()
 	{
 		if (bPlaying && !bFinished)
 		{
-			OggPlayErrorCode r;
-			SEM_WAIT(sem);
+			OggPlayErrorCode r = E_OGGPLAY_TIMEOUT;
+			if (sem)
+				SEM_WAIT(sem);
 
-			r = E_OGGPLAY_TIMEOUT;
-			while (r == E_OGGPLAY_TIMEOUT)
+			while (r == E_OGGPLAY_TIMEOUT && !bTerminateThread)
 			{
 				r = oggplay_step_decoding(pPlayer);
 			}
@@ -116,7 +118,8 @@ BOOL Theora::Run()
 				//bPlaying = FALSE;
 				bFinished = TRUE;
 				pTimer->Sleep(10);
-				SEM_WAIT(sem);
+				if (sem)
+					SEM_WAIT(sem);
 			}
 		}
 		
@@ -134,6 +137,7 @@ BOOL Theora::Load(const char *filename)
 	pPlayer = oggplay_open_with_reader(reader);
 
 	bLoaded = FALSE;
+	bTerminateThread = FALSE;
 
 	if (pPlayer)
 	{
