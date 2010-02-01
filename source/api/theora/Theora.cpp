@@ -73,16 +73,9 @@ INLINE void Theora::Reset()
 
 INLINE BOOL Theora::Unload()
 {
-	if (sem)
-		SEM_CLOSE(sem);
-	sem = 0;
-
 	bFinished = TRUE;
 	bTerminateThread = TRUE;
 	bPlaying = FALSE;
-
-	if (pPlayer)
-		oggplay_close(pPlayer);
 
 	if (iTextureId)
 		glDeleteTextures(1, &iTextureId);
@@ -124,6 +117,16 @@ BOOL Theora::Run()
 		}
 		
 		ret = !bTerminateThread;
+	}
+
+	if (bTerminateThread)
+	{
+		if (sem)
+			SEM_CLOSE(sem);
+		sem = 0;
+
+		if (pPlayer)
+			oggplay_close(pPlayer);
 	}
 
 	pTimer->Sleep(10);

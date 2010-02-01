@@ -120,7 +120,7 @@ class ISprite : public ITransformable2D
 
 		// IObject
 		virtual const char *GetObjectName() const;
-		virtual int GetObjectType() const;		
+		virtual int GetObjectType() const;
 	protected:
 		void *operator new(size_t len);
 		void operator delete(void *ptr);

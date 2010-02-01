@@ -181,7 +181,7 @@ INLINE BOOL String::Copy(const u16 *str)
 
 INLINE void String::Replace(const u16 *str, const u16 *val)
 {
-	if (!pConstructedStr || !str || !val)
+	if (!pConstructedStr || !str)
 		return;
 
 	u32 bufferLen = this->Length(pConstructedStr);

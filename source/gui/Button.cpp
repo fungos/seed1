@@ -692,7 +692,7 @@ INLINE void Button::SetDisabled(BOOL b)
 			{
 				if (bOffsetPressed)
 				{
-					cSprite.AddPosition(fSpritePressOffsetX * -1.0f, fSpritePressOffsetY * -1.0f);
+					//cSprite.AddPosition(fSpritePressOffsetX * -1.0f, fSpritePressOffsetY * -1.0f);
 					bOffsetPressed = FALSE;
 				}
 
