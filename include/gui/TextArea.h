@@ -52,8 +52,8 @@ class TextArea : public IWidget
 		virtual void Rebuild();
 		virtual u32 CalculateLineCount();
 
-		virtual u32 TextArea::RebuildPosX();
-		virtual void TextArea::RebuildPosY(u32 usedLines);
+		virtual u32 RebuildPosX();
+		virtual void RebuildPosY(u32 usedLines);
 
 	protected:
 		struct sLineInfo

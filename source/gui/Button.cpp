@@ -211,7 +211,7 @@ BOOL Button::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		{
 			READ_U32(mask, ptr);
 			if (mask != SEED_INVALID_ID && eButtonCollision == CollisionNone)
-				this->SetMask(_F(mask), pool);
+				this->SetMask(_F(mask), res, pool);
 		}
 
 		this->bLoaded = TRUE;
@@ -822,12 +822,15 @@ INLINE void Button::SetFrameControl(BOOL b)
 	this->bFrameControl = b;
 }
 
-INLINE void Button::SetMask(const char *maskName, IMemoryPool *pool)
+INLINE void Button::SetMask(const char *maskName, ResourceManager *res, IMemoryPool *pool)
 {
 	ASSERT_NULL(pool);
 
 	if (pMask)
 		pMask->Release();
+
+	if (!pRes)
+		pRes = res;
 
 	this->pMask = static_cast<CollisionMask *>(pRes->Get(maskName, Seed::ObjectCollisionMask, pool));
 	this->eButtonCollision = CollisionByMask;

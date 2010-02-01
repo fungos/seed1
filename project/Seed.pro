@@ -118,6 +118,7 @@ HEADERS += ../include/StateMachine.h \
 	../include/SoundSource.h \
 	../include/SpriteObject.h \
 	../include/Base.h \
+	../include/ModuleManager.h \
 	../include/ParticleEmitter.h \
 	../include/platform/sdl/SdlSystem.h \
 	../include/platform/sdl/SdlScreen.h \
@@ -268,6 +269,7 @@ SOURCES += ../source/EventInputPointer.cpp \
 	../source/Formats.cpp \
 	../source/EventMovie.cpp \
 	../source/Particle.cpp \
+	../source/ModuleManager.cpp \
 	../source/ResourceManager.cpp \
 	../source/platform/sdl/SdlSystem.cpp \
 	../source/platform/sdl/SdlScreen.cpp \

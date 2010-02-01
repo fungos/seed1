@@ -61,7 +61,7 @@ class Button : public IWidget, public IResource
 		virtual void SetPressOffset(f32 x, f32 y);
 		virtual void SetHoverOffset(f32 x, f32 y);
 
-		virtual void SetMask(const char *maskName, IMemoryPool *pool = pDefaultPool);
+		virtual void SetMask(const char *maskName, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual void SetCollisionType(eCollisionType type);
 		virtual eCollisionType GetCollisionType() const;
 
