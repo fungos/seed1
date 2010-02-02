@@ -93,6 +93,7 @@ class ISprite : public ITransformable2D
 		virtual void GotoAndPlay(u32 frame);
 		virtual void Stop();
 		virtual void Play();
+		virtual BOOL IsFinished() const;
 		virtual void NextFrame();
 		virtual void PreviousFrame();
 		virtual u32  GetAnimation() const;
@@ -142,6 +143,7 @@ class ISprite : public ITransformable2D
 		BOOL bAnimation;
 		BOOL bLoop;
 		BOOL bPlaying;
+		BOOL bFinished;
 
 		f32 fTexS0;
 		f32 fTexS1;

@@ -30,6 +30,7 @@ ISprite::ISprite()
 	, bAnimation(FALSE)
 	, bLoop(FALSE)
 	, bPlaying(FALSE)
+	, bFinished(FALSE)
 	, fTexS0(0.0f)
 	, fTexS1(0.0f)
 	, fTexT0(0.0f)
@@ -86,6 +87,7 @@ INLINE void ISprite::Reset()
 	this->bLoop 		= FALSE;
 	this->bVisible 		= TRUE;
 	this->bPlaying 		= FALSE;
+	this->bFinished		= FALSE;
 
 	this->iCurrentFrame = 0;
 	this->iFrames 		= 0;
@@ -370,6 +372,12 @@ INLINE void ISprite::Play()
 	fCurrentFrameRate = 1.0f / static_cast<f32>(pFrame->iTime);
 	bPlaying = TRUE;
 	bChanged = TRUE;
+	bFinished = FALSE;
+}
+
+INLINE BOOL ISprite::IsFinished() const
+{
+	return bFinished;
 }
 
 INLINE void ISprite::NextFrame()
@@ -482,9 +490,14 @@ void ISprite::Update(f32 delta)
 			if (iCurrentFrame + 1 == iFrames)
 			{
 				if (bLoop)
+				{
 					iCurrentFrame = 0;
+				}
 				else
+				{
 					bChanged = FALSE;
+					bFinished = TRUE;
+				}
 			}
 			else
 				iCurrentFrame++;
