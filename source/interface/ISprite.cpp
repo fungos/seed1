@@ -30,7 +30,6 @@ ISprite::ISprite()
 	, bAnimation(FALSE)
 	, bLoop(FALSE)
 	, bPlaying(FALSE)
-	, bFinished(FALSE)
 	, fTexS0(0.0f)
 	, fTexS1(0.0f)
 	, fTexT0(0.0f)
@@ -87,7 +86,6 @@ INLINE void ISprite::Reset()
 	this->bLoop 		= FALSE;
 	this->bVisible 		= TRUE;
 	this->bPlaying 		= FALSE;
-	this->bFinished		= FALSE;
 
 	this->iCurrentFrame = 0;
 	this->iFrames 		= 0;
@@ -179,6 +177,9 @@ INLINE void ISprite::ReconfigureAnimation()
 	pFrameImage = static_cast<IImage *>(pRes->Get(_F(pFrame->iFileId), Seed::ObjectImage, pPool));
 
 	this->ReconfigureFrame();
+
+	if (this->bAnimation)
+		this->Play();
 }
 
 // WARNING: pFrameImage must be valid here.
@@ -190,8 +191,8 @@ INLINE void ISprite::ReconfigureFrame()
 	//this->iCurrentFrameTime = pFrame->iTime;
 	this->fCurrentFrameRate = 1.0f / static_cast<f32>(pFrame->iTime);
 
-	if (this->bAnimation)
-		this->Play();
+	//if (this->bAnimation)
+	//	this->Play();
 
 	if (pFrame->iWidth == 0)
 		this->iWidth = this->GetWidthInPixel();
@@ -372,12 +373,11 @@ INLINE void ISprite::Play()
 	fCurrentFrameRate = 1.0f / static_cast<f32>(pFrame->iTime);
 	bPlaying = TRUE;
 	bChanged = TRUE;
-	bFinished = FALSE;
 }
 
 INLINE BOOL ISprite::IsFinished() const
 {
-	return bFinished;
+	return (iCurrentFrame == iFrames - 1);
 }
 
 INLINE void ISprite::NextFrame()
@@ -496,7 +496,6 @@ void ISprite::Update(f32 delta)
 				else
 				{
 					bChanged = FALSE;
-					bFinished = TRUE;
 				}
 			}
 			else
