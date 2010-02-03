@@ -22,6 +22,37 @@
 #include <SDL/SDL_opengl.h>
 #include <SDL/SDL_image.h>
 
+#if defined(__MINGW32__) && defined(SEED_BUILD_DLL)
+	#define SEED_CORE __declspec(dllexport)
+#elif defined(__MINGW32__) && defined(SEED_EXTRA_BUILD)
+	#define SEED_PLATFORM __declspec(dllexport)
+	#define SEED_EXTRA __declspec(dllexport)
+	#define SEED_CORE __declspec(dllimport)
+#elif defined(__MINGW32__) && defined(SEED_DLL_IMPORT)
+	#define SEED_CORE __declspec(dllimport)
+	#define SEED_EXTRA __declspec(dllimport)
+	#define SEED_PLATFORM _declspec(dllimport)
+#elif defined(_MSC_VER) && defined(SEED_BUILD_DLL)
+	#define SEED_CORE _declspec(dllexport)
+#elif defined(_MSC_VER) && defined(SEED_EXTRA_BUILD)
+	#define SEED_CORE _declspec(dllimport)
+	#define SEED_EXTRA _declspec(dllexport)
+	#define SEED_PLATFORM _declspec(dllexport)
+#endif
+
+#ifndef SEED_CORE
+#define SEED_CORE
+#endif
+
+#ifndef SEED_PLATFORM
+#define SEED_PLATFORM
+#endif
+
+#ifndef SEED_EXTRA
+#define SEED_EXTRA
+#endif
+
+
 #define PLATFORM SDL
 
 #ifdef _SDL_EMULATE_WII_
@@ -38,6 +69,7 @@
 #define PLATFORM_CODE					3
 #define PLATFORM_MAX_INPUT				1
 #define PLATFORM_SAVESYSTEM_SLOTS_MAX	10
+
 
 // Types
 
