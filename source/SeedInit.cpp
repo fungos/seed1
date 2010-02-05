@@ -33,6 +33,7 @@
 #include "StringPool.h"
 #include "Updater.h"
 #include "ModuleManager.h"
+#include "Cartridge.h"
 
 namespace Seed {
 
@@ -97,6 +98,7 @@ BOOL Initialize()
 	ret = ret && pModuleManager->Add(pTimer);
 	ret = ret && pModuleManager->Add(pPackageManager);
 	ret = ret && pModuleManager->Add(pFileSystem);
+	ret = ret && pModuleManager->Add(pCartridge);
 	ret = ret && pModuleManager->Add(pScreen);
 	ret = ret && pModuleManager->Add(pSoundSystem);
 	ret = ret && pModuleManager->Add(pGuiManager);

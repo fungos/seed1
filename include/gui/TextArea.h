@@ -58,6 +58,9 @@ class TextArea : public IWidget
 	protected:
 		struct sLineInfo
 		{
+			public:
+				sLineInfo():fPosX(0.0f), fPosY(0.0f), iIndex(0), iSize(0){};
+
 			f32 fPosX;
 			f32 fPosY;
 			u32 iIndex;
