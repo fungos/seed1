@@ -142,10 +142,10 @@ INLINE void Renderer2D::Enable2D()
 	glLoadIdentity();
 
 	#ifdef SEED_USE_REAL_COORDINATE_SYSTEM
-		glOrtho(0.0f, pScreen->GetWidth(), pScreen->GetHeight(), 0.0f, -100000, 0);
+		glOrtho(0.0f, pScreen->GetWidth(), pScreen->GetHeight(), 0.0f, -1000000, 0);
 	#else
 		f32 aspectH = fScreenH / fScreenW;
-		glOrtho(0.0f, 1.0f, aspectH, 0.0f, -100000, 0);
+		glOrtho(0.0f, 1.0f, aspectH, 0.0f, -1000000, 0);
 	#endif
 
 	glMatrixMode(GL_MODELVIEW);
