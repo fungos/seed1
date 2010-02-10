@@ -16,6 +16,7 @@
 #include "Input.h"
 #include "EventInputPointer.h"
 #include "EventInputKeyboard.h"
+#include "EventSystem.h"
 
 
 #define TAG "[Input] "
@@ -83,7 +84,10 @@ FIXME: 2009-02-17 | BUG | Usar polling? Isso deve ferrar com o frame rate config
 			break;
 
 			case SDL_QUIT:
-				pSystem->Shutdown();
+			{
+				EventSystem ev;
+				pSystem->SendEventShutdown(&ev);
+			}
 			break;
 
 			case SDL_MOUSEMOTION:

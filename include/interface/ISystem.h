@@ -272,7 +272,6 @@ class ISystem : public IModule, public IUpdatable
 		// IObject
 		virtual const char *GetObjectName() const;
 
-	protected:
 		void SendEventReset(const EventSystem *ev);
 		void SendEventShutdown(const EventSystem *ev);
 		void SendEventSystemMenu(const EventSystem *ev);

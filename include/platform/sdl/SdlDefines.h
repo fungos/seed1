@@ -97,14 +97,15 @@
 	typedef unsigned short		u16;
 #elif defined(__APPLE_CC__)
 	typedef signed long long 		s64;
-	typedef unsigned long long	 	u64;
+	typedef unsigned long long		u64;
 	typedef signed int 			s32;
 	typedef unsigned int 			u32;
 	typedef signed short int 		s16;
 	typedef unsigned short int 		u16;
 #elif defined(__GNUC__)
-	typedef signed long int 		s64;
-	typedef unsigned long int	 	u64;
+	#include <inttypes.h>
+	typedef uint64_t  			s64;
+	typedef int64_t 			u64;
 	typedef signed int 			s32;
 	typedef unsigned int 			u32;
 	typedef signed short int 		s16;
