@@ -177,6 +177,17 @@ template <class TYPE> class Point
 			return ((x * point.x) + (y * point.y));
 		}
 
+		Point<TYPE> & Cross()
+		{
+			TYPE new_x = y;
+			TYPE new_y = -x;
+
+			x = new_x;
+			y = new_y;
+
+			return *this;
+		}
+
 		TYPE SquareLength() const
 		{
 			return ((x * x) + (y * y));
