@@ -20,6 +20,8 @@ class IGameApp : public IUpdatable, public IModule
 		IGameApp();
 		virtual ~IGameApp();
 
+		virtual BOOL Shutdown();
+
 		virtual void Setup(int argc, char **argv);
 		virtual void WriteOut(const char *msg);
 		virtual void WriteErr(const char *msg);

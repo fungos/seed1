@@ -5,6 +5,7 @@
 
 
 #include "interface/IGameApp.h"
+#include "Dictionary.h"
 #include "Enum.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -18,6 +19,14 @@ IGameApp::IGameApp()
 
 IGameApp::~IGameApp()
 {
+}
+
+INLINE BOOL IGameApp::Shutdown()
+{
+	pDictionary->Reset();
+	glResourceManager.Reset();
+
+	return TRUE;
 }
 
 INLINE void IGameApp::Setup(int argc, char **argv)

@@ -177,11 +177,9 @@ void Shutdown()
 	if (!Private::bInitialized)
 		return;
 
-//	Private::pApplication->Shutdown();
+	//Private::pApplication->Shutdown();
 
 	// Reset util classes
-	pDictionary->Reset();
-	glResourceManager.Reset();
 
 	pModuleManager->Shutdown();
 /*
