@@ -31,6 +31,7 @@ enum eObjectType
 	ObjectParticleManager,
 
 	// System
+	ObjectConfiguration,
 	ObjectInterfaceModule,
 	ObjectInterfaceRenderable,
 	ObjectInterfaceGameApp,
@@ -55,6 +56,31 @@ enum eLanguage
 	ja_JA,
 	cn_CN,
 	MaximumLanguage
+};
+
+//! Basic frame rate values.
+/*!
+	Some platform may not support nativelly some frame rates values.
+*/
+enum eSystemFrameRate
+{
+	FrameRateLockAt60 = 60, /*!< 60 Frames per second. */
+	FrameRateLockAt30 = 30, /*!< 30 Frames per second. */
+	FrameRateLockAt20 = 20, /*!< 20 Frames per second. */
+	FrameRateLockAt15 = 15, /*!< 15 Frames per second. */
+	FrameRateUnlocked = 10000 /*!< 100 or more frames per second. */
+};
+
+//! Platform Simulation
+/*!
+	Sets the platform simulation "profile".
+*/
+enum ePlatformSimulation
+{
+	SimulateNothing,
+	SimulateWii,
+	SimulatePsp,
+	SimulateN900
 };
 
 /// Widget Alignment
@@ -352,6 +378,13 @@ enum eMeshType
 	TriangleStrip,
 	Triangles,
 	LineStrip
+};
+
+enum ePlayableState
+{
+	PlayableStopped,
+	PlayablePaused,
+	PlayablePlaying
 };
 
 } // namespace

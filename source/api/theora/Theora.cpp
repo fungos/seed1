@@ -13,13 +13,10 @@
 #include "Screen.h"
 #include "MemoryManager.h"
 
-
 #define TAG "[Theora] "
 #define OGGPLAY_BUFFER_SIZE		20
 
-
 namespace Seed {
-
 
 Theora::Theora()
 	: pPlayer(NULL)
@@ -115,7 +112,7 @@ BOOL Theora::Run()
 					SEM_WAIT(sem);
 			}
 		}
-		
+
 		ret = !bTerminateThread;
 	}
 
@@ -136,66 +133,71 @@ BOOL Theora::Run()
 
 BOOL Theora::Load(const char *filename)
 {
-	OggPlayReader *reader = oggplay_file_reader_new(filename);
-	pPlayer = oggplay_open_with_reader(reader);
-
-	bLoaded = FALSE;
-	bTerminateThread = FALSE;
-
-	if (pPlayer)
+	if (this->Unload())
 	{
-		u32 tracks = oggplay_get_num_tracks(pPlayer);
-		Log(TAG "There are %d tracks.", tracks);
-		
-		for (u32 i = 0; i < tracks; i++)
+		OggPlayReader *reader = oggplay_file_reader_new(filename);
+		pPlayer = oggplay_open_with_reader(reader);
+
+		bLoaded = FALSE;
+		bTerminateThread = FALSE;
+
+		if (pPlayer)
 		{
-			Log(TAG "Track %d is of type %s", i, oggplay_get_track_typename(pPlayer, i));
-			if (oggplay_get_track_type(pPlayer, i) == OGGZ_CONTENT_THEORA)
-			{
-				oggplay_set_callback_num_frames(pPlayer, i, 1);
+			u32 tracks = oggplay_get_num_tracks(pPlayer);
+			Log(TAG "There are %d tracks.", tracks);
 
-				oggplay_get_video_fps(pPlayer, i, (int*)&iFpsDenom, (int*)&iFpsNum);
-				iDuration = (u32)oggplay_get_duration(pPlayer);
-				fFps = static_cast<f32>(iFpsNum) / static_cast<f32>(iFpsDenom);
-				fDelay = 1000 / fFps;
-				iTotalFrames = static_cast<u32>(iDuration * fFps / 1000) + 1;
+			for (u32 i = 0; i < tracks; i++)
+			{
+				Log(TAG "Track %d is of type %s", i, oggplay_get_track_typename(pPlayer, i));
+				if (oggplay_get_track_type(pPlayer, i) == OGGZ_CONTENT_THEORA)
+				{
+					oggplay_set_callback_num_frames(pPlayer, i, 1);
+
+					oggplay_get_video_fps(pPlayer, i, (int*)&iFpsDenom, (int*)&iFpsNum);
+					iDuration = (u32)oggplay_get_duration(pPlayer);
+					fFps = static_cast<f32>(iFpsNum) / static_cast<f32>(iFpsDenom);
+					fDelay = 1000 / fFps;
+					iTotalFrames = static_cast<u32>(iDuration * fFps / 1000) + 1;
+				}
+
+				if (oggplay_set_track_active(pPlayer, i) < 0)
+				{
+					Log(TAG "Note: Could not set this track active!");
+				}
+				else
+				{
+					iTrack = i;
+				}
 			}
 
-			if (oggplay_set_track_active(pPlayer, i) < 0)
-			{
-				Log(TAG "Note: Could not set this track active!");
-			}
-			else
-			{
-				iTrack = i;
-			}
+			oggplay_use_buffer(pPlayer, OGGPLAY_BUFFER_SIZE);
+
+			bLoaded = TRUE;
+			bPlaying = FALSE;
+			bFinished = FALSE;
+
+			SEM_CREATE(sem, OGGPLAY_BUFFER_SIZE);
+			SEM_WAIT(sem);
+
+			this->Create();
+			this->Run();
+
+			this->ConfigureRendering();
 		}
-
-		oggplay_use_buffer(pPlayer, OGGPLAY_BUFFER_SIZE);
-
-		bLoaded = TRUE;
-		bPlaying = FALSE;
-		bFinished = FALSE;
-
-		SEM_CREATE(sem, OGGPLAY_BUFFER_SIZE);
-		SEM_WAIT(sem);
-
-		this->Create();
-		this->Run();
-
-		this->ConfigureRendering();
-	}
-	else
-	{
-		reader = NULL;
-		Log(TAG "ERROR: could not initialise oggplay with '%s'", filename);
+		else
+		{
+			reader = NULL;
+			Log(TAG "ERROR: could not initialise oggplay with '%s'", filename);
+		}
 	}
 
 	return bLoaded;
 }
 
-void Theora::Update()
+void Theora::Update(f32 delta)
 {
+	UNUSED(delta);
+
 	if (bPlaying)
 	{
 		if (iUntilFrame && iUntilFrame == iFrameCount)
@@ -228,7 +230,7 @@ void Theora::Update()
 		{
 			type = oggplay_callback_info_get_type(track_info[i]);
 			headers = oggplay_callback_info_get_headers(track_info[i]);
-			
+
 			switch (type)
 			{
 				case OGGPLAY_INACTIVE:
@@ -286,7 +288,7 @@ INLINE BOOL Theora::GoToFrame(u32 frame)
 	BOOL ret = FALSE;
 	iFrameCount = frame;
 	ogg_int64_t pos = static_cast<ogg_int64_t>(frame * fDelay);
-	
+
 	if (oggplay_seek(pPlayer, pos) == E_OGGPLAY_CANT_SEEK)
 	{
 		Log(TAG "Cant seek forward.");
@@ -391,7 +393,7 @@ INLINE void Theora::ProcessVideoData(OggPlayVideoData *data)
 {
 	OggPlayYUVChannels yuv;
 	OggPlayRGBChannels rgb;
-	
+
 	yuv.ptry = data->y;
 	yuv.ptru = data->u;
 	yuv.ptrv = data->v;
@@ -399,11 +401,11 @@ INLINE void Theora::ProcessVideoData(OggPlayVideoData *data)
 	yuv.uv_height = iUVHeight;
 	yuv.y_width = iWidth;
 	yuv.y_height = iHeight;
-	
+
 	rgb.ptro = pTexData;
 	rgb.rgb_width = iTexWidth;
 	rgb.rgb_height = iTexHeight;
-	
+
 	oggplay_yuv2rgba(&yuv, &rgb);
 }
 
@@ -434,7 +436,7 @@ void Theora::ConfigureRendering()
 
 	glGenTextures(1, &iTextureId);
 	glBindTexture(GL_TEXTURE_2D, iTextureId);
-	
+
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -446,10 +448,10 @@ void Theora::ConfigureRendering()
 
 	ASSERT_MSG((iUVWidth == (iWidth / 2)), "Invalid width ");
 	ASSERT_MSG((iUVHeight == (iHeight / 2)), "Invalid height ");
-	
+
 	for (po2_width = 1; po2_width < iWidth; po2_width <<= 1);
 	for (po2_height = 1; po2_height < iHeight; po2_height <<= 1);
-	
+
 	fTexScaleX = static_cast<f32>(iWidth) / static_cast<f32>(po2_width);
 	fTexScaleY = static_cast<f32>(iHeight) / static_cast<f32>(po2_height);
 
@@ -463,7 +465,7 @@ void Theora::ConfigureRendering()
 		iTexHeight = po2_height;
 	}
 	/*
-	else if (iTexWidth != po2_width || iTexHeight != po2_height) 
+	else if (iTexWidth != po2_width || iTexHeight != po2_height)
 	{
 		//free(pTexData);
 		//pTexData = reinterpret_cast<u8 *>(calloc(1, po2_width * po2_height * 4));

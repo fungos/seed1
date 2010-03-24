@@ -37,12 +37,13 @@ IResource *ImageResourceLoader(const char *filename, ResourceManager *res, IMemo
 
 Image::Image()
 	: pSurface(NULL)
+	, pData(NULL)
 #if defined(DEBUG)
 	, stFile()
 #endif
 	, iTextureId(0)
-	, fWidth(0.0f)
-	, fHeight(0.0f)
+	, iBytesPerPixel(0)
+	, iPitch(0)
 {
 }
 
@@ -57,12 +58,17 @@ INLINE void Image::Reset()
 
 	if (pSurface)
 		SDL_FreeSurface(pSurface);
+	pSurface = NULL;
+	pData = NULL;
+	pPool = NULL;
 
-	this->pSurface = NULL;
-	this->pPool = NULL;
+	iWidth = 0;
+	iHeight = 0;
+	iBytesPerPixel = 0;
+	iPitch = 0;
 
-	this->fWidth = 0;
-	this->fHeight = 0;
+	fWidth = 0.0f;
+	fHeight = 0.0f;
 
 #if defined(DEBUG)
 	stFile.Close();
@@ -107,7 +113,7 @@ BOOL Image::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 
 			if (format == PNG)
 				Info(TAG "Make sure that libpng12-0.dll and zlib1.dll is in the exact same folder than this application.");
-			
+
 			ASSERT(false);
 		}
 
@@ -120,9 +126,14 @@ BOOL Image::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		ASSERT_NULL(pSurface);
 		SDL_FreeSurface(tmp);
 
-		//Log(TAG "%dx%d", pSurface->w, pSurface->h);
-		this->fWidth = (f32)pSurface->w / (f32)pScreen->GetWidth();
-		this->fHeight = (f32)pSurface->h / (f32)pScreen->GetHeight();
+		iWidth = pSurface->w;
+		iHeight = pSurface->h;
+		fWidth = (f32)iWidth / (f32)pScreen->GetWidth();
+		fHeight = (f32)iHeight / (f32)pScreen->GetHeight();
+
+		iBytesPerPixel = pSurface->format->BytesPerPixel;
+		iPitch = pSurface->pitch;
+		pData = pSurface->pixels;
 
 	#if SEED_ENABLE_PRELOAD_TEXTURE == 1
 	//	this->LoadTexture();
@@ -138,12 +149,41 @@ BOOL Image::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 	return this->bLoaded;
 }
 
-/*
-BOOL Image::Load(u16 width, u16 height, PIXEL *buffer, IMemoryPool *pool)
+BOOL Image::Load(u32 width, u32 height, PIXEL *buffer, IMemoryPool *pool)
 {
-	ASSERT_MSG(FALSE, "Not supported!");
+	ASSERT_NULL(buffer);
+	ASSERT_NULL(pool);
+
+	ASSERT_MSG(ALIGN_FLOOR(buffer, 32) == (u8 *)buffer, "ERROR: User image buffer MUST BE 32bits aligned!");
+	ASSERT_MSG(ROUND_UP(width, 32) == width, "ERROR: User image scanline MUST BE 32bits aligned - pitch/stride!");
+
+	if (this->Unload())
+	{
+		this->pPool = pool;
+		this->pFilename = "[dynamic qt image]";
+
+		this->fWidth = (f32)width / (f32)pScreen->GetWidth();
+		this->fHeight = (f32)height / (f32)pScreen->GetHeight();
+
+		iBytesPerPixel = 4; // FIXME: You can use whatever it wants?
+		iPitch = ROUND_UP(width, 32); // FIXME: pitch?
+		pData = buffer;
+
+	#if SEED_ENABLE_PRELOAD_TEXTURE == 1
+	//	this->LoadTexture();
+	#endif // SEED_ENABLE_PRELOAD_TEXTURE
+
+		this->bLoaded = TRUE;
+	}
+
+	return this->bLoaded;
 }
-*/
+
+void Image::Update()
+{
+	this->UnloadTexture();
+	this->LoadTexture();
+}
 
 BOOL Image::Unload()
 {
@@ -160,10 +200,7 @@ BOOL Image::Unload()
 
 INLINE const void *Image::GetData() const
 {
-	if (!pSurface)
-		return NULL;
-
-	return this->pSurface->pixels;
+	return pData;
 }
 
 INLINE void Image::PutPixel(u32 x, u32 y, PIXEL px)
@@ -171,12 +208,10 @@ INLINE void Image::PutPixel(u32 x, u32 y, PIXEL px)
 	if (!pSurface)
 		return;
 
-	u32 i_bpp = pSurface->format->BytesPerPixel;
-
 	/* Here p is the address to the pixel we want to retrieve */
-	u8 *p = (u8 *)pSurface->pixels + y * pSurface->pitch + x * i_bpp;
+	u8 *p = (u8 *)pData + y * iPitch + x * iBytesPerPixel;
 
-	switch (i_bpp)
+	switch (iBytesPerPixel)
 	{
 		case 3:
 		{
@@ -216,12 +251,10 @@ INLINE PIXEL Image::GetPixel(u32 x, u32 y) const
 	if (!pSurface)
 		return 0;
 
-	u32 i_bpp = pSurface->format->BytesPerPixel;
-
 	/* Here p is the address to the pixel we want to retrieve */
-	u8 *p = (u8 *)pSurface->pixels + y * pSurface->pitch + x * i_bpp;
+	u8 *p = (u8 *)pData + y * iPitch + x * iBytesPerPixel;
 
-	switch (i_bpp)
+	switch (iBytesPerPixel)
 	{
 		case 1:
 			return *p;
@@ -248,7 +281,7 @@ INLINE u8 Image::GetPixelAlpha(u32 x, u32 y) const
 	if (!pSurface)
 		return 0;
 
-	if (x > (u32)pSurface->w || y > (u32)pSurface->h)
+	if (x > iWidth || y > iHeight)
 	{
 		#if !defined(__GNUC__)
 			__asm { int 3 };
@@ -261,53 +294,25 @@ INLINE u8 Image::GetPixelAlpha(u32 x, u32 y) const
 
 	u8 a = 255;
 	u8 r, g, b;
-	if (pSurface->format->BitsPerPixel == 32)
+	if (iBytesPerPixel == 4)
 	{
 		PIXEL px = this->GetPixel(x, y);
-		SDL_GetRGBA(px, pSurface->format, &r, &g, &b, &a);
+
+		if (pSurface)
+			SDL_GetRGBA(px, pSurface->format, &r, &g, &b, &a);
 	}
 
 	return a;
 }
 
-INLINE u32 Image::GetWidthInPixel() const
-{
-	if (!pSurface)
-		return 0;
-
-	return pSurface->w;
-}
-
-INLINE u32 Image::GetHeightInPixel() const
-{
-	if (!pSurface)
-		return 0;
-
-	return pSurface->h;
-}
-
-INLINE f32 Image::GetWidth() const
-{
-	return this->fWidth;
-}
-
-INLINE f32 Image::GetHeight() const
-{
-	return this->fHeight;
-}
-
 INLINE u32 Image::GetUsedMemory() const
 {
-	u32 size = IResource::GetUsedMemory() + sizeof(this);
-	if (pSurface)
-		size += (pSurface->h * pSurface->w * pSurface->format->BytesPerPixel);
-
-	return size;
+	return IResource::GetUsedMemory() + sizeof(this) + (iHeight * iWidth * iBytesPerPixel);
 }
 
 INLINE int Image::LoadTexture()
 {
-	if (pSurface && !iTextureId)
+	if (pData && !iTextureId)
 	{
 		glGenTextures(1, &iTextureId);
 		glBindTexture(GL_TEXTURE_2D, iTextureId);
@@ -325,28 +330,30 @@ INLINE int Image::LoadTexture()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-		switch (pSurface->format->BitsPerPixel)
+		switch (iBytesPerPixel)
 		{
-			case 32:
+			case 4:
 				// OpenGL 1.2+ only GL_EXT_bgra
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pSurface->w, pSurface->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, pSurface->pixels);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iWidth, iHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, pData);
 			break;
 
-			case 24:
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pSurface->w, pSurface->h, 0, GL_RGB, GL_UNSIGNED_BYTE, pSurface->pixels);
+			case 3:
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, iWidth, iHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, pData);
 			break;
 
-			case 16:
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pSurface->w, pSurface->h, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, pSurface->pixels);
+			case 2:
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, iWidth, iHeight, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, pData);
 			break;
 
-			case 8:
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, pSurface->w, pSurface->h, 0, GL_ALPHA, GL_UNSIGNED_BYTE, pSurface->pixels);
+			case 1:
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, iWidth, iHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, pData);
 			break;
 
 			default:
 			break;
 		}
+
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	return this->iTextureId;

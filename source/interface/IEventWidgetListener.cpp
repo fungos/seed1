@@ -3,12 +3,9 @@
 	\brief Defines the event widget listener class interface
 */
 
-
 #include "interface/IEventWidgetListener.h"
 
-
 namespace Seed {
-
 
 IEventWidgetListener::IEventWidgetListener()
 {
@@ -63,6 +60,4 @@ INLINE void IEventWidgetListener::OnWidgetDrop(const EventWidget *ev)
 	UNUSED (ev);
 }
 
-
 } // namespace
-

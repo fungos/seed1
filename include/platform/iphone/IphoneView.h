@@ -11,7 +11,6 @@
 #include "interface/IGameApp.h"
 #include "interface/IRenderer.h"
 
-
 /*
 This class wraps the CAEAGLLayer from CoreAnimation into a convenient UIView subclass.
 The view content is basically an EAGL surface you render your OpenGL scene into.

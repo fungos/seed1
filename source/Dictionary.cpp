@@ -106,7 +106,7 @@ INLINE const u16 *Dictionary::GetGlyphTable(u32 *outLen) const
 	return this->pGlyphs;
 }
 
-const WideString Dictionary::GetString(u32 stringId, u32 *outLen) const
+const u16 *Dictionary::GetString(u32 stringId, u32 *outLen) const
 {
 	ASSERT_MSG(stringId != SEED_INVALID_ID, "Error: stringId is invalid. Rebuild your assets.");
 	const void *ret = NULL;

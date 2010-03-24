@@ -28,7 +28,7 @@ void Profiler::AddSlice(const char *func, int time)
 		p->calls++;
 		p->time += time;
 
-		if(time > p->maxtime)
+		if (time > p->maxtime)
 			p->maxtime = time;
 	}
 	else
@@ -67,7 +67,7 @@ void Profiler::Dump()
 
 	FuncTimeMapIt it = mapSubjectTotal.begin();
 	FuncTimeMapIt end = mapSubjectTotal.end();
-	for(; it != end; ++it)
+	for (; it != end; ++it)
 	{
 		Log("%s: %s [%d (Max %d) called %d times]", pName, (*it).first, (*it).second->time, (*it).second->maxtime, (*it).second->calls);
 	}
@@ -76,7 +76,7 @@ void Profiler::Dump()
 
 	it = mapSubjectSlice.begin();
 	end = mapSubjectSlice.end();
-	for(; it != end; ++it)
+	for (; it != end; ++it)
 	{
 		Log("%s: %s [%d (Max %d) interrupted %d times]", pName, (*it).first, (*it).second->time, (*it).second->maxtime, (*it).second->calls);
 	}
@@ -86,7 +86,7 @@ void Profiler::Reset()
 {
 	FuncTimeMapIt it = mapSubjectTotal.begin();
 	FuncTimeMapIt end = mapSubjectTotal.end();
-	for(; it != end; ++it)
+	for (; it != end; ++it)
 	{
 		delete (*it).second;
 	}
@@ -94,7 +94,7 @@ void Profiler::Reset()
 
 	it = mapSubjectSlice.begin();
 	end = mapSubjectSlice.end();
-	for(; it != end; ++it)
+	for (; it != end; ++it)
 	{
 		delete (*it).second;
 	}

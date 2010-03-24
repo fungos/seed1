@@ -24,9 +24,7 @@
 
 #define TAG "[Screen] "
 
-
 namespace Seed { namespace iPhone {
-
 
 Screen Screen::instance;
 
@@ -46,12 +44,10 @@ Screen::Screen()
 	this->Reset();
 }
 
-
 Screen::~Screen()
 {
 	this->Reset();
 }
-
 
 BOOL Screen::Reset()
 {
@@ -61,12 +57,10 @@ BOOL Screen::Reset()
 	return TRUE;
 }
 
-
 void Screen::Setup(u32 mode)
 {
 	this->iMode = mode;
 }
-
 
 BOOL Screen::Initialize()
 {
@@ -79,7 +73,6 @@ BOOL Screen::Initialize()
 	return TRUE;
 }
 
-
 BOOL Screen::Shutdown()
 {
 	Log(TAG "Terminating...");
@@ -90,14 +83,12 @@ BOOL Screen::Shutdown()
 	return r;
 }
 
-
-BOOL Screen::Update()
+BOOL Screen::Update(f32 delta)
 {
+	UNUSED(delta);
 	this->SwapSurfaces();
-
 	return TRUE;
 }
-
 
 void Screen::FadeOut()
 {
@@ -109,7 +100,6 @@ void Screen::FadeOut()
 	iFadeStatus	= FADE_OUT_TRANS;
 }
 
-
 void Screen::FadeIn()
 {
 	if (bFading)
@@ -120,7 +110,6 @@ void Screen::FadeIn()
 	iFadeStatus	= FADE_OUT_SOLID;
 }
 
-
 void Screen::CancelFade()
 {
 	if (!bFading)
@@ -130,12 +119,10 @@ void Screen::CancelFade()
 	iFadeStatus	= FADE_OUT_TRANS;
 }
 
-
 void Screen::SwapSurfaces()
 {
 	glFlush();
 }
-
 
 void Screen::CreateHardwareSurfaces()
 {
@@ -169,7 +156,6 @@ void Screen::CreateHardwareSurfaces()
 	}
 }
 
-
 void Screen::DestroyHardwareSurfaces()
 {
 	glDeleteFramebuffersOES(1, &frameBuffer);
@@ -185,7 +171,6 @@ void Screen::DestroyHardwareSurfaces()
 	}
 #endif // SEED_ENABLE_DEPTH_TEST
 }
-
 
 void Screen::ApplyFade()
 {
@@ -253,26 +238,21 @@ void Screen::ApplyFade()
 	glEnable(GL_TEXTURE_2D);
 }
 
-
 void Screen::SetRenderer2D(IRenderer2D *renderer)
 {
 	this->pRenderer = renderer;
 }
-
 
 INLINE u32 Screen::GetHeight() const
 {
 	return static_cast<u32>(iModeHeight);
 }
 
-
 INLINE u32 Screen::GetWidth() const
 {
 	return static_cast<u32>(iModeWidth);
 }
 
-
 }} // namespace
-
 
 #endif // _IPHONE_

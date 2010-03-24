@@ -7,9 +7,12 @@
 
 namespace Seed {
 
-
 IPlayable::IPlayable()
-	: nState(PlayableStopped)
+	: fFrameRate(30.0f)
+	, iTotalFrames(0)
+	, nState(PlayableStopped)
+	, bFinished(FALSE)
+	, bLoop(FALSE)
 {
 }
 

@@ -3,13 +3,10 @@
 	\brief Defines the resource loader event listener class interface
 */
 
-
 #include "Defines.h"
 #include "interface/IEventResourceLoaderListener.h"
 
-
 namespace Seed {
-
 
 IEventResourceLoaderListener::IEventResourceLoaderListener()
 {
@@ -28,6 +25,5 @@ void IEventResourceLoaderListener::OnQueueEmpty(const EventResourceLoader *ev)
 {
 	UNUSED(ev);
 }
-
 
 } // namespace

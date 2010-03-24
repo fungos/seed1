@@ -17,9 +17,7 @@
 
 #define TAG "[Renderer] "
 
-
 namespace Seed { namespace iPhone {
-
 
 Renderer::Renderer()
 	: myScreen(NULL)
@@ -32,25 +30,21 @@ Renderer::Renderer()
 	Log(TAG "Initialization completed.");
 }
 
-
 Renderer::~Renderer()
 {
 	this->Reset();
 }
-
 
 void Renderer::SetBufferMode(eBufferMode mode)
 {
 	this->iBufferMode = mode;
 }
 
-
 INLINE BOOL Renderer::Reset()
 {
 	IRenderer::Reset();
 	return TRUE;
 }
-
 
 void Renderer::Begin() const
 {
@@ -64,7 +58,6 @@ void Renderer::Begin() const
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-
 void Renderer::End() const
 {
 	pScreen->ApplyFade();
@@ -73,9 +66,6 @@ void Renderer::End() const
 	iphContextPresentRenderBuffer();
 }
 
-
 }} // namespace
 
-
 #endif // _IPHONE_
-

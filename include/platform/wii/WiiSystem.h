@@ -12,22 +12,11 @@
 
 namespace Seed { namespace WII {
 
-
 class System : public ISystem
 {
 	public:
-		static System instance;
-
 		System();
 		virtual ~System();
-
-		// IModule
-		virtual BOOL Initialize();
-		virtual BOOL Shutdown();
-		virtual BOOL Reset();
-
-		// IUpdatable
-		virtual BOOL Update();
 
 		virtual void OnHomeCalled();
 		virtual void GoToMenu();
@@ -51,10 +40,21 @@ class System : public ISystem
 		virtual BOOL IsHomeRunning() const;
 
 		virtual BOOL InitializeHome();
-		
+
+		// IModule
+		virtual BOOL Initialize();
+		virtual BOOL Shutdown();
+		virtual BOOL Reset();
+
+		// IUpdatable
+		virtual BOOL Update(f32 delta);
+
+	public:
+		static System instance;
+
 	private:
 		SEED_DISABLE_COPY(System);
-		
+
 		static void System::ResetCallback();
 		static void System::PowerCallback();
 
@@ -65,16 +65,11 @@ class System : public ISystem
 		static BOOL g_Power;
 };
 
-
 System *const pSystem = &System::instance;
-
 
 }} // namespace
 
-
 #else // _WII_
-
 	#error "Include 'System.h' instead 'platform/wii/WiiSystem.h' directly."
-
 #endif // _WII_
 #endif // __WII_SYSTEM_H__

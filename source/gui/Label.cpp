@@ -37,7 +37,7 @@ Label::~Label()
 {
 	this->Reset();
 
-	if(Private::bInitialized)
+	if (Private::bInitialized)
 		pGuiManager->Remove(this);
 }
 

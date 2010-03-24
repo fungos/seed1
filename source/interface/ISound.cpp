@@ -5,9 +5,7 @@
 
 #include "interface/ISound.h"
 
-
 namespace Seed {
-
 
 ISound::ISound()
 {
@@ -37,6 +35,4 @@ INLINE const char *ISound::GetObjectName() const
 	return "ISound";
 }
 
-
 } // namespace
-

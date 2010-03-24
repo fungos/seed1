@@ -60,6 +60,8 @@ bool Scene::drawScene()
 
 void Scene::setStates(f32 aspect)
 {
+	UNUSED(aspect)
+
 	glFrontFace(GL_CW); // defino os vertices em sentido horario
 	glDisable(GL_CULL_FACE); // desabilita back face culling
 

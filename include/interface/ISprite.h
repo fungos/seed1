@@ -9,7 +9,7 @@
 #include "Defines.h"
 #include "interface/IObject.h"
 #include "interface/IRenderable.h"
-#include "interface/ITransformable2D.h"
+#include "interface/IBasicMesh.h"
 #include "ResourceManager.h"
 #include "MemoryManager.h"
 #include "Image.h"
@@ -18,20 +18,16 @@
 
 #define		SPRITE_GLOBAL_FRAME_TIME		60.0f
 
-
 namespace Seed {
-
 
 class ResourceManager;
 class SpriteObject;
 class IImage;
 
-
-class ISprite : public ITransformable2D
+class ISprite : public IBasicMesh
 {
 	public:
 		friend class ResourceLoader;
-
 
 	public:
 		struct Frame
@@ -67,7 +63,6 @@ class ISprite : public ITransformable2D
 
 			//Animation() : iIndex(0), iFrames(0), iFlags(Seed::FlagNone), pName(NULL), pFrame(NULL) {}
 		};
-
 
 	public:
 		ISprite();
@@ -108,20 +103,21 @@ class ISprite : public ITransformable2D
 		virtual u32 GetWidthInPixel() const;
 		virtual u32 GetHeightInPixel() const;
 
-		virtual void SetCustomVertexDataArray(Vector3f *myVertexData, u32 qty, eMeshType type = Seed::TriangleStrip);
-		virtual void SetCustomCoordsDataArray(f32 *myCoordsData, u32 qty);
+		//virtual void SetCustomVertexDataArray(Vector3f *myVertexData, u32 qty, eMeshType type = Seed::TriangleStrip);
+		//virtual void SetCustomCoordsDataArray(f32 *myCoordsData, u32 qty);
 
 		virtual void Reset();
 		virtual void Initialize();
 
+		virtual IImage *GetTexture() const;
+
 		// IRenderable
 		virtual void Update(f32 delta);
-		virtual void Render(f32 delta);
-		virtual IImage *GetTexture() const;
 
 		// IObject
 		virtual const char *GetObjectName() const;
 		virtual int GetObjectType() const;
+
 	protected:
 		void *operator new(size_t len);
 		void operator delete(void *ptr);
@@ -145,11 +141,6 @@ class ISprite : public ITransformable2D
 		BOOL bPlaying;
 		BOOL bFinished;
 
-		f32 fTexS0;
-		f32 fTexS1;
-		f32 fTexT0;
-		f32 fTexT1;
-
 		// Frame related width and height *proportional to view port aspect ratio* for rendering only
 		f32 fAspectHalfWidth; // real half width
 		f32 fAspectHalfHeight; // real half height
@@ -168,7 +159,7 @@ class ISprite : public ITransformable2D
 		s32 iHalfHeight; // half height in pixel
 		u32 iWidth; // width in pixel
 		u32 iHeight; // height in pixel
-
+/*
 		//Custom vertex and uv map
 		u32 iNumVertices;
 		Vector3f *arCustomVertexData;
@@ -178,7 +169,7 @@ class ISprite : public ITransformable2D
 		f32 *arCustomCoordsData;
 
 		eMeshType	nMeshType;
-
+*/
 		ResourceManager *pRes;
 		IMemoryPool		*pPool;
 		const char		*pFilename;
@@ -187,8 +178,6 @@ class ISprite : public ITransformable2D
 		SEED_DISABLE_COPY(ISprite);
 };
 
-
 } // namespace
-
 
 #endif // __ISPRITE_H__

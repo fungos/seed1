@@ -3,22 +3,20 @@
 	\brief Defines the System class interface
 */
 
-
 #include "interface/ISystem.h"
 #include "interface/IEventSystemListener.h"
 #include "EventSystem.h"
 
-
 namespace Seed {
 
-const char *pcLanguageTable[] = 
+const char *pcLanguageTable[] =
 {
-	"en_US", 
-	"pt_BR", 
-	"es_ES", 
-	"de_DE", 
-	"ja_JA", 
-	"cn_CN", 
+	"en_US",
+	"pt_BR",
+	"es_ES",
+	"de_DE",
+	"ja_JA",
+	"cn_CN",
 	"Unknown"
 };
 
@@ -70,21 +68,25 @@ INLINE const char *ISystem::GetLanguageString() const
 
 INLINE const char *ISystem::GetUsername() const
 {
+	SEED_ABSTRACT_METHOD;
 	return NULL;
 }
 
 INLINE const char *ISystem::GetHomeFolder() const
 {
+	SEED_ABSTRACT_METHOD;
 	return NULL;
 }
 
 INLINE const char *ISystem::GetApplicationDataFolder() const
 {
+	SEED_ABSTRACT_METHOD;
 	return NULL;
 }
 
 INLINE const char *ISystem::GetSaveGameFolder() const
 {
+	SEED_ABSTRACT_METHOD;
 	return NULL;
 }
 

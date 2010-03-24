@@ -3,10 +3,8 @@
 	\brief Image QT Implementation
 */
 
-
 #ifndef __QT_IMAGE_H__
 #define __QT_IMAGE_H__
-
 
 #ifdef _QT_
 
@@ -19,15 +17,12 @@
 
 namespace Seed { namespace QT {
 
-
 IResource *ImageResourceLoader(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
-
 
 class Image : public IImage
 {
 	friend IResource *ImageResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 	friend class Sprite;
-
 
 	public:
 		Image();
@@ -35,7 +30,7 @@ class Image : public IImage
 
 		// IImage
 		virtual BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool);
-		//virtual void Load(u16 width, u16 height, PIXEL *buffer, IMemoryPool *pool = pDefaultPool);
+		virtual BOOL Load(u32 width, u32 height, PIXEL *buffer, IMemoryPool *pool = pDefaultPool);
 		virtual BOOL Unload();
 
 		virtual const void *GetData() const;
@@ -67,23 +62,13 @@ class Image : public IImage
 
 		u32 iTextureId;
 
-		f32 fWidth;
-		f32 fHeight;
-
 		s32 iHalfWidth;
 		s32 iHalfHeight;
-
-		u16 iWidth;
-		u16 iHeight;
 };
-
 
 }} // namespace
 
-
 #else // _QT_
-
 	#error "Include 'Image.h' instead 'platform/qt/QtImage.h' directly."
-
 #endif // _QT_
 #endif // __QT_IMAGE__

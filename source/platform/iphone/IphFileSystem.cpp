@@ -15,26 +15,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 #define TAG "[FileSystem] "
-
 
 namespace Seed { namespace iPhone {
 
-
 FileSystem FileSystem::instance;
-
 
 FileSystem::FileSystem()
 	: iLastLength(0)
 {
 }
 
-
 FileSystem::~FileSystem()
 {
 }
-
 
 BOOL FileSystem::Initialize()
 {
@@ -53,18 +47,15 @@ BOOL FileSystem::Initialize()
 	return TRUE;
 }
 
-
 BOOL FileSystem::Reset()
 {
 	return TRUE;
 }
 
-
 BOOL FileSystem::Shutdown()
 {
 	return this->Reset();
 }
-
 
 BOOL FileSystem::Open(const char *fname, File *file, IMemoryPool *pool)
 {
@@ -88,11 +79,11 @@ BOOL FileSystem::Open(const char *fname, File *file, IMemoryPool *pool)
 
 			u32 total = fread(buff, 1, this->iLastLength, fp);
 			fclose(fp);
-			
+
 			if (total != this->iLastLength)
 			{
 				Log(TAG "WARNING: fread bytes read mismatch (diff: %d).", iLastLength - total);
-				Log(TAG "WARNING: %s.", fname);			
+				Log(TAG "WARNING: %s.", fname);
 			}
 
 			file->iSize = this->iLastLength;
@@ -113,7 +104,6 @@ BOOL FileSystem::Open(const char *fname, File *file, IMemoryPool *pool)
 
 	return ret;
 }
-
 
 }} // namespace
 

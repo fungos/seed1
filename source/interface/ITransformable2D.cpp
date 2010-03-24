@@ -3,22 +3,15 @@
 	\brief Defines a primitive Transformable2D class interface
 */
 
-
 #include "interface/ITransformable2D.h"
 #include "Point.h"
 
-
 namespace Seed {
-
 
 ITransformable2D::ITransformable2D()
 	: bTransformationChanged(TRUE)
 	, pParent(NULL)
-	//, fPosX(0.0f)
-	//, fPosY(0.0f)
 	, ptPos(0.0f, 0.0f)
-	//, fLocalPosX(0.0f)
-	//, fLocalPosY(0.0f)
 	, ptLocalPos(0.0f, 0.0f)
 	, fWidth(0.0f)
 	, fHeight(0.0f)
@@ -35,12 +28,8 @@ ITransformable2D::~ITransformable2D()
 
 void ITransformable2D::Reset()
 {
-	//this->fPosX 		= 0.0f;
-	//this->fPosY 		= 0.0f;
 	this->ptPos.x		= 0.0f;
 	this->ptPos.y		= 0.0f;
-	//this->fLocalPosX 	= 0.0f;
-	//this->fLocalPosY 	= 0.0f;
 	this->ptLocalPos.x	= 0.0f;
 	this->ptLocalPos.y	= 0.0f;
 	this->fWidth 		= 0.0f;
@@ -481,7 +470,6 @@ INLINE ITransformable2D *ITransformable2D::GetParent() const
 	return pParent;
 }
 
-
 INLINE BOOL ITransformable2D::IsChanged() const
 {
 	BOOL ret = bTransformationChanged;
@@ -490,6 +478,5 @@ INLINE BOOL ITransformable2D::IsChanged() const
 
 	return ret;
 }
-
 
 } // namespace

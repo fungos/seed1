@@ -12,9 +12,7 @@
 #include "interface/IMemoryManager.h"
 #include "platform/iphone/IphMemoryPool.h"
 
-
 namespace Seed { namespace iPhone {
-
 
 class MemoryManager : public IMemoryManager
 {
@@ -35,29 +33,21 @@ class MemoryManager : public IMemoryManager
 		virtual BOOL Reset();
 		virtual BOOL Shutdown();
 
-
 	public:
 		static MemoryManager instance;
 		static IphoneMemoryPool defaultPool;
 
-
 	private:
-		MemoryManager(const MemoryManager &);
-		MemoryManager &operator=(const MemoryManager &);
+		SEED_DISABLE_COPY(MemoryManager);
 };
-
 
 MemoryManager *const pMemoryManager = &MemoryManager::instance;
 IphoneMemoryPool *const pDefaultPool = &MemoryManager::defaultPool;
 #define pLargePool pDefaultPool
 
-
 }} // namespace
 
-
 #else // _IPHONE_
-
 	#error "Include 'MemoryManager.h' instead 'platform/iphone/IphMemoryManager.h' directly."
-
 #endif // _IPHONE_
 #endif // __MEMORY_MANAGER__

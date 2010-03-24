@@ -24,7 +24,11 @@ struct sOggFile
 	u32		dataSize;
 	u64		dataRead;
 
-	sOggFile() : dataPtr(NULL), dataSize(0), dataRead(0) {}
+	sOggFile()
+		: dataPtr(NULL)
+		, dataSize(0)
+		, dataRead(0)
+	{}
 };
 
 

@@ -39,7 +39,7 @@ class IRenderer : public IUpdatable, public IModule
 		IRenderer();
 		virtual ~IRenderer();
 
-		virtual void Update(const RenderableVector &vec) const;
+		virtual void Update(const RenderableVector &vec, f32 delta) const;
 		virtual BOOL Render(f32 delta);
 
 		/// Set the buffer mode for this rendering engine
@@ -69,7 +69,7 @@ class IRenderer : public IUpdatable, public IModule
 		void ClearStatic();
 
 		// IUpdatable
-		virtual BOOL Update(f32 dt);
+		virtual BOOL Update(f32 delta);
 
 	protected:
 		RenderableVector vRenderables;

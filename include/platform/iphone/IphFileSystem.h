@@ -13,9 +13,7 @@
 
 #define FILESYSTEM_DEFAULT_PATH	"data/"
 
-
 namespace Seed { namespace iPhone {
-
 
 class FileSystem : public IFileSystem
 {
@@ -30,31 +28,21 @@ class FileSystem : public IFileSystem
 		virtual BOOL Reset();
 		virtual BOOL Shutdown();
 
-
 	public:
 		static FileSystem instance;
 
-
 	private:
-		FileSystem(const FileSystem &);
-		FileSystem &operator=(const FileSystem &);
-
+		SEED_DISABLE_COPY(FileSystem);
 
 	private:
 		u32 iLastLength;
 };
 
-
 FileSystem *const pFileSystem = &FileSystem::instance;
-
 
 }} // namespace
 
-
 #else // _IPHONE_
-
 	#error "Include 'FileSystem.h' instead 'platform/iphone/IphFileSystem.h' directly."
-
 #endif // _IPHONE_
 #endif // __IPH_FILESYSTEM_H__
-

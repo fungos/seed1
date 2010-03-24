@@ -3,14 +3,11 @@
 	\brief Defines the Resource object interface
 */
 
-
 #include "interface/IResource.h"
 #include "SeedInit.h"
 #include "MemoryManager.h"
 
-
 namespace Seed {
-
 
 IResource::IResource()
 	: bLoaded(FALSE)

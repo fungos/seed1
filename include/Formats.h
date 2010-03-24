@@ -74,8 +74,11 @@ struct SpriteObjectHeader
 	//ObjectHeader block;
 	u32 animation_amount;
 	u32 flags;
-	
-	SpriteObjectHeader() : animation_amount(0), flags(0) {}
+
+	SpriteObjectHeader()
+		: animation_amount(0)
+		, flags(0)
+	{}
 };
 /*
 struct AnimationObjectHeader

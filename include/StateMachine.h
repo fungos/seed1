@@ -13,9 +13,7 @@
 #include "interface/IEvent.h"
 #include <vector>
 
-
 namespace Seed {
-
 
 class STMEvent : public IEvent
 {
@@ -112,10 +110,13 @@ class StateMachine
 		std::vector<STMTransition *> transitions;
 
 		SEED_DISABLE_COPY(StateMachine);
-		
-		
+
 	public:
-		StateMachine() :  currentState(NULL), transitions() {}
+		StateMachine()
+			: currentState(NULL)
+			, transitions()
+		{}
+
 		~StateMachine() {}
 
 		eReturnCode Initialize(STMState *state, IObject *pUserData)
@@ -205,9 +206,6 @@ class StateMachine
 		}
 };
 
-
 } // namespace
 
-
 #endif // __STATE_MACHINE_H__
-

@@ -6,18 +6,13 @@
 #ifndef __WII_THREAD_H__
 #define __WII_THREAD_H__
 
-
 #include "Defines.h"
-
 
 #if defined(_WII_)
 
-
 #include "interface/IThread.h"
 
-
 namespace Seed { namespace WII {
-
 
 class Thread : public IThread
 {
@@ -36,13 +31,9 @@ class Thread : public IThread
 		u8 			arThreadStack[PLATFORM_THREAD_STACK_SIZE];
 };
 
-
 }} // namespace
 
-
 #else // _WII_
-
 	#error "Include 'Thread.h' instead 'platform/wii/WiiThread.h' directly."
-
 #endif // _WII_
 #endif // __WII_THREAD_H__

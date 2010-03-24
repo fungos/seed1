@@ -58,11 +58,14 @@ HEADERS += ../include/StateMachine.h \
 	../include/Renderer2D.h \
 	../include/Keyframe.h \
 	../include/Config.h \
+	../include/Configuration.h \
 	../include/Trigonometry.h \
 	../include/Input.h \
 	../include/Particle.h \
 	../include/Updater.h \
 	../include/Profiler.h \
+	../include/ModuleManager.h \
+	../include/interface/IBasicMesh.h \
 	../include/interface/IRenderer2D.h \
 	../include/interface/IEventInputMotionListener.h \
 	../include/interface/IEventFileSystemListener.h \
@@ -103,6 +106,7 @@ HEADERS += ../include/StateMachine.h \
 	../include/interface/IInput.h \
 	../include/interface/IGameApp.h \
 	../include/interface/IFileSystem.h \
+	../include/interface/IPlayable.h \
 	../include/EventMovie.h \
 	../include/Enum.h \
 	../include/EventInputPointer.h \
@@ -118,7 +122,6 @@ HEADERS += ../include/StateMachine.h \
 	../include/SoundSource.h \
 	../include/SpriteObject.h \
 	../include/Base.h \
-	../include/ModuleManager.h \
 	../include/ParticleEmitter.h \
 	../include/platform/sdl/SdlSystem.h \
 	../include/platform/sdl/SdlScreen.h \
@@ -162,6 +165,27 @@ HEADERS += ../include/StateMachine.h \
 	../include/platform/qt/QtImage.h \
 	../include/platform/qt/QtInput.h \
 	../include/platform/qt/QtDefines.h \
+	../include/platform/wii/WiiCartridge.h \
+	../include/platform/wii/WiiDefines.h \
+	../include/platform/wii/WiiFileSystem.h \
+	../include/platform/wii/WiiHomeButton.h \
+	../include/platform/wii/WiiImage.h \
+	../include/platform/wii/WiiInput.h \
+	../include/platform/wii/WiiMemoryManager.h \
+	../include/platform/wii/WiiMusic.h \
+	../include/platform/wii/WiiMutex.h \
+	../include/platform/wii/WiiRenderer2D.h \
+	../include/platform/wii/WiiRenderer.h \
+	../include/platform/wii/WiiScreen.h \
+	../include/platform/wii/WiiSound.h \
+	../include/platform/wii/WiiSoundHelper.h \
+	../include/platform/wii/WiiSoundSource.h \
+	../include/platform/wii/WiiSoundSystem.h \
+	../include/platform/wii/WiiSprite.h \
+	../include/platform/wii/WiiSystem.h \
+	../include/platform/wii/WiiThread.h \
+	../include/platform/wii/WiiTimer.h \
+	../include/platform/wii/WiiWrapper.h \
 	../include/Log.h \
 	../include/ResourceLoader.h \
 	../include/Formats.h \
@@ -173,7 +197,6 @@ HEADERS += ../include/StateMachine.h \
 	../include/Package.h \
 	../include/Font.h \
 	../include/Thread.h \
-	../include/Singleton.h \
 	../include/EventSystem.h \
 	../include/SeedInit.h \
 	../include/SoundSystem.h \
@@ -196,6 +219,7 @@ HEADERS += ../include/StateMachine.h \
 	../include/api/ogl/OglSprite.h \
 	../include/api/theora/Theora.h \
 	../include/interface/IUpdatable.h \
+	../include/interface/IVideo.h \
 	../include/StringPool.h \
 	../include/TString.h \
 	../include/platform/qt/QtPch.h
@@ -221,6 +245,7 @@ SOURCES += ../source/EventInputPointer.cpp \
 	../source/Updater.cpp \
 	../source/Profiler.cpp \
 	../source/ParticleEmitterObject.cpp \
+	../source/interface/IBasicMesh.cpp \
 	../source/interface/IThread.cpp \
 	../source/interface/IRenderable.cpp \
 	../source/interface/IObject.cpp \
@@ -261,6 +286,8 @@ SOURCES += ../source/EventInputPointer.cpp \
 	../source/interface/IMutex.cpp \
 	../source/interface/IEventResourceLoaderListener.cpp \
 	../source/interface/IEventWidgetListener.cpp \
+	../source/interface/IVideo.cpp \
+	../source/interface/IPlayable.cpp \
 	../source/Keyframe.cpp \
 	../source/SpriteObject.cpp \
 	../source/ResourceLoader.cpp \
@@ -322,6 +349,7 @@ SOURCES += ../source/EventInputPointer.cpp \
 	../source/PackageManager.cpp \
 	../source/Text.cpp \
 	../source/Rand.cpp \
+	../source/Configuration.cpp \
 	../source/ParticleManager.cpp \
 	../source/api/oal_ogg/OalOggSoundSource.cpp \
 	../source/api/oal_ogg/OalOggMusic.cpp \

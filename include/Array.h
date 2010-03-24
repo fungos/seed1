@@ -6,12 +6,9 @@
 #ifndef __ARRAY_H__
 #define __ARRAY_H__
 
-
 #include "Log.h"
 
-
 namespace Seed {
-
 
 template <class TYPE, int SIZE> class Array
 {
@@ -19,31 +16,33 @@ template <class TYPE, int SIZE> class Array
 		TYPE array[SIZE];
 		u32 used;
 
-
 	public:
-		Array() : array(), used(0) {};
+		Array()
+			: array()
+			, used(0)
+		{}
 
 		inline int ArraySize()
 		{
 			return SIZE;
-		};
+		}
 
 		inline u32 Size()
 		{
 			return used;
-		};
+		}
 
 		inline TYPE& operator[](u32 index)
 		{
 			ASSERT(index < used);
 			return array[index];
-		};
+		}
 
 		inline void Add(TYPE element)
 		{
 			ASSERT(used<SIZE);
 			array[used++] = element;
-		};
+		}
 
 		inline void Add(TYPE element, u32 pos)
 		{
@@ -55,7 +54,7 @@ template <class TYPE, int SIZE> class Array
 			used++;
 
 			array[pos] = element;
-		};
+		}
 
 		inline void Add()
 		{
@@ -70,7 +69,7 @@ template <class TYPE, int SIZE> class Array
 
 			ASSERT(pos < used);
 			used = pos;
-		};
+		}
 
 		inline void Del(u32 pos, u32 qtt = 1)
 		{
@@ -145,9 +144,6 @@ template <class TYPE, int SIZE> class Array
 		}
 };
 
-
 } // namespace
 
-
 #endif // __ARRAY_H__
-

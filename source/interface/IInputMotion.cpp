@@ -4,7 +4,6 @@
 	\brief Defines Input Motion class interface
 */
 
-
 #include "interface/IInputMotion.h"
 #include "interface/IEventInputMotionListener.h"
 #include "Log.h"
@@ -13,9 +12,7 @@
 #include <vector>
 #include <algorithm>
 
-
 namespace Seed {
-
 
 IInputMotion::IInputMotion()
 	: arMotionListeners()
@@ -29,18 +26,21 @@ IInputMotion::~IInputMotion()
 INLINE Vector3f IInputMotion::GetAccelerationAxis(u16 joystick) const
 {
 	UNUSED(joystick);
+	SEED_ABSTRACT_METHOD;
 	return Vector3f(0.0f, 0.0f, 0.0f);
 }
 
 INLINE f32 IInputMotion::GetAccelerationMagnitude(u16 joystick) const
 {
 	UNUSED(joystick);
+	SEED_ABSTRACT_METHOD;
 	return 0.0f;
 }
 
 INLINE f32 IInputMotion::GetAccelerationSpeed(u16 joystick) const
 {
 	UNUSED(joystick);
+	SEED_ABSTRACT_METHOD;
 	return 0.0f;
 }
 
@@ -74,7 +74,4 @@ INLINE void IInputMotion::SendEventAccelerationChanged(const EventInputMotion *e
 	}
 }
 
-
 } // namespace
-
-

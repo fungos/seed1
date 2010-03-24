@@ -52,7 +52,7 @@ BOOL Music::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 	ASSERT_NULL(pool);
 	ASSERT_NULL(res);
 
-	if (this->Unload())
+	if (pSoundSystem->IsInitialized() && this->Unload())
 	{
 		pFilename = filename;
 		pRes = res;

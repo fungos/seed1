@@ -14,20 +14,15 @@
 #include "File.h"
 
 #include <vector>
-
 #include <OpenAL/al.h>
-
 
 #define IPHONE_MAX_VOICES		32
 #define IPHONE_MAX_FILES		64
 #define IPHONE_MASTER_VOLUME	0.2f
 
-
 namespace Seed { namespace iPhone {
 
-
 IResource *AudioResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
-
 
 class SoundSystem : public ISoundSystem, public IResource
 {
@@ -58,13 +53,12 @@ class SoundSystem : public ISoundSystem, public IResource
 		virtual void Unmute();
 
 		// IUpdatable
-		virtual BOOL Update(f32 dt);
+		virtual BOOL Update(f32 delta);
 
 		// IModule
 		virtual BOOL Initialize();
 		virtual BOOL Reset();
 		virtual BOOL Shutdown();
-
 
 	public:
 		typedef std::vector<const char *> MusicList;
@@ -98,10 +92,8 @@ class SoundSystem : public ISoundSystem, public IResource
 			eSoundState iState;
 		};
 
-
 	public:
 		static SoundSystem instance;
-
 
 	private:
 		SoundSystem(const SoundSystem &);
@@ -110,7 +102,6 @@ class SoundSystem : public ISoundSystem, public IResource
 		void UpdateMusic();
 		void UpdateSounds();
 		void ReadData(sSoundFileInfo *obj, const char *file);
-
 
 	private:
 		File				stFile;
@@ -133,16 +124,11 @@ class SoundSystem : public ISoundSystem, public IResource
 		u32					iCurrentStream;
 };
 
-
 SoundSystem *const pSoundSystem = &SoundSystem::instance;
-
 
 }} // namespace
 
-
 #else // _IPHONE_
-
 	#error "Include 'SoundSystem.h' instead 'platform/iphone/IphSoundSystem.h' directly."
-
 #endif // _IPHONE_
 #endif // __IHP_SOUND_SYSTEM_H__

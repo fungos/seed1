@@ -317,7 +317,7 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 		img->SetFilter(TextureFilterTypeMin, nMinFilter);
 	}
 
-	if(bParticlesFollowEmitter)
+	if (bParticlesFollowEmitter)
 		MoveEverything(ptPos);
 
 	ptPrevLocation = location;

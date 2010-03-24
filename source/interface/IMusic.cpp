@@ -5,9 +5,7 @@
 
 #include "interface/IMusic.h"
 
-
 namespace Seed {
-
 
 IMusic::IMusic()
 	: fVolume(1.0f)
@@ -22,6 +20,7 @@ IMusic::~IMusic()
 
 INLINE BOOL IMusic::Unload()
 {
+	SEED_ABSTRACT_METHOD;
 	return FALSE;
 }
 
@@ -30,18 +29,22 @@ INLINE BOOL IMusic::Load(const char *filename, ResourceManager *res, IMemoryPool
 	UNUSED(filename);
 	UNUSED(res);
 	UNUSED(pool);
+	SEED_ABSTRACT_METHOD;
+
 	return FALSE;
 }
 
 INLINE BOOL IMusic::Update(f32 dt)
 {
 	UNUSED(dt);
+	SEED_ABSTRACT_METHOD;
 
 	return FALSE;
 }
 
 INLINE const void *IMusic::GetData() const
 {
+	SEED_ABSTRACT_METHOD;
 	return NULL;
 }
 
@@ -82,14 +85,17 @@ INLINE const char *IMusic::GetObjectName() const
 
 INLINE void IMusic::Play()
 {
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE void IMusic::Stop()
 {
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE void IMusic::Pause()
 {
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE BOOL IMusic::IsPlaying() const
@@ -100,6 +106,5 @@ INLINE BOOL IMusic::IsPlaying() const
 			(eState != MusicPaused) &&
 			(eState != MusicNone));
 }
-
 
 } // namespace

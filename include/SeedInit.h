@@ -123,6 +123,10 @@ namespace Seed {
 	{
 	} // namespace
 
+	/// Qt platform related implementation
+	namespace QT
+	{
+	} // namespace
 } // namespace
 
 

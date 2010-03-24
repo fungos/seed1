@@ -11,9 +11,7 @@
 #include <vector>
 #include <algorithm>
 
-
 namespace Seed {
-
 
 IWidget::IWidget()
 	: vListener()
@@ -32,7 +30,6 @@ IWidget::IWidget()
 		arPlayerStateStartTime[i] = 0;
 	}
 }
-
 
 IWidget::IWidget(u32 id, f32 w, f32 h, f32 x, f32 y)
 	: ITransformable2D()
@@ -58,7 +55,6 @@ IWidget::IWidget(u32 id, f32 w, f32 h, f32 x, f32 y)
 	}
 }
 
-
 IWidget::~IWidget()
 {
 	this->Reset();
@@ -78,6 +74,7 @@ void IWidget::Reset()
 void IWidget::Update(f32 dt)
 {
 	UNUSED(dt);
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE void IWidget::SetTrigger(eInputButton button)

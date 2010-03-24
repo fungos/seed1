@@ -19,7 +19,8 @@ void Info(const char *pMessage, ...)
 	vsnprintf(t, 2048, pMessage, ap);
 	va_end(ap);
 
-	Seed::Private::pApplication->WriteOut(t);
+	if (Seed::Private::pApplication)
+		Seed::Private::pApplication->WriteOut(t);
 }
 
 #ifdef DEBUG
@@ -33,7 +34,8 @@ void Log(const char *pMessage, ...)
 	vsnprintf(t, 2048, pMessage, ap);
 	va_end(ap);
 
-	Seed::Private::pApplication->WriteOut(t);
+	if (Seed::Private::pApplication)
+		Seed::Private::pApplication->WriteOut(t);
 }
 
 void Dbg(const char *pMessage, ...)
@@ -45,7 +47,8 @@ void Dbg(const char *pMessage, ...)
 	vsnprintf(t, 2048, pMessage, ap);
 	va_end(ap);
 
-	Seed::Private::pApplication->WriteDbg(t);
+	if (Seed::Private::pApplication)
+		Seed::Private::pApplication->WriteDbg(t);
 }
 
 #endif // DEBUG

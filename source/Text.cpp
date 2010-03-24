@@ -70,7 +70,7 @@ INLINE void Text::SetText(u32 dictText)
 	if (!this->bStatic && this->pStrData)
 		pMemoryManager->Free(this->pStrData, pDefaultPool);
 
-	this->pStrData = pDictionary->GetString(dictText); //staticStr; FIXME TODO
+	this->pStrData = const_cast<WideString>(pDictionary->GetString(dictText)); //staticStr; FIXME TODO
 	this->bStatic = TRUE;
 	//this->bChanged = TRUE;
 	this->fWidth = this->GetWidth(0, String::Length(pStrData));
@@ -89,7 +89,7 @@ INLINE void Text::SetText(WideString str)
 
 INLINE void Text::SetText(const String &str)
 {
-	this->SetText(str.GetData());
+	this->SetText(const_cast<WideString>(str.GetData()));
 }
 
 /*

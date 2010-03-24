@@ -14,29 +14,23 @@
 
 #define TAG "[MemoryManager] "
 
-
 namespace Seed { namespace iPhone {
-
 
 MemoryManager MemoryManager::instance;
 IphoneMemoryPool MemoryManager::defaultPool;
-
 
 MemoryManager::MemoryManager()
 {
 }
 
-
 MemoryManager::~MemoryManager()
 {
 }
-
 
 BOOL MemoryManager::Reset()
 {
 	return TRUE;
 }
-
 
 BOOL MemoryManager::Initialize()
 {
@@ -49,7 +43,6 @@ BOOL MemoryManager::Initialize()
 	return r;
 }
 
-
 BOOL MemoryManager::Shutdown()
 {
 	Log(TAG "Terminating...");
@@ -59,12 +52,10 @@ BOOL MemoryManager::Shutdown()
 	return r;
 }
 
-
 INLINE u32 MemoryManager::GetFreeMemory() const
 {
 	return 0;
 }
-
 
 INLINE void *MemoryManager::Alloc(SIZE_T len, IMemoryPool *pool, const char *desc, const char *owner)
 {
@@ -72,19 +63,15 @@ INLINE void *MemoryManager::Alloc(SIZE_T len, IMemoryPool *pool, const char *des
 	return (void *)malloc(ROUND_UP(len, 32));
 }
 
-
 INLINE void MemoryManager::Free(void *ptr, IMemoryPool *pool)
 {
 	free(ptr);
 }
 
-
 INLINE void MemoryManager::Info()
 {
 }
 
-
 }} // namespace
-
 
 #endif // _IPHONE_

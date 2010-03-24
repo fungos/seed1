@@ -89,7 +89,7 @@ Button::Button()
 Button::~Button()
 {
 	this->Unload();
-	if(Private::bInitialized)
+	if (Private::bInitialized)
 		pGuiManager->Remove(this);
 }
 
@@ -174,7 +174,7 @@ BOOL Button::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 
 		f32 x = 0;
 		f32 y = 0;
-
+		
 		READ_F32(x, ptr);
 		READ_F32(y, ptr);
 
@@ -211,9 +211,9 @@ BOOL Button::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 	return this->bLoaded;
 }
 
-void Button::Update(f32 dt)
+void Button::Update(f32 delta)
 {
-	UNUSED(dt);
+	UNUSED(delta);
 	//IWidget::Update();
 
 	if (bButtonChanged || bTransformationChanged)
@@ -696,7 +696,7 @@ INLINE void Button::SetDisabled(BOOL b)
 				{
 					BOOL hasAnim = FALSE;
 					hasAnim = cSprite.SetAnimation("idle");
-					if (hasAnim) 
+					if (hasAnim)
 					{
 						pPreviousEnabledAnimation = "idle";
 					}

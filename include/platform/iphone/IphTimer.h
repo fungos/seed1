@@ -11,9 +11,7 @@
 #include "interface/ITimer.h"
 #include <time.h>
 
-
 namespace Seed { namespace iPhone {
-
 
 class Timer : public ITimer
 {
@@ -24,32 +22,25 @@ class Timer : public ITimer
 		// ITimer
 		virtual const u64 GetMilliseconds() const;
 		virtual void Sleep(u32 ms) const;
-	
+
 		// IModule
 		virtual BOOL Initialize();
 		virtual BOOL Reset();
 		virtual BOOL Shutdown();
 
-	
 	public:
 		static Timer instance;
 		u64 fStart;
 
-
 	private:
-		Timer(const Timer &);
-		Timer &operator=(const Timer &);
+		SEED_DISABLE_COPY(Timer);
 };
 
 Timer *const pTimer = &Timer::instance;
 
-
 }} // namespace
 
-
 #else // _IPHONE_
-
 	#error "Include 'Timer.h' instead 'platform/iphone/IphTimer.h' directly."
-
 #endif // _IPHONE_
 #endif // __IPH_TIMER_H__

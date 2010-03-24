@@ -429,8 +429,8 @@ BOOL Screen::Shutdown()
 
 INLINE BOOL Screen::Update(f32 dt)
 {
-	if (!IScreen::Update(dt))
-		return FALSE;
+	//if (!IScreen::Update(dt))
+	//	return FALSE;
 
 	this->SwapSurfaces();
 

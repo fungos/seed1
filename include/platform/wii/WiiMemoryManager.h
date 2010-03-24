@@ -6,31 +6,20 @@
 #ifndef __WII_MEMORY_MANAGER_H__
 #define __WII_MEMORY_MANAGER_H__
 
-
 #include "Defines.h"
-
 
 #ifdef _WII_
 
 #include "interface/IMemoryPool.h"
 #include "interface/IMemoryManager.h"
 
-
 #include <stdlib.h>
 
-
 namespace Seed { namespace WII {
-
 
 class WiiMemoryPool : public IMemoryPool
 {
 	friend class MemoryManager;
-
-	protected:
-		WiiHeapHandle heapHandle;
-		WiiAllocator allocator;
-
-		virtual void Initialize() = 0;
 
 	public:
 		virtual void *Alloc(SIZE_T len, const char *desc, const char *owner)
@@ -49,8 +38,13 @@ class WiiMemoryPool : public IMemoryPool
 		{
 			return static_cast<u32>(WiiGetTotalFreeSizeForExpHeap(heapHandle));
 		}
-};
 
+	protected:
+		WiiHeapHandle heapHandle;
+		WiiAllocator allocator;
+
+		virtual void Initialize() = 0;
+};
 
 class DefaultMemoryPool : public WiiMemoryPool
 {
@@ -60,7 +54,6 @@ class DefaultMemoryPool : public WiiMemoryPool
 		virtual void Initialize();
 };
 
-
 class LargeMemoryPool : public WiiMemoryPool
 {
 	friend class MemoryManager;
@@ -68,7 +61,6 @@ class LargeMemoryPool : public WiiMemoryPool
 	private:
 		virtual void Initialize();
 };
-
 
 class MemoryManager : public IMemoryManager
 {
@@ -99,13 +91,9 @@ DefaultMemoryPool *const pDefaultPool = &MemoryManager::defaultPool;
 /// Memory Pool for Wii MEM2 memory
 LargeMemoryPool *const pLargePool = &MemoryManager::largePool;
 
-
 }} // namespace
 
-
 #else // _WII_
-
 	#error "Include 'MemoryManager.h' instead 'platform/wii/WiiMemoryManager.h' directly."
-
 #endif // _WII_
 #endif // __WII_MEMORY_MANAGER_H__

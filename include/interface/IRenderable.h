@@ -47,7 +47,7 @@ class IRenderable : public IObject
 
 
 		IRenderable::NONE
-		
+
 		Will blend the incoming texture with the background respecting the texture alpha
 		and not the background alfa.
 
@@ -56,7 +56,7 @@ class IRenderable : public IObject
 
 
 		* GL_BLEND operations *
-	
+
 		All operations from here are blending between two textures:
 		- the source texture (currently selected texture);
 		- the destiny texture or rasterized texture (whatever is in the framebuffer / background);
@@ -88,7 +88,7 @@ class IRenderable : public IObject
 
 
 		* GL_MODULATE operations *
-		
+
 		Modulate is applied based in a Texture Pixel with a Color Fragment (glColor*) based
 		in the following formula:
 
@@ -118,7 +118,7 @@ class IRenderable : public IObject
 
 
 		IRenderable::MODULATE
-	
+
 		Cr = Ct * At + Cf * (1.0f - At)
 		Ar = At * At + Af * (1.0f - At)
 		*/
@@ -142,7 +142,7 @@ class IRenderable : public IObject
 		virtual ~IRenderable();
 
 		virtual void Render(f32 delta);
-		virtual void Update();
+		virtual void Update(f32 delta);
 		virtual void SetColor(u8 r, u8 g, u8 b, u8 a);
 		virtual void SetColor(f32 r, f32 g, f32 b, f32 a);
 		virtual void SetColor(PIXEL px);

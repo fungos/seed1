@@ -17,9 +17,7 @@
 
 #define IPHONE_MAX_PATH		2048
 
-
 namespace Seed { namespace iPhone {
-
 
 class Cartridge : public ICartridge
 {
@@ -59,13 +57,9 @@ class Cartridge : public ICartridge
 
 Cartridge *const pCartridge = &Cartridge::instance;
 
-
 }} // namespace
 
-
 #else // _IPHONE_
-
 	#error "Include 'Cartridge.h' instead 'platform/iphone/IphCartridge.h' directly."
-
 #endif // _IPHONE_
 #endif // __IPH_CARTRIDGE_H__

@@ -41,7 +41,7 @@ INLINE String &String::Initialize(const WideString newStr)
 
 	iConstructedSize = this->Length(pOriginalStr) + 1;
 	pConstructedStr = glStringPool.Alloc(iConstructedSize);
-	
+
 	this->Copy(pOriginalStr);
 
 	return *this;
@@ -68,7 +68,7 @@ INLINE String &String::operator=(const String &string)
 	pOriginalStr		= string.pOriginalStr;
 
 	pConstructedStr		= glStringPool.Alloc(iConstructedSize);
-	
+
 	this->Copy(string.pConstructedStr);
 
 	return *this;
@@ -106,7 +106,7 @@ INLINE String &String::Set(const u16 *paramName, const char *paramVal)
 	}
 
 	parsedParamVal[len] = '\0';
- 
+
 	this->Replace(paramName, parsedParamVal);
 	//glStringPool.Free(parsedParamVal);
 
@@ -121,7 +121,7 @@ INLINE String &String::Set(const u16 *paramName, const char paramVal)
 	tmp[1] = '\0';
 	tmp[2] = '\0';
 	tmp[3] = '\0';
- 
+
 	this->Replace(paramName, (u16 *)tmp);
 
 	return *this;
@@ -270,7 +270,7 @@ INLINE void String::Cut(u32 index, u32 size)
 {
 	if (!size)
 		return;
-	
+
 	u32 len = this->Length();
 	ASSERT(index + size <= len);
 
@@ -289,7 +289,7 @@ INLINE void String::Paste(u32 index, const u16 *val)
 	MEMCOPY(tmp, pConstructedStr, bufferLen * sizeof(u16));
 	MEMCOPY(&pConstructedStr[index + valueLen], &tmp[index], (bufferLen - index) * sizeof(u16));
 	glStringPool.Free(tmp);
-	
+
 	//paste string
 	MEMCOPY(&pConstructedStr[index], val, valueLen * sizeof(u16));
 	pConstructedStr[bufferLen + valueLen - 1] = NULL;
@@ -315,12 +315,12 @@ INLINE u32 String::Length() const
 {
 	return String::Length(pConstructedStr);
 }
-
+/*
 INLINE u32 String::Length(const u16 *str)
 {
 	return String::Length(static_cast<const WideString>((void *)str));
 }
-
+*/
 INLINE u32 String::Length(const WideString str)
 {
 	if (!str)
@@ -337,12 +337,12 @@ INLINE BOOL String::Equals(const u16 *str) const
 {
 	return this->Equals(pConstructedStr, str);
 }
-
+/*
 INLINE BOOL String::Equals(const u16 *str1, const u16 *str2)
 {
 	return String::Equals(static_cast<const WideString>((void *)str1), static_cast<const WideString>((void *)str2));
 }
-
+*/
 INLINE BOOL String::Equals(const WideString str1, const WideString str2)
 {
 	if (str1 == str2)
@@ -363,9 +363,9 @@ INLINE BOOL String::Equals(const WideString str1, const WideString str2)
 	return TRUE;
 }
 
-INLINE const WideString String::GetData() const
+INLINE const u16 *String::GetData() const
 {
-	return (const WideString)pConstructedStr;
+	return pConstructedStr;
 }
 
 } // namespace

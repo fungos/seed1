@@ -38,53 +38,56 @@ void SoundSource::Load(const char *filename, ResourceManager *res, IMemoryPool *
 	ASSERT_NULL(pool);
 	ASSERT_NULL(res);
 
-	this->Unload();
+	if (pSoundSystem->IsInitialized())
+	{
+		this->Unload();
 
-	/* Open file .sound */
-	SECURITY_CHECK(pFileSystem->Open(filename, &stFile, pool), "Sound object couldn't be opened");
+		/* Open file .sound */
+		SECURITY_CHECK(pFileSystem->Open(filename, &stFile, pool), "Sound object couldn't be opened");
 
-	const u8 *ptr = static_cast<const u8 *>(stFile.GetData());
-	ObjectHeader *block = NULL;
-	READ_STRUCT(block, ObjectHeader, ptr);
-	SECURITY_CHECK(seed_validate_block(&stFile, block, SOUND_OBJECT_MAGIC, SOUND_OBJECT_VERSION), "Invalid block header for sound.");
+		const u8 *ptr = static_cast<const u8 *>(stFile.GetData());
+		ObjectHeader *block = NULL;
+		READ_STRUCT(block, ObjectHeader, ptr);
+		SECURITY_CHECK(seed_validate_block(&stFile, block, SOUND_OBJECT_MAGIC, SOUND_OBJECT_VERSION), "Invalid block header for sound.");
 
-	u32 volume = 0;
-	READ_U32(volume, ptr);
-	this->fVolume  = volume / 100.0f;
+		u32 volume = 0;
+		READ_U32(volume, ptr);
+		this->fVolume  = volume / 100.0f;
 
-	u32 flags = 0;
-	READ_U32(flags, ptr);
-	this->bLoop = ((flags & 0x01) == 0x01); // FIXME
+		u32 flags = 0;
+		READ_U32(flags, ptr);
+		this->bLoop = ((flags & 0x01) == 0x01); // FIXME
 
-	const char *fname = NULL;
-	READ_STR(fname, ptr);
-	ASSERT_NULL(fname);
+		const char *fname = NULL;
+		READ_STR(fname, ptr);
+		ASSERT_NULL(fname);
 
-	/* Get the resource */
-	pSound = static_cast<Sound *>(res->Get(fname, Seed::ObjectSound, pool));
+		/* Get the resource */
+		pSound = static_cast<Sound *>(res->Get(fname, Seed::ObjectSound, pool));
 
-	if (iSource)
-		alDeleteSources(1, &iSource);
-	ALenum err = alGetError();
+		if (iSource)
+			alDeleteSources(1, &iSource);
+		ALenum err = alGetError();
 
-	alGenSources(1, &iSource);
-	err = alGetError();
-	if (err != AL_NO_ERROR)
-		Info(TAG "Could not create OpenAL Source: %4x", err);
+		alGenSources(1, &iSource);
+		err = alGetError();
+		if (err != AL_NO_ERROR)
+			Info(TAG "Could not create OpenAL Source: %4x", err);
 
-	const ALint *buffer = static_cast<const ALint *>(pSound->GetData());
+		const ALint *buffer = static_cast<const ALint *>(pSound->GetData());
 
-	alSourcef(iSource, AL_PITCH, 1.0f);
-	alSource3f(iSource, AL_POSITION, cPosition.x, cPosition.y, cPosition.z);
-	alSource3f(iSource, AL_VELOCITY, cVelocity.x, cVelocity.y, cVelocity.z);
-	alSourcei(iSource, AL_LOOPING, this->bLoop);
-	alSourcei(iSource, AL_BUFFER, *buffer);
-	this->SetVolume(this->fVolume);
+		alSourcef(iSource, AL_PITCH, 1.0f);
+		alSource3f(iSource, AL_POSITION, cPosition.x, cPosition.y, cPosition.z);
+		alSource3f(iSource, AL_VELOCITY, cVelocity.x, cVelocity.y, cVelocity.z);
+		alSourcei(iSource, AL_LOOPING, this->bLoop);
+		alSourcei(iSource, AL_BUFFER, *buffer);
+		this->SetVolume(this->fVolume);
+	}
 }
 
-void SoundSource::Unload()
+INLINE void SoundSource::Unload()
 {
-	if(Private::bInitialized)
+	if (Private::bInitialized)
 		pSoundSystem->Remove(this);
 
 	if (iSource)
@@ -117,7 +120,7 @@ INLINE void SoundSource::SetLoop(BOOL b)
 
 INLINE void SoundSource::Stop(f32 ms)
 {
-	UNUSED(ms);
+	UNUSED(ms)
 
 	alSourceStop(this->iSource);
 	eState = Seed::SourceStop;

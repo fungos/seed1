@@ -6,16 +6,12 @@
 #ifndef __IPH_THREAD_H__
 #define __IPH_THREAD_H__
 
-
 #ifdef _IPHONE_
-
 
 #include "Defines.h"
 #include "interface/IThread.h"
 
-
 namespace Seed { namespace iPhone {
-
 
 class Thread : public IThread
 {
@@ -26,23 +22,16 @@ class Thread : public IThread
 		virtual void Create();
 		virtual BOOL Run();
 
-
 	private:
-		Thread(const Thread &);
-		Thread &operator=(const Thread &);
-
+		SEED_DISABLE_COPY(Thread);
 
 	private:
 		void 	*pThread;
 };
 
-
 }} // namespace
 
-
 #else // _IPHONE_
-
 	#error "Include 'Thread.h' instead 'platform/iphone/IphThread.h' directly."
-
 #endif // _IPHONE_
 #endif // __IPH_THREAD_H__

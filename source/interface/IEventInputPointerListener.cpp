@@ -5,9 +5,7 @@
 
 #include "interface/IEventInputPointerListener.h"
 
-
 namespace Seed {
-
 
 IEventInputPointerListener::IEventInputPointerListener()
 {
@@ -47,6 +45,4 @@ void IEventInputPointerListener::OnAccelerationChanged(const EventInputMotion *e
 	UNUSED(ev);
 }
 
-
 } // namespace
-

@@ -3,12 +3,10 @@
 	\brief Interface to a mutex object
 */
 
-
 #include "interface/IMutex.h"
-
+#include "Log.h"
 
 namespace Seed {
-
 
 IMutex::IMutex()
 	: bLocked(FALSE)
@@ -31,8 +29,8 @@ INLINE void IMutex::Unlock()
 
 INLINE BOOL IMutex::TryLock()
 {
+	SEED_ABSTRACT_METHOD;
 	return TRUE;
 }
-
 
 } // namespace

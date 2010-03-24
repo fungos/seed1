@@ -3,13 +3,10 @@
 	\brief Defines the event system listener class interface
 */
 
-
 #include "interface/IEventSystemListener.h"
 #include "Defines.h"
 
-
 namespace Seed {
-
 
 IEventSystemListener::IEventSystemListener()
 {
@@ -53,6 +50,5 @@ void IEventSystemListener::OnSystemLanguageChanged(const EventSystem *ev)
 {
 	UNUSED(ev);
 }
-
 
 } // namespace

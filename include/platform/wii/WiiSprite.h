@@ -3,27 +3,21 @@
 	\brief Sprite Implementation
 */
 
-
 #ifndef __WII_SPRITE_H__
 #define __WII_SPRITE_H__
-
 
 #include "Defines.h"
 #include "ResourceManager.h"
 #include "interface/IMemoryPool.h"
 
-
 #if defined(_WII_)
-
 
 #include "interface/ISprite.h"
 #include "SeedInit.h"
 
 #include <math.h>
 
-
 namespace Seed { namespace WII {
-
 
 class Sprite : public ISprite
 {
@@ -42,7 +36,7 @@ class Sprite : public ISprite
 		virtual BOOL Unload();
 
 		// IUpdatable
-		virtual void Update();
+		virtual BOOL Update(f32 delta);
 
 		// IRenderable
 		virtual void Render(f32 delta);
@@ -57,13 +51,9 @@ class Sprite : public ISprite
 		WiiVec p1, p2, p3, p4;
 };
 
-
 }} // namespace
 
-
 #else // _WII_
-
 	#error "Include 'Sprite.h' instead 'platform/wii/WiiSprite.h' directly."
-
-#endif // _WII_
+endif // _WII_
 #endif // __WII_SPRITE_H__
