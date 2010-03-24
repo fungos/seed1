@@ -56,12 +56,15 @@ set (SEED_SRC_CORE
 	${SEED_SRC_DIR}/Trigonometry.cpp
 	${SEED_SRC_DIR}/TString.cpp
 	${SEED_SRC_DIR}/Updater.cpp
+	${SEED_SRC_DIR}/ModuleManager.cpp
+	${SEED_SRC_DIR}/Configuration.cpp
 	${SEED_SRC_DIR}/gui/Button.cpp
 	${SEED_SRC_DIR}/gui/EventWidget.cpp
 	${SEED_SRC_DIR}/gui/GuiManager.cpp
 	${SEED_SRC_DIR}/gui/Label.cpp
 	${SEED_SRC_DIR}/gui/TextArea.cpp
 	${SEED_SRC_DIR}/gui/WidgetContainer.cpp
+	${SEED_SRC_DIR}/interface/IBasicMesh.cpp
 	${SEED_SRC_DIR}/interface/ICartridge.cpp
 	${SEED_SRC_DIR}/interface/IEvent.cpp
 	${SEED_SRC_DIR}/interface/IEventFileSystemListener.cpp
@@ -103,6 +106,7 @@ set (SEED_SRC_CORE
 	${SEED_SRC_DIR}/interface/ITimer.cpp
 	${SEED_SRC_DIR}/interface/ITransformable2D.cpp
 	${SEED_SRC_DIR}/interface/IUpdatable.cpp
+	${SEED_SRC_DIR}/interface/IVideo.cpp
 	${SEED_SRC_DIR}/interface/IWidget.cpp
 	${SEED_INC_DIR}/Array.h
 	${SEED_INC_DIR}/AutoConfig.h
@@ -171,12 +175,15 @@ set (SEED_SRC_CORE
 	${SEED_INC_DIR}/TString.h
 	${SEED_INC_DIR}/Vector.h
 	${SEED_INC_DIR}/Updater.h
+	${SEED_INC_DIR}/ModuleManager.h
+	${SEED_INC_DIR}/Configuration.h
 	${SEED_INC_DIR}/gui/Button.h
 	${SEED_INC_DIR}/gui/EventWidget.h
 	${SEED_INC_DIR}/gui/GuiManager.h
 	${SEED_INC_DIR}/gui/Label.h
 	${SEED_INC_DIR}/gui/TextArea.h
 	${SEED_INC_DIR}/gui/WidgetContainer.h
+	${SEED_INC_DIR}/interface/IBasicMesh.h
 	${SEED_INC_DIR}/interface/ICartridge.h
 	${SEED_INC_DIR}/interface/IEvent.h
 	${SEED_INC_DIR}/interface/IEventFileSystemListener.h
@@ -218,6 +225,7 @@ set (SEED_SRC_CORE
 	${SEED_INC_DIR}/interface/ITimer.h
 	${SEED_INC_DIR}/interface/ITransformable2D.h
 	${SEED_INC_DIR}/interface/IUpdatable.h
+	${SEED_INC_DIR}/interface/IVideo.h
 	${SEED_INC_DIR}/interface/IWidget.h
 )
 

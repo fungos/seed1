@@ -62,10 +62,6 @@ class ParticleManager : public IModule, public IUpdatable
 		SEED_DISABLE_COPY(ParticleManager);
 
 	private:
-		//typedef std::vector<ParticleEmitter *> EmitterVector;
-		//typedef EmitterVector::iterator EmitterIterator;
-		//EmitterVector vEmitter;
-
 		Array<ParticleEmitter *, MAX_PARTICLE_EMITTERS>	vEmitter;
 
 		BOOL	bPaused;

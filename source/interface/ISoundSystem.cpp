@@ -3,13 +3,11 @@
 	\brief Defines the Sound System class interface
 */
 
-
 #include "interface/ISoundSystem.h"
 #include "interface/IMusic.h"
 #include "Timer.h"
 
 namespace Seed {
-
 
 ISoundSystem::ISoundSystem()
 	: fMusicVolume(1.0f)

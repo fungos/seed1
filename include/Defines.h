@@ -108,7 +108,13 @@ Compiler specific pragmas here
 	#define SECURITY_CHECK					LIB_ASSERT_MSG
 	#endif // SECURITY_CHECK
 
+	#if defined(__GNUC__)
+		#define SEED_ABSTRACT_METHOD		Dbg(SEED_TAG "WARNING: Calling an 'abstract' method: [%s] (%s:%d).", __PRETTY_FUNCTION__, __FILE__, __LINE__);
+	#else
+		#define SEED_ABSTRACT_METHOD		Dbg(SEED_TAG "WARNING: Calling an 'abstract' method: [%s] (%s:%d).", __FUNCSIG__, __FILE__, __LINE__);
+	#endif
 #else
+	#define SEED_ABSTRACT_METHOD
 
 	#if defined(__GNUC__) || defined(_WII_)
 		#ifndef ASSERT
@@ -147,9 +153,13 @@ Compiler specific pragmas here
 #define CLAMP(val,min,max) 				((val) = (((val) < (min)) ? (min) : ((val) > (max)) ? (max) : (val)))
 #define ROUND_UP(value, alignment)		(((u32)(value) + (alignment-1)) & ~(alignment-1))
 #define ROUND_DOWN(value, alignment)	((u32)(value) & ~(alignment-1))
+#define PTR_OFF(ptr) 			((size_t)(ptr))
+#define ALIGN_OFFSET(ptr, align)	(PTR_OFF(ptr) & ((align) - 1))
+#define ALIGN_FLOOR(ptr, align)		((u8 *)(ptr) - ( PTR_OFF(ptr) & ((align) - 1)))
+#define ALIGN_CEIL(ptr, align) 		((u8 *)(ptr) + (-PTR_OFF(ptr) & ((align) - 1)))
+
 #define DISPLAY_MEM()					pMemoryManager->Info()
 
-#define SEED_ABSTRACT_METHOD(m)			Log(SEED_TAG "WARNING: Calling an 'abstract' method " # m);
 
 #define SEED_DISABLE_COPY(Class)		Class(const Class &); \
 										Class &operator=(const Class &)
@@ -171,8 +181,13 @@ SEED_COMPILE_TIME_ASSERT(s64, sizeof(s64) == 8);
 typedef enum { SEED_ENUM_ASSERT_VALUE } SEED_ENUM_ASSERT;
 SEED_COMPILE_TIME_ASSERT(enum, sizeof(SEED_ENUM_ASSERT) == sizeof(u32));
 
+/*
 typedef u16* WideString;
 typedef u16  WideChar;
+*/
+
+#define WideString 	u16*
+#define WideChar	u16
 
 #ifdef DEBUG
 #define DEBUG_RECT(x, y, w, h, c) static_cast<Renderer2D *>(Seed::Private::pRenderer)->DrawRect(x, y, w, h, c);

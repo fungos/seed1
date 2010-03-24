@@ -3,7 +3,6 @@
 	\brief Defines Input Pointer class interface
 */
 
-
 #include "interface/IInputPointer.h"
 #include "interface/IEventInputPointerListener.h"
 #include "Log.h"
@@ -12,9 +11,7 @@
 #include <vector>
 #include <algorithm>
 
-
 namespace Seed {
-
 
 IInputPointer::IInputPointer()
 	: arPointerListeners()
@@ -29,6 +26,7 @@ INLINE BOOL IInputPointer::IsHold(u32 button, u16 joystick) const
 {
 	UNUSED(button);
 	UNUSED(joystick);
+	SEED_ABSTRACT_METHOD;
 	return FALSE;
 }
 
@@ -36,6 +34,7 @@ INLINE BOOL IInputPointer::IsPressed(u32 button, u16 joystick) const
 {
 	UNUSED(button);
 	UNUSED(joystick);
+	SEED_ABSTRACT_METHOD;
 	return FALSE;
 }
 
@@ -43,24 +42,28 @@ INLINE BOOL IInputPointer::IsReleased(u32 button, u16 joystick) const
 {
 	UNUSED(button);
 	UNUSED(joystick);
+	SEED_ABSTRACT_METHOD;
 	return FALSE;
 }
 
 INLINE f32 IInputPointer::GetX(u16 joystick) const
 {
 	UNUSED(joystick);
+	SEED_ABSTRACT_METHOD;
 	return 0.0f;
 }
 
 INLINE f32 IInputPointer::GetY(u16 joystick) const
 {
 	UNUSED(joystick);
+	SEED_ABSTRACT_METHOD;
 	return 0.0f;
 }
 
 INLINE u32 IInputPointer::GetSensitivity(u16 joystick) const
 {
 	UNUSED(joystick);
+	SEED_ABSTRACT_METHOD;
 	return 0;
 }
 
@@ -68,46 +71,54 @@ INLINE void IInputPointer::SetSensitivity(u32 sens, u16 joystick)
 {
 	UNUSED(sens);
 	UNUSED(joystick);
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE u32 IInputPointer::GetMaximumSensitivity(u16 joystick) const
 {
 	UNUSED(joystick);
+	SEED_ABSTRACT_METHOD;
 	return 0;
 }
 
 INLINE u32 IInputPointer::GetMaximumPointers() const
 {
+	SEED_ABSTRACT_METHOD;
 	return 0;
 }
 
 INLINE f32 IInputPointer::GetRelativeX(u16 joystick) const
 {
 	UNUSED(joystick);
+	SEED_ABSTRACT_METHOD;
 	return 0.0f;
 }
 
 INLINE f32 IInputPointer::GetRelativeY(u16 joystick) const
 {
 	UNUSED(joystick);
+	SEED_ABSTRACT_METHOD;
 	return 0.0f;
 }
 
 INLINE f32 IInputPointer::GetDistance(u16 joystick) const
 {
 	UNUSED(joystick);
+	SEED_ABSTRACT_METHOD;
 	return 0.0f;
 }
 
 INLINE f32 IInputPointer::GetOrientation(u16 joystick) const
 {
 	UNUSED(joystick);
+	SEED_ABSTRACT_METHOD;
 	return 0.0f;
 }
 
 INLINE BOOL IInputPointer::IsEnabled(u16 joystick) const
 {
 	UNUSED(joystick);
+	SEED_ABSTRACT_METHOD;
 	return FALSE;
 }
 
@@ -186,7 +197,4 @@ INLINE void IInputPointer::SendEventPointerRelease(const EventInputPointer *ev)
 	}
 }
 
-
 } // namespace
-
-

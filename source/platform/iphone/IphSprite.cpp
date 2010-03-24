@@ -21,7 +21,6 @@
 
 #define TAG		"[Sprite] "
 
-
 namespace Seed { namespace iPhone {
 
 const GLubyte _no_texture_colors[] =
@@ -32,7 +31,6 @@ const GLubyte _no_texture_colors[] =
 	0,   0, 255, 255,
 };
 
-
 enum eTextureFormat
 {
 	kTexture2DPixelFormat_Automatic = 0,
@@ -41,34 +39,29 @@ enum eTextureFormat
 	kTexture2DPixelFormat_A8,
 };
 
-
 Sprite::Sprite()
 {
 	this->Reset();
 }
-
 
 Sprite::~Sprite()
 {
 	this->Reset();
 }
 
-
 INLINE u32 Sprite::GetWidthInPixel() const
 {
 	return static_cast<Image *>(pFrame->pImage)->GetWidthInPixel();
 }
-
 
 INLINE u32 Sprite::GetHeightInPixel() const
 {
 	return static_cast<Image *>(pFrame->pImage)->GetHeightInPixel();
 }
 
-
-void Sprite::Update()
+void Sprite::Update(f32 delta)
 {
-	ISprite::Update();
+	ISprite::Update(delta);
 
 	if (!this->bChanged && !this->bTransformationChanged)
 		return;
@@ -102,10 +95,9 @@ void Sprite::Update()
 	bTransformationChanged = FALSE;
 }
 
-
 void Sprite::Render(f32 delta)
 {
-	this->Update();
+	this->Update(delta);
 	UNUSED(delta);
 
 	Image *image = static_cast<Image *>(pFrame->pImage);
@@ -251,20 +243,20 @@ FIXME: 08-11-2008 | IPHONE | GRAPHICS | WISH | Use glLists to optimize rendering
 */
 	glPushMatrix();
 		glLoadIdentity();
-		
+
 		/* movie - check */
 		glTranslatef(ISprite::GetLocalX() + x, ISprite::GetLocalY() + y, 0.0f);
 		glRotatef(ISprite::GetRotation(), 0.0f, 0.0f, 1.0f);
 		glScalef(ISprite::GetScaleX(), ISprite::GetScaleY(), 1.0f);
 		glTranslatef(-ISprite::GetLocalX(), -ISprite::GetLocalY(), 0.0f);
-		
+
 		/* original */
-		/*		
+		/*
 		glTranslatef(x, y, 0.0f);
 		glScalef(ISprite::GetScaleX(), ISprite::GetScaleY(), 1.0f);
 		glRotatef(this->GetRotation(), 0.0f, 0.0f, 1.0f);
 		*/
-		
+
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glPopMatrix();
 
@@ -279,8 +271,6 @@ FIXME: 08-11-2008 | IPHONE | GRAPHICS | WISH | Use glLists to optimize rendering
 #endif // SEED_ENABLE_PRELOAD_TEXTURE
 }
 
-
 }} // namespace
-
 
 #endif // _IPHONE_

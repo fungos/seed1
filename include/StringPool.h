@@ -115,7 +115,12 @@ template <int SIZE, int COUNT, typename T> struct StringPool
 		T pData[SIZE];
 		u32 iBackGuard;
 
-		StringEntry() : iFrontGuard(STRING_POOL_FRONTGUARD), iFlags(STRING_POOL_UNUSED), pData(), iBackGuard(STRING_POOL_BACKGUARD) {}// { memset(pData, '\0', SIZE); }
+		StringEntry()
+			: iFrontGuard(STRING_POOL_FRONTGUARD)
+			, iFlags(STRING_POOL_UNUSED)
+			, pData()
+			, iBackGuard(STRING_POOL_BACKGUARD)
+		{}// { memset(pData, '\0', SIZE); }
 	} mBuff[COUNT];
 #else
 	struct StringEntry

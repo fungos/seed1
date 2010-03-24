@@ -64,56 +64,63 @@ IRenderer::~IRenderer()
 INLINE void IRenderer::SetBufferMode(eBufferMode mode)
 {
 	UNUSED(mode);
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE void IRenderer::SelectTexture(u32 texId)
 {
 	UNUSED(texId);
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE void IRenderer::UploadData(void *userData)
 {
 	UNUSED(userData);
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE void IRenderer::Begin() const
 {
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE void IRenderer::End() const
 {
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE void IRenderer::BeginRenderMask() const
 {
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE void IRenderer::BeginRenderMasked() const
 {
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE void IRenderer::BeginRenderUnmasked() const
 {
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE void IRenderer::BeginRenderSpecial() const
 {
+	SEED_ABSTRACT_METHOD;
 }
 
-BOOL IRenderer::Update(f32 dt)
+BOOL IRenderer::Update(f32 delta)
 {
-	UNUSED(dt);
-
 	if (!IModule::IsEnabled())
 		return FALSE;
 
-	this->Update(vRenderables);
-	this->Update(vRenderablesStatic);
+	this->Update(vRenderables, delta);
+	this->Update(vRenderablesStatic, delta);
 
 	return TRUE;
 }
 
-INLINE void IRenderer::Update(const RenderableVector &vec) const
+INLINE void IRenderer::Update(const RenderableVector &vec, f32 delta) const
 {
 	ConstRenderableVectorIterator it = vec.begin();
 	ConstRenderableVectorIterator end = vec.end();
@@ -123,7 +130,7 @@ INLINE void IRenderer::Update(const RenderableVector &vec) const
 		IRenderable *obj = const_cast<IRenderable *>(*it);
 		ASSERT_NULL(obj);
 
-		obj->Update();
+		obj->Update(delta);
 	}
 }
 
@@ -329,6 +336,4 @@ INLINE void IRenderer::ClearStatic()
 	RenderableVector().swap(vRenderablesStatic);
 }
 
-
 } // namespace
-

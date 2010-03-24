@@ -53,7 +53,7 @@ class Text
 		virtual void SetColor(u8 r, u8 g, u8 b, u8 a);
 		virtual void SetColor(PIXEL px);
 		virtual void SetScale(f32 scaleX, f32 scaleY);
-		
+
 		virtual WideString GetText() const;
 
 	private:

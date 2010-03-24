@@ -3,7 +3,6 @@
 	\brief Renderer2D Iphone Implementation
 */
 
-
 #ifdef _IPHONE_
 
 #include "Defines.h"
@@ -20,9 +19,7 @@
 
 #define TAG "[Renderer2D] "
 
-
 namespace Seed { namespace iPhone {
-
 
 Renderer2D::Renderer2D()
 	: Renderer()
@@ -38,11 +35,9 @@ Renderer2D::Renderer2D()
 	Log(TAG "Initialization completed.");
 }
 
-
 Renderer2D::~Renderer2D()
 {
 }
-
 
 INLINE void Renderer2D::ClearScreen(const PIXEL color) const
 {
@@ -51,18 +46,15 @@ INLINE void Renderer2D::ClearScreen(const PIXEL color) const
 	glClearDepthf(1.0f);
 }
 
-
 INLINE void Renderer2D::Begin() const
 {
 	Renderer::Begin();
 }
 
-
 INLINE void Renderer2D::End() const
 {
 	Renderer::End();
 }
-
 
 INLINE void Renderer2D::Initialize2D()
 {
@@ -116,7 +108,6 @@ INLINE void Renderer2D::Initialize2D()
 	glLoadIdentity();
 }
 
-
 INLINE void Renderer2D::Orthogonal(f32 width, f32 height)
 {
 	f32 aspectH = height / width;
@@ -124,8 +115,6 @@ INLINE void Renderer2D::Orthogonal(f32 width, f32 height)
 	glOrthof(0.0f, 1.0f, aspectH, 0.0f, -1, 1);
 }
 
-
 }} // namespace
-
 
 #endif // _IPHONE_

@@ -8,7 +8,6 @@
 
 namespace Seed {
 
-
 IInput::IInput()
 {
 }

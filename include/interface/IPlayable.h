@@ -1,20 +1,15 @@
 /*! \file IPlayable.h
 	\author	Danny Angelo Carminati Grein
-	\brief Defines the Playable interface
+	\brief Playable interface - animations should use it (video, sprite, movies, etc.)
 */
 
-#include "Defines.h"
+#ifndef __IPLAYABLE_H__
+#define __IPLAYABLE_H__
 
+#include "Defines.h"
+#include "Enum.h"
 
 namespace Seed {
-
-
-enum ePlayableState
-{
-	PlayableStopped,
-	PlayablePlaying,
-	PlayablePaused,
-};
 
 class IPlayable
 {
@@ -22,30 +17,40 @@ class IPlayable
 		IPlayable();
 		virtual ~IPlayable();
 
-		/// Play a playable object. Play starts playing if the object was stopped or resume playing if it was paused.
+		virtual void GotoAndPlay(u32 frame);
+		virtual void GotoAndStop(u32 frame);
 		virtual void Play();
 		virtual BOOL IsPlaying() const;
 
-		/// Stop a playable object. Stops a playing object, by stopping we are Reseting the object state to initial state.
 		virtual void Stop();
 		virtual BOOL IsStopped() const;
 
-		/// Pause a playable object. Pause freezes the object updating of its internal state and can be resumed by calling Play.
 		virtual void Pause();
 		virtual BOOL IsPaused() const;
 
-		/// Check if this playable object is seekable.
+		virtual void SetLoop(BOOL loop);
+		virtual BOOL IsLoop() const;
+
+		virtual void Seek(f32 d);
 		virtual BOOL IsSeekable() const;
 
-		/// Seek to a position if it is seekable. To be defined: the pos must be a position in time of a simulation step per seconds unity.
-		virtual void Seek(f32 pos);
+		virtual void Rewind();
+		virtual BOOL IsFinished() const;
 
-	protected:
-		ePlayableState	nState;
-	
+		virtual u32 GetNumFrames() const;
+		virtual f32 GetFrameRate() const;
+
 	private:
 		SEED_DISABLE_COPY(IPlayable);
+
+	protected:
+		f32 fFrameRate;
+		u32 iTotalFrames;
+		ePlayableState	nState;
+		BOOL bFinished;
+		BOOL bLoop;
 };
 
-
 } // namespace
+
+#endif // __IPLAYABLE_H__

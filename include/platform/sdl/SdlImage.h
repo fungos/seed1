@@ -38,15 +38,11 @@ class Image : public IImage
 		virtual PIXEL GetPixel(u32 x, u32 y) const;
 		virtual u8 GetPixelAlpha(u32 x, u32 y) const;
 
-		virtual f32 GetWidth() const;
-		virtual f32 GetHeight() const;
-		virtual u32 GetWidthInPixel() const;
-		virtual u32 GetHeightInPixel() const;
-
 		virtual void SetFilter(eTextureFilterType type, eTextureFilter filter);
 
+		virtual void Update();
 		virtual void Reset();
-		//virtual BOOL Load(u16 width, u16 height, PIXEL *buffer, IMemoryPool *pool = pDefaultPool); // O que acontece no Reload?
+		virtual BOOL Load(u32 width, u32 height, PIXEL *buffer, IMemoryPool *pool = pDefaultPool); // O que acontece no Reload?
 
 		// IResource
 		virtual BOOL Load(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
@@ -63,14 +59,15 @@ class Image : public IImage
 
 	private:
 		SDL_Surface *pSurface;
+		void *pData;
 
 #ifdef DEBUG
 		File stFile;
 #endif
 		GLuint iTextureId;
 
-		f32 fWidth;
-		f32 fHeight;
+		u32 iBytesPerPixel;
+		u32 iPitch;
 };
 
 

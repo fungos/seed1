@@ -64,7 +64,7 @@ BOOL Font::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		ObjectHeader *block = NULL;
 		READ_STRUCT(block, ObjectHeader, ptr);
 		SECURITY_CHECK(seed_validate_block(&stFile, block, FONT_OBJECT_MAGIC, FONT_OBJECT_VERSION), "Invalid block header for font.");
-
+/*
 #ifndef __WARNING_F32_ALREADY_
 #if !defined(__GNUC__)
 #pragma message("WARNING: f32 endianess not checked on some platforms - need do some testing!")
@@ -73,7 +73,7 @@ BOOL Font::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 #endif
 #define __WARNING_F32_ALREADY_
 #endif // __WARNING_F32_ALREADY_
-
+*/
 		READ_F32(this->fTracking, ptr);
 		READ_F32(this->fSpacing, ptr);
 		READ_F32(this->fSpaceWidth, ptr);

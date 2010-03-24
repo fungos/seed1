@@ -194,12 +194,14 @@ INLINE void Input::PointerRelease(f32 x, f32 y, u32 btn, u16 joystick)
 
 INLINE void Input::KeyboardPress(u32 key, u32 modifier, u16 joystick)
 {
+	UNUSED(joystick)
 	EventInputKeyboard ev(this->TranslateKey(key), this->TranslateModifier(modifier), key);
 	this->SendEventKeyboardPress(&ev);
 }
 
 INLINE void Input::KeyboardRelease(u32 key, u32 modifier, u16 joystick)
 {
+	UNUSED(joystick)
 	EventInputKeyboard ev(this->TranslateKey(key), this->TranslateModifier(modifier), key);
 	this->SendEventKeyboardRelease(&ev);
 }

@@ -32,12 +32,8 @@ IResource *ImageResourceLoader(const char *filename, ResourceManager *res, IMemo
 Image::Image()
 	: pPool(NULL)
 	, iTextureId(0)
-	, fWidth(0.0f)
-	, fHeight(0.0f)
 	, iHalfWidth(0)
 	, iHalfHeight(0)
-	, iWidth(0)
-	, iHeight(0)
 {
 }
 
@@ -46,19 +42,24 @@ Image::~Image()
 	this->Unload();
 }
 
+INLINE BOOL Image::Unload()
+{
+	return this->Reset();
+}
+
 BOOL Image::Reset()
 {
 	this->UnloadTexture();
 
-	this->pPool = NULL;
+	pPool = NULL;
 
-	this->fWidth = 0;
-	this->fHeight = 0;
+	fWidth = 0;
+	fHeight = 0;
 
-	this->iWidth = 0;
-	this->iHeight = 0;
-	this->iHalfWidth = 0;
-	this->iHalfHeight = 0;
+	iWidth = 0;
+	iHeight = 0;
+	iHalfWidth = 0;
+	iHalfHeight = 0;
 
 	return TRUE;
 }
@@ -66,13 +67,13 @@ BOOL Image::Reset()
 BOOL Image::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
 	UNUSED(res);
+	UNUSED(pool);
 	ASSERT_NULL(res);
 	ASSERT_NULL(filename);
 	ASSERT_NULL(pool);
 
 	if (this->Unload())
 	{
-		//QImage img(filename);
 		image = QImage(filename);
 
 		if (image.isNull())
@@ -88,25 +89,49 @@ BOOL Image::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		iHalfWidth = iWidth >> 1;
 		iHalfHeight = iHeight >> 1;
 
-		//img = img.scaled(iWidth, iHeight, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
-		//Log(TAG "%dx%d", pSurface->w, pSurface->h);
-		this->fWidth = (f32)iWidth / (f32)pScreen->GetWidth();
-		this->fHeight = (f32)iHeight / (f32)pScreen->GetHeight();
-
-		//pImage = &img;
+		fWidth = (f32)iWidth / (f32)pScreen->GetWidth();
+		fHeight = (f32)iHeight / (f32)pScreen->GetHeight();
 
 #if SEED_ENABLE_PRELOAD_TEXTURE == 1
-		this->LoadTexture();
+		//this->LoadTexture();
 #endif // SEED_ENABLE_PRELOAD_TEXTURE
 	}
 
 	return TRUE;
 }
 
-BOOL Image::Unload()
+BOOL Image::Load(u32 width, u32 height, PIXEL *buffer, IMemoryPool *pool)
 {
-	return this->Reset();
+	UNUSED(pool);
+	ASSERT_NULL(pool);
+
+	ASSERT_MSG(ROUND_UP(buffer) == buffer, "ERROR: User image buffer MUST BE 32bits aligned!");
+	ASSERT_MSG(ROUND_UP(width) == width, "ERROR: User image scanline MUST BE 32bits aligned - pitch/stride!");
+
+	if (this->Unload())
+	{
+		image = QImage((uchar *)buffer, width, height, QImage::Format_ARGB32);
+
+		if (image.isNull())
+		{
+			return FALSE;
+		}
+
+		iWidth = width;
+		iHeight = height;
+
+		iHalfWidth = iWidth >> 1;
+		iHalfHeight = iHeight >> 1;
+
+		fWidth = (f32)iWidth / (f32)pScreen->GetWidth();
+		fHeight = (f32)iHeight / (f32)pScreen->GetHeight();
+
+#if SEED_ENABLE_PRELOAD_TEXTURE == 1
+		//this->LoadTexture();
+#endif // SEED_ENABLE_PRELOAD_TEXTURE
+	}
+
+	return TRUE;
 }
 
 INLINE const void *Image::GetData() const
@@ -116,48 +141,24 @@ INLINE const void *Image::GetData() const
 
 INLINE void Image::PutPixel(u32 x, u32 y, PIXEL px)
 {
-	UNUSED(x);
-	UNUSED(y);
-	UNUSED(px);
+	u8 mR = PIXEL_GET_R(px);
+	u8 mG = PIXEL_GET_G(px);
+	u8 mB = PIXEL_GET_B(px);
+	u8 mA = PIXEL_GET_A(px);
+
+	image.setPixel(x, y, qRgba(mR, mG, mB, mA));
 }
 
 INLINE PIXEL Image::GetPixel(u32 x, u32 y) const
 {
-	UNUSED(x);
-	UNUSED(y);
-
-	return 0;
+	QRgb px = image.pixel(x, y);
+	return PIXEL_COLOR(qRed(px), qGreen(px), qBlue(px), qAlpha(px));
 }
 
 INLINE u8 Image::GetPixelAlpha(u32 x, u32 y) const
 {
-	UNUSED(x);
-	UNUSED(y);
-
 	QRgb px = image.pixel(x, y);
-
 	return (u8)(qAlpha(px));
-
-}
-
-INLINE u32 Image::GetWidthInPixel() const
-{
-	return iWidth;
-}
-
-INLINE u32 Image::GetHeightInPixel() const
-{
-	return iHeight;
-}
-
-INLINE f32 Image::GetWidth() const
-{
-	return this->fWidth;
-}
-
-INLINE f32 Image::GetHeight() const
-{
-	return this->fHeight;
 }
 
 INLINE u32 Image::GetUsedMemory() const
@@ -174,16 +175,26 @@ INLINE int Image::LoadTexture()
 		glGenTextures(1, &iTextureId);
 		glBindTexture(GL_TEXTURE_2D, iTextureId);
 
+		if (nMinFilter == Seed::TextureFilterLinear)
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		if (nMinFilter == Seed::TextureFilterNearest)
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+		if (nMagFilter == Seed::TextureFilterLinear)
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		if (nMagFilter == Seed::TextureFilterNearest)
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
 		// Works on x86, so probably works on all little-endian systems.
 		// Does it work on big-endian systems?
 		glTexImage2D(GL_TEXTURE_2D, 0, 4, image.width(), image.height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, image.bits());
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
@@ -202,8 +213,6 @@ INLINE void Image::UnloadTexture()
 	iTextureId = 0;
 }
 
-
 }} // namespace
-
 
 #endif // _QT_

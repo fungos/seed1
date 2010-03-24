@@ -17,7 +17,6 @@
 
 namespace Seed { namespace iPhone {
 
-
 Cartridge Cartridge::instance;
 
 Cartridge::Cartridge()
@@ -323,8 +322,6 @@ BOOL Cartridge::CreateSaveFile()
 	return TRUE;
 }
 
-
 }} // namespace
-
 
 #endif // _IPHONE_

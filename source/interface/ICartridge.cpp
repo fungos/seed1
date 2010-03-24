@@ -4,9 +4,9 @@
 */
 
 #include "interface/ICartridge.h"
+#include "Log.h"
 
 namespace Seed {
-
 
 ICartridge::ICartridge()
 	: eLastError(ErrorNone)
@@ -28,6 +28,7 @@ INLINE BOOL ICartridge::Write(u32 dest, const void *src, u32 len)
 	UNUSED(dest);
 	UNUSED(src);
 	UNUSED(len);
+	SEED_ABSTRACT_METHOD;
 	return FALSE;
 }
 
@@ -41,12 +42,14 @@ INLINE BOOL ICartridge::Read(u32 src, void *dest, u32 len)
 	UNUSED(dest);
 	UNUSED(src);
 	UNUSED(len);
+	SEED_ABSTRACT_METHOD;
 	return FALSE;
 }
 
 INLINE BOOL ICartridge::Prepare(eCartridgeSize size)
 {
 	UNUSED(size);
+	SEED_ABSTRACT_METHOD;
 	return FALSE;
 }
 
@@ -64,6 +67,5 @@ INLINE u32 ICartridge::GetRequiredSize(u32 headerSize, u32 sharedSize, u32 dataS
 {
 	return headerSize + sharedSize + ((sharedSize > 0) ? sizeof(u32) : 0) + (num_slots * (dataSize + sizeof(u32)));
 }
-
 
 } // namespace

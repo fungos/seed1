@@ -3,15 +3,11 @@
 	\brief Mutex
 */
 
-
 #ifdef _IPHONE_
-
 
 #include "IphMutex.h"
 
-
 namespace Seed { namespace iPhone {
-
 
 Mutex::Mutex()
 	: pMutex(NULL)
@@ -20,12 +16,10 @@ Mutex::Mutex()
 	//ASSERT_NULL(pMutex);
 }
 
-
 Mutex::~Mutex()
 {
 	//SDL_DestroyMutex(pMutex);
 }
-
 
 INLINE void Mutex::Lock()
 {
@@ -33,15 +27,12 @@ INLINE void Mutex::Lock()
 	//SDL_mutexP(pMutex);
 }
 
-
 INLINE void Mutex::Unlock()
 {
 	//SDL_mutexV(pMutex);
 	IMutex::Unlock();
 }
 
-
 }} // namespace
-
 
 #endif // _IPHONE_

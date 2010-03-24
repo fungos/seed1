@@ -13,7 +13,6 @@
 
 namespace Seed { namespace iPhone {
 
-
 class Renderer : public IRenderer
 {
 	public:
@@ -26,26 +25,19 @@ class Renderer : public IRenderer
 		virtual void Begin() const;
 		virtual void End() const;
 
-
 	protected:
 		friend class Screen;
 
 		Screen *myScreen;
 		eBufferMode iBufferMode;
 
-
 	private:
-		Renderer(const Renderer &);
-		Renderer &operator=(const Renderer &);
+		SEED_DISABLE_COPY(Renderer);
 };
-
 
 }} // namespace
 
-
 #else // _IPHONE_
-
 	#error "Include 'Renderer.h' instead 'platform/iphone/IphRenderer.h' directly."
-
 #endif // _IPHONE_
 #endif // __IPH_RENDERER_H__

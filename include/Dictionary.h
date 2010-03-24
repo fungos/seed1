@@ -32,7 +32,7 @@ class Dictionary : public IModule, public IEventSystemListener
 		virtual ~Dictionary();
 
 		virtual const u16 *GetGlyphTable(u32 *outLen) const;
-		virtual const WideString GetString(u32 stringId, u32 *outLen = NULL) const;
+		virtual const u16 *GetString(u32 stringId, u32 *outLen = NULL) const;
 		virtual u32 GetSize() const;
 
 		virtual void OnSystemLanguageChanged(const EventSystem *ev);

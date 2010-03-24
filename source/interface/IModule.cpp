@@ -3,13 +3,11 @@
 	\brief Defines the Framework Base Module class interface
 */
 
-
 #include "interface/IModule.h"
 #include "Enum.h"
-
+#include "Log.h"
 
 namespace Seed {
-
 
 IModule::IModule()
 	: bInitialized(FALSE)
@@ -30,6 +28,7 @@ INLINE BOOL IModule::Initialize()
 
 INLINE BOOL IModule::Reset()
 {
+	SEED_ABSTRACT_METHOD;
 	return TRUE;
 }
 

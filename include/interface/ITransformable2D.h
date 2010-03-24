@@ -86,7 +86,7 @@ class ITransformable2D : public IRenderable
 		/// Set a parent for this transformable
 		/**
 		When a Transformable2D has a parent it will inherit all it's properies.
-		If you use a instanced Transformable2D and delete it, you're responsable 
+		If you use a instanced Transformable2D and delete it, you're responsable
 		to set the parent of this object to NULL or we can crash badly.
 		\param Set a Transformable2D as parent for this object
 		 */
@@ -94,7 +94,7 @@ class ITransformable2D : public IRenderable
 		virtual ITransformable2D *GetParent() const;
 
 		virtual void Reset();
-		
+
 		virtual BOOL IsChanged() const;
 
 		// IObject
@@ -105,11 +105,7 @@ class ITransformable2D : public IRenderable
 		BOOL bTransformationChanged;
 		ITransformable2D *pParent;
 		Point<f32> ptPos;
-		//f32 fPosX;
-		//f32 fPosY;
 		Point<f32> ptLocalPos;
-		//f32 fLocalPosX;
-		//f32 fLocalPosY;
 		f32 fWidth;
 		f32 fHeight;
 		f32 fScaleX;

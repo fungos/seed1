@@ -3,16 +3,12 @@
 	\brief Image implementation
 */
 
-
 #ifndef __WII_IMAGE_H__
 #define __WII_IMAGE_H__
 
-
 #include "Defines.h"
 
-
 #if defined(_WII_)
-
 
 #include "interface/IImage.h"
 #include "ResourceManager.h"
@@ -21,18 +17,14 @@
 #include "File.h"
 #include "SeedInit.h"
 
-
 namespace Seed { namespace WII {
 
-
 IResource *ImageResourceLoader(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
-
 
 class Image : public IImage
 {
 	friend IResource *ImageResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool = pDefaultPool);
 	friend class Sprite;
-
 
 	public:
 		Image();
@@ -55,15 +47,15 @@ class Image : public IImage
 
 		// IResource
 		virtual BOOL Load(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
-		virtual BOOL Unload();		
+		virtual BOOL Unload();
 		virtual u32 GetUsedMemory() const;
-
 
 	protected:
 		File 	stFile;
 
 	private:
 		SEED_DISABLE_COPY(Image);
+		void LoadPalette(const char *name);
 
 	private:
 		WiiTexObj pImage;
@@ -78,17 +70,11 @@ class Image : public IImage
 
 		u16 iWidth;
 		u16 iHeight;
-
-		void LoadPalette(const char *name);
 };
-
 
 }} // namespace
 
-
 #else // _WII_
-
 	#error "Include 'Image.h' instead 'platform/wii/WiiImage.h' directly."
-
 #endif // _WII_
 #endif // __WII_IMAGE_H__

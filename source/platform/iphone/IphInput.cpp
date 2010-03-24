@@ -46,8 +46,9 @@ INLINE BOOL Input::Initialize()
 	return r;
 }
 
-BOOL Input::Update()
+BOOL Input::Update(f32 delta)
 {
+	UNUSED(delta);
 	for (u32 i = 0; i < PLATFORM_MAX_INPUT; i++)
 	{
 		memcpy(&oldState[i], &curState[i], sizeof(curState[i]));
@@ -422,6 +423,5 @@ INLINE u32 Input::ConvertButtonFlags(u32 flags)
 }
 
 }} // namespace
-
 
 #endif // _IPHONE_

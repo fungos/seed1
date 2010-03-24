@@ -7,8 +7,7 @@
 
 namespace Seed {
 
-
-Movie::Movie() 
+Movie::Movie()
 	: ITransformable2D()
 	, bPlaying(TRUE)
 	, arTimelines()
@@ -20,7 +19,7 @@ Movie::~Movie()
 	this->Reset();
 }
 
-INLINE void Movie::AddTimeline(Timeline* pTimeline)
+INLINE void Movie::AddTimeline(Timeline *pTimeline)
 {
 	arTimelines.Add(pTimeline);
 	pTimeline->SetParent(this);
@@ -32,9 +31,9 @@ INLINE void Movie::AddTimeline(Timeline* pTimeline)
 */
 }
 
-INLINE void Movie::Update()
+INLINE void Movie::Update(f32 delta)
 {
-
+	UNUSED(delta);
 }
 
 INLINE void Movie::Play()
@@ -93,6 +92,5 @@ INLINE int Movie::GetObjectType() const
 {
 	return Seed::ObjectMovie;
 }
-
 
 } // namespace

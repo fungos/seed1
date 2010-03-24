@@ -10,18 +10,15 @@
 
 #if SEED_USE_THEORA == 1
 
-
 #include "Thread.h"
 #include "Mutex.h"
 #include "interface/IRenderable.h"
 #include <oggplay/oggplay.h>
 
-
 /* FIXME */
-
 #if defined(linux) || defined(SOLARIS) || defined(AIX) || defined(__FreeBSD__) || defined(LINUX)
 /*	#include <semaphore.h>
-	#if defined(__FreeBSD__) 
+	#if defined(__FreeBSD__)
 	#define SEM_CREATE(p,s) sem_init(&(p), 0, s)
 	#else
 	#define SEM_CREATE(p,s) sem_init(&(p), 1, s)
@@ -63,12 +60,9 @@
 	typedef MPSemaphoreID   semaphore;*/
 #endif
 
-
-
 namespace Seed {
 
-
-class Theora : public IRenderable, public Thread
+class Theora : /*public IVideo,*/ public IRenderable, public Thread
 {
 	public:
 		Theora();
@@ -100,7 +94,7 @@ class Theora : public IRenderable, public Thread
 
 		// IRenderable
 		virtual void Render(f32 delta);
-		virtual void Update();
+		virtual void Update(f32 delta);
 
 		// Thread
 		virtual BOOL Run();
@@ -117,7 +111,7 @@ class Theora : public IRenderable, public Thread
 	public:
 		OggPlay		*pPlayer;
 		u8			*pTexData;
-		
+
 		u32			iTime;
 		u32			iDuration;
 		f32			fFps;
@@ -155,9 +149,7 @@ class Theora : public IRenderable, public Thread
 		GLfloat		coords[8];
 };
 
-
 } // namespace
-
 
 #endif // SEED_USE_THEORA
 

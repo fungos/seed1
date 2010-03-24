@@ -3,12 +3,9 @@
 	\brief Defines the event input class interface
 */
 
-
 #include "interface/IEventInput.h"
 
-
 namespace Seed {
-
 
 IEventInput::IEventInput()
 	: IEvent(IEvent::INPUT, 0)
@@ -23,6 +20,5 @@ IEventInput::IEventInput(u32 myId)
 IEventInput::~IEventInput()
 {
 }
-
 
 } // namespace

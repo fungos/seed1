@@ -5,9 +5,7 @@
 
 #include "interface/IThread.h"
 
-
 namespace Seed {
-
 
 IThread::IThread()
 {
@@ -30,6 +28,5 @@ INLINE BOOL IThread::Run()
 {
 	return TRUE;
 }
-
 
 } // namespace

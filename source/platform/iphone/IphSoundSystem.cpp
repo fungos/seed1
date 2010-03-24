@@ -48,12 +48,9 @@ ALvoid  alBufferDataStaticProc(const ALint bid, ALenum format, ALvoid *data, ALs
 		proc(bid, format, data, size, freq);
 }
 
-
 namespace Seed { namespace iPhone {
 
-
 SoundSystem SoundSystem::instance;
-
 
 IResource *AudioResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
@@ -61,7 +58,6 @@ IResource *AudioResourceLoader(const char *filename, ResourceManager *res, IMemo
 	pSoundSystem->Load(filename, pool);
 	return pSoundSystem;
 }
-
 
 SoundSystem::SoundSystem()
 	: pAVPlayer(NULL)
@@ -83,12 +79,10 @@ SoundSystem::SoundSystem()
 	this->Reset();
 }
 
-
 SoundSystem::~SoundSystem()
 {
 	this->Reset();
 }
-
 
 BOOL SoundSystem::Initialize()
 {
@@ -113,7 +107,6 @@ BOOL SoundSystem::Initialize()
 
 	return r;
 }
-
 
 BOOL SoundSystem::Reset()
 {
@@ -191,7 +184,6 @@ BOOL SoundSystem::Reset()
 	return TRUE;
 }
 
-
 BOOL SoundSystem::Shutdown()
 {
 	Log(TAG "Terminating...");
@@ -212,15 +204,15 @@ BOOL SoundSystem::Shutdown()
 	return r;
 }
 
-
-BOOL SoundSystem::Update()
+BOOL SoundSystem::Update(f32 delta)
 {
+	UNUSED(delta);
+
 	this->UpdateSounds();
 	this->UpdateMusic();
 
 	return TRUE;
 }
-
 
 BOOL SoundSystem::Prepare(void *workBuffer, u32 bufferLength)
 {
@@ -309,7 +301,6 @@ void SoundSystem::Load(const char *filename, IMemoryPool *pool)
 	}
 }
 
-
 void SoundSystem::PlaySound(u32 soundId)
 {
 	if (!bLoaded)
@@ -340,7 +331,6 @@ void SoundSystem::PlaySound(u32 soundId)
 	}
 }
 
-
 void SoundSystem::StopSound(u32 soundId, u16 fadeFrames)
 {
 	UNUSED(fadeFrames)
@@ -357,18 +347,15 @@ void SoundSystem::StopSound(u32 soundId, u16 fadeFrames)
 	}
 }
 
-
 void SoundSystem::StopSounds()
 {
 	for (u32 i = 0; i < IPHONE_MAX_FILES; i++)
 		this->StopSound(i, 0);
 }
 
-
 void SoundSystem::SetSoundVolume(f32 volume)
 {
 }
-
 
 void SoundSystem::UpdateSounds()
 {
@@ -411,7 +398,6 @@ void SoundSystem::UpdateSounds()
 	}
 }
 
-
 void SoundSystem::PlayMusic(u32 streamId)
 {
 	if (!bLoaded)
@@ -448,7 +434,6 @@ void SoundSystem::PlayMusic(u32 streamId)
 	}
 }
 
-
 void SoundSystem::StopMusic(u16 fadeFrames)
 {
 	UNUSED(fadeFrames);
@@ -466,7 +451,6 @@ void SoundSystem::StopMusic(u16 fadeFrames)
 	}
 }
 
-
 void SoundSystem::PauseMusic()
 {
 	if (!bLoaded)
@@ -476,7 +460,6 @@ void SoundSystem::PauseMusic()
 	if (p)
 		[p pause];
 }
-
 
 void SoundSystem::ResumeMusic()
 {
@@ -491,21 +474,17 @@ void SoundSystem::ResumeMusic()
 	}
 }
 
-
 void SoundSystem::UpdateMusic()
 {
 }
-
 
 void SoundSystem::Mute()
 {
 }
 
-
 void SoundSystem::Unmute()
 {
 }
-
 
 void SoundSystem::SetMusicVolume(f32 volume)
 {
@@ -516,7 +495,6 @@ void SoundSystem::SetMusicVolume(f32 volume)
 	this->fVolume = volume;
 	p.volume = volume;
 }
-
 
 void SoundSystem::ReadData(sSoundFileInfo *obj, const char *file)
 {
@@ -617,13 +595,10 @@ void SoundSystem::ReadData(sSoundFileInfo *obj, const char *file)
 	}
 
 Exit:
-
 	if (afid)
 		AudioFileClose(afid);
 }
 
-
 }} // namespace
-
 
 #endif // _IPHONE_

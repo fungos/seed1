@@ -16,12 +16,9 @@
 #include "Image.h"
 #include "ResourceManager.h"
 
-
 #include <math.h>
 
-
 namespace Seed { namespace iPhone {
-
 
 class Sprite : public ISprite
 {
@@ -34,18 +31,15 @@ class Sprite : public ISprite
 		virtual u32 GetHeightInPixel() const;
 
 		// IUpdatable
-		virtual void Update();
+		virtual void Update(f32 delta);
 
 		// IRenderable
 		virtual void Render(f32 delta);
 
-
 	private:
-		Sprite(const Sprite &);
-		Sprite &operator=(const Sprite &);
+		SEED_DISABLE_COPY(Sprite);
 
 		virtual void ReconfigureFrame();
-
 
 	private:
 		const void	*pData;
@@ -54,13 +48,9 @@ class Sprite : public ISprite
 		GLfloat coords[8];
 };
 
-
 }} // namespace
 
-
 #else // _IPHONE_
-
 	#error "Include 'Sprite.h' instead 'platform/iphone/IphSprite.h' directly."
-
 #endif // _IPHONE_
 #endif // __IPH_SPRITE_H__

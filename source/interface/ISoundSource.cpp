@@ -10,9 +10,7 @@
 
 #define TAG		"[ISoundSource] "
 
-
 namespace Seed {
-
 
 ISoundSource::ISoundSource()
 	: cPosition()
@@ -40,6 +38,7 @@ void ISoundSource::Load(const char *filename, ResourceManager *res, IMemoryPool 
 	UNUSED(filename);
 	UNUSED(res);
 	UNUSED(pool);
+	SEED_ABSTRACT_METHOD;
 }
 
 void ISoundSource::Unload()
@@ -108,6 +107,7 @@ INLINE f32 ISoundSource::GetVolume() const
 
 INLINE void ISoundSource::UpdateVolume()
 {
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE BOOL ISoundSource::IsPlaying() const
@@ -189,6 +189,5 @@ INLINE int ISoundSource::GetObjectType() const
 {
 	return Seed::ObjectSoundSource;
 }
-
 
 } // namespace

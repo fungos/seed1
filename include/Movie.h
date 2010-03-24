@@ -30,7 +30,7 @@ class Movie : public ITransformable2D
 		void Reset();
 
 		// IRenderable
-		virtual void Update();
+		virtual void Update(f32 delta);
 		virtual void Render(f32 delta);
 
 		// IObject

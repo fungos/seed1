@@ -6,23 +6,17 @@
 #ifndef __WII_SCREEN_H__
 #define __WII_SCREEN_H__
 
-
 #include "Defines.h"
 
-
 #ifdef _WII_
-
 
 #include "interface/IScreen.h"
 #include "interface/IRenderer.h"
 
-
 namespace Seed { namespace WII {
-
 
 class Renderer2D;
 class Renderer3D;
-
 
 class Screen : public IScreen
 {
@@ -31,6 +25,30 @@ class Screen : public IScreen
 	friend class Renderer3D;
 	friend class HomeButton;
 
+	public:
+		Screen();
+		virtual ~Screen();
+
+		virtual BOOL Initialize();
+		virtual BOOL Reset();
+		virtual BOOL Shutdown();
+
+		// IUpdatable
+		virtual BOOL Update();
+
+		virtual void Setup(u32 mode = SCREEN_AUTODETECT);
+		virtual void FadeOut();
+		virtual void FadeIn();
+		virtual void CancelFade();
+		void SwapSurfaces();
+
+		virtual u32 GetHeight() const;
+		virtual u32 GetWidth() const;
+		virtual void SetRenderer(IRenderer *renderer);
+
+	public:
+		static Screen instance;
+
 	protected:
 		u32			surfaceSize;
 		static void *pSurfaceA;
@@ -38,6 +56,17 @@ class Screen : public IScreen
 		static void *currentSurface;
 		WiiRenderModeObj renderMode;
 		IRenderer 	*pRenderer;
+
+	private:
+		SEED_DISABLE_COPY(Screen);
+
+		void CreateHardwareSurfaces();
+		void DestroyHardwareSurfaces();
+		void ApplyFade();
+
+#ifdef DEBUG
+		void PrintVideoMode();
+#endif // DEBUG
 
 	private:
 		enum
@@ -60,47 +89,13 @@ class Screen : public IScreen
 		PIXEL 		iFadeStatus;
 		eFadeType 	fadeType;
 		BOOL 		bFirstFrame;
-
-		void CreateHardwareSurfaces();
-		void DestroyHardwareSurfaces();
-		void ApplyFade();
-
-#ifdef DEBUG
-		void PrintVideoMode();
-#endif // DEBUG
-	public:
-		Screen();
-		virtual ~Screen();
-
-		virtual BOOL Initialize();
-		virtual BOOL Reset();
-		virtual BOOL Shutdown();
-
-		// IUpdatable
-		virtual BOOL Update();
-
-		virtual void Setup(u32 mode = SCREEN_AUTODETECT);
-		virtual void FadeOut();
-		virtual void FadeIn();
-		virtual void CancelFade();
-		void SwapSurfaces();
-
-		virtual u32 GetHeight() const;
-		virtual u32 GetWidth() const;
-		virtual void SetRenderer(IRenderer *renderer);
-
-		static Screen instance;
 };
 
 Screen *const pScreen = &Screen::instance;
 
-
 }} // namespace
 
-
 #else // _WII_
-
 	#error "Include 'Screen.h' instead 'platform/wii/WiiScreen.h' directly."
-
 #endif // _WII_
 #endif // __WII_SCREEN_H__

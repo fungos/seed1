@@ -12,7 +12,6 @@
 #include <wchar.h>
 #include "WiiWrapper.h"
 
-
 #define PLATFORM						WII
 
 #define PLATFORM_MAX_SCREEN_WIDTH		640
@@ -39,15 +38,11 @@ typedef float 					fixed32;
 //typedef unsigned char 		BOOL;
 typedef int 					PIXEL;
 
-
 //#define FALSE	0
 //#define	TRUE	1
 
-
-
 #define LIB_SIZE_T				size_t
 #define LIB_RAND				WiiGetTick() //(u32)(srand((unsigned int)(time(NULL))))
-
 
 // Memory and Strings
 #define LIB_MEMSET(ptr, v, len)		memset(ptr, v, len)
@@ -116,10 +111,7 @@ typedef int 					PIXEL;
 
 #define ENABLE_SCREENSHOT_TOOL
 
-
 #else // _WII_
-
 	#error "Include 'Defines.h' instead 'platform/wii/WiiDefines.h' directly."
-
 #endif // _WII_
 #endif // __WII_DEFINES_H__

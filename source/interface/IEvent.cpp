@@ -8,9 +8,7 @@
 #include "interface/IEvent.h"
 #include "Enum.h"
 
-
 namespace Seed {
-
 
 IEvent::IEvent(eType myType, u32 myId)
 	: iType(myType)
@@ -63,6 +61,4 @@ INLINE const char *IEvent::GetObjectName() const
 	return "IEvent";
 }
 
-
 } // namespace
-

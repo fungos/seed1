@@ -6,12 +6,9 @@
 #ifndef __WII_INPUT_H__
 #define __WII_INPUT_H__
 
-
 #include "Defines.h"
 
-
 #if defined(_WII_)
-
 
 #include "interface/IInputPointer.h"
 #include "interface/IInputMotion.h"
@@ -19,14 +16,11 @@
 
 #include "WiiHomeButton.h"
 
-
 #ifdef USE_AILIVE
 #include "WiiAiLive.h"
 #endif // USE_AILIVE
 
-
 namespace Seed { namespace WII {
-
 
 class Input : public IInput, public IInputPointer, public IInputMotion
 {
@@ -34,7 +28,6 @@ class Input : public IInput, public IInputPointer, public IInputMotion
 	friend class Seed::WII::AiLive;
 #endif // USE_AILIVE
 	friend class HomeButton;
-
 
 	public:
 		Input();
@@ -45,14 +38,14 @@ class Input : public IInput, public IInputPointer, public IInputMotion
 		virtual BOOL IsPressed(u32 button, u16 joystick = 0) const;
 		virtual BOOL IsReleased(u32 button, u16 joystick = 0) const;
 		virtual BOOL IsEnabled(u16 joystick = 0) const;
-		
+
 		virtual f32 GetX(u16 joystick = 0) const;
 		virtual f32 GetY(u16 joystick = 0) const;
-		
+
 		virtual u32 GetSensitivity(u16 joystick = 0) const;
-      	virtual void SetSensitivity(u32 sens, u16 joystick = 0);
+		virtual void SetSensitivity(u32 sens, u16 joystick = 0);
 		virtual u32 GetMaximumSensitivity(u16 joystick = 0) const;
-  		virtual u32 GetMaximumPointers() const;
+		virtual u32 GetMaximumPointers() const;
 
 		virtual f32 GetRelativeX(u16 joystick = 0) const;
 		virtual f32 GetRelativeY(u16 joystick = 0) const;
@@ -68,13 +61,14 @@ class Input : public IInput, public IInputPointer, public IInputMotion
 		virtual f32 GetAccelerationSpeed(u16 joystick = 0) const;
 
 		// IUpdatable
-		virtual BOOL Update();
+		virtual BOOL Update(f32 delta);
 
 		// IModule
 		virtual BOOL Initialize();
 		virtual BOOL Shutdown();
 		virtual BOOL Reset();
 
+	public:
 		static Input instance;
 
 	protected:
@@ -88,19 +82,14 @@ class Input : public IInput, public IInputPointer, public IInputMotion
 
 	private:
 		SEED_DISABLE_COPY(Input);
-
 		void SendEvents();
 };
 
 Input *const pInput = &Input::instance;
 
-
 }} // namespace
 
-
 #else // _WII_
-
 	#error "Include 'Input.h' instead 'platform/wii/WiiInputPointer.h' directly."
-
 #endif // _WII_
 #endif // __WII_POINTER_INPUT_H__

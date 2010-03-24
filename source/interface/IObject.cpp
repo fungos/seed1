@@ -3,11 +3,9 @@
 	\brief Defines the Base Object class interface
 */
 
-
 #include "interface/IObject.h"
 
 namespace Seed {
-
 
 IObject::IObject()
 {
@@ -17,6 +15,4 @@ IObject::~IObject()
 {
 }
 
-
 } // namespace
-

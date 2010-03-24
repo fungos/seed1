@@ -3,12 +3,10 @@
 	\brief Defines the Screen class interface
 */
 
-
 #include "interface/IScreen.h"
-
+#include "Log.h"
 
 namespace Seed {
-
 
 IScreen::IScreen()
 	: bFading(FALSE)
@@ -41,15 +39,18 @@ INLINE u32 IScreen::GetMode() const
 
 INLINE void IScreen::ToggleFullscreen()
 {
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE BOOL IScreen::HasWindowedMode() const
 {
+	SEED_ABSTRACT_METHOD;
 	return FALSE;
 }
 
 INLINE BOOL IScreen::IsFullscreen() const
 {
+	SEED_ABSTRACT_METHOD;
 	return TRUE;
 }
 

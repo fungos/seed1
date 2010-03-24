@@ -3,13 +3,11 @@
 	\brief Defines the Renderable object interface
 */
 
-
 #include "interface/IRenderable.h"
 #include "Enum.h"
-
+#include "Log.h"
 
 namespace Seed {
-
 
 IRenderable::IRenderable()
 	: IObject()
@@ -45,10 +43,13 @@ INLINE void IRenderable::Reset()
 INLINE void IRenderable::Render(f32 delta)
 {
 	UNUSED(delta);
+	SEED_ABSTRACT_METHOD;
 }
 
-INLINE void IRenderable::Update()
+INLINE void IRenderable::Update(f32 delta)
 {
+	UNUSED(delta);
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE void IRenderable::SetPriority(u32 prio)

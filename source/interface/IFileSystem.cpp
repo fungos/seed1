@@ -3,7 +3,6 @@
 	\brief Defines the File System class interface
 */
 
-
 #include "interface/IFileSystem.h"
 #include "interface/IEventFileSystemListener.h"
 #include "Log.h"
@@ -16,9 +15,7 @@
 #define TAG	"[IFileSystem] "
 #define FILESYSTEM_TABLE_FILE	"filelist.data"
 
-
 namespace Seed {
-
 
 IFileSystem::IFileSystem()
 	: pWorkDir(NULL)
@@ -304,6 +301,7 @@ INLINE const char *IFileSystem::GetWriteableDirectory() const
 INLINE void IFileSystem::MakeDirectory(const char *dir) const
 {
 	UNUSED(dir);
+	SEED_ABSTRACT_METHOD;
 }
 
 INLINE BOOL IFileSystem::IsRequired() const

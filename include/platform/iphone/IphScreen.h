@@ -12,12 +12,9 @@
 #include "interface/IRenderer2D.h"
 #include <OpenGLES/ES1/gl.h>
 
-
 namespace Seed { namespace iPhone {
 
-
 class IRenderer2D;
-	
 
 class Screen : public IScreen
 {
@@ -40,8 +37,7 @@ class Screen : public IScreen
 		virtual BOOL Shutdown();
 
 		// IUpdatable
-		virtual BOOL Update(f32 dt);
-
+		virtual BOOL Update(f32 delta);
 
 	public:
 		enum eScreenMode
@@ -51,10 +47,8 @@ class Screen : public IScreen
 			LANDSCAPE_GOOFY
 		};
 
-
 	public:
 		static Screen instance;
-
 
 	protected:
 		friend class Renderer;
@@ -65,16 +59,13 @@ class Screen : public IScreen
 		GLuint		frameBuffer;
 		GLuint		depthRenderbuffer;
 
-
 	private:
-		Screen(const Screen &);
-		Screen &operator=(const Screen &);
+		SEED_DISABLE_COPY(Screen);
 
 		void CreateHardwareSurfaces();
 		void DestroyHardwareSurfaces();
 		void SwapSurfaces();
 		void ApplyFade();
-
 
 	private:
 		enum eFadeType
@@ -82,7 +73,6 @@ class Screen : public IScreen
 			FADE_IN = 1,
 			FADE_OUT
 		};
-
 
 	private:
 		s32 		iFadeStatus;
@@ -97,13 +87,9 @@ class Screen : public IScreen
 
 Screen *const pScreen = &Screen::instance;
 
-
 }} // namespace
 
-
 #else // _IPHONE_
-
 	#error "Include 'Screen.h' instead 'platform/iphone/IphScreen.h' directly."
-
 #endif // _IPHONE_
 #endif // __IPH_SCREEN_H__

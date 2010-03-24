@@ -33,9 +33,6 @@ INLINE BOOL ParticleManager::Initialize()
 INLINE BOOL ParticleManager::Reset()
 {
 	this->Kill();
-
-	//vEmitter.clear();
-	//EmitterVector().swap(vEmitter);
 	vEmitter.Truncate();
 
 	return IModule::Reset();
@@ -60,12 +57,9 @@ INLINE BOOL ParticleManager::Update(f32 dt)
 	UNUSED(dt);
 	if (bEnabled && !(bPaused || bStopped))
 	{
-		//EmitterIterator it = vEmitter.begin();
-		//EmitterIterator end = vEmitter.end();
-		//for (; it != end; ++it)
 		for (u32 i = 0; i < vEmitter.Size(); i++)
 		{
-			ParticleEmitter *p = vEmitter[i]; //(*it);
+			ParticleEmitter *p = vEmitter[i];
 			ASSERT_NULL(p);
 
 			if (!p->IsPaused())
@@ -78,12 +72,9 @@ INLINE BOOL ParticleManager::Update(f32 dt)
 
 INLINE void ParticleManager::Kill()
 {
-	//EmitterIterator it = vEmitter.begin();
-	//EmitterIterator end = vEmitter.end();
-	//for (; it != end; ++it)
 	for (u32 i = 0; i < vEmitter.Size(); i++)
 	{
-		ParticleEmitter *p = vEmitter[i]; //(*it);
+		ParticleEmitter *p = vEmitter[i];
 		ASSERT_NULL(p);
 
 		p->Kill();
@@ -92,12 +83,9 @@ INLINE void ParticleManager::Kill()
 
 INLINE void ParticleManager::Stop()
 {
-	//EmitterIterator it = vEmitter.begin();
-	//EmitterIterator end = vEmitter.end();
-	//for (; it != end; ++it)
 	for (u32 i = 0; i < vEmitter.Size(); i++)
 	{
-		ParticleEmitter *p = vEmitter[i]; //(*it);
+		ParticleEmitter *p = vEmitter[i];
 		ASSERT_NULL(p);
 
 		p->Stop();
@@ -114,12 +102,9 @@ INLINE BOOL ParticleManager::IsStopped() const
 
 INLINE void ParticleManager::Pause()
 {
-	//EmitterIterator it = vEmitter.begin();
-	//EmitterIterator end = vEmitter.end();
-	//for (; it != end; ++it)
 	for (u32 i = 0; i < vEmitter.Size(); i++)
 	{
-		ParticleEmitter *p = vEmitter[i]; //(*it);
+		ParticleEmitter *p = vEmitter[i];
 		ASSERT_NULL(p);
 
 		p->Pause();
@@ -135,12 +120,9 @@ INLINE BOOL ParticleManager::IsPaused() const
 
 INLINE void ParticleManager::Play()
 {
-	//EmitterIterator it = vEmitter.begin();
-	//EmitterIterator end = vEmitter.end();
-	//for (; it != end; ++it)
 	for (u32 i = 0; i < vEmitter.Size(); i++)
 	{
-		ParticleEmitter *p = vEmitter[i]; //(*it);
+		ParticleEmitter *p = vEmitter[i];
 		ASSERT_NULL(p);
 
 		p->Play();
@@ -158,15 +140,10 @@ INLINE BOOL ParticleManager::IsPlaying() const
 INLINE void ParticleManager::Disable()
 {
 	IModule::Disable();
-	//this->bEnabled = FALSE;
-	//this->Kill();
 
-	//EmitterIterator it = vEmitter.begin();
-	//EmitterIterator end = vEmitter.end();
-	//for (; it != end; ++it)
 	for (u32 i = 0; i < vEmitter.Size(); i++)
 	{
-		ParticleEmitter *p = vEmitter[i]; //(*it);
+		ParticleEmitter *p = vEmitter[i];
 		ASSERT_NULL(p);
 
 		p->Disable();
@@ -176,14 +153,10 @@ INLINE void ParticleManager::Disable()
 INLINE void ParticleManager::Enable()
 {
 	IModule::Enable();
-	//this->bEnabled = TRUE;
 
-	//EmitterIterator it = vEmitter.begin();
-	//EmitterIterator end = vEmitter.end();
-	//for (; it != end; ++it)
 	for (u32 i = 0; i < vEmitter.Size(); i++)
 	{
-		ParticleEmitter *p = vEmitter[i]; //(*it);
+		ParticleEmitter *p = vEmitter[i];
 		ASSERT_NULL(p);
 
 		p->Enable();
@@ -194,12 +167,6 @@ INLINE void ParticleManager::Add(ParticleEmitter *emitter)
 {
 	ASSERT_NULL(emitter);
 
-	//EmitterIterator p = std::find(vEmitter.begin(), vEmitter.end(), emitter);
-	//if (p == vEmitter.end())
-	//{
-	//	vEmitter.push_back(emitter);
-	//}
-	
 	BOOL found = FALSE;
 	for (u32 i = 0; i < vEmitter.Size(); i++)
 	{
@@ -220,14 +187,6 @@ INLINE void ParticleManager::Add(ParticleEmitter *emitter)
 INLINE void ParticleManager::Remove(ParticleEmitter *emitter)
 {
 	ASSERT_NULL(emitter);
-
-	//EmitterIterator p = std::find(vEmitter.begin(), vEmitter.end(), emitter);
-	//if (p != vEmitter.end())
-	//{
-	//	vEmitter.erase(p);
-	//}
-
-	//EmitterVector(vEmitter).swap(vEmitter);
 	vEmitter.Remove(emitter);
 }
 

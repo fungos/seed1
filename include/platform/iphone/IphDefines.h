@@ -92,8 +92,6 @@ typedef int 					PIXEL;
 //#define ENABLE_NATIVE_PVRTC_FORMAT		// MUST HAVE SEED_ENABLE_PRELOAD_TEXTURE enabled!
 
 #else // _IPHONE_
-
 	#error "Include 'Defines.h' instead 'platform/iphone/IphDefines.h' directly."
-
 #endif // _IPHONE_
 #endif // __IPH_DEFINES_H__

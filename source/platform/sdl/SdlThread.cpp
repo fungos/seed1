@@ -46,6 +46,7 @@ INLINE void Thread::Create(s32 priority)
 INLINE void Thread::Destroy()
 {
 	bRunning = FALSE;
+
 	if (pThread)
 	{
 #if defined(__APPLE_CC__)

@@ -6,24 +6,16 @@
 #ifndef __WII_HOMEBUTTON_H__
 #define __WII_HOMEBUTTON_H__
 
-
 #if defined(_WII_)
-
 
 #include "interface/IModule.h"
 #include "interface/IUpdatable.h"
 #include "File.h"
 
-
 namespace Seed { namespace WII {
-
 
 class HomeButton : public IModule, public IUpdatable
 {
-	public:
-		static HomeButton instance;
-
-
 	public:
 		virtual ~HomeButton() {};
 
@@ -33,8 +25,8 @@ class HomeButton : public IModule, public IUpdatable
 		virtual BOOL Shutdown();
 
 		//IUpdatable
-		virtual BOOL Update();
-		virtual BOOL Render();
+		virtual BOOL Update(f32 delta);
+		virtual BOOL Render(f32 delta);
 
 		void Start();
 
@@ -69,6 +61,22 @@ class HomeButton : public IModule, public IUpdatable
 			return !bDisabled;
 		}
 
+	public:
+		static HomeButton instance;
+
+	private:
+		SEED_DISABLE_COPY(HomeButton);
+
+		void InitControllerData();
+		void InitHomeButtonInfo();
+		void SetAdjustValue();
+		void InitSound();
+		void SetProjection();
+		void LoadBanIcon();
+		void DrawBanIcon(u8 alpha);
+
+		static int SoundCallback(int evt, int arg);
+
 	private:
 		BOOL 				bRunning;
 		BOOL 				bFadeCalled;
@@ -81,16 +89,15 @@ class HomeButton : public IModule, public IUpdatable
 		File				stFileHBMMsg;
 		File				stFileHBMCfg;
 		File				stFileHBMSoundData;
-		WiiControllerData		m_conData;
-		WiiRenderModeObj		pRenderMode;
+		WiiControllerData	m_conData;
+		WiiRenderModeObj	pRenderMode;
 
-		BOOL     			m_banIconSwitch;
-		s8      			m_banIconMode;
-		WiiTick  				m_banIconTime;
-		u8      			m_banIconAlpha;
-		WiiPalettePtr 			sIconTpl;
-		WiiTexObj 				texObj;
-
+		BOOL				m_banIconSwitch;
+		s8					m_banIconMode;
+		WiiTick				m_banIconTime;
+		u8					m_banIconAlpha;
+		WiiPalettePtr		sIconTpl;
+		WiiTexObj			texObj;
 
 		enum
 		{
@@ -104,30 +111,13 @@ class HomeButton : public IModule, public IUpdatable
 
 		/* Read destination for sound data from an optical disc */
 		u8 *pSoundData;
-
-
-	private:
-		void InitControllerData();
-		void InitHomeButtonInfo();
-		void SetAdjustValue();
-		void InitSound();
-		void SetProjection();
-		void LoadBanIcon();
-		void DrawBanIcon(u8 alpha);
-
-		static int SoundCallback(int evt, int arg);
 };
-
 
 HomeButton *const pHBM = &HomeButton::instance;
 
-
 }} // namespace
 
-
 #else // _WII_
-
 	#error "Cannot include 'WiiHomeButton.h' in a non-Wii platform."
-
 #endif // _WII_
 #endif // __WII_HOMEBUTTON_H__

@@ -14,23 +14,18 @@
 
 #define TAG "[Timer] "
 
-
 namespace Seed { namespace iPhone {
 
-
 Timer Timer::instance;
-
 
 Timer::Timer()
 	: fStart(0)
 {
 }
 
-
 Timer::~Timer()
 {
 }
-
 
 INLINE BOOL Timer::Initialize()
 {
@@ -40,7 +35,6 @@ INLINE BOOL Timer::Initialize()
 
 	return TRUE;
 }
-
 
 INLINE BOOL Timer::Reset()
 {
@@ -52,12 +46,10 @@ INLINE BOOL Timer::Reset()
 	return TRUE;
 }
 
-
 INLINE BOOL Timer::Shutdown()
 {
 	return this->Reset();
 }
-
 
 INLINE const u64 Timer::GetMilliseconds() const
 {
@@ -69,11 +61,9 @@ INLINE const u64 Timer::GetMilliseconds() const
 	return (ret - fStart);
 }
 
-	
 INLINE void Timer::Sleep(u32 ms) const
 {
 }
-	
 
 }} // namespace
 

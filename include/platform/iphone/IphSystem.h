@@ -10,9 +10,7 @@
 
 #include "interface/ISystem.h"
 
-
 namespace Seed { namespace iPhone {
-
 
 class System : public ISystem
 {
@@ -46,17 +44,13 @@ class System : public ISystem
 		virtual BOOL Reset();
 
 		// IUpdatable
-		virtual BOOL Update(f32 dt);
-
+		virtual BOOL Update(f32 delta);
 
 	public:
 		static System instance;
 
-
 	private:
-		System(const System &);
-		System &operator=(const System &);
-
+		SEED_DISABLE_COPY(System);
 
 	private:
 		u32 iRetraceCount;
@@ -65,13 +59,9 @@ class System : public ISystem
 
 System *const pSystem = &System::instance;
 
-
 }} // namespace
 
-
 #else // _IPHONE_
-
 	#error "Include 'System.h' instead 'platform/iphone/IphSystem.h' directly."
-
 #endif // _IPHONE_
 #endif // __IPH_SYSTEM_H__

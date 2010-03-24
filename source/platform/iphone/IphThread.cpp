@@ -3,16 +3,13 @@
 	\brief Thread implementation
 */
 
-
 #ifdef _IPHONE_
 
 #include "IphThread.h"
 
 #define TAG 	"[Thread] "
 
-
 namespace Seed { namespace iPhone {
-
 
 static int __seed_thread_loop_callback(void *param)
 {
@@ -22,12 +19,10 @@ static int __seed_thread_loop_callback(void *param)
 	return 0;
 }
 
-
 Thread::Thread()
 	: pThread(NULL)
 {
 }
-
 
 Thread::~Thread()
 {
@@ -40,21 +35,17 @@ Thread::~Thread()
 	pThread = NULL;
 }
 
-
 INLINE void Thread::Create()
 {
 	//pThread = SDL_CreateThread(__seed_thread_loop_callback, this);
 	//ASSERT_MSG(pThread != NULL, TAG "Failed to create thread.");
 }
 
-
 INLINE BOOL Thread::Run()
 {
 	return TRUE;
 }
 
-
 }} // namespace
-
 
 #endif // _IPHONE_

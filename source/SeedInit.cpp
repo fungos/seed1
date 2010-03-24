@@ -37,17 +37,19 @@
 
 namespace Seed {
 
-
-namespace Private {
+namespace Private
+{
 	IGameApp	*pApplication 	= NULL;
-	IRenderer	*pRenderer 		= NULL;
+	IRenderer	*pRenderer 	= NULL;
 	BOOL		bInitialized 	= FALSE;
-	int			iArgc			= 0;
-	char		**pcArgv		= NULL;
-	f32			fCurrentTime	= 0.0f;
+	int		iArgc		= 0;
+	char		**pcArgv	= NULL;
+	BOOL		bDisableSound	= FALSE;
+	f32		fCurrentTime	= 0.0f;
 }
 
 ResourceManager glResourceManager("global");
+const Configuration *pConfiguration = NULL;
 
 #define MAX_FRAME_DELTA (1.0f / 60.0f) * 5.0f
 
@@ -55,12 +57,35 @@ ResourceManager glResourceManager("global");
 StringPoolManager<u16> glStringPool;
 #endif // SEED_USE_STRING_POOL
 
+INLINE void CommandLineParameter(const char *param)
+{
+	if (!STRCASECMP(param, "--nosound"))
+	{
+		Private::bDisableSound = TRUE;
+	}
+}
+
+INLINE void CommandLineParse(int argc, char **argv)
+{
+	int i = 0;
+	while (i < argc)
+	{
+		const char *param = argv[i];
+		CommandLineParameter(param);
+		i++;
+	}
+}
+
 INLINE void SetGameApp(IGameApp *app, int argc, char **argv)
 {
 	Private::iArgc = argc;
 	Private::pcArgv = argv;
 	Private::pApplication = app;
 	Private::pApplication->Setup(argc, argv);
+	pConfiguration  = app->GetConfiguration();
+	//glResourceManager = app->GetResourceManager();
+
+	CommandLineParse(argc, argv);
 }
 
 INLINE void SetRenderer(IRenderer *renderer)
@@ -92,6 +117,7 @@ BOOL Initialize()
 	Info(SEED_TAG "Initializing...");
 
 	BOOL ret = TRUE;
+	//Private::bDisableSound = TRUE;
 
 	ret = ret && pModuleManager->Add(pSystem);
 	ret = ret && pModuleManager->Add(pMemoryManager);
@@ -100,18 +126,24 @@ BOOL Initialize()
 	ret = ret && pModuleManager->Add(pFileSystem);
 	ret = ret && pModuleManager->Add(pCartridge);
 	ret = ret && pModuleManager->Add(pScreen);
-	ret = ret && pModuleManager->Add(pSoundSystem);
+
+	if (!Private::bDisableSound)
+		ret = ret && pModuleManager->Add(pSoundSystem);
+
 	ret = ret && pModuleManager->Add(pGuiManager);
 	ret = ret && pModuleManager->Add(pResourceLoader);
 	ret = ret && pModuleManager->Add(pInput);
 	ret = ret && pModuleManager->Add(pDictionary);
 	ret = ret && pModuleManager->Add(pStringCache);
 	ret = ret && pModuleManager->Add(pParticleManager);
-	
+
 	pUpdater->Add(Private::pApplication);
 	pUpdater->Add(pInput);
 	pUpdater->Add(pGuiManager);
-	pUpdater->Add(pSoundSystem);
+
+	if (!Private::bDisableSound)
+		pUpdater->Add(pSoundSystem);
+
 	pUpdater->Add(pSystem);
 	pUpdater->Add(pResourceLoader);
 	pUpdater->Add(pParticleManager);
@@ -148,18 +180,10 @@ void Update()
 	f32 dt					= newTime - Private::fCurrentTime;
 	Private::fCurrentTime	= newTime;
 
-	if(dt > MAX_FRAME_DELTA) dt = MAX_FRAME_DELTA;
+	if (dt > MAX_FRAME_DELTA)
+		dt = MAX_FRAME_DELTA;
 
 	pUpdater->Run(dt, 1.0f / 60.0f); //60
-
-	//pInput->Update(dt);
-	//Private::pApplication->Update(dt);
-	/*pGuiManager->Update(dt);
-	pSoundSystem->Update(dt);
-	pSystem->Update(dt);
-	pResourceLoader->Update(dt);
-	pParticleManager->Update(dt);*/
-	//Private::pRenderer->Update();
 
 	Seed::Render(dt);
 }
@@ -177,29 +201,15 @@ void Shutdown()
 	if (!Private::bInitialized)
 		return;
 
-	//Private::pApplication->Shutdown();
-
 	// Reset util classes
+	pDictionary->Reset();
+	glResourceManager.Reset();
 
+	Info(SEED_TAG "Shutting down subsystems...");
 	pModuleManager->Shutdown();
-/*
-	pParticleManager->Shutdown();
-	pStringCache->Shutdown();
-	pDictionary->Shutdown();
-	pInput->Shutdown();
-	pResourceLoader->Shutdown();
-	pGuiManager->Shutdown();
-	pSoundSystem->Shutdown();
-	pScreen->Shutdown();
-	pFileSystem->Shutdown();
-	pPackageManager->Shutdown();
-	pTimer->Shutdown();
-	pMemoryManager->Shutdown();
-	Info(SEED_TAG "Terminating...");
-	pSystem->Shutdown();
-*/
 	Private::bInitialized = FALSE;
-}
 
+	Private::pApplication = NULL;
+}
 
 } // namespace

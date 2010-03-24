@@ -25,7 +25,6 @@
 
 namespace Seed { namespace iPhone {
 
-
 IResource *ImageResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
 	UNUSED(res);
@@ -35,7 +34,6 @@ IResource *ImageResourceLoader(const char *filename, ResourceManager *res, IMemo
 
 	return image;
 }
-
 
 Image::Image()
 	: pImage(NULL)
@@ -52,12 +50,10 @@ Image::Image()
 {
 }
 
-
 Image::~Image()
 {
 	this->Unload();
 }
-
 
 INLINE void Image::Load(const char *filename, IMemoryPool *pool)
 {
@@ -71,7 +67,6 @@ INLINE void Image::Load(const char *filename, IMemoryPool *pool)
 	this->LoadPVRTC(filename);
 #endif // ENABLE_NATIVE_PVRTC_FORMAT
 }
-
 
 INLINE void Image::Load(u16 width, u16 height, PIXEL *buffer, IMemoryPool *pool)
 {
@@ -87,12 +82,10 @@ INLINE void Image::Load(u16 width, u16 height, PIXEL *buffer, IMemoryPool *pool)
 	this->pImage = buffer;
 }
 
-
 INLINE void Image::Unload()
 {
 	this->Reset();
 }
-
 
 INLINE void Image::Reset()
 {
@@ -110,12 +103,10 @@ INLINE void Image::Reset()
 	this->bCompressed = FALSE;
 }
 
-
 INLINE const void *Image::GetData() const
 {
 	return pImage;
 }
-
 
 INLINE void Image::PutPixel(u32 x, u32 y, PIXEL px)
 {
@@ -134,7 +125,6 @@ INLINE void Image::PutPixel(u32 x, u32 y, PIXEL px)
 	Log(TAG "PutPixel doesn't work with PVRTC!");
 #endif // ENABLE_NATIVE_PVRTC_FORMAT
 }
-
 
 INLINE PIXEL Image::GetPixel(u32 x, u32 y) const
 {
@@ -157,7 +147,6 @@ INLINE PIXEL Image::GetPixel(u32 x, u32 y) const
 #endif // ENABLE_NATIVE_PVRTC_FORMAT
 }
 
-
 INLINE u8 Image::GetPixelAlpha(u32 x, u32 y) const
 {
 #ifndef ENABLE_NATIVE_PVRTC_FORMAT
@@ -178,7 +167,6 @@ INLINE u8 Image::GetPixelAlpha(u32 x, u32 y) const
 #endif // ENABLE_NATIVE_PVRTC_FORMAT
 }
 
-
 INLINE u32 Image::GetUsedMemory() const
 {
 	u32 size = 4;
@@ -189,30 +177,25 @@ INLINE u32 Image::GetUsedMemory() const
 	return size * iWidth * iHeight;
 }
 
-
 INLINE f32 Image::GetWidth() const
 {
 	return fWidth;
 }
-
 
 INLINE f32 Image::GetHeight() const
 {
 	return fHeight;
 }
 
-
 INLINE u32 Image::GetWidthInPixel() const
 {
 	return this->iWidth;
 }
 
-
 INLINE u32 Image::GetHeightInPixel() const
 {
 	return this->iHeight;
 }
-
 
 INLINE int Image::LoadTexture()
 {
@@ -264,12 +247,10 @@ INLINE int Image::LoadTexture()
 	return this->iTextureId;
 }
 
-
 INLINE int Image::GetTexture()
 {
 	return this->iTextureId;
 }
-
 
 INLINE void Image::UnloadTexture()
 {
@@ -278,7 +259,6 @@ INLINE void Image::UnloadTexture()
 
 	iTextureId = 0;
 }
-
 
 // FIXME: 2009-02-15 | Use Width x Height from image. | Danny Angelo Carminati Grein
 void Image::LoadPVRTC(const char *file)
@@ -299,7 +279,6 @@ void Image::LoadPVRTC(const char *file)
 	this->fWidth = 1024 / pScreen->GetWidth();
 	this->fHeight = 1024 / pScreen->GetHeight();
 }
-
 
 void Image::LoadPNG(const char *file)
 {
@@ -448,9 +427,6 @@ void Image::LoadPNG(const char *file)
 #endif // SEED_ENABLE_KEEP_IMAGE_DATA
 }
 
-
 }} // namespace
 
-
 #endif // _IPHONE_
-

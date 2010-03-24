@@ -3,7 +3,6 @@
 	\brief Input Iphone Implementation
 */
 
-
 #ifndef __IPH_INPUT_H__
 #define __IPH_INPUT_H__
 
@@ -13,9 +12,7 @@
 #include "interface/IInputPointer.h"
 #include "IphoneSystemStub.h"
 
-
 namespace Seed { namespace iPhone {
-
 
 class Input : public IInput, public IInputPointer
 {
@@ -46,17 +43,15 @@ class Input : public IInput, public IInputPointer
 		virtual void SetSensitivity(u32 sens, u16 joystick = 0);
 
 		// IUpdatable
-		virtual BOOL Update(f32 dt);
+		virtual BOOL Update(f32 delta);
 
 		// IModule
 		virtual BOOL Initialize();
 		virtual BOOL Shutdown();
 		virtual BOOL Reset();
 
-
 	public:
 		static Input instance;
-
 
 	public:
 		struct sState
@@ -68,11 +63,8 @@ class Input : public IInput, public IInputPointer
 			BOOL bValid;
 		};
 
-
 	private:
-		Input(const Input &);
-		Input &operator=(const Input &);
-
+		SEED_DISABLE_COPY(Input);
 
 	private:
 		void SendEvents();
@@ -80,16 +72,11 @@ class Input : public IInput, public IInputPointer
 		sState oldState[PLATFORM_MAX_INPUT];
 };
 
-
 Input *const pInput = &Input::instance;
-
 
 }} // namespace
 
-
 #else // _IPHONE_
-
 	#error "Include 'Input.h' instead 'platform/iphone/IphInput.h' directly."
-
 #endif // _IPHONE_
 #endif // __IPH_INPUT_H__

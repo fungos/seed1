@@ -4,6 +4,7 @@ OBJECTS = ../source/api/ogl/OglRenderer.o \
 ../source/api/theora/Theora.o \
 ../source/Checksum.o \
 ../source/CollisionMask.o \
+../source/Configuration.o \
 ../source/EventFileSystem.o \
 ../source/EventInputKeyboard.o \
 ../source/EventInputMotion.o \

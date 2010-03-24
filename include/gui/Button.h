@@ -47,7 +47,7 @@ class Button : public IWidget, public IResource
 
 		virtual void Select();
 		virtual void Unselect();
-		virtual void Update(f32 dt);
+		virtual void Update(f32 delta);
 		virtual void SetDraggable(BOOL b);
 		virtual void SetDraggingPriority(u32 i);
 		virtual u32 GetDraggingPriority() const;

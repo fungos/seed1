@@ -14,18 +14,14 @@
 #include "interface/IImage.h"
 #include <OpenGLES/ES1/gl.h>
 
-
 namespace Seed { namespace iPhone {
 
-
 IResource *ImageResourceLoader(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
-
 
 class Image : public IImage
 {
 	friend IResource *ImageResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 	friend class Sprite;
-
 
 	public:
 		Image();
@@ -51,20 +47,16 @@ class Image : public IImage
 		// IResource
 		virtual u32 GetUsedMemory() const;
 
-
 	protected:
 		int LoadTexture();
 		int GetTexture();
 		void UnloadTexture();
 
-
 	private:
-		Image(const Image &);
-		Image &operator=(const Image &);
+		SEED_DISABLE_COPY(Image);
 
 		void LoadPVRTC(const char *file);
 		void LoadPNG(const char *file);
-
 
 	private:
 		enum eTextureFormat
@@ -75,7 +67,6 @@ class Image : public IImage
 			kTexture2DPixelFormat_A8,
 			kTexture2DPixelFormat_RGBA2,
 		};
-
 
 	private:
 		const void	*pImage;
@@ -97,13 +88,9 @@ class Image : public IImage
 		eTextureFormat pixelFormat;
 };
 
-
 }} // namespace
 
-
 #else // _IPHONE_
-
 	#error "Include 'Image.h' instead 'platform/iphone/IphImage.h' directly."
-
 #endif // _IPHONE_
 #endif // __IPH_IMAGE_H__

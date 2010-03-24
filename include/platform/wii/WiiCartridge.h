@@ -3,23 +3,17 @@
 	\brief Cartridge Functionality
 */
 
-
 #ifndef __WII_CARTRIDGE_H__
 #define __WII_CARTRIDGE_H__
 
-
 #if defined(_WII_)
 
-
 #include "interface/ICartridge.h"
-
 
 #define CARTRIDGE_SECTOR_ROUND(n, a)     (((u32) (n) + (a) - 1) & ~((a) - 1))
 #define CARTRIDGE_FILENAME	"savefile.dat"
 
-
 namespace Seed { namespace WII {
-
 
 class Cartridge : public ICartridge
 {
@@ -67,13 +61,9 @@ class Cartridge : public ICartridge
 
 Cartridge *const pCartridge = &Cartridge::instance;
 
-
 }} // namespace
 
-
 #else // _WII_
-
 	#error "Include 'Cartridge.h' instead 'platform/wii/WiiCartridge.h' directly."
-
 #endif // _WII_
 #endif // __WII_CARTRIDGE_H__

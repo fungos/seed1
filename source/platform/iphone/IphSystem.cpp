@@ -15,9 +15,7 @@
 
 namespace Seed { namespace iPhone {
 
-
 System System::instance;
-
 
 System::System()
 	: iRetraceCount(0)
@@ -25,17 +23,14 @@ System::System()
 {
 }
 
-
 System::~System()
 {
 }
-
 
 BOOL System::Reset()
 {
 	return TRUE;
 }
-
 
 BOOL System::Initialize()
 {
@@ -45,7 +40,6 @@ BOOL System::Initialize()
 	return TRUE;
 }
 
-
 BOOL System::Shutdown()
 {
 	Log(TAG "Terminated.");
@@ -54,38 +48,34 @@ BOOL System::Shutdown()
 	return TRUE;
 }
 
-
-BOOL System::Update()
+BOOL System::Update(f32 delta)
 {
+	UNUSED(delta);
+
 	this->WaitForRetrace(this->iFrameRate);
 
 	return TRUE;
 }
-
 
 void System::Sleep()
 {
 	Log(TAG "WARNING: Platform doesnt support sleep mode.");
 }
 
-
 INLINE BOOL System::IsSleeping() const
 {
 	return FALSE;
 }
-
 
 INLINE BOOL System::IsShuttingDown() const
 {
 	return FALSE;
 }
 
-
 INLINE BOOL System::IsResetting() const
 {
 	return FALSE;
 }
-
 
 INLINE void System::WaitForRetrace(eFrameRate rate)
 {
@@ -93,7 +83,6 @@ INLINE void System::WaitForRetrace(eFrameRate rate)
 	// This platform is synced by NSTimer at AppView
 	this->iRetraceCount = 0;
 }
-
 
 INLINE void System::SetFrameRate(eFrameRate rate)
 {
@@ -105,60 +94,49 @@ INLINE void System::SetFrameRate(eFrameRate rate)
 	this->iFrameRate = rate;
 }
 
-
 INLINE ISystem::eFrameRate System::GetFrameRate()
 {
 	return this->iFrameRate;
 }
 
-
 INLINE void System::GoToMenu()
 {
 }
-
 
 INLINE void System::OnHomeCalled()
 {
 }
 
-
 INLINE void System::GoToDataManager()
 {
 }
-
 
 INLINE void System::HangUp()
 {
 }
 
-
 INLINE void System::DisableHome()
 {
 }
 
-
 INLINE void System::EnableHome()
 {
 }
-
 
 INLINE BOOL System::IsHomeEnabled() const
 {
 	return FALSE;
 }
 
-
 INLINE BOOL System::IsHomeRunning() const
 {
 	return FALSE;
 }
 
-
 INLINE BOOL System::InitializeHome()
 {
 	return FALSE;
 }
-
 
 }} // namespace
 
