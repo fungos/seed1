@@ -17,8 +17,13 @@
 
 #include <math.h>
 #include <SDL/SDL.h>
+#if defined(__APPLE_CC__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
+#else
 #include <GL/gl.h>
 #include <GL/glext.h>
+#endif
 
 #define TAG "[Renderer2D] "
 

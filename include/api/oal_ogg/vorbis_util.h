@@ -6,7 +6,11 @@
 #include <vorbis/codec.h>
 #include <vorbis/vorbisfile.h>
 
+#if defined(__APPLE_CC__)
+#include <OpenAL/al.h>
+#else
 #include <AL/al.h>
+#endif
 
 #include "Defines.h"
 

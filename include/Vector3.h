@@ -19,21 +19,21 @@ template <typename T> class Vector3
 {
 	public:
 		// Constructors
-		Vector3()
+		inline Vector3()
 			: x(0)
 			, y(0)
 			, z(0)
 		{
 		}
 
-		Vector3(T x, T y, T z)
+		inline Vector3(T x, T y, T z)
 			: x(x)
 			, y(y)
 			, z(z)
 		{
 		}
 
-		~Vector3()
+		inline ~Vector3()
 		{
 		}
 

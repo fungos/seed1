@@ -1,7 +1,7 @@
 #if defined(_SDL_) || defined(_QT_)
 
+#define OV_EXCLUDE_STATIC_CALLBACKS
 #include "api/oal_ogg/vorbis_util.h"
-
 
 size_t vorbis_read(void *ptr, size_t byteSize, size_t sizeToRead, void *datasource)
 {

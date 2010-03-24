@@ -13,6 +13,7 @@
 #define _OAL_OGG_	1
 
 #define _NO_W32_PSEUDO_MODIFIERS
+#define OV_EXCLUDE_STATIC_CALLBACKS
 
 #include <string.h>
 #include <time.h>
@@ -20,7 +21,12 @@
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
+
+#if defined(__APPLE_CC__)
+#include <SDL_image/SDL_image.h>
+#else
 #include <SDL/SDL_image.h>
+#endif
 
 #if defined(__MINGW32__) && defined(SEED_BUILD_DLL)
 	#define SEED_CORE __declspec(dllexport)

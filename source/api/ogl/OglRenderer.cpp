@@ -12,8 +12,13 @@
 #include "MemoryManager.h"
 #include "Screen.h"
 
+#if defined(__APPLE_CC__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
+#else
 #include <GL/gl.h>
 #include <GL/glext.h>
+#endif
 
 #if defined(_SDL_)
 #include "platform/sdl/SdlDefines.h"

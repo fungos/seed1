@@ -20,7 +20,11 @@
 #include "Enum.h"
 
 #include <math.h>
+#if defined(__APPLE_CC__)
+#include <OpenGL/glext.h>
+#else
 #include <GL/glext.h>
+#endif
 
 #define TAG		"[Sprite] "
 

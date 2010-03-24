@@ -13,8 +13,12 @@
 #ifdef _OGL_
 
 #include "interface/IRenderer.h"
-#include <GL/glext.h>
 
+#if defined(__APPLE_CC__)
+#include <OpenGL/glext.h>
+#else
+#include <GL/glext.h>
+#endif
 
 // VBO
 extern PFNGLGENBUFFERSARBPROC glGenBuffersARB;

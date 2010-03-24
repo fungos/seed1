@@ -18,8 +18,14 @@
 #include "Sound.h"
 #include "api/oal_ogg/vorbis_util.h"
 
+
+#if defined(__APPLE_CC__)
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
+#else
 #include <AL/al.h>
 #include <AL/alc.h>
+#endif
 
 #define OPENAL_MUSIC_BUFFERS	2
 

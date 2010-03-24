@@ -13,6 +13,11 @@
 
 #define TAG	"[Platform] "
 
+#if defined(__APPLE_CC__)
+#include "SeedInit.h"
+static char pcBundle[2048];
+#endif
+
 BOOL create_directory(const char *path)
 {
 	BOOL ret = FALSE;
@@ -106,7 +111,19 @@ const char *get_user_home_folder()
 
 void get_current_directory(char *buff, int size)
 {
+#if defined(__APPLE_CC__)
+	int len = strlen(Seed::Private::pcArgv[0]);
+	
+	memcpy(pcBundle, Seed::Private::pcArgv[0], len);
+	while (pcBundle[len] != '/') len--;
+	len -= strlen("MacOS");
+	memset(&pcBundle[len], '\0', sizeof(pcBundle) - len);
+	strcpy(&pcBundle[len], "Resources");
+	
+	memcpy(buff, pcBundle, size);
+#else
 	getcwd(buff, size);
+#endif
 }
 
 BOOL change_directory(const char *to)

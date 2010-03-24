@@ -15,9 +15,13 @@
 #include "interface/ISound.h"
 #include "File.h"
 
+#if defined(__APPLE_CC__)
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
+#else
 #include <AL/al.h>
 #include <AL/alc.h>
-
+#endif
 
 namespace Seed { namespace OAL {
 

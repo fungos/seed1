@@ -17,8 +17,11 @@
 #include "interface/ISound.h"
 #include "api/oal_ogg/vorbis_util.h"
 
+#if defined(__APPLE_CC__)
+#include <OpenAL/al.h>
+#else
 #include <AL/al.h>
-
+#endif
 
 namespace Seed { namespace OAL {
 

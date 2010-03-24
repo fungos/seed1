@@ -17,7 +17,11 @@
 #include "File.h"
 #include "Array.h"
 
+#if defined(__APPLE_CC__)
+#include <OpenAL/al.h>
+#else
 #include <AL/al.h>
+#endif
 
 #define SOUND_MASTER_VOLUME		0.2f
 

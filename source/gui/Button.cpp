@@ -175,15 +175,6 @@ BOOL Button::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		f32 x = 0;
 		f32 y = 0;
 
-#ifndef __WARNING_F32_ALREADY_
-#if !defined(__GNUC__)
-#pragma message("WARNING: f32 endianess not checked on some platforms - need do some testing!")
-#else
-#warning "WARNING: f32 endianess not checked on some platforms - need do some testing!"
-#endif
-#define __WARNING_F32_ALREADY_
-#endif // __WARNING_F32_ALREADY_
-
 		READ_F32(x, ptr);
 		READ_F32(y, ptr);
 
