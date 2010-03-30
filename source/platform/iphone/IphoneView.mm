@@ -1,6 +1,7 @@
 //  Created by Danny Grein on 10/13/08.
 //  Copyright TechFront Studios 2008. All rights reserved.
 
+#if defined(_IPHONE_)
 
 #include <QuartzCore/QuartzCore.h>
 #include <OpenGLES/EAGLDrawable.h>
@@ -302,4 +303,6 @@ const char *iphGetHomePath()
 	
 	return _defaultHomePath;
 }
+
+#endif // _IPHONE_
 

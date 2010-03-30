@@ -9,7 +9,7 @@
 // FIXME: Xcode or cmake isnt setting these defines correcly - quick hack to get it working on mac
 #if defined(__APPLE_CC__)
 #define DEBUG
-#define _SDL_
+//#define _SDL_
 //#define YMEM_DEBUG
 #endif
 
