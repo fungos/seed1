@@ -45,6 +45,9 @@
 #include "Renderer.h"
 #include "SeedInit.h"
 
+#ifdef WIN32
+#include <SDL/SDL_syswm.h>
+#endif
 
 #define TAG "[Screen] "
 
@@ -405,14 +408,45 @@ INLINE BOOL Screen::InitializeVideo()
 		this->SetupOpenGL();
 	}
 
-	Uint32 colorkey;
-	SDL_Surface *icon = SDL_LoadBMP("icon.bmp");
-	if (icon)
+#ifdef WIN32
+	BOOL icon = FALSE;
+
+	/*
+	If there is a icon.ico file in the SAME directory of the executable (can't be workdir) we will use it, otherwise we will look for
+	<workdir>/data/icon.bmp and use it instead.
+	*/
+	SDL_SysWMinfo info;
+	SDL_VERSION(&info.version);
+	if (SDL_GetWMInfo(&info) > 0)
 	{
-		colorkey = SDL_MapRGB(icon->format, 255, 0, 255);
-		SDL_SetColorKey(icon, SDL_SRCCOLORKEY, colorkey);
-		SDL_WM_SetIcon(icon, NULL);
+		HWND hWnd = info.window;
+
+		const HANDLE bigIcon = ::LoadImage(NULL, "icon.ico", IMAGE_ICON, ::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON), LR_LOADFROMFILE);
+		if (bigIcon)
+		{
+			icon = TRUE;
+			::SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM)bigIcon);
+		}
+
+		const HANDLE lilIcon = ::LoadImage(NULL, "icon.ico", IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), LR_LOADFROMFILE);
+		if (bigIcon)
+		{
+			icon = TRUE;
+			::SendMessage(hWnd, WM_SETICON, ICON_SMALL, (LPARAM)lilIcon);
+		}
 	}
+	if (!icon)
+#endif
+	{
+		SDL_Surface *icon = SDL_LoadBMP("icon.bmp");
+		if (icon)
+		{
+			Uint32 colorkey = SDL_MapRGB(icon->format, 255, 0, 255);
+			SDL_SetColorKey(icon, SDL_SRCCOLORKEY, colorkey);
+			SDL_WM_SetIcon(icon, NULL);
+		}
+	}
+
 	SDL_WM_SetCaption(pSystem->GetApplicationTitle(), pSystem->GetApplicationTitle());//"Seed", "Seed");
 	pSurface = SDL_SetVideoMode(iWidth, iHeight, iBPP, iFlags);
 
