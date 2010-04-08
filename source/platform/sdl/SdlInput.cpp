@@ -110,13 +110,11 @@ FIXME: 2009-02-17 | BUG | Usar polling? Isso deve ferrar com o frame rate config
 				switch (event.syswm.msg->msg)
 				{
 					case WM_SYSCOMMAND:
-					case WM_GETTEXT:
-					break;
-
 					case WM_IME_SETCONTEXT:
 					case WM_IME_NOTIFY:
 					break;
 
+					case WM_GETTEXT:
 					case WM_GETICON:
 					case WM_NCHITTEST:
 					case WM_NCMOUSEMOVE:
@@ -134,6 +132,10 @@ FIXME: 2009-02-17 | BUG | Usar polling? Isso deve ferrar com o frame rate config
 					case WM_NCCALCSIZE:
 					case WM_SIZE:
 					case WM_QUERYOPEN:
+					break;
+
+					case WM_DISPLAYCHANGE:
+						Log(TAg "event DISPLAYCHANGE");
 					break;
 
 					case WM_SYNCPAINT:
@@ -158,6 +160,10 @@ FIXME: 2009-02-17 | BUG | Usar polling? Isso deve ferrar com o frame rate config
 
 					case WM_ACTIVATEAPP:
 						Log(TAG "event ACTIVATEAPP");
+					break;
+
+					case WM_TASKBAR_CREATED:
+						Log(TAG "event TASKBAR_CREATED");
 					break;
 
 					default:
