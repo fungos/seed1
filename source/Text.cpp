@@ -54,10 +54,6 @@
 namespace Seed {
 
 
-// Flawfinder: ignore
-//static wchar_t _seed_internal_buff[TEXT_BUFFER_MAX];
-
-
 Text::Text()
 	: pFont(NULL)
 	, pStrData(NULL)
@@ -67,8 +63,6 @@ Text::Text()
 	, fHeight(0)
 	, fScaleX(1.0f)
 	, fScaleY(1.0f)
-	, bStatic(FALSE)
-	//, bChanged(FALSE)
 	, iColor(0)
 	, iOperation(IRenderable::NONE)
 {
@@ -81,9 +75,6 @@ Text::~Text()
 
 INLINE void Text::Reset()
 {
-	if (!this->bStatic && this->pStrData)
-		pMemoryManager->Free(this->pStrData, pDefaultPool);
-
 	if (this->pFont)
 		this->pFont->Release();
 
@@ -92,29 +83,18 @@ INLINE void Text::Reset()
 
 	this->fPosX = 0;
 	this->fPosY = 0;
-	this->bStatic	= FALSE;
-	//this->bChanged  = FALSE;
 }
 
 INLINE void Text::SetText(u32 dictText)
 {
-	if (!this->bStatic && this->pStrData)
-		pMemoryManager->Free(this->pStrData, pDefaultPool);
 
-	this->pStrData = const_cast<WideString>(pDictionary->GetString(dictText)); //staticStr; FIXME TODO
-	this->bStatic = TRUE;
-	//this->bChanged = TRUE;
+	this->pStrData = const_cast<WideString>(pDictionary->GetString(dictText));
 	this->fWidth = this->GetWidth(0, String::Length(pStrData));
 }
 
-INLINE void Text::SetText(WideString str)
+INLINE void Text::SetText(const WideString str)
 {
-	if (!this->bStatic && this->pStrData)
-		pMemoryManager->Free(this->pStrData, pDefaultPool);
-
-	this->pStrData = str; //staticStr; FIXME TODO
-	this->bStatic = TRUE;
-	//this->bChanged = TRUE;
+	this->pStrData = str;
 	this->fWidth = this->GetWidth(0, String::Length(pStrData));
 }
 
@@ -123,64 +103,6 @@ INLINE void Text::SetText(const String &str)
 	this->SetText(const_cast<WideString>(str.GetData()));
 }
 
-/*
-void Text::SetText(String &str)
-{
-	if (this->bStatic)
-	{
-		this->pStrData	= NULL;
-		this->bStatic	= FALSE;
-	}
-
-	if (this->pStrData)
-		pMemoryManager->Free(this->pStrData, pDefaultPool);
-
-	MEMSET(_seed_internal_buff, '\0', TEXT_BUFFER_MAX);
-
-	// Flawfinder: ignore
-	WVSNPRINTF(_seed_internal_buff, TEXT_BUFFER_MAX, str, *ap);
-
-	SIZE_T size = wcslen(_seed_internal_buff) + 1;
-	this->pStrData = static_cast<WideString>(pMemoryManager->Alloc(size * sizeof(wchar_t), pDefaultPool));
-	ASSERT_NULL(this->pStrData);
-
-	MEMCOPY(this->pStrData, _seed_internal_buff, size * sizeof(wchar_t));
-
-	this->fWidth = this->GetWidth(0, (u32)size);
-	//this->bChanged	= TRUE;
-}
-
-void Text::Print(WideString str, ...)
-{
-	va_list ap;
-	va_start(ap, str);
-	this->Print(str, &ap);
-	va_end(ap);
-}
-
-f32 Text::GetWidth(WideString str, ...)
-{
-	va_list ap;
-
-	MEMSET(_seed_internal_buff, '\0', TEXT_BUFFER_MAX);
-
-	va_start(ap, str);
-	// Flawfinder: ignore
-	WVSNPRINTF(_seed_internal_buff, TEXT_BUFFER_MAX, str, ap);
-	va_end(ap);
-
-	SIZE_T size = wcslen(_seed_internal_buff) + 1;
-
-	return this->GetWidth(0, (u32)size);
-}
-*/
-/*
-INLINE f32 Text::GetWidth(WideString str)
-{
-	u32 size = String::Length(str);
-	return this->GetWidth(0, size);
-}
-*/
 INLINE f32 Text::GetWidth(u32 index, u32 size)
 {
 	f32 w = 0.0f;
@@ -386,7 +308,7 @@ INLINE void Text::SetScale(f32 scaleX, f32 scaleY)
 	fScaleY = scaleY;
 }
 
-INLINE WideString Text::GetText() const
+INLINE const WideString Text::GetText() const
 {
 	return this->pStrData;
 }

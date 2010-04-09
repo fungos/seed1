@@ -40,13 +40,15 @@ class String
 {
 	public:
 		String();
-		String(const WideString newStr);
-		String(const String &str);
+		explicit String(const WideString newStr);
+		explicit String(const String &str);
 		virtual ~String();
-
-		String &Initialize(const WideString newStr);
+		
+		String &Set(const WideString newStr);
 		String &Reset();
-
+		String &Clear();
+		String &Release();
+		
 		// Size modifiers
 		// All methods return this
 		String &Set();
@@ -57,7 +59,7 @@ class String
 		String &Set(const u16 *paramName, bool paramVal);
 		String &Set(const u16 *paramName, const char paramVal);
 		String &Set(const u16 *paramName, String *paramVal);
-
+		
 		void SubString(u32 index, u32 size);
 		void Append(WideChar chr);
 		//void Append(const u16 *str);
@@ -70,10 +72,7 @@ class String
 		static u32 Length(const WideString str);
 		static BOOL Equals(const WideString str1, const WideString str2);
 
-		//static u32 Length(const u16 *str);
-		//static BOOL Equals(const u16 *str1, const u16 *str2);
-
-		const u16 *GetData() const; // DO NOT USE!
+		const WideString GetData() const; // DO NOT USE!
 
 		String &operator=(const String &string);
 

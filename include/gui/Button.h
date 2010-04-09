@@ -149,10 +149,8 @@ class Button : public IWidget, public IResource
 		virtual void SetLabelHorizontalAlignment(eHorizontalAlignment align);
 		virtual void SetLabelVerticalAlignment(eVerticalAlignment align);
 		virtual void SetFont(const Font *font);
-		virtual void SetText(u32 dictId);
-		virtual void SetText(WideString str);
+		virtual void SetText(const WideString str);
 		virtual void SetText(const String &str);
-		//virtual void Print(WideString str, ...);
 		virtual void SetLabelBlending(eBlendMode blending);
 		virtual void SetLabelColor(u8 r, u8 g, u8 b, u8 a);
 		virtual void SetLabelColor(PIXEL px);

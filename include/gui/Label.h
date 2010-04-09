@@ -57,10 +57,8 @@ class Label : public IWidget
 		virtual void SetAutoAdjust(BOOL b);
 		virtual BOOL IsAutoAdjust() const;
 		virtual void SetAlignment(eHorizontalAlignment align);
-		virtual void SetText(u32 dictId);
-		virtual void SetText(WideString str);
+		virtual void SetText(const WideString str);
 		virtual void SetText(const String &str);
-		//virtual void Print(WideString str, ...);
 		virtual void SetFont(const Font *font);
 
 		f32 GetTextWidth();

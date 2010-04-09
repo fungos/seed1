@@ -191,7 +191,7 @@ void Sprite::Render(f32 delta)
 
 	this->SetupBlendingOperation();
 
-#if 1 // Vertex Array
+#if 0 // Vertex Array
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
@@ -215,24 +215,76 @@ void Sprite::Render(f32 delta)
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-#elif 0 // Immediate mode A
+#elif 1 // Immediate mode A
+	glBindTexture(GL_TEXTURE_2D, image->LoadTexture());
+
 	// TOP 160 FPS
 	// AVG 159 FPS
 	glPushMatrix();
 	glLoadIdentity();
 	glBegin(GL_TRIANGLE_STRIP);
-		glTexCoord2f(coords[0], coords[1]);
-		glVertex3f(vert[0].x, vert[0].y, vert[0].z);
+	glGetError();//Se remover os glGetError em Release o jogo fecha na máquina lixo!!!
 
-		glTexCoord2f(coords[2], coords[3]);
-		glVertex3f(vert[1].x, vert[1].y, vert[1].z);
+	for (u32 i = 0; i < iNumVertices; i++)
+	{
+		if (arCustomCoordsData)
+		{
+			glTexCoord2f(arCustomCoordsData[(i*2)], arCustomCoordsData[(i*2)+1]);
+			glGetError();
+		}
+		else
+		{
+			glTexCoord2f(coords[(i*2)], coords[(i*2)+1]);
+			glGetError();
+		}
 
-		glTexCoord2f(coords[4], coords[5]);
-		glVertex3f(vert[2].x, vert[2].y, vert[2].z);
+		glVertex3f(arCurrentVertexData[i].x, arCurrentVertexData[i].y, arCurrentVertexData[i].z);
+		glGetError();
+	}
 
-		glTexCoord2f(coords[6], coords[7]);
-		glVertex3f(vert[3].x, vert[3].y, vert[3].z);
+	//if (arCurrentVertexData)
+	//{
+	//	//for (u32 i = 0; i < iNumVertices; i++)
+	//	//{
+	//	//	if (arCustomCoordsData)
+	//	//		glTexCoord2f(arCustomCoordsData[(i*2)], arCustomCoordsData[(i*2)+1]);
+	//	//	else
+	//	//		glTexCoord2f(coords[(i*2)], coords[(i*2)+1]);
+
+	//	//	glVertex3f(arCurrentVertexData[i].x, arCurrentVertexData[i].y, arCurrentVertexData[i].z);
+	//	//}
+
+
+	//	//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	//	//glEnableClientState(GL_VERTEX_ARRAY);
+
+	//	//if (arCustomCoordsData)
+	//	//	glTexCoordPointer(2, GL_FLOAT, 0, arCustomCoordsData);
+	//	//else
+	//	//	glTexCoordPointer(2, GL_FLOAT, 0, coords);
+
+	//	//glVertexPointer(3, GL_FLOAT, 0, arCurrentVertexData);
+	//	//glDrawArrays(Renderer::GetOpenGLMeshType(nMeshType), 0, iNumVertices);
+
+	//	//glDisableClientState(GL_VERTEX_ARRAY);
+	//	//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	//}
+	//else
+	//{
+	//	glTexCoord2f(coords[0], coords[1]);
+	//	glVertex3f(vert[0].x, vert[0].y, vert[0].z);
+
+	//	glTexCoord2f(coords[2], coords[3]);
+	//	glVertex3f(vert[1].x, vert[1].y, vert[1].z);
+
+	//	glTexCoord2f(coords[4], coords[5]);
+	//	glVertex3f(vert[2].x, vert[2].y, vert[2].z);
+
+	//	glTexCoord2f(coords[6], coords[7]);
+	//	glVertex3f(vert[3].x, vert[3].y, vert[3].z);
+	//}
 	glEnd();
+	glGetError();
 	glPopMatrix();
 #elif 0 // Immediate mode B
 	RendererPacket packet;
@@ -272,9 +324,6 @@ void Sprite::Render(f32 delta)
 #else
 	// TOP 154 FPS
 	// AVG 152 FPS
-	if (iNumVertices > 4)
-		int a =0;
-
 	RendererPacket packet;
 	packet.iSize = iNumVertices;
 	packet.nMeshType = Renderer::GetOpenGLMeshType(nMeshType);

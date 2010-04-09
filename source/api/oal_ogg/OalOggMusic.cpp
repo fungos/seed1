@@ -113,7 +113,7 @@ BOOL Music::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		err = alGetError();
 		if (err != AL_NO_ERROR)
 		{
-			Info(TAG "Could not create OpenAL music source (0x%04x).", alGetError());
+			Info(TAG "Could not create OpenAL music source (0x%04x).", err);
 			this->bLoaded = FALSE;
 			return this->bLoaded;
 		}
@@ -126,7 +126,7 @@ BOOL Music::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 			memset(iBuffers, '\0', sizeof(iBuffers));
 			this->bLoaded = FALSE;
 
-			Info(TAG "Could not generate OpenAL music buffers (0x%04x).", alGetError());
+			Info(TAG "Could not generate OpenAL music buffers (0x%04x).", err);//alGetError());
 		}
 
 		if (ov_fopen(const_cast<char *>(fname), &oggStream) < 0)

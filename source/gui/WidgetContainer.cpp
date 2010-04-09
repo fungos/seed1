@@ -85,7 +85,7 @@ WidgetContainer::~WidgetContainer()
 {
 	this->Reset();
 
-	if (Private::bInitialized)
+	if(Private::bInitialized)
 		pGuiManager->Remove(this);
 }
 
@@ -97,8 +97,13 @@ void WidgetContainer::Reset()
 
 	IWidget::Reset();
 
+#ifdef SEED_USE_REAL_COORDINATE_SYSTEM
+	this->SetWidth(1024.0f); //f32(pScreen->GetWidth()));
+	this->SetHeight(768.0f); //f32(pScreen->GetHeight()));
+#else
 	this->SetWidth(1.0f);
 	this->SetHeight(1.0f);
+#endif
 
 	this->bVisible			= TRUE;
 	this->bChanged			= TRUE;

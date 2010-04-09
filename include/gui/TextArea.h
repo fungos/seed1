@@ -54,10 +54,8 @@ class TextArea : public IWidget
 		virtual void Reset();
 		virtual void Update(f32 dt);
 
-		virtual void SetText(u32 dictId);
-		virtual void SetText(WideString str);
+		virtual void SetText(const WideString str);
 		virtual void SetText(const String &str);
-		//virtual void Print(WideString str, ...);
 		virtual void SetFont(const Font *font);
 
 		virtual void SetPriority(u32 p);

@@ -168,18 +168,7 @@ INLINE void Label::SetAlignment(eHorizontalAlignment align)
 	this->bChanged = TRUE;
 }
 
-INLINE void Label::SetText(u32 dictId)
-{
-	this->cText.SetText(dictId);
-
-	this->SetHeight(cText.GetHeight());
-	if (!this->GetWidth() || this->bAutoAdjust)
-		IWidget::SetWidth(cText.GetWidth());
-
-	this->bChanged = TRUE;
-}
-
-INLINE void Label::SetText(WideString str)
+INLINE void Label::SetText(const WideString str)
 {
 	this->cText.SetText(str);
 
@@ -200,22 +189,6 @@ INLINE void Label::SetText(const String &str)
 
 	this->bChanged = TRUE;
 }
-
-/*
-INLINE void Label::Print(WideString str, ...)
-{
-	va_list ap;
-	va_start(ap, str);
-	this->cText.Print(str, &ap);
-	va_end(ap);
-
-	this->SetHeight(cText.GetHeight());
-	if (!this->GetWidth() || this->bAutoAdjust)
-		IWidget::SetWidth(cText.GetWidth());
-
-	this->bChanged = TRUE;
-}
-*/
 
 INLINE void Label::SetFont(const Font *font)
 {

@@ -257,24 +257,7 @@ void TextArea::RebuildPosY(u32 usedLines)
 		this->pLines[i].fPosY = y + ((cText.GetHeight() + cText.GetFontTracking()) * i * this->GetScaleY());
 }
 
-INLINE void TextArea::SetText(u32 dictId)
-{
-	this->cText.SetText(dictId);
-
-	if (!this->GetHeight())
-		this->SetHeight(cText.GetHeight());
-
-	if (!this->GetWidth())
-		this->SetWidth(cText.GetWidth());
-
-	this->Rebuild();
-	this->bChanged = FALSE;
-
-
-//	this->bChanged = TRUE;
-}
-
-INLINE void TextArea::SetText(WideString str)
+INLINE void TextArea::SetText(const WideString str)
 {
 	this->cText.SetText(str);
 
@@ -288,6 +271,7 @@ INLINE void TextArea::SetText(WideString str)
 	this->bChanged = FALSE;
 //	this->bChanged = TRUE;
 }
+
 
 INLINE void TextArea::SetText(const String &str)
 {
@@ -303,25 +287,6 @@ INLINE void TextArea::SetText(const String &str)
 	this->bChanged = FALSE;
 //	this->bChanged = TRUE;
 }
-
-
-/*
-INLINE void TextArea::Print(WideString str, ...)
-{
-	va_list ap;
-	va_start(ap, str);
-	this->cText.Print(str, &ap);
-	va_end(ap);
-
-	if (!this->GetHeight())
-		this->SetHeight(cText.GetHeight());
-
-	if (!this->GetWidth())
-		this->SetWidth(cText.GetWidth());
-
-	this->bChanged = TRUE;
-}
-*/
 
 INLINE void TextArea::SetAutoAdjust(BOOL b)
 {

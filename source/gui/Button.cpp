@@ -1151,22 +1151,7 @@ INLINE void Button::SetLabelDisabledColor(PIXEL px)
 	this->iLabelDisabledColor = px;
 }
 
-INLINE void Button::SetText(u32 dictId)
-{
-	this->cLabel.SetText(dictId);
-
-	if (cLabel.GetWidth() > this->GetWidth())
-		this->SetWidth(cLabel.GetWidth());
-	if (cLabel.GetHeight() > this->GetHeight())
-		this->SetHeight(cLabel.GetHeight());
-
-	this->UpdateLabel();
-
-	this->bLabelBased = TRUE;
-	this->bButtonChanged = TRUE;
-}
-
-INLINE void Button::SetText(WideString str)
+INLINE void Button::SetText(const WideString str)
 {
 	this->cLabel.SetText(str);
 
@@ -1195,26 +1180,6 @@ INLINE void Button::SetText(const String &str)
 	this->bLabelBased = TRUE;
 	this->bButtonChanged = TRUE;
 }
-
-/*
-INLINE void Button::Print(WideString str, ...)
-{
-	va_list ap;
-	va_start(ap, str);
-	this->cLabel.Print(str, &ap);
-	va_end(ap);
-
-	if (cLabel.GetWidth() > this->GetWidth())
-		this->SetWidth(cLabel.GetWidth());
-	if (cLabel.GetHeight() > this->GetHeight())
-		this->SetHeight(cLabel.GetHeight());
-
-	this->UpdateLabel();
-
-	this->bLabelBased = TRUE;
-	this->bButtonChanged = TRUE;
-}
-*/
 
 INLINE void Button::SetSpriteWidth(f32 w)
 {

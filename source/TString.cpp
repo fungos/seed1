@@ -40,7 +40,7 @@ String::String()
 	, pConstructedStr(NULL)
 	, iConstructedSize(0)
 {
-	this->Reset();
+	this->Release();
 }
 
 String::String(const WideString newStr)
@@ -48,7 +48,7 @@ String::String(const WideString newStr)
 	, pConstructedStr(NULL)
 	, iConstructedSize(0)
 {
-	this->Initialize(newStr);
+	this->Set(newStr);
 }
 
 String::String(const String& str)
@@ -61,24 +61,40 @@ String::String(const String& str)
 
 String::~String()
 {
-	this->Reset();
+	this->Release();
 }
 
-INLINE String &String::Initialize(const WideString newStr)
+INLINE String &String::Set(const WideString newStr)
 {
-	this->Reset();
+	this->Release();
 
 	pOriginalStr = static_cast<const u16 *>((void *)newStr);
 
 	iConstructedSize = this->Length(pOriginalStr) + 1;
 	pConstructedStr = glStringPool.Alloc(iConstructedSize);
-
+	
 	this->Copy(pOriginalStr);
 
 	return *this;
 }
 
 INLINE String &String::Reset()
+{
+	if (pConstructedStr)
+	{
+		glStringPool.Free(pConstructedStr);
+		pConstructedStr = NULL;
+	}
+
+	iConstructedSize = this->Length(pOriginalStr) + 1;
+	pConstructedStr = glStringPool.Alloc(iConstructedSize);
+	
+	this->Copy(pOriginalStr);
+
+	return *this;
+}
+
+INLINE String &String::Release()
 {
 	pOriginalStr = NULL;
 
@@ -93,22 +109,22 @@ INLINE String &String::Reset()
 
 INLINE String &String::operator=(const String &string)
 {
-	this->Reset();
+	this->Release();
 
 	iConstructedSize	= string.iConstructedSize;
 	pOriginalStr		= string.pOriginalStr;
 
 	pConstructedStr		= glStringPool.Alloc(iConstructedSize);
-
+	
 	this->Copy(string.pConstructedStr);
 
 	return *this;
 }
 
 
-INLINE String &String::Set()
+INLINE String &String::Clear()
 {
-	this->Copy(pOriginalStr);
+	MEMSET(pConstructedStr, '\0', this->Length() * sizeof(u16));
 	return *this;
 }
 
@@ -137,7 +153,7 @@ INLINE String &String::Set(const u16 *paramName, const char *paramVal)
 	}
 
 	parsedParamVal[len] = '\0';
-
+ 
 	this->Replace(paramName, parsedParamVal);
 	//glStringPool.Free(parsedParamVal);
 
@@ -152,7 +168,7 @@ INLINE String &String::Set(const u16 *paramName, const char paramVal)
 	tmp[1] = '\0';
 	tmp[2] = '\0';
 	tmp[3] = '\0';
-
+ 
 	this->Replace(paramName, (u16 *)tmp);
 
 	return *this;
@@ -289,11 +305,7 @@ INLINE void String::SubString(u32 from, u32 to)
 	}
 
 	u32 len = to - from + 1;
-	// FIXME: OMG.
-	if (pOriginalStr)
-		MEMCOPY(pConstructedStr, &pOriginalStr[from], len * sizeof(u16));
-	else
-		MEMCOPY(pConstructedStr, &pConstructedStr[from], len * sizeof(u16));
+	MEMCOPY(pConstructedStr, &pConstructedStr[from], len * sizeof(u16));
 	pConstructedStr[len - 1] = NULL;
 }
 
@@ -301,7 +313,7 @@ INLINE void String::Cut(u32 index, u32 size)
 {
 	if (!size)
 		return;
-
+	
 	u32 len = this->Length();
 	ASSERT(index + size <= len);
 
@@ -320,7 +332,7 @@ INLINE void String::Paste(u32 index, const u16 *val)
 	MEMCOPY(tmp, pConstructedStr, bufferLen * sizeof(u16));
 	MEMCOPY(&pConstructedStr[index + valueLen], &tmp[index], (bufferLen - index) * sizeof(u16));
 	glStringPool.Free(tmp);
-
+	
 	//paste string
 	MEMCOPY(&pConstructedStr[index], val, valueLen * sizeof(u16));
 	pConstructedStr[bufferLen + valueLen - 1] = NULL;
@@ -346,12 +358,7 @@ INLINE u32 String::Length() const
 {
 	return String::Length(pConstructedStr);
 }
-/*
-INLINE u32 String::Length(const u16 *str)
-{
-	return String::Length(static_cast<const WideString>((void *)str));
-}
-*/
+
 INLINE u32 String::Length(const WideString str)
 {
 	if (!str)
@@ -368,12 +375,7 @@ INLINE BOOL String::Equals(const u16 *str) const
 {
 	return this->Equals(pConstructedStr, str);
 }
-/*
-INLINE BOOL String::Equals(const u16 *str1, const u16 *str2)
-{
-	return String::Equals(static_cast<const WideString>((void *)str1), static_cast<const WideString>((void *)str2));
-}
-*/
+
 INLINE BOOL String::Equals(const WideString str1, const WideString str2)
 {
 	if (str1 == str2)
@@ -394,9 +396,9 @@ INLINE BOOL String::Equals(const WideString str1, const WideString str2)
 	return TRUE;
 }
 
-INLINE const u16 *String::GetData() const
+INLINE const WideString String::GetData() const
 {
-	return pConstructedStr;
+	return (const WideString)pConstructedStr;
 }
 
 } // namespace
