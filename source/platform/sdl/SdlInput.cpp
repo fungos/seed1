@@ -49,6 +49,7 @@
 #include "EventInputKeyboard.h"
 #include "EventSystem.h"
 
+#include <SDL/SDL_syswm.h>
 
 #define TAG "[Input] "
 
@@ -83,6 +84,9 @@ INLINE BOOL Input::Initialize()
 {
 	Log(TAG "Initializing...");
 	BOOL r = this->Reset();
+	#if defined(WIN32) && defined(_DEBUG_)
+	SDL_EventState(SDL_SYSWMEVENT, SDL_ENABLE);
+	#endif
 	Log(TAG "Initialization completed.");
 
 	return r;
@@ -100,6 +104,76 @@ FIXME: 2009-02-17 | BUG | Usar polling? Isso deve ferrar com o frame rate config
 	{
 		switch (event.type)
 		{
+			#if defined(WIN32) && defined(_DEBUG_)
+			case SDL_SYSWMEVENT:
+			{
+				switch (event.syswm.msg->msg)
+				{
+					case WM_SYSCOMMAND:
+					case WM_IME_SETCONTEXT:
+					case WM_IME_NOTIFY:
+					break;
+
+					case WM_GETTEXT:
+					case WM_GETICON:
+					case WM_NCHITTEST:
+					case WM_NCMOUSEMOVE:
+					case WM_NCLBUTTONDOWN:
+					case WM_NCLBUTTONDBLCLK:
+					case WM_NCLBUTTONUP:
+					case WM_CAPTURECHANGED:
+					case WM_WINDOWPOSCHANGING:
+					case WM_WINDOWPOSCHANGED:
+					case WM_MOVE:
+					case WM_MOVING:
+					case WM_ENTERSIZEMOVE:
+					case WM_EXITSIZEMOVE:
+					case WM_MOUSEACTIVATE:
+					case WM_NCCALCSIZE:
+					case WM_SIZE:
+					case WM_QUERYOPEN:
+					break;
+
+					case WM_DISPLAYCHANGE:
+						Log(TAg "event DISPLAYCHANGE");
+					break;
+
+					case WM_SYNCPAINT:
+						Log(TAG "event SYNCPAINT");
+					break;
+
+					case WM_NCPAINT:
+						Log(TAG "event NCPAINT");
+					break;
+
+					case WM_NCACTIVATE:
+						Log(TAG "event NCACTIVATE");
+					break;
+
+					case WM_KILLFOCUS:
+						Log(TAG "event KILLFOCUS");
+					break;
+
+					case WM_SETFOCUS:
+						Log(TAG "event SETFOCUS");
+					break;
+
+					case WM_ACTIVATEAPP:
+						Log(TAG "event ACTIVATEAPP");
+					break;
+
+					case WM_TASKBAR_CREATED:
+						Log(TAG "event TASKBAR_CREATED");
+					break;
+
+					default:
+						Log(TAG "Received system event. Message (0x%x) wParam = %d, lParam = %d.", event.syswm.msg->msg, event.syswm.msg->wParam, event.syswm.msg->lParam);
+					break;
+				}
+			}
+			break;
+			#endif
+
 			case SDL_KEYDOWN:
 			{
 				EventInputKeyboard ev(event.key.keysym.sym, event.key.keysym.mod, event.key.keysym.scancode, event.key.which);
