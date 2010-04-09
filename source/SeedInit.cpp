@@ -232,10 +232,6 @@ void Shutdown()
 	if (!Private::bInitialized)
 		return;
 
-	// Reset util classes
-	pDictionary->Reset();
-	glResourceManager.Reset();
-
 	Info(SEED_TAG "Shutting down subsystems...");
 	pModuleManager->Shutdown();
 	Private::bInitialized = FALSE;
