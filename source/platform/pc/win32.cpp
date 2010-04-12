@@ -35,6 +35,7 @@
 
 #include "Defines.h"
 #include "Log.h"
+#include "System.h"
 
 #include <io.h>
 #include <windows.h>
@@ -164,5 +165,36 @@ void print_system_info()
 	Info(TAG "Memory: %ldKb total, %ldKb free", mem.dwTotalPhys/1024L, mem.dwAvailPhys/1024L);
 }
 
+BOOL system_check_multiple_instance(bool warnUser)
+{
+	DWORD error = 0;
+
+	HANDLE handleProcess;
+	LPCTSTR lpName = (LPCTSTR)pSystem->GetApplicationTitle();
+
+	handleProcess = CreateMutex(NULL, CREATE_MUTEX_INITIAL_OWNER, lpName);
+	error = GetLastError();
+	if (!handleProcess)
+	{
+		Log(TAG "ERROR! could not create a object mutex. Error:%d ", error);
+		return TRUE;
+	}
+	else if (error == ERROR_ALREADY_EXISTS)
+	{
+		HWND hWnd = FindWindow(NULL, pSystem->GetApplicationTitle());
+		if (hWnd)
+		{
+			if (warnUser)
+			{
+				MessageBox(NULL, "There is already an instance of this application running!", pSystem->GetApplicationTitle(), MB_ICONWARNING);
+			}
+			SwitchToThisWindow(hWnd, FALSE);
+			ShowWindow(hWnd, SW_RESTORE);
+			return FALSE;
+		}
+	}
+
+	return TRUE;
+}
 
 #endif // WIN32

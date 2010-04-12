@@ -164,6 +164,12 @@ BOOL change_directory(const char *to)
 
 void print_system_info()
 {
+	#warning "Must implement function " ## __PRETTY_FUNCTION__
+}
+
+BOOL system_check_multiple_instance(bool warnUser)
+{
+	#warning "Must implement function " ## __PRETTY_FUNCTION__
 }
 
 #endif // _LINUX_

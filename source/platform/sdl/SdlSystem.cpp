@@ -42,6 +42,7 @@
 #include "MemoryManager.h"
 #include "Timer.h"
 #include "EventSystem.h"
+#include "SeedInit.h"
 
 #include "platform/pc/platform.h"
 
@@ -80,6 +81,11 @@ BOOL System::Initialize()
 {
 	Log(TAG "Initializing...");
 	print_system_info();
+
+	if (!pConfiguration->GetCanHaveMultipleInstances() && !system_check_multiple_instance(pConfiguration->GetWarningMultipleInstances()))
+	{
+		exit(1);
+	}
 
 	if (SDL_Init(SDL_INIT_TIMER) < 0 ) // SDL_INIT_VIDEO
 	{

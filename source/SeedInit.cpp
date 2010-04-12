@@ -71,12 +71,12 @@ namespace Seed {
 namespace Private
 {
 	IGameApp	*pApplication 	= NULL;
-	IRenderer	*pRenderer 	= NULL;
+	IRenderer	*pRenderer 		= NULL;
 	BOOL		bInitialized 	= FALSE;
-	int		iArgc		= 0;
-	char		**pcArgv	= NULL;
+	int			iArgc			= 0;
+	char		**pcArgv		= NULL;
 	BOOL		bDisableSound	= FALSE;
-	f32		fCurrentTime	= 0.0f;
+	f32			fCurrentTime	= 0.0f;
 }
 
 ResourceManager glResourceManager("global");
