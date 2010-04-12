@@ -1,34 +1,3 @@
-/******************************************************************************
- ** Copyright (c) 2010 Seed Developers
- ** All rights reserved
- ** Contact: licensing@seedframework.org
- ** Website: http://www.seedframework.org
- 
- ** This file is part of the Seed Framework.
- 
- ** Commercial Usage
- ** Seed Framework is available under proprietary license for those who cannot,
- ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
- ** Nintendo Wii and others).
- 
- ** GNU Lesser General Public License Usage
- ** Alternatively, this file may be used under the terms of the GNU Lesser
- ** General Public License version 2.1 as published by the Free Software
- ** Foundation and appearing in the file LICENSE.LGPL included in the
- ** packaging of this file.  Please review the following information to
- ** ensure the GNU Lesser General Public License version 2.1 requirements
- ** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
- **
- ** In addition, as a special exception, Seed developers gives you certain
- ** additional rights. These rights are described in the Seed Framework LGPL
- ** Exception version 1.1, included in the file LGPL_EXCEPTION.txt in this
- ** package.
- **
- ** If you have questions regarding the use of this file, please contact
- ** Seed developers at licensing@seedframework.org.
- **
- *****************************************************************************/
-
 /*! \file Button.cpp
 	\author Rafael Eduardo Gonchor
 			Danny Angelo Carminati Grein
@@ -120,7 +89,7 @@ Button::Button()
 Button::~Button()
 {
 	this->Unload();
-	if (Private::bInitialized)
+	if(Private::bInitialized)
 		pGuiManager->Remove(this);
 }
 
@@ -135,6 +104,7 @@ BOOL Button::Unload()
 
 	if (bLabelBased)
 	{
+		this->cLabel.Reset();
 		this->bLabelBased = FALSE;
 	}
 
@@ -205,7 +175,16 @@ BOOL Button::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 
 		f32 x = 0;
 		f32 y = 0;
-		
+
+#ifndef __WARNING_F32_ALREADY_
+#if !defined(__GNUC__)
+#pragma message("WARNING: f32 endianess not checked on some platforms - need do some testing!")
+#else
+#warning "WARNING: f32 endianess not checked on some platforms - need do some testing!"
+#endif
+#define __WARNING_F32_ALREADY_
+#endif // __WARNING_F32_ALREADY_
+
 		READ_F32(x, ptr);
 		READ_F32(y, ptr);
 
@@ -242,9 +221,9 @@ BOOL Button::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 	return this->bLoaded;
 }
 
-void Button::Update(f32 delta)
+void Button::Update(f32 dt)
 {
-	UNUSED(delta);
+	UNUSED(dt);
 	//IWidget::Update();
 
 	if (bButtonChanged || bTransformationChanged)
@@ -727,7 +706,7 @@ INLINE void Button::SetDisabled(BOOL b)
 				{
 					BOOL hasAnim = FALSE;
 					hasAnim = cSprite.SetAnimation("idle");
-					if (hasAnim)
+					if (hasAnim) 
 					{
 						pPreviousEnabledAnimation = "idle";
 					}
@@ -1151,7 +1130,22 @@ INLINE void Button::SetLabelDisabledColor(PIXEL px)
 	this->iLabelDisabledColor = px;
 }
 
-INLINE void Button::SetText(const WideString str)
+INLINE void Button::SetText(u32 dictId)
+{
+	this->cLabel.SetText(dictId);
+
+	if (cLabel.GetWidth() > this->GetWidth())
+		this->SetWidth(cLabel.GetWidth());
+	if (cLabel.GetHeight() > this->GetHeight())
+		this->SetHeight(cLabel.GetHeight());
+
+	this->UpdateLabel();
+
+	this->bLabelBased = TRUE;
+	this->bButtonChanged = TRUE;
+}
+
+INLINE void Button::SetText(WideString str)
 {
 	this->cLabel.SetText(str);
 
@@ -1180,6 +1174,26 @@ INLINE void Button::SetText(const String &str)
 	this->bLabelBased = TRUE;
 	this->bButtonChanged = TRUE;
 }
+
+/*
+INLINE void Button::Print(WideString str, ...)
+{
+	va_list ap;
+	va_start(ap, str);
+	this->cLabel.Print(str, &ap);
+	va_end(ap);
+
+	if (cLabel.GetWidth() > this->GetWidth())
+		this->SetWidth(cLabel.GetWidth());
+	if (cLabel.GetHeight() > this->GetHeight())
+		this->SetHeight(cLabel.GetHeight());
+
+	this->UpdateLabel();
+
+	this->bLabelBased = TRUE;
+	this->bButtonChanged = TRUE;
+}
+*/
 
 INLINE void Button::SetSpriteWidth(f32 w)
 {
