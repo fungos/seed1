@@ -494,6 +494,7 @@ BOOL Screen::Shutdown()
 
 INLINE BOOL Screen::Update(f32 dt)
 {
+	UNUSED(dt);
 	//if (!IScreen::Update(dt))
 	//	return FALSE;
 

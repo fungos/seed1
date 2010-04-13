@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -136,8 +136,8 @@ BOOL Image::Load(u32 width, u32 height, PIXEL *buffer, IMemoryPool *pool)
 	UNUSED(pool);
 	ASSERT_NULL(pool);
 
-	ASSERT_MSG(ROUND_UP(buffer) == buffer, "ERROR: User image buffer MUST BE 32bits aligned!");
-	ASSERT_MSG(ROUND_UP(width) == width, "ERROR: User image scanline MUST BE 32bits aligned - pitch/stride!");
+	ASSERT_MSG((void *)ROUND_UP(buffer, 32) == (void *)buffer, "ERROR: User image buffer MUST BE 32bits aligned!");
+	ASSERT_MSG(ROUND_UP(width, 32) == width, "ERROR: User image scanline MUST BE 32bits aligned - pitch/stride!");
 
 	if (this->Unload())
 	{

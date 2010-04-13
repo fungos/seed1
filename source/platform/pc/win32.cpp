@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -167,6 +167,7 @@ void print_system_info()
 
 BOOL system_check_multiple_instance(bool warnUser)
 {
+#if !defined(_QT_)
 	DWORD error = 0;
 
 	HANDLE handleProcess;
@@ -193,7 +194,9 @@ BOOL system_check_multiple_instance(bool warnUser)
 			return FALSE;
 		}
 	}
-
+#else
+	#warning "Implementar 'system_check_multiple_instance' no Qt"
+#endif
 	return TRUE;
 }
 
