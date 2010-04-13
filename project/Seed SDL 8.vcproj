@@ -240,6 +240,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\Configuration.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\Dictionary.cpp"
 				>
 			</File>
@@ -571,6 +575,10 @@
 				Name="interface"
 				>
 				<File
+					RelativePath="..\source\interface\IBasicMesh.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\source\interface\ICartridge.cpp"
 					>
 				</File>
@@ -877,6 +885,10 @@
 			</File>
 			<File
 				RelativePath="..\include\Config.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\Configuration.h"
 				>
 			</File>
 			<File
@@ -1214,6 +1226,10 @@
 			<Filter
 				Name="interface"
 				>
+				<File
+					RelativePath="..\include\interface\IBasicMesh.h"
+					>
+				</File>
 				<File
 					RelativePath="..\include\interface\ICartridge.h"
 					>
