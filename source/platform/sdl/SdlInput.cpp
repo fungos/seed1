@@ -166,6 +166,10 @@ FIXME: 2009-02-17 | BUG | Usar polling? Isso deve ferrar com o frame rate config
 						Log(TAG "event TASKBAR_CREATED");
 					break;
 
+					case WM_DWMCOMPOSITIONCHANGED:
+						Log(TAG "event DWMCOMPOSITIONCHANGED");
+					break;
+
 					default:
 						Log(TAG "Received system event. Message (0x%x) wParam = %d, lParam = %d.", event.syswm.msg->msg, event.syswm.msg->wParam, event.syswm.msg->lParam);
 					break;
