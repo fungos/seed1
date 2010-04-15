@@ -123,58 +123,64 @@ BOOL Image::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 	#else
 		File stFile(filename, pool);
 	#endif
-
-		SDL_RWops *rwops = SDL_RWFromConstMem(stFile.GetData(), stFile.GetSize());
-
-		SIZE_T extpos = STRLEN(stFile.GetName());
-		char *ext = const_cast<char *>(stFile.GetName()) - 3;
-		ext = &ext[extpos];
-
-		u32 format = PNG;
-		if (!STRCASECMP(pImageFormatTable[TGA], ext))
-			format = TGA;
-		else if (!STRCASECMP(pImageFormatTable[JPG], ext))
-			format = JPG;
-
-		SDL_Surface *tmp = IMG_LoadTyped_RW(rwops, 1, const_cast<char *>(pImageFormatTable[format]));
-
-		if (!tmp)
+		if (stFile.GetData())
 		{
-			Info(TAG "IMG_Load_RW ERROR: %s\n", IMG_GetError());
+			SDL_RWops *rwops = SDL_RWFromConstMem(stFile.GetData(), stFile.GetSize());
 
-			if (format == PNG)
-				Info(TAG "Make sure that libpng12-0.dll and zlib1.dll is in the exact same folder than this application.");
+			SIZE_T extpos = STRLEN(stFile.GetName());
+			char *ext = const_cast<char *>(stFile.GetName()) - 3;
+			ext = &ext[extpos];
 
-			ASSERT(false);
+			u32 format = PNG;
+			if (!STRCASECMP(pImageFormatTable[TGA], ext))
+				format = TGA;
+			else if (!STRCASECMP(pImageFormatTable[JPG], ext))
+				format = JPG;
+
+			SDL_Surface *tmp = IMG_LoadTyped_RW(rwops, 1, const_cast<char *>(pImageFormatTable[format]));
+
+			if (!tmp)
+			{
+				Info(TAG "IMG_Load_RW ERROR: %s\n", IMG_GetError());
+
+				if (format == PNG)
+					Info(TAG "Make sure that libpng12-0.dll and zlib1.dll is in the exact same folder than this application.");
+
+				ASSERT(false);
+			}
+
+			if (tmp->format->BitsPerPixel != 32)
+			{
+				SDL_SetAlpha(tmp, 0, SDL_ALPHA_OPAQUE);
+			}
+
+			pSurface = SDL_DisplayFormatAlpha(tmp);
+			ASSERT_NULL(pSurface);
+			SDL_FreeSurface(tmp);
+
+			iWidth = pSurface->w;
+			iHeight = pSurface->h;
+			fWidth = (f32)iWidth / (f32)pScreen->GetWidth();
+			fHeight = (f32)iHeight / (f32)pScreen->GetHeight();
+
+			iBytesPerPixel = pSurface->format->BytesPerPixel;
+			iPitch = pSurface->pitch;
+			pData = pSurface->pixels;
+
+		#if SEED_ENABLE_PRELOAD_TEXTURE == 1
+		//	this->LoadTexture();
+		#endif // SEED_ENABLE_PRELOAD_TEXTURE
+
+			this->bLoaded = TRUE;
 		}
-
-		if (tmp->format->BitsPerPixel != 32)
+		else
 		{
-			SDL_SetAlpha(tmp, 0, SDL_ALPHA_OPAQUE);
+			Log(TAG "ERROR: Could not find/load texture %s.", filename);
 		}
-
-		pSurface = SDL_DisplayFormatAlpha(tmp);
-		ASSERT_NULL(pSurface);
-		SDL_FreeSurface(tmp);
-
-		iWidth = pSurface->w;
-		iHeight = pSurface->h;
-		fWidth = (f32)iWidth / (f32)pScreen->GetWidth();
-		fHeight = (f32)iHeight / (f32)pScreen->GetHeight();
-
-		iBytesPerPixel = pSurface->format->BytesPerPixel;
-		iPitch = pSurface->pitch;
-		pData = pSurface->pixels;
-
-	#if SEED_ENABLE_PRELOAD_TEXTURE == 1
-	//	this->LoadTexture();
-	#endif // SEED_ENABLE_PRELOAD_TEXTURE
 
 	#if SEED_ENABLE_KEEP_IMAGE_DATA != 1
 		stFile.Close();
 	#endif
-
-		this->bLoaded = TRUE;
 	}
 
 	return this->bLoaded;
@@ -191,7 +197,7 @@ BOOL Image::Load(u32 width, u32 height, PIXEL *buffer, IMemoryPool *pool)
 	if (this->Unload())
 	{
 		this->pPool = pool;
-		this->pFilename = "[dynamic qt image]";
+		this->pFilename = "[dynamic sdl image]";
 
 		this->fWidth = (f32)width / (f32)pScreen->GetWidth();
 		this->fHeight = (f32)height / (f32)pScreen->GetHeight();
