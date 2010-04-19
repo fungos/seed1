@@ -233,9 +233,9 @@ template <class TYPE> class Point
 		{
 			TYPE fLength = Length();
 
-			if (fLength != 0)
+			if (fLength != 0.0f)
 			{
-				fLength = 1 / fLength;
+				fLength = 1.0f / fLength;
 
 				(*this) *= fLength;
 			}

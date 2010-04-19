@@ -58,16 +58,18 @@ class String
 		String &Set(const u16 *paramName, f32 paramVal);
 		String &Set(const u16 *paramName, bool paramVal);
 		String &Set(const u16 *paramName, const char paramVal);
+		String &Set(const u16 *paramName, const u16 paramVal);
 		String &Set(const u16 *paramName, String *paramVal);
 		
 		void SubString(u32 index, u32 size);
 		void Append(WideChar chr);
 		//void Append(const u16 *str);
-		//void Append(const String &str);
+		void Append(const String *pString);
 
 		// Common string functions
 		u32 Length() const;
 		BOOL Equals(const u16 *str) const;
+		BOOL Equals(const String *pString) const;
 
 		static u32 Length(const WideString str);
 		static BOOL Equals(const WideString str1, const WideString str2);

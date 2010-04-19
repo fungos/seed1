@@ -79,8 +79,10 @@ template <class TYPE, int SIZE> class Array
 		{
 			ASSERT((used + 1) < SIZE);
 
-			for (u32 i = (u32)used; i >= pos; i--)
+			for (s32 i = (s32)used-1; i >= (s32)pos; i--)
+			{
 				array[i+1] = array[i];
+			}
 
 			used++;
 

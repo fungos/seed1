@@ -124,7 +124,9 @@ INLINE String &String::operator=(const String &string)
 
 INLINE String &String::Clear()
 {
-	MEMSET(pConstructedStr, '\0', this->Length() * sizeof(u16));
+	if(pConstructedStr)
+		MEMSET(pConstructedStr, '\0', this->Length() * sizeof(u16));
+
 	return *this;
 }
 
@@ -170,6 +172,26 @@ INLINE String &String::Set(const u16 *paramName, const char paramVal)
 	tmp[3] = '\0';
  
 	this->Replace(paramName, (u16 *)tmp);
+
+	return *this;
+}
+
+INLINE String &String::Set(const u16 *paramName, const u16 paramVal)
+{
+	char *temp;
+	char tmp[4];
+	char tmp2[2];
+
+	temp = tmp2;
+
+	temp = (char*)&paramVal;
+
+	tmp[0] = tmp2[0];
+	tmp[1] = tmp2[1];
+	tmp[2] = '\0';
+	tmp[3] = '\0';
+ 
+	this->Replace(paramName, (u16 *)paramVal);
 
 	return *this;
 }
@@ -344,6 +366,7 @@ INLINE void String::Append(WideChar chr)
 	{
 		iConstructedSize = 32;
 		pConstructedStr = glStringPool.Alloc(iConstructedSize);
+		Clear();
 	}
 
 	u32 len = this->Length() + 2; // len + 1char + null
@@ -352,6 +375,27 @@ INLINE void String::Append(WideChar chr)
 
 	pConstructedStr[len - 2] = chr;
 	pConstructedStr[len - 1] = NULL;
+}
+
+INLINE void String::Append(const String *pString)
+{
+	if (!pConstructedStr)
+	{
+		iConstructedSize = 32;
+		pConstructedStr = glStringPool.Alloc(iConstructedSize);
+		Clear();
+	}
+
+	u32 iLen		= Length();
+	u32 iAppendLen	= pString->Length();
+	u32 iSize		= iLen + iAppendLen + 1; // len + stringlen + null
+	if (iSize >= iConstructedSize)
+		this->Realloc(iSize);
+
+	for(u32 i = 0; i < iAppendLen; i++)
+		pConstructedStr[iLen + i] = pString->GetData()[i];
+
+	pConstructedStr[iSize-1] = NULL;
 }
 
 INLINE u32 String::Length() const
@@ -369,6 +413,11 @@ INLINE u32 String::Length(const WideString str)
 		iIndex += 1;
 
 	return iIndex;
+}
+
+INLINE BOOL String::Equals(const String *pString) const
+{
+	return this->Equals(pConstructedStr, pString->GetData());
 }
 
 INLINE BOOL String::Equals(const u16 *str) const

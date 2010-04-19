@@ -114,7 +114,7 @@ BOOL Font::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		u32 ext = 0;
 		READ_U32(ext, ptr);
 
-		if (ext != SEED_INVALID_ID/* && (pSystem->GetLanguage() != Seed::en_US)*/)
+		if (ext != SEED_INVALID_ID /*&& pSystem->GetLanguage() != Seed::en_US*/)
 		{
 			this->mFontExt.Load(_F(ext), res, pool);
 			this->pGlyphs = pDictionary->GetGlyphTable(&this->iTotalGlyphs);
