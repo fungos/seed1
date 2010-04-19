@@ -84,7 +84,7 @@ INLINE BOOL Input::Initialize()
 {
 	Log(TAG "Initializing...");
 	BOOL r = this->Reset();
-	#if defined(WIN32) && defined(_DEBUG_)
+	#if defined(WIN32) && defined(DEBUG)
 	SDL_EventState(SDL_SYSWMEVENT, SDL_ENABLE);
 	#endif
 	Log(TAG "Initialization completed.");
@@ -104,7 +104,7 @@ FIXME: 2009-02-17 | BUG | Usar polling? Isso deve ferrar com o frame rate config
 	{
 		switch (event.type)
 		{
-			#if defined(WIN32) && defined(_DEBUG_)
+			#if defined(WIN32) && defined(DEBUG)
 			case SDL_SYSWMEVENT:
 			{
 				switch (event.syswm.msg->msg)
@@ -135,7 +135,7 @@ FIXME: 2009-02-17 | BUG | Usar polling? Isso deve ferrar com o frame rate config
 					break;
 
 					case WM_DISPLAYCHANGE:
-						Log(TAg "event DISPLAYCHANGE");
+						Log(TAG "event DISPLAYCHANGE");
 					break;
 
 					case WM_SYNCPAINT:
@@ -162,8 +162,12 @@ FIXME: 2009-02-17 | BUG | Usar polling? Isso deve ferrar com o frame rate config
 						Log(TAG "event ACTIVATEAPP");
 					break;
 
-					case WM_TASKBAR_CREATED:
+					case 0xc086: //WM_TASKBAR_CREATED:
 						Log(TAG "event TASKBAR_CREATED");
+					break;
+
+					case WM_DWMCOMPOSITIONCHANGED:
+						Log(TAG "event DWMCOMPOSITIONCHANGED");
 					break;
 
 					default:

@@ -50,7 +50,7 @@ Profiler::~Profiler()
 	Reset();
 }
 
-void Profiler::AddSlice(const char *func, int time)
+void Profiler::AddSlice(const char *func, double time)
 {
 	FuncTimeMapIt it = mapSubjectSlice.find(func);
 	if (it != mapSubjectSlice.end())
@@ -73,7 +73,7 @@ void Profiler::AddSlice(const char *func, int time)
 	}
 }
 
-void Profiler::AddTotal(const char *func, int time)
+void Profiler::AddTotal(const char *func, double time)
 {
 	FuncTimeMapIt it = mapSubjectTotal.find(func);
 	if (it != mapSubjectTotal.end())
@@ -154,10 +154,10 @@ void ProfileContext::Terminate()
 	if (bTerminated)
 		return;
 
-	int end = clock();
+	u64 end = pTimer->GetMilliseconds(); //clock();
 
-	int diff = 0;
-	diff = (end - begTotal);// / CLOCKS_PER_SEC;
+	double diff = 0;
+	diff = static_cast<double>(end - begTotal);// / CLOCKS_PER_SEC;
 
 	pProf->AddTotal(func, diff);
 
@@ -186,10 +186,10 @@ void ProfileContext::RestorePrevious()
 
 void ProfileContext::StopAndCommit()
 {
-	int end = pTimer->GetMilliseconds();
+	u64 end = pTimer->GetMilliseconds();
 
-	int diff = 0;
-	diff = (end - beg);// / CLOCKS_PER_SEC;
+	double diff = 0;
+	diff = static_cast<double>(end - beg);// / CLOCKS_PER_SEC;
 
 	pProf->AddSlice(func, diff);
 	beg = 0;

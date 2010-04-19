@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -35,6 +35,7 @@
 
 #include "Defines.h"
 #include "Log.h"
+#include "System.h"
 
 #include <io.h>
 #include <windows.h>
@@ -164,5 +165,39 @@ void print_system_info()
 	Info(TAG "Memory: %ldKb total, %ldKb free", mem.dwTotalPhys/1024L, mem.dwAvailPhys/1024L);
 }
 
+BOOL system_check_multiple_instance(bool warnUser)
+{
+#if !defined(_QT_)
+	DWORD error = 0;
+
+	HANDLE handleProcess;
+	LPCTSTR lpName = (LPCTSTR)pSystem->GetApplicationTitle();
+
+	handleProcess = CreateMutex(NULL, CREATE_MUTEX_INITIAL_OWNER, lpName);
+	error = GetLastError();
+	if (!handleProcess)
+	{
+		Log(TAG "ERROR! could not create a object mutex. Error:%d ", error);
+		return TRUE;
+	}
+	else if (error == ERROR_ALREADY_EXISTS)
+	{
+		HWND hWnd = FindWindow(NULL, pSystem->GetApplicationTitle());
+		if (hWnd)
+		{
+			if (warnUser)
+			{
+				MessageBox(NULL, "There is already an instance of this application running!", pSystem->GetApplicationTitle(), MB_ICONWARNING);
+			}
+			SwitchToThisWindow(hWnd, FALSE);
+			ShowWindow(hWnd, SW_RESTORE);
+			return FALSE;
+		}
+	}
+#else
+	#warning "Implementar 'system_check_multiple_instance' no Qt"
+#endif
+	return TRUE;
+}
 
 #endif // WIN32

@@ -66,6 +66,12 @@ class Configuration : public IObject
 		void SetPlatformSimulation(ePlatformSimulation platform);
 		ePlatformSimulation GetPlatformSimulation() const;
 		
+		void SetCanHaveMultipleInstances(BOOL enable);
+		BOOL GetCanHaveMultipleInstances() const;
+
+		void SetWarningMultipleInstances(BOOL warnUser);
+		BOOL GetWarningMultipleInstances() const;
+
 		void SetMemorySize(u32 memsize);
 		u32 GetMemorySize() const;
 
@@ -85,6 +91,8 @@ class Configuration : public IObject
 		const char *pcWorkingDirectory;
 
 		// System
+		BOOL	bMultipleInstances;
+		BOOL	bWarningMultipleInstances;
 		eSystemFrameRate iFrameRate;
 		const char *pcTitle;
 		const char *pcDescription;

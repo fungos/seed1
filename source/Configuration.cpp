@@ -40,6 +40,8 @@ Configuration::Configuration()
 	, iResolutionWidth(800)
 	, iResolutionHeight(600)
 	, pcWorkingDirectory(NULL)
+	, bMultipleInstances(FALSE)
+	, bWarningMultipleInstances(FALSE)
 	, iFrameRate(Seed::FrameRateLockAt60)
 	, pcTitle(NULL)
 	, pcDescription(NULL)
@@ -116,6 +118,26 @@ INLINE void Configuration::SetApplicationDescription(const char *desc)
 INLINE const char *Configuration::GetApplicationDescription() const
 {
 	return this->pcDescription;
+}
+
+INLINE void Configuration::SetCanHaveMultipleInstances(BOOL enable)
+{
+	bMultipleInstances = enable;
+}
+
+INLINE BOOL Configuration::GetCanHaveMultipleInstances() const
+{
+	return bMultipleInstances;
+}
+
+INLINE void Configuration::SetWarningMultipleInstances(BOOL warnUser)
+{
+	bWarningMultipleInstances = warnUser;
+}
+
+INLINE BOOL Configuration::GetWarningMultipleInstances() const
+{
+	return bWarningMultipleInstances;
 }
 
 INLINE void Configuration::SetMemorySize(u32 memsize)

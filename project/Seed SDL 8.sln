@@ -2,41 +2,39 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Seed", "Seed SDL 8.vcproj", "{D5B9F9EE-D553-47C6-B1E8-10D5145F6472}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sprite-basic1", "..\..\demos\sprite\basic1\project\project1.vcproj", "{2BE9AA39-A4B9-4AC7-90A9-CE64FECE7B14}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sprite-basic1", "..\..\seeddemos\sprite\basic1\project\project1.vcproj", "{2BE9AA39-A4B9-4AC7-90A9-CE64FECE7B14}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sprite-movie1", "..\..\demos\sprite\movie1\project\project2.vcproj", "{55962E06-4E2B-4A74-938A-D3705996843D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sprite-movie1", "..\..\seeddemos\sprite\movie1\project\project2.vcproj", "{55962E06-4E2B-4A74-938A-D3705996843D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sprite-movie2", "..\..\demos\sprite\movie2\project\project3.vcproj", "{70713857-61AD-4F4C-98BA-4BA8A132117A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sprite-movie2", "..\..\seeddemos\sprite\movie2\project\project3.vcproj", "{70713857-61AD-4F4C-98BA-4BA8A132117A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sprite-movie3", "..\..\demos\sprite\movie3\project\project4.vcproj", "{DA8671C9-46BC-47A8-A8DF-7B154C22B19F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sprite-movie3", "..\..\seeddemos\sprite\movie3\project\project4.vcproj", "{DA8671C9-46BC-47A8-A8DF-7B154C22B19F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sprite-movie4", "..\..\demos\sprite\movie4\project\project5.vcproj", "{0E9B183E-C453-4B9E-87BC-B67C7160FFAE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sprite-movie4", "..\..\seeddemos\sprite\movie4\project\project5.vcproj", "{0E9B183E-C453-4B9E-87BC-B67C7160FFAE}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sprite-movie5", "..\..\demos\sprite\movie5\project\project6.vcproj", "{DC70FDD6-751D-423A-A438-5029883C5901}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sprite-movie5", "..\..\seeddemos\sprite\movie5\project\project6.vcproj", "{DC70FDD6-751D-423A-A438-5029883C5901}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sprite-advanced1", "..\..\demos\sprite\advanced1\project\project7.vcproj", "{592E4B14-8E68-43F6-A9E8-AC635747E091}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sprite-advanced1", "..\..\seeddemos\sprite\advanced1\project\project7.vcproj", "{592E4B14-8E68-43F6-A9E8-AC635747E091}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui-basic1", "..\..\demos\gui\basic1\project\project8.vcproj", "{A5E3BD41-D0F2-4DDF-9504-F1B6F2B230D7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui-basic1", "..\..\seeddemos\gui\basic1\project\project8.vcproj", "{A5E3BD41-D0F2-4DDF-9504-F1B6F2B230D7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui-basic2", "..\..\demos\gui\basic2\project\project9.vcproj", "{8132DC06-ACF7-4B93-8CF5-20818E702049}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui-basic2", "..\..\seeddemos\gui\basic2\project\project9.vcproj", "{8132DC06-ACF7-4B93-8CF5-20818E702049}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui-basic3", "..\..\demos\gui\basic3\project\project10.vcproj", "{88B8DC4C-873F-4363-8AB4-FE66F36134FF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui-basic3", "..\..\seeddemos\gui\basic3\project\project10.vcproj", "{88B8DC4C-873F-4363-8AB4-FE66F36134FF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui-basic4", "..\..\demos\gui\basic4\project\project11.vcproj", "{B926F5FA-C1B1-4381-B80C-BC8C3C487F80}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gui-basic4", "..\..\seeddemos\gui\basic4\project\project11.vcproj", "{B926F5FA-C1B1-4381-B80C-BC8C3C487F80}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "input-basic1", "..\..\demos\input\basic1\project\project12.vcproj", "{A22E3520-77BC-4766-9C4A-4EF336D01496}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "input-basic1", "..\..\seeddemos\input\basic1\project\project12.vcproj", "{A22E3520-77BC-4766-9C4A-4EF336D01496}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "particle-basic1", "..\..\demos\particle\basic1\project\project13.vcproj", "{92F2A89F-70CE-4FC1-AA56-004B8AA84F24}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "particle-basic1", "..\..\seeddemos\particle\basic1\project\project13.vcproj", "{92F2A89F-70CE-4FC1-AA56-004B8AA84F24}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "save-basic1", "..\..\demos\save\basic1\project\project14.vcproj", "{FE85EFCE-FB4E-4E6D-A311-21ED8FFB4E2E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "save-basic1", "..\..\seeddemos\save\basic1\project\project14.vcproj", "{FE85EFCE-FB4E-4E6D-A311-21ED8FFB4E2E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sound-basic1", "..\..\demos\sound\basic1\project\project15.vcproj", "{4DF10C5C-F503-4916-BC74-27266E952039}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sound-basic1", "..\..\seeddemos\sound\basic1\project\project15.vcproj", "{4DF10C5C-F503-4916-BC74-27266E952039}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "video-basic1", "..\..\demos\video\basic1\project\project16.vcproj", "{7980892E-2835-4C6E-8E90-710F6D71683E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "video-basic1", "..\..\seeddemos\video\basic1\project\project16.vcproj", "{7980892E-2835-4C6E-8E90-710F6D71683E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "dra_w32", "..\..\..\Dracula\dra_w32\principal\prog\project\dra_w32.vcproj", "{2AA5F3BD-1234-4E6A-8DD6-E54F0112510C}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "particle-viewer", "..\..\tools\particle-viewer\project\project.vcproj", "{93075348-E351-4FC4-A7E7-26240F1B00B0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "particle-viewer", "..\..\seedtools\particle-viewer\project\project.vcproj", "{93075348-E351-4FC4-A7E7-26240F1B00B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

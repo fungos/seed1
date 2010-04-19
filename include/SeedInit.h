@@ -51,6 +51,7 @@ Everything from Seed SDK will be inside Seed namespace.
 namespace Seed {
 
 	extern ResourceManager glResourceManager;
+	extern const Configuration *pConfiguration;
 
 	#if SEED_USE_STRING_POOL == 1
 	extern StringPoolManager<u16> glStringPool;

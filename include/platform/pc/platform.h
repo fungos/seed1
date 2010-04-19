@@ -42,5 +42,6 @@ const char *get_user_home_folder();
 void get_current_directory(char *buff, int size);
 BOOL change_directory(const char *to);
 void print_system_info();
+BOOL system_check_multiple_instance(bool warn);
 
 #endif // __PC_PLATFORM_H__

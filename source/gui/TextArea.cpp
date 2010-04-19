@@ -103,7 +103,8 @@ void TextArea::Reset()
 
 void TextArea::Update(f32 dt)
 {
-	IWidget::Update(dt);
+	//IWidget::Update(dt);
+	UNUSED(dt);
 
 	if (this->bChanged)
 	{

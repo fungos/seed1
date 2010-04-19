@@ -94,7 +94,8 @@ void Label::Update(f32 dt)
 {
 	if (bChanged || bTransformationChanged)
 	{
-		IWidget::Update(dt);
+		//IWidget::Update(dt);
+		UNUSED(dt);
 
 		if (bAutoAdjust)
 		{

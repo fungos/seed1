@@ -108,7 +108,7 @@ class IImage : public IResource
 		*/
 		virtual BOOL Load(u32 width, u32 height, PIXEL *buffer, IMemoryPool *pool = pDefaultPool);
 
-		/// Update the internal state of a dinamic texture (texture created by the user)
+		/// Update the internal state of a dynamic texture (texture created by the user)
 		/**
 		This method should be called as the user finishes its texture manipulation.
 		This is a really expensive method that will keep the internal state of the texture usable by

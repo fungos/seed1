@@ -45,8 +45,8 @@ class ProfileContext;
 
 struct ProfilerEntry
 {
-	int time;
-	int maxtime;
+	double time;
+	double maxtime;
 	int calls;
 
 	ProfilerEntry()
@@ -67,8 +67,8 @@ class Profiler
 		Profiler(const char *name);
 		~Profiler();
 
-		void AddSlice(const char *func, int time);
-		void AddTotal(const char *func, int time);
+		void AddSlice(const char *func, double time);
+		void AddTotal(const char *func, double time);
 		void Dump();
 		void Reset();
 
@@ -76,12 +76,12 @@ class Profiler
 		static Profiler *regionProfilerInstance;
 
 	private:
+		SEED_DISABLE_COPY(Profiler);
+
+	private:
 		const char *pName;
 		FuncTimeMap mapSubjectSlice;
 		FuncTimeMap mapSubjectTotal;
-
-		Profiler(const Profiler &);
-		Profiler &operator=(const Profiler &);
 };
 
 class ProfileContext
@@ -101,15 +101,15 @@ class ProfileContext
 		static ContextStack stack;
 
 	private:
+		SEED_DISABLE_COPY(ProfileContext);
+
+	private:
 		const char *func;
-		int beg;
-		int begTotal;
+		u64 beg;
+		u64 begTotal;
 		bool bTerminated;
 
 		Profiler *pProf;
-
-		ProfileContext(const ProfileContext &);
-		ProfileContext &operator=(const ProfileContext &);
 };
 
 #endif
