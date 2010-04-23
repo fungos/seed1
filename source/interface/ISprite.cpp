@@ -200,7 +200,7 @@ INLINE void ISprite::ReconfigureFrame()
 {
 	ASSERT_NULL(pFrameImage);
 
-	this->fCurrentFrameRate = 1.0f / static_cast<f32>(pFrame->iTime);
+	this->fCurrentFrameRate = 1.0f / static_cast<f32>(pFrame->iTime); // FIXME: iTime default value must be 1 not 0. <- division by zero
 
 	//if (this->bAnimation)
 	//	this->Play();

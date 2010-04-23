@@ -158,6 +158,48 @@ BOOL Image::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 			ASSERT_NULL(pSurface);
 			SDL_FreeSurface(tmp);
 
+			iWidth	= pSurface->w;
+			iHeight = pSurface->h;
+
+			u32 width = 1;
+			while (width < iWidth) 
+				width *= 2;
+
+			u32 height = 1;
+			while (height < iHeight) 
+				height *= 2;
+
+			if (width != iWidth || height != iHeight)
+			{
+				Log(TAG "WARNING: Image size not optimal, changing from %dx%d to %dx%d", iWidth, iHeight, width, height);
+
+				SDL_Surface *pTempSurface = NULL;
+				Uint32 rmask, gmask, bmask, amask;
+
+				#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+					rmask = 0xff000000;
+					gmask = 0x00ff0000;
+					bmask = 0x0000ff00;
+					amask = 0x000000ff;
+				#else
+					rmask = 0x000000ff;
+					gmask = 0x0000ff00;
+					bmask = 0x00ff0000;
+					amask = 0xff000000;
+				#endif
+
+				pTempSurface = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA , width, height, 32, bmask, gmask, rmask, amask);
+
+				SDL_SetAlpha(pTempSurface, 0, SDL_ALPHA_OPAQUE);
+				SDL_SetAlpha(pSurface, 0, SDL_ALPHA_OPAQUE);
+				SDL_BlitSurface(pSurface, NULL, pTempSurface, NULL);
+				SDL_SetAlpha(pTempSurface, 0, SDL_ALPHA_TRANSPARENT);
+				SDL_SetAlpha(pSurface, 0, SDL_ALPHA_TRANSPARENT);
+
+				SDL_FreeSurface(pSurface);
+				pSurface = pTempSurface;
+			}
+
 			iWidth = pSurface->w;
 			iHeight = pSurface->h;
 			fWidth = (f32)iWidth / (f32)pScreen->GetWidth();
@@ -371,19 +413,19 @@ INLINE int Image::LoadTexture()
 		{
 			case 4:
 				// OpenGL 1.2+ only GL_EXT_bgra
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iWidth, iHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, pData);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pSurface->w, pSurface->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, pData);
 			break;
 
 			case 3:
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, iWidth, iHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, pData);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pSurface->w, pSurface->h, 0, GL_RGB, GL_UNSIGNED_BYTE, pData);
 			break;
 
 			case 2:
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, iWidth, iHeight, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, pData);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pSurface->w, pSurface->h, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, pData);
 			break;
 
 			case 1:
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, iWidth, iHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, pData);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, pSurface->w, pSurface->h, 0, GL_ALPHA, GL_UNSIGNED_BYTE, pData);
 			break;
 
 			default:
