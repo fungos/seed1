@@ -104,7 +104,7 @@ BOOL Button::Unload()
 
 	if (bLabelBased)
 	{
-		this->cLabel.Reset();
+		this->cLabel.ReleaseText();
 		this->bLabelBased = FALSE;
 	}
 
