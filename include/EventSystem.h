@@ -34,19 +34,15 @@
 	\brief A system event
 */
 
-
 #ifndef __EVENTSYSTEM_H__
 #define __EVENTSYSTEM_H__
-
 
 #include "interface/IEvent.h"
 #include "Enum.h"
 
-
 namespace Seed {
 
-
-class EventSystem : public IEvent
+class SEED_CORE_API EventSystem : public IEvent
 {
 	public:
 		EventSystem();
@@ -68,8 +64,6 @@ class EventSystem : public IEvent
 		SEED_DISABLE_COPY(EventSystem);
 };
 
-
 } // namespace
-
 
 #endif // __EVENTSYSTEM_H__

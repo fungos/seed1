@@ -34,18 +34,15 @@
 	\brief Checksum calculation
 */
 
-
 #ifndef __CHECKSUM_H__
 #define __CHECKSUM_H__
 
-
 #include "Defines.h"
-
 
 namespace Seed {
 
 /// Helper class to calculate CRC checksums
-class Checksum
+class SEED_CORE_API Checksum
 {
 	public:
 		Checksum();
@@ -70,14 +67,11 @@ class Checksum
  		*/
 		u64		Calculate(const char *data, u32 len);
 
-
 	public:
 		static Checksum instance;
 
-
 	private:
 		SEED_DISABLE_COPY(Checksum);
-
 
 	private:
 		unsigned int	iPolynomial1;
@@ -88,11 +82,8 @@ class Checksum
 
 };
 
-
 Checksum *const pChecksum = &Checksum::instance;
 
-
 } // namespace
-
 
 #endif // __CHECKSUM_H__

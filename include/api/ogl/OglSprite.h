@@ -34,7 +34,6 @@
 	\brief Sprite OpenGL Implementation
 */
 
-
 #ifndef __OGL_SPRITE_H__
 #define __OGL_SPRITE_H__
 
@@ -46,14 +45,11 @@
 #include "SeedInit.h"
 #include "MathUtil.h"
 
-
 #include <math.h>
-
 
 namespace Seed { namespace OGL {
 
-
-class Sprite : public ISprite
+class SEED_CORE_API Sprite : public ISprite
 {
 	public:
 		Sprite();
@@ -84,13 +80,9 @@ class Sprite : public ISprite
 		GLfloat coords[8];
 };
 
-
 }} // namespace
 
-
 #else // _OGL_
-
 	#error "Include 'Sprite.h' instead 'api/ogl/OglSprite.h' directly."
-
 #endif // _OGL_
 #endif // __OGL_SPRITE_H__

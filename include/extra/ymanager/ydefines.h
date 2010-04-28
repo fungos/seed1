@@ -13,9 +13,7 @@ Description:
 #include <stdlib.h>
 #include <stdio.h>
 
-#undef _DEBUG
-
-#ifdef  YMEM_DEBUG
+#if defined(YMEM_DEBUG)
 	#if YMEM_DEBUG_LOG
 		#define LOG0(arg);				printf(arg);
 		#define LOG1(arg1, arg2);		printf(arg1, arg2);

@@ -36,7 +36,7 @@
 
 #include "FileSystem.h"
 
-#ifdef _PC_
+#if defined(_PC_)
 
 #include "Log.h"
 #include "MemoryManager.h"
@@ -50,12 +50,10 @@
 
 #define TAG "[FileSystem] "
 
-
 namespace Seed { namespace PC {
 
-
 FileSystem FileSystem::instance;
-
+FileSystem *const pFileSystem = &FileSystem::instance;
 
 FileSystem::FileSystem()
 	: iLastLength(0)
@@ -181,6 +179,4 @@ INLINE void FileSystem::MakeDirectory(const char *dir) const
 
 }} // namespace
 
-
 #endif // _PC_
-

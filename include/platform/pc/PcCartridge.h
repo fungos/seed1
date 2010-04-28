@@ -50,11 +50,9 @@
 
 #define PC_MAX_PATH		2048
 
-
 namespace Seed { namespace PC {
 
-
-class Cartridge : public ICartridge
+class SEED_CORE_API Cartridge : public ICartridge
 {
 	public:
 		Cartridge();
@@ -90,13 +88,9 @@ class Cartridge : public ICartridge
 
 Cartridge *const pCartridge = &Cartridge::instance;
 
-
 }} // namespace
 
-
 #else // _PC_
-
 	#error "Include 'Cartridge.h' instead 'platform/pc/PcCartridge.h' directly."
-
 #endif // _PC_
 #endif // __PC_CARTRIDGE_H__

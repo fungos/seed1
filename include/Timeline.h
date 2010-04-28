@@ -42,17 +42,13 @@
 #include "Keyframe.h"
 #include "interface/IEventMovieListener.h"
 
-
 #define MAX_KEYFRAMES 8192
-
 
 namespace Seed {
 
-
 class Movie;
 
-
-class Timeline
+class SEED_CORE_API Timeline
 {
 	public:
 		Timeline();

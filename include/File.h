@@ -34,15 +34,12 @@
 	\brief A system event
 */
 
-
 #ifndef __FILE_H__
 #define __FILE_H__
-
 
 #include "Defines.h"
 #include "MemoryManager.h"
 #include "FileSystem.h"
-
 
 namespace Seed {
 
@@ -50,8 +47,7 @@ class IFileSystem;
 class IMemoryPool;
 class Package;
 
-
-class File
+class SEED_CORE_API File
 {
 	friend class IFileSystem;
 	friend class FSNS::FileSystem;
@@ -76,8 +72,8 @@ class File
 	protected:
 		void *operator new(size_t len);
 		void operator delete(void *ptr);
-		void *operator new [](size_t);
-		void operator delete [](void *);
+		void *operator new[](size_t) { return NULL; };
+		void operator delete[](void *) {};
 
 	protected:
 		const char	*pName;
@@ -91,8 +87,6 @@ class File
 		SEED_DISABLE_COPY(File);
 };
 
-
 } // namespace
-
 
 #endif // __FILE_H__

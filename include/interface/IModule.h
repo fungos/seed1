@@ -37,19 +37,16 @@
 #ifndef __IMODULE_H__
 #define __IMODULE_H__
 
-
 #include "Defines.h"
 #include "interface/IObject.h"
 
-
 namespace Seed {
-
 
 /// Object Interface
 /**
 Interface for basic module
 */
-class IModule : public IObject
+class SEED_CORE_API IModule : public IObject
 {
 	public:
 		IModule();
@@ -91,8 +88,6 @@ class IModule : public IObject
 		SEED_DISABLE_COPY(IModule);
 };
 
-
 } // namespace
-
 
 #endif // __IMODULE_H__

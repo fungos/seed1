@@ -41,13 +41,11 @@
 #include "MemoryManager.h"
 #include "TString.h"
 
-
 #include <stdarg.h>
 
 namespace Seed {
 
-
-class Text
+class SEED_CORE_API Text
 {
 	public:
 		Text();
@@ -72,7 +70,7 @@ class Text
 
 		virtual void SetPosition(f32 x, f32 y);
 		virtual void SetFont(Font *f);
-		virtual void SetBlending(IRenderable::eBlendMode op);
+		virtual void SetBlending(eBlendMode op);
 		virtual void SetColor(u8 r, u8 g, u8 b, u8 a);
 		virtual void SetColor(PIXEL px);
 		virtual void SetScale(f32 scaleX, f32 scaleY);
@@ -94,11 +92,9 @@ class Text
 		f32 fScaleY;
 
 		PIXEL iColor;
-		IRenderable::eBlendMode iOperation;
+		eBlendMode iOperation;
 };
 
-
 } // namespace
-
 
 #endif // __TEXT_H__

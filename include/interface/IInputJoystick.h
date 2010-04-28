@@ -37,18 +37,15 @@
 #ifndef __IINPUT_JOYSTICK_H__
 #define __IINPUT_JOYSTICK_H__
 
-
 #include "IInput.h"
 
-
 namespace Seed {
-
 
 /// Joystick Input Interface
 /**
 Platforms that support Joystick must implement this interface.
 */
-class IInputJoystick
+class SEED_CORE_API IInputJoystick
 {
 	public:
 		IInputJoystick();
@@ -65,9 +62,6 @@ class IInputJoystick
 		SEED_DISABLE_COPY(IInputJoystick);
 };
 
-
 } // namespace
 
-
 #endif // __IINPUT_JOYSTICK_H__
-

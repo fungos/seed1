@@ -37,7 +37,7 @@
 #ifndef __IPH_MEMORY_POOL_H__
 #define __IPH_MEMORY_POOL_H__
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 #include <stdlib.h>
 #include "interface/IMemoryPool.h"

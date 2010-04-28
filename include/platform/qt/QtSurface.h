@@ -34,18 +34,15 @@
 	\brief QT Rendering Surface
 */
 
-
 #ifndef __QT_SURFACE_H__
 #define __QT_SURFACE_H__
 
-#ifdef _QT_
+#if defined(_QT_)
 
 #include <QPainter>
 #include <QGraphicsScene>
 
-
 namespace Seed { namespace QT {
-
 
 class QtSurface : public QGraphicsScene
 {
@@ -57,7 +54,6 @@ class QtSurface : public QGraphicsScene
 };
 
 }} // namespace
-
 
 #endif // _QT_
 #endif // __QT_SURFACE_H__

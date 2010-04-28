@@ -37,15 +37,12 @@
 #ifndef __PARTICLE_H__
 #define __PARTICLE_H__
 
-
 #include "Sprite.h"
 #include "Point.h"
 
-
 namespace Seed {
 
-
-class Particle : public Sprite
+class SEED_CORE_API Particle : public Sprite
 {
 	friend class ParticleEmitter;
 
@@ -90,9 +87,6 @@ class Particle : public Sprite
 		SEED_DISABLE_COPY(Particle);
 };
 
-
 } // namespace
 
-
 #endif // __PARTICLE_H__
-

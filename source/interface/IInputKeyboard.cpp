@@ -34,7 +34,6 @@
 	\brief Defines Input Keyboard class interface
 */
 
-
 #include "interface/IInputKeyboard.h"
 #include "interface/IEventInputKeyboardListener.h"
 #include "Log.h"
@@ -43,10 +42,9 @@
 #include <vector>
 #include <algorithm>
 
-
 namespace Seed {
 
-#ifdef DEBUG
+#if defined(DEBUG)
 const char *keyName[] = {
 	"KeyNone", // 0
 	"", // 1
@@ -434,7 +432,7 @@ INLINE void IInputKeyboard::SendEventKeyboardPress(const EventInputKeyboard *ev)
 {
 	ASSERT_NULL(ev);
 
-#ifdef DEBUG
+#if defined(DEBUG)
 	Dbg(">>>> Key Press: %s Modifier: 0x%04x", keyName[ev->GetKey().GetValue()], ev->GetModifier());
 #endif
 
@@ -452,7 +450,7 @@ INLINE void IInputKeyboard::SendEventKeyboardRelease(const EventInputKeyboard *e
 {
 	ASSERT_NULL(ev);
 
-#ifdef DEBUG
+#if defined(DEBUG)
 	Dbg(">>>> Key Release: %s Modifier: 0x%04x", keyName[ev->GetKey().GetValue()], ev->GetModifier());
 #endif
 
@@ -466,7 +464,4 @@ INLINE void IInputKeyboard::SendEventKeyboardRelease(const EventInputKeyboard *e
 	}
 }
 
-
 } // namespace
-
-

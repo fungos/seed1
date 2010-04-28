@@ -46,9 +46,7 @@
 
 #include <map>
 
-
 namespace Seed {
-
 
 typedef IResource *(*pResourceLoaderFunc)(const char *filename, ResourceManager *res, IMemoryPool *pool);
 
@@ -58,8 +56,7 @@ typedef ResourceMap::iterator ResourceIterator;
 typedef std::map<Seed::eObjectType, pResourceLoaderFunc> LoaderMap;
 typedef LoaderMap::iterator LoaderIterator;
 
-
-class ResourceManager
+class SEED_CORE_API ResourceManager
 {
 	public:
 		ResourceManager(const char *name);
@@ -93,10 +90,6 @@ class ResourceManager
 		static LoaderMap mapLoaders;
 };
 
-
 } // namespace
 
-
 #endif // __RESOURCE_MANAGER_H__
-
-

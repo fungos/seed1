@@ -39,7 +39,7 @@
 
 #include "Defines.h"
 
-#ifdef _OAL_OGG_
+#if defined(_OAL_OGG_)
 
 #include "Sound.h"
 #include "interface/ISoundSource.h"
@@ -56,8 +56,7 @@
 
 namespace Seed { namespace OAL {
 
-
-class SoundSource : public ISoundSource
+class SEED_CORE_API SoundSource : public ISoundSource
 {
 	friend class SoundSystem;
 
@@ -86,12 +85,9 @@ class SoundSource : public ISoundSource
 		File			stFile;
 };
 
-
 }} // namespace
 
 #else // _OAL_OGG_
-	
 	#error "Include 'SoundSource.h' instead 'api/oal_ogg/OalOggSoundSource.h' directly."
-
 #endif // _OAL_OGG_
 #endif // __OAL_OGG_SOUND_SOURCE_H__

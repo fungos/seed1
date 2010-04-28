@@ -34,16 +34,14 @@
 	\brief Input Implementation
 */
 
-
 #ifndef __QT_INPUT_H__
 #define __QT_INPUT_H__
 
-#ifdef _QT_
+#if defined(_QT_)
 
 #include "interface/IInput.h"
 #include "interface/IInputPointer.h"
 #include "interface/IInputKeyboard.h"
-
 
 namespace Seed { namespace QT {
 
@@ -108,16 +106,11 @@ class Input : public IInput, public IInputPointer, public IInputKeyboard
 		eKey TranslateKey(u32 key);
 };
 
-
 Input *const pInput = &Input::instance;
-
 
 }} // namespace
 
-
 #else // _QT_
-
 	#error "Include 'Input.h' instead 'platform/qt/QtInput.h' directly."
-
 #endif // _QT_
 #endif // __QT_INPUT_H__

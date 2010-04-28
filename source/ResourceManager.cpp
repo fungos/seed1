@@ -34,7 +34,6 @@
 	\brief Resource Manager
 */
 
-
 #include "Defines.h"
 #include "Log.h"
 #include "ResourceManager.h"
@@ -42,7 +41,6 @@
 #include "Base.h"
 
 #define TAG		"[ResourceManager] "
-
 
 #if defined(SEED_LOG_RESOURCEMANAGER)
 	#define LOG		Log
@@ -128,7 +126,7 @@ void ResourceManager::GarbageCollect()
 
 	LOG(TAG "Starting garbage collection in '%s'...", pcName);
 
-#ifdef DEBUG
+#if defined(DEBUG)
 	u64 begin = pTimer->GetMilliseconds();
 	u64 end = 0;
 #endif // DEBUG
@@ -161,7 +159,7 @@ FIXME: 30-10-2008 | BUG | MAJOR | CORE | Resources sendo liberados que liberarem
 		this->GarbageCollect();
 	}
 
-#ifdef DEBUG
+#if defined(DEBUG)
 	end = pTimer->GetMilliseconds();
 	LOG(TAG "Garbage collection done in %d milliseconds.",  (u32)(end - begin));
 	LOG(TAG "Resources inside '%s': ", pcName);
@@ -290,7 +288,4 @@ INLINE void ResourceManager::Print()
 #endif // DEBUG
 }
 
-
 } // namespace
-
-

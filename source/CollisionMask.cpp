@@ -34,13 +34,10 @@
 	\brief Collision Mask to be do fast pixel test on sprites (ie. Button)
 */
 
-
 #include "CollisionMask.h"
 #include "Formats.h"
 
-
 namespace Seed {
-
 
 IResource *CollisionMaskResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
@@ -139,6 +136,4 @@ INLINE int CollisionMask::GetObjectType() const
 	return Seed::ObjectCollisionMask;
 }
 
-
 } // namespace
-

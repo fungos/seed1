@@ -39,7 +39,7 @@
 
 #include "Defines.h"
 
-#ifdef _OAL_OGG_
+#if defined(_OAL_OGG_)
 
 #include "interface/ISoundSystem.h"
 #include "interface/IResource.h"
@@ -56,11 +56,9 @@
 
 #define SOUND_MASTER_VOLUME		0.2f
 
-
 namespace Seed { namespace OAL {
 
-
-class SoundSystem : public ISoundSystem
+class SEED_CORE_API SoundSystem : public ISoundSystem
 {
 	public:
 		SoundSystem();
@@ -98,16 +96,11 @@ class SoundSystem : public ISoundSystem
 		ALCcontext			*pContext;
 };
 
-
 SoundSystem *const pSoundSystem = &SoundSystem::instance;
-
 
 }} // namespace
 
-
 #else // _OAL_OGG_
-
 	#error "Include 'SoundSystem.h' instead 'api/oal_ogg/OalOggSoundSystem.h' directly."
-
 #endif // _OAL_OGG_
 #endif // __OAL_OGG_SOUND_SYSTEM_H__

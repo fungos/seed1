@@ -39,16 +39,14 @@
 
 #include "IModule.h"
 
-
 namespace Seed {
 
 class IMemoryPool;
 
-
 /// MemoryManager Interface
 /**
 */
-class IMemoryManager : public IModule
+class SEED_CORE_API IMemoryManager : public IModule
 {
 	public:
 		IMemoryManager();
@@ -70,8 +68,6 @@ class IMemoryManager : public IModule
 		SEED_DISABLE_COPY(IMemoryManager);
 };
 
-
 } // namespace
-
 
 #endif // __IMEMORYMANAGER_H__

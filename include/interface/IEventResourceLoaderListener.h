@@ -34,21 +34,16 @@
 	\brief Defines the resource loader event listener class interface
 */
 
-
 #ifndef __IEVENTRESOURCELOADERLISTENER_H__
 #define __IEVENTRESOURCELOADERLISTENER_H__
 
-
 #include "interface/IEventListener.h"
-
 
 namespace Seed {
 
-
 class EventResourceLoader;
 
-
-class IEventResourceLoaderListener : public IEventListener
+class SEED_CORE_API IEventResourceLoaderListener : public IEventListener
 {
 	public:
 		IEventResourceLoaderListener();
@@ -61,8 +56,6 @@ class IEventResourceLoaderListener : public IEventListener
 		SEED_DISABLE_COPY(IEventResourceLoaderListener);
 };
 
-
 } // namespace
-
 
 #endif // __IEVENTRESOURCELOADERLISTENER_H__

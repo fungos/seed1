@@ -34,10 +34,8 @@
 	\brief A font class
 */
 
-
 #ifndef __FONT_H__
 #define __FONT_H__
-
 
 #include "Defines.h"
 #include "interface/IResource.h"
@@ -46,14 +44,11 @@
 #include "Sprite.h"
 #include "Enum.h"
 
-
 namespace Seed {
-
 
 IResource *FontResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 
-
-class Font : public IResource
+class SEED_CORE_API Font : public IResource
 {
 	friend IResource *FontResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 	friend class Text;
@@ -89,10 +84,10 @@ class Font : public IResource
 	protected:
 		void *operator new(size_t len);
 		void operator delete(void *ptr);
-		void *operator new [](size_t);
-		void operator delete [](void *);
+		void *operator new[](size_t) { return NULL; };
+		void operator delete[](void *) {};
 
-		void SetBlending(IRenderable::eBlendMode op);
+		void SetBlending(eBlendMode op);
 		void SetColor(PIXEL px);
 		void Draw();
 		void Update(f32 dt);
@@ -121,8 +116,6 @@ class Font : public IResource
 		BOOL			bSpace;
 };
 
-
 } // namespace
-
 
 #endif // __FONT_H__

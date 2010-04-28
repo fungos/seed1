@@ -34,13 +34,11 @@
 	\brief Memory Pool PC implementation
 */
 
-
 #include "MemoryPool.h"
 
-#ifdef _PC_
+#if defined(_PC_)
 
-
-#ifdef YMEM_DEBUG
+#if defined(YMEM_DEBUG)
 	#include "extra/ymanager/yallocwrap.h"
 
 	#define SEED_MALLOC(len, desc, owner)	(void *)yalloc(this->pMgr, len, desc, owner)
@@ -58,9 +56,7 @@
 	#define YMANAGER_PRINT
 #endif // DEBUG
 
-
 namespace Seed { namespace PC {
-
 
 PcMemoryPool::PcMemoryPool(u32 size)
 	YMANAGER_INIT
@@ -123,8 +119,6 @@ LargeMemoryPool::~LargeMemoryPool()
 {
 }
 
-
 }} // namespace
-
 
 #endif // _PC_

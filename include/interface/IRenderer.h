@@ -37,7 +37,6 @@
 #ifndef __IRENDERER_H__
 #define __IRENDERER_H__
 
-
 #include "IUpdatable.h"
 #include "IModule.h"
 
@@ -45,15 +44,13 @@
 
 namespace Seed {
 
-
 class IRenderable;
-
 
 /// Renderer Interface
 /**
 Rendering engine interface
 */
-class IRenderer : public IUpdatable, public IModule
+class SEED_CORE_API IRenderer : public IUpdatable, public IModule
 {
 	typedef std::vector<IRenderable *> RenderableVector;
 	typedef RenderableVector::iterator RenderableVectorIterator;
@@ -124,8 +121,6 @@ class IRenderer : public IUpdatable, public IModule
 		SEED_DISABLE_COPY(IRenderer);
 };
 
-
 } // namespace
-
 
 #endif // __IRENDERER_H__

@@ -37,7 +37,7 @@
 #ifndef __WII_RENDERER_H__
 #define __WII_RENDERER_H__
 
-#ifdef _WII_
+#if defined(_WII_)
 
 #include "interface/IRenderer.h"
 #include "Screen.h"

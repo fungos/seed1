@@ -34,8 +34,7 @@
 	\brief Qt Scene
 */
 
-
-#ifdef _QT_
+#if defined(_QT_)
 
 #include "platform/qt/QtScene.h"
 #include "platform/qt/QtInput.h"
@@ -46,9 +45,7 @@
 
 #define TAG "[Scene] "
 
-
 namespace Seed { namespace QT {
-
 
 Scene::Scene(u32 width, u32 height)
 	: iWidth(width)
@@ -288,6 +285,4 @@ void Scene::keyReleaseEvent(QKeyEvent *event)
 
 }} // namespace
 
-
 #endif // _QT_
-

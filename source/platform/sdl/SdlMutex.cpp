@@ -34,15 +34,12 @@
 	\brief Mutex
 */
 
-
-#ifdef _SDL_
+#if defined(_SDL_)
 
 #include <SDL/SDL_mutex.h>
 #include "platform/sdl/SdlMutex.h"
 
-
 namespace Seed { namespace SDL {
-
 
 Mutex::Mutex()
 	: pMutex(NULL)
@@ -68,8 +65,6 @@ INLINE void Mutex::Unlock()
 	IMutex::Unlock();
 }
 
-
 }} // namespace
-
 
 #endif // _SDL

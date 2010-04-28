@@ -29,7 +29,7 @@ struct block
 };
 */
 
-#ifdef YMEM_DEBUG
+#if defined(YMEM_DEBUG)
 #define KEEP(i)			(*((u32 *)(&this->pPool[i - 25])))
 #define OWNR(i)			(*((u32 *)(&this->pPool[i - 21])))
 #define DESC(i)			(*((u32 *)(&this->pPool[i - 17])))
@@ -151,7 +151,7 @@ void *YMemoryManager::Alloc(u32 len, const char *desc, const char *owner)
 
 void YMemoryManager::Free(void *addr)
 {
-#ifdef YMEM_PARANOID_CHECK
+#if defined(YMEM_PARANOID_CHECK)
 	if (addr == NULL)
 	{
 		LOG0(TAG "Trying to free NULL pointer.\n");
@@ -170,7 +170,7 @@ void YMemoryManager::Free(void *addr)
 	u32 free = (u32)(((u8 *)addr) - this->pPool);
 	LOG1(TAG "Amount to be freed: %d.\n", SIZE(free));
 
-#ifdef YMEM_PARANOID_CHECK
+#if defined(YMEM_PARANOID_CHECK)
 	if (free < SIZE_HEADER)
 		 return;
 
@@ -375,7 +375,7 @@ u32 YMemoryManager::GetFreeMemory()
 	return this->iFreeMemory;
 }
 
-#ifdef YMEM_DEBUG
+#if defined(YMEM_DEBUG)
 void YMemoryManager::PrintSnapshot()
 {
 	u32 i;

@@ -41,11 +41,9 @@
 #include "GuiManager.h"
 #include "../interface/IWidget.h"
 
-
 namespace Seed {
 
-
-class Label : public IWidget
+class SEED_CORE_API Label : public IWidget
 {
 	public:
 		Label();
@@ -86,9 +84,6 @@ class Label : public IWidget
 		SEED_DISABLE_COPY(Label);
 };
 
-
 } // namespace
 
-
 #endif // __LABEL_H__
-

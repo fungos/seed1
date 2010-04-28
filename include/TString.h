@@ -36,7 +36,7 @@
 
 namespace Seed {
 
-class String
+class SEED_CORE_API String
 {
 	public:
 		String();
@@ -92,7 +92,6 @@ class String
 		u16 *pConstructedStr;
 		u32 iConstructedSize;
 };
-
 
 } // namespace
 

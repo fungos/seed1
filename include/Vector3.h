@@ -39,12 +39,9 @@
 #ifndef __VECTOR3_H__
 #define __VECTOR3_H__
 
-
 #include <math.h>
 
-
 namespace Seed {
-
 
 template <typename T> class Vector3
 {
@@ -360,9 +357,6 @@ typedef Vector3<double> Vector3d;
 static const Vector3f ZeroVectorf(0.0f, 0.0f, 0.0f);
 static const Vector3d ZeroVectord(0.0, 0.0, 0.0);
 
-
 } // namespace
-
-
 
 #endif // __VECTOR_H__

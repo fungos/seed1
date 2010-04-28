@@ -516,7 +516,7 @@ void Theora::ConfigureRendering()
 	coords[6] = 0.0f;
 	coords[7] = fTexScaleY;
 
-	#ifdef SEED_USE_REAL_COORDINATE_SYSTEM
+	#if defined(SEED_USE_REAL_COORDINATE_SYSTEM)
 		// A
 		vertices[0] = 0.0f;
 		vertices[1] = 0.0f;

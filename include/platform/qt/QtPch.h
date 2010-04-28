@@ -32,7 +32,7 @@
 #ifndef QTPCH_H
 #define QTPCH_H
 
-#ifdef _QT_
+#if defined(_QT_)
 	#include <QtGui>
 	#include <QtOpenGL>
 #endif

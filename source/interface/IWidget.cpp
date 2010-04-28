@@ -52,12 +52,12 @@ IWidget::IWidget()
 	, bSelected(FALSE)
 	, bChanged(TRUE)
 	, bDraggable(FALSE)
-	, iState(NONE)
+	, iState(Seed::WidgetStateNone)
 	, iButton(Seed::ButtonAll)
 {
 	for (int i = 0; i < PLATFORM_MAX_INPUT; i++)
 	{
-		iPlayerState[i] = NONE;
+		iPlayerState[i] = Seed::WidgetStateNone;
 		arPlayerStateStartTime[i] = 0;
 	}
 }
@@ -71,7 +71,7 @@ IWidget::IWidget(u32 id, f32 w, f32 h, f32 x, f32 y)
 	, bSelected(FALSE)
 	, bChanged(TRUE)
 	, bDraggable(FALSE)
-	, iState(NONE)
+	, iState(Seed::WidgetStateNone)
 	, iButton(Seed::ButtonAll)
 {
 	this->SetWidth(w);
@@ -81,7 +81,7 @@ IWidget::IWidget(u32 id, f32 w, f32 h, f32 x, f32 y)
 
 	for (int i = 0; i < PLATFORM_MAX_INPUT; i++)
 	{
-		iPlayerState[i] = NONE;
+		iPlayerState[i] = Seed::WidgetStateNone;
 		arPlayerStateStartTime[i] = 0;
 	}
 }
@@ -163,24 +163,24 @@ INLINE BOOL IWidget::IsDraggable() const
 	return this->bDraggable;
 }
 
-INLINE void IWidget::SetState(eState s)
+INLINE void IWidget::SetState(eWidgetState s)
 {
 	this->iStateStartTime = pTimer->GetMilliseconds();
 	this->iState = s;
 }
 
-INLINE IWidget::eState IWidget::GetState() const
+INLINE eWidgetState IWidget::GetState() const
 {
 	return this->iState;
 }
 
-INLINE void IWidget::SetPlayerState(IWidget::eState s, u32 i)
+INLINE void IWidget::SetPlayerState(eWidgetState s, u32 i)
 {
 	this->arPlayerStateStartTime[i] = pTimer->GetMilliseconds();
 	this->iPlayerState[i] = s;
 }
 
-INLINE IWidget::eState IWidget::GetPlayerState(u32 i) const
+INLINE eWidgetState IWidget::GetPlayerState(u32 i) const
 {
 	return this->iPlayerState[i];
 }
@@ -206,12 +206,12 @@ INLINE void IWidget::SetVisible(BOOL b)
 	ITransformable2D::SetVisible(b);
 	if (!b)
 	{
-		this->iState = IWidget::NONE;
+		this->iState = Seed::WidgetStateNone;
 		this->iStateStartTime = 0;
 
 		for (u32 i = 0; i < PLATFORM_MAX_INPUT; i++)
 		{
-			this->iPlayerState[i] = IWidget::NONE;
+			this->iPlayerState[i] = Seed::WidgetStateNone;
 			this->arPlayerStateStartTime[i] = 0;
 		}
 	}

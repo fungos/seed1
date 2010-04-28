@@ -267,7 +267,7 @@ INLINE const char *Font::GetObjectName() const
 	return "Font";
 }
 
-INLINE void Font::SetBlending(IRenderable::eBlendMode op)
+INLINE void Font::SetBlending(eBlendMode op)
 {
 	mFont.SetBlending(op);
 	mFontExt.SetBlending(op);

@@ -49,7 +49,7 @@
 #define VORBIS_BUFFER_SIZE SEED_MUSIC_STREAMING_BUFFER_SIZE
 
 
-struct sOggFile
+struct SEED_CORE_API sOggFile
 {
 	u8		*dataPtr;
 	u32		dataSize;

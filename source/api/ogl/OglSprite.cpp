@@ -34,10 +34,9 @@
 	\brief Sprite OpenGL Implementation
 */
 
-
 #include "Sprite.h"
 
-#ifdef _OGL_
+#if defined(_OGL_)
 
 #include "FileSystem.h"
 #include "MemoryManager.h"
@@ -65,18 +64,7 @@
 #define DEBUG_SPRITE_RECT
 #endif
 
-
 namespace Seed { namespace OGL {
-
-
-const GLubyte _no_texture_colors[] =
-{
-	255, 0, 255, 255,
-	255, 0,   0, 255,
-	0, 255,   0, 255,
-	0,   0, 255, 255,
-};
-
 
 Sprite::Sprite()
 {
@@ -91,13 +79,11 @@ Sprite::~Sprite()
 
 u32 Sprite::GetWidthInPixel() const
 {
-	//return static_cast<Image *>(pFrame->pImage)->GetWidthInPixel();
 	return pFrameImage->GetWidthInPixel();
 }
 
 u32 Sprite::GetHeightInPixel() const
 {
-	//return static_cast<Image *>(pFrame->pImage)->GetHeightInPixel();
 	return pFrameImage->GetHeightInPixel();
 }
 
@@ -122,7 +108,7 @@ void Sprite::Update(f32 delta)
 
 	if (!arCustomVertexData)
 	{
-		#ifdef SEED_USE_REAL_COORDINATE_SYSTEM
+		#if defined(SEED_USE_REAL_COORDINATE_SYSTEM)
 			arCurrentVertexData = &vert[0];
 			vert[0] = Vector3f(-(f32)iHalfWidth, -(f32)iHalfHeight, fPriority);
 			vert[1] = Vector3f(+(f32)iHalfWidth, -(f32)iHalfHeight, fPriority);
@@ -142,18 +128,18 @@ void Sprite::Update(f32 delta)
 	}
 
 	/* Mover para viewport */
-	f32 fScreenWidth	= (f32)pScreen->GetWidth();
-	f32 fScreenHeight	= (f32)pScreen->GetHeight();
+	//f32 fScreenWidth	= (f32)pScreen->GetWidth();
+	//f32 fScreenHeight	= (f32)pScreen->GetHeight();
 	/* ^^^^ */
 
 	f32 x, y;
-	#ifdef SEED_USE_REAL_COORDINATE_SYSTEM
+	#if defined(SEED_USE_REAL_COORDINATE_SYSTEM)
 		x = this->iHalfWidth + ISprite::GetX();
 		y = this->iHalfHeight + ISprite::GetY();
 	#else
-		f32 ratio			= fScreenHeight / fScreenWidth;
+		//f32 ratio			= fScreenHeight / fScreenWidth;
 		x = this->fAspectHalfWidth + ISprite::GetX();
-		y = this->fAspectHalfHeight + ISprite::GetY() * ratio;
+		y = this->fAspectHalfHeight + ISprite::GetY() * pScreen->GetAspectRatio();
 	#endif
 
 	f32 lx = ISprite::GetLocalX();
@@ -345,7 +331,7 @@ void Sprite::Render(f32 delta)
 	image->UnloadTexture();
 #endif // SEED_ENABLE_PRELOAD_TEXTURE
 
-	//DEBUG_SPRITE_RECT;
+	DEBUG_SPRITE_RECT;
 }
 
 void Sprite::SetupBlendingOperation()
@@ -354,7 +340,7 @@ void Sprite::SetupBlendingOperation()
 	{
 		/* REPLACE */
 		default:
-		case IRenderable::NONE:
+		case Seed::BlendNone:
 		{
 			// http://home.comcast.net/~tom_forsyth/blog.wiki.html#[[Premultiplied%20alpha]]
 			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
@@ -364,21 +350,21 @@ void Sprite::SetupBlendingOperation()
 		break;
 
 		/* BLEND */
-		case IRenderable::BLEND:
+		case Seed::BlendDefault:
 		{
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
 			glBlendFunc(GL_ONE, GL_ONE);
 		}
 		break;
 
-		case IRenderable::MERGE:
+		case Seed::BlendMerge:
 		{
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA);
 		}
 		break;
 
-		case IRenderable::SCREEN:
+		case Seed::BlendScreen:
 		{
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
 			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
@@ -388,7 +374,7 @@ void Sprite::SetupBlendingOperation()
 		break;
 
 		/* DECAL */
-		case IRenderable::DECAL_OVERLAY:
+		case Seed::BlendDecalOverlay:
 		{
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 			glBlendFunc(GL_DST_COLOR, GL_ONE);
@@ -404,7 +390,7 @@ void Sprite::SetupBlendingOperation()
 		break;
 
 		/* MODULATE */
-		case IRenderable::ADDITIVE:
+		case Seed::BlendAdditive:
 		{
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -419,7 +405,7 @@ void Sprite::SetupBlendingOperation()
 		}
 		break;
 
-		case IRenderable::OVERLAY:
+		case Seed::BlendOverlay:
 		{
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glBlendFunc(GL_DST_COLOR, GL_ONE);
@@ -434,7 +420,7 @@ void Sprite::SetupBlendingOperation()
 		}
 		break;
 
-		case IRenderable::LIGHTEN:
+		case Seed::BlendLighten:
 		{
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glBlendFunc(GL_ONE_MINUS_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -449,7 +435,7 @@ void Sprite::SetupBlendingOperation()
 		}
 		break;
 
-		case IRenderable::COLOR_DODGE:
+		case Seed::BlendColorDodge:
 		{
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glBlendFunc(GL_ONE, GL_ONE);
@@ -464,7 +450,7 @@ void Sprite::SetupBlendingOperation()
 		}
 		break;
 
-		case IRenderable::MODULATE_ALPHA:
+		case Seed::BlendModulateAlpha:
 		{
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -476,7 +462,7 @@ void Sprite::SetupBlendingOperation()
 		}
 		break;
 
-		case IRenderable::MODULATE:
+		case Seed::BlendModulate:
 		{
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -493,8 +479,6 @@ void Sprite::SetupBlendingOperation()
 	}
 }
 
-
 }} // namespace
-
 
 #endif // _OGL_

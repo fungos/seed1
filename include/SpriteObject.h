@@ -34,7 +34,6 @@
 	\brief Sprite Object information
 */
 
-
 #ifndef __SPRITE_OBJECT_H__
 #define __SPRITE_OBJECT_H__
 
@@ -65,14 +64,11 @@ The use of SEED_USE_MULTIPLE_IMAGES_PER_ANIMATION will enable the SDK to load si
 
 //#define SEED_USE_MULTIPLE_IMAGES_PER_ANIMATION
 
-
 namespace Seed {
-
 
 IResource *SpriteResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 
-
-class SpriteObject : public IResource
+class SEED_CORE_API SpriteObject : public IResource
 {
 	friend IResource *SpriteResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 
@@ -104,8 +100,8 @@ class SpriteObject : public IResource
 	protected:
 		void *operator new(size_t len);
 		void operator delete(void *ptr);
-		void *operator new [](size_t);
-		void operator delete [](void *);
+		void *operator new[](size_t) { return NULL; };
+		void operator delete[](void *) {};
 
 		// IResource
 		virtual BOOL Unload();
@@ -133,7 +129,6 @@ class SpriteObject : public IResource
 		
 		//AnimationMap			mapAnim;
 };
-
 
 } // namespace
 

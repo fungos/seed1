@@ -18,7 +18,6 @@
 
 #include <math.h>
 
-
 #define ROUND(x) ((x - static_cast<u32>(x)) > 0.5 ? static_cast<u32>(x) + 1 : static_cast<u32>(x))
 
 #if DEBUG_ENABLE_RECT_BUTTON == 1
@@ -28,7 +27,6 @@
 #endif
 
 namespace Seed {
-
 
 IResource *ButtonResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
@@ -59,7 +57,7 @@ Button::Button()
 	, iLabelHoverColor(0)
 	, iLabelDisabledColor(0)
 	, iLabelColor(0)
-	, eLabelBlendOperation(IRenderable::NONE)
+	, eLabelBlendOperation(Seed::BlendNone)
 	, fLabelOffsetX(0.0f)
 	, fLabelOffsetY(0.0f)
 	, fLabelPressOffsetX(0.0f)
@@ -175,15 +173,6 @@ BOOL Button::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 
 		f32 x = 0;
 		f32 y = 0;
-
-#ifndef __WARNING_F32_ALREADY_
-#if !defined(__GNUC__)
-#pragma message("WARNING: f32 endianess not checked on some platforms - need do some testing!")
-#else
-#warning "WARNING: f32 endianess not checked on some platforms - need do some testing!"
-#endif
-#define __WARNING_F32_ALREADY_
-#endif // __WARNING_F32_ALREADY_
 
 		READ_F32(x, ptr);
 		READ_F32(y, ptr);
@@ -354,7 +343,7 @@ INLINE BOOL Button::ContainsPoint(f32 x, f32 y)
 	return ret;
 }
 
-void Button::SetBlending(Seed::IRenderable::eBlendMode op)
+void Button::SetBlending(eBlendMode op)
 {
 	this->cSprite.SetBlending(op);
 	this->cLabel.SetBlending(op);
@@ -378,7 +367,7 @@ INLINE BOOL Button::CheckPixel(f32 x, f32 y)
 
 	u32 pX, pY, iPxTargetX, iPxTargetY;
 
-	#ifdef SEED_USE_REAL_COORDINATE_SYSTEM
+	#if defined(SEED_USE_REAL_COORDINATE_SYSTEM)
 		pX = static_cast<u32>(x);
 		pY = static_cast<u32>(y);
 
@@ -459,7 +448,7 @@ void Button::OnWidgetRollOut(const EventWidget *ev)
 				this->cLabel.AddPosition(fLabelHoverOffsetX * -1.0f, fLabelHoverOffsetY * -1.0f);
 				if (iLabelHoverColor)
 				{
-					this->cLabel.SetBlending(IRenderable::NONE);
+					this->cLabel.SetBlending(Seed::BlendNone);
 					if (this->iLabelColor)
 					{
 						this->cLabel.SetColor(this->iLabelColor);
@@ -541,7 +530,7 @@ void Button::OnWidgetRelease(const EventWidget *ev)
 			this->cLabel.AddPosition(this->fLabelPressOffsetX * -1.0f, this->fLabelPressOffsetY * -1.0f);
 			if (this->iLabelPressColor)
 			{
-				this->cLabel.SetBlending(IRenderable::NONE);
+				this->cLabel.SetBlending(Seed::BlendNone);
 				if (this->iLabelColor)
 				{
 					this->cLabel.SetColor(this->iLabelColor);
@@ -583,7 +572,7 @@ void Button::OnWidgetReleaseOut(const EventWidget *ev)
 			this->cLabel.AddPosition(this->fLabelPressOffsetX * -1.0f, this->fLabelPressOffsetY * -1.0f);
 			if (this->iLabelPressColor)
 			{
-				this->cLabel.SetBlending(IRenderable::NONE);
+				this->cLabel.SetBlending(Seed::BlendNone);
 				if (this->iLabelColor)
 				{
 					this->cLabel.SetColor(this->iLabelColor);
@@ -733,7 +722,7 @@ INLINE void Button::SetDisabled(BOOL b)
 			}
 			else
 			{
-				this->cLabel.SetBlending(IRenderable::NONE);
+				this->cLabel.SetBlending(Seed::BlendNone);
 				if (iLabelColor)
 				{
 					this->cLabel.SetColor(iLabelColor);
@@ -1317,7 +1306,7 @@ INLINE IImage *Button::GetSpriteTexture() const
 	return this->cSprite.GetTexture();
 }
 
-INLINE void Button::SetSpriteBlending(Seed::IRenderable::eBlendMode op)
+INLINE void Button::SetSpriteBlending(eBlendMode op)
 {
 	this->cSprite.SetBlending(op);
 }

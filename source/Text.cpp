@@ -64,7 +64,7 @@ Text::Text()
 	, fScaleX(1.0f)
 	, fScaleY(1.0f)
 	, iColor(0)
-	, iOperation(IRenderable::NONE)
+	, iOperation(Seed::BlendNone)
 {
 }
 
@@ -284,7 +284,7 @@ INLINE void Text::SetFont(Font *f)
 		this->fWidth = this->GetWidth(0, String::Length(pStrData));
 }
 
-INLINE void Text::SetBlending(IRenderable::eBlendMode op)
+INLINE void Text::SetBlending(eBlendMode op)
 {
 	this->iOperation = op;
 }

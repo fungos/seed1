@@ -496,11 +496,13 @@ eCartridgeError SaveSystem::WriteSharedData(void *sharedBlankData)
 
 void SaveSystem::Wait()
 {
-	/*#ifndef DEBUG_GAMESTATE_NODELAY
+	/*
+	#if !defined(DEBUG_GAMESTATE_NODELAY)
 	u8 i;
 	for (i = 0; i < 24; i ++)
 		pSystem->WaitForRetrace(ISystem::RATE_60FPS);
-	#endif // DEBUG_GAMESTATE_NODELAY*/
+	#endif // DEBUG_GAMESTATE_NODELAY
+	*/
 }
 
 BOOL SaveSystem::IsSaving() const

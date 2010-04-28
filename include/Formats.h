@@ -34,7 +34,6 @@
 	\brief File formats structs and magic codes
 */
 
-
 #ifndef __FORMATS_H__
 #define __FORMATS_H__
 
@@ -70,7 +69,6 @@
 #define SST_OBJECT_MAGIC			0x00535346
 #define SST_OBJECT_VERSION			0x00000001
 
-
 #define READ_F32(var, ptr)			var = *((f32 *)ptr); ptr = &ptr[sizeof(f32)];
 #define READ_U32(var, ptr)			var = *((u32 *)ptr); ptr = &ptr[sizeof(u32)];
 #define READ_U16(var, ptr)			var = *((u16 *)ptr); ptr = &ptr[sizeof(u16)];
@@ -78,20 +76,19 @@
 #define SKIP_STRUCT(type, ptr)		ptr = &ptr[sizeof(type)];
 #define READ_STRUCT(out, type, ptr)	out = static_cast<type *>((void *)ptr); SKIP_STRUCT(type, ptr);
 
-
 namespace Seed {
 
 class File;
 extern const char *g_pcPlatform[];
 
-struct ObjectHeader
+struct SEED_CORE_API ObjectHeader
 {
 	u32 magic;
 	u32 version;
 	u32 platform;
 };
 
-struct ImageObjectHeader
+struct SEED_CORE_API ImageObjectHeader
 {
 	u32 width;
 	u32 height;
@@ -100,7 +97,7 @@ struct ImageObjectHeader
 	u32 padding02;
 };
 
-struct SpriteObjectHeader
+struct SEED_CORE_API SpriteObjectHeader
 {
 	//ObjectHeader block;
 	u32 animation_amount;
@@ -112,7 +109,7 @@ struct SpriteObjectHeader
 	{}
 };
 /*
-struct AnimationObjectHeader
+struct SEED_CORE_API AnimationObjectHeader
 {
 	//ObjectHeader block;
 	u32 frame_amount;
@@ -120,7 +117,7 @@ struct AnimationObjectHeader
 	u32 animId;
 };
 
-struct FrameObjectHeader
+struct SEED_CORE_API FrameObjectHeader
 {
 	//ObjectHeader block;
 	u32 time;
@@ -131,27 +128,27 @@ struct FrameObjectHeader
 	u32 fileId; // filename
 };
 */
-struct PackageObjectHeader
+struct SEED_CORE_API PackageObjectHeader
 {
 	//ObjectHeader block;
 	u32 filesAmount;
 	// packages FS table
 };
 
-struct MusicObjectHeader
+struct SEED_CORE_API MusicObjectHeader
 {
 	//ObjectHeader block;
 	u32 volume;
 };
 
-struct SoundObjectHeader
+struct SEED_CORE_API SoundObjectHeader
 {
 	//ObjectHeader block;
 	u32 volume;
 	u32 flags;
 };
 
-struct ButtonObjectHeader
+struct SEED_CORE_API ButtonObjectHeader
 {
 	//ObjectHeader block;
 	u32		id;
@@ -164,7 +161,7 @@ struct ButtonObjectHeader
 	//const char *mask;
 };
 
-struct DictionaryObjectHeader
+struct SEED_CORE_API DictionaryObjectHeader
 {
 	//ObjectHeader block;
 	u32 language;
@@ -177,7 +174,7 @@ struct DictionaryObjectHeader
 	//   ...
 };
 
-struct FontObjectHeader
+struct SEED_CORE_API FontObjectHeader
 {
 	//ObjectHeader block;
 	f32 tracking;
@@ -189,9 +186,6 @@ struct FontObjectHeader
 
 BOOL seed_validate_block(File *file, ObjectHeader *block, u32 magic, u32 version);
 
-
 } // namespace
 
 #endif // __FORMATS_H__
-
-

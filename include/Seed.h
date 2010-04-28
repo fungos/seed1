@@ -124,8 +124,8 @@
 #include <api/theora/Theora.h>
 #endif
 
-#ifdef _WII_
-	#ifdef USE_AILIVE
+#if defined(_WII_)
+	#if defined(USE_AILIVE)
 		#include <platform/wii/WiiAiLive.h>
 	#endif // USE_AILIVE
 #endif // _WII_

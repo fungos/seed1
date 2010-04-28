@@ -37,7 +37,6 @@
 #ifndef __PARTICLE_EMITTER_OBJECT_H__
 #define __PARTICLE_EMITTER_OBJECT_H__
 
-
 #include "interface/IResource.h"
 #include "Vector.h"
 #include "Rect.h"
@@ -45,11 +44,9 @@
 #include "SeedInit.h"
 #include "File.h"
 
-
 namespace Seed {
 
-
-struct ParticleEmitterInfo
+struct SEED_CORE_API ParticleEmitterInfo
 {
 	u32					iDummy;
 	u32					iTextureFrame;
@@ -103,11 +100,9 @@ struct ParticleEmitterInfo
 	f32					fInterval;
 };
 
-
 IResource *ParticleEmitterObjectResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 
-
-class ParticleEmitterObject : public IResource
+class SEED_CORE_API ParticleEmitterObject : public IResource
 {
 	friend IResource *ParticleEmitterObjectResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 	friend class ParticleEmitter;
@@ -128,8 +123,8 @@ class ParticleEmitterObject : public IResource
 	protected:
 		void *operator new(size_t len);
 		void operator delete(void *ptr);
-		void *operator new [](size_t);
-		void operator delete [](void *);
+		void *operator new[](size_t) { return NULL; };
+		void operator delete[](void *) {};
 
 		// IResource
 		virtual BOOL Unload();
@@ -144,9 +139,6 @@ class ParticleEmitterObject : public IResource
 		u32		iMemory;
 };
 
-
 } // namespace
 
-
 #endif // __PARTICLE_EMITTER_OBJECT_H__
-

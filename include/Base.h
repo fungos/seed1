@@ -37,7 +37,6 @@
 #ifndef __BASE_H__
 #define __BASE_H__
 
-
 #include "Defines.h"
 
 #include <string.h>
@@ -45,7 +44,7 @@
 namespace Seed {
 
 /// String comparator operator to be used with STL/STL-like containers.
-struct LowerThanStringComparator
+struct SEED_CORE_API LowerThanStringComparator
 {
 	BOOL operator()(const char *s1, const char *s2) const
 	{
@@ -53,8 +52,6 @@ struct LowerThanStringComparator
 	}
 };
 
-
 } // namespace
-
 
 #endif // __BASE_H__

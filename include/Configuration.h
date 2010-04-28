@@ -38,7 +38,7 @@
 
 namespace Seed {
 
-class Configuration : public IObject
+class SEED_CORE_API Configuration : public IObject
 {
 	public:
 		Configuration();
@@ -104,8 +104,6 @@ class Configuration : public IObject
 		ePlatformSimulation iPlatformSimulation;
 };
 
-
 } // namespace
-
 
 #endif // __CONFIGURATION_H__

@@ -34,21 +34,16 @@
 	\brief Qt Surface
 */
 
+#if defined(_QT_)
 
-#ifdef _QT_
-
-#ifndef GL_MULTISAMPLE
+#if !defined(GL_MULTISAMPLE)
 #define GL_MULTISAMPLE  0x809D
 #endif // GL_MULTISAMPLE
 
 #define TAG "[Surface] "
 
-
 namespace Seed { namespace QT {
-
 
 }} // namespace
 
-
 #endif // _QT_
-

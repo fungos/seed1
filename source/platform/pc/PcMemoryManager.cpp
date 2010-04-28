@@ -36,23 +36,22 @@
 
 #include "MemoryManager.h"
 
-#ifdef _PC_
+#if defined(_PC_)
 
 #include "Log.h"
-
 #include <sys/types.h>
 
 #define TAG "[MemoryManager] "
 
-
 namespace Seed { namespace PC {
-
 
 MemoryManager MemoryManager::instance;
 DefaultMemoryPool MemoryManager::defaultPool(MB60);
 LargeMemoryPool MemoryManager::largePool(MB20);
 
-
+MemoryManager *const pMemoryManager = &MemoryManager::instance;
+DefaultMemoryPool *const pDefaultPool = &MemoryManager::defaultPool;
+LargeMemoryPool *const pLargePool = &MemoryManager::largePool;
 
 MemoryManager::MemoryManager()
 {
@@ -152,4 +151,3 @@ void operator delete[](void * p) throw()
 }
 
 #endif // _PC_
-

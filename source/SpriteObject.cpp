@@ -34,7 +34,6 @@
 	\brief Sprite Object information
 */
 
-
 #include "SpriteObject.h"
 #include "FileSystem.h"
 #include "Formats.h"
@@ -42,12 +41,9 @@
 #include "SeedInit.h"
 #include "StringCache.h"
 
-
 #define TAG		"[SpriteObject] "
 
-
 namespace Seed {
-
 
 IResource *SpriteResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
@@ -88,8 +84,8 @@ BOOL SpriteObject::Unload()
 		
 		pFileSystem->Close(&stFile);
 
-#ifdef _WII_
-	#ifndef SEED_USE_MULTIPLE_IMAGES_PER_ANIMATION
+#if defined(_WII_)
+	#if !defined(SEED_USE_MULTIPLE_IMAGES_PER_ANIMATION)
 		pMemoryManager->Free((void *)pTplFile, pPool);
 		pTplFile = NULL;
 	#endif // SEED_USE_MULTIPLE_IMAGES_PER_ANIMATION
@@ -116,8 +112,8 @@ BOOL SpriteObject::Load(const char *filename, ResourceManager *res, IMemoryPool 
 	TODO: 2008-10-29 | DESIGN | HIGH | CORE | Resource extension must be inside .sprite file. | Danny Angelo Carminati Grein
 	*/
 
-	#ifdef _WII_
-	#ifndef SEED_USE_MULTIPLE_IMAGES_PER_ANIMATION
+	#if defined(_WII_)
+	#if !defined(SEED_USE_MULTIPLE_IMAGES_PER_ANIMATION)
 		// Flawfinder: ignore
 		char tplName[128] = "\0";
 		std::map<const char *, u32, LowerThanStringComparator> frameIndex;
@@ -179,11 +175,10 @@ BOOL SpriteObject::Load(const char *filename, ResourceManager *res, IMemoryPool 
 			for (u32 f = 0; f < anim->iFrames; f++)
 			{
 /*
-THIS IS HACK for Wii
-To use tpl as a container of images
+THIS IS A HACK for Wii To use tpl as a container of images
 */
-#ifdef _WII_
-	#ifndef SEED_USE_MULTIPLE_IMAGES_PER_ANIMATION
+#if defined(_WII_)
+	#if !defined(SEED_USE_MULTIPLE_IMAGES_PER_ANIMATION)
 				// check if it's using atlas
 				if (hdr->flags == 0x01)
 				{
@@ -242,7 +237,7 @@ INLINE const ISprite::Animation *SpriteObject::GetAnimation(const char *anim) co
 		}
 	}
 	/*
-#ifdef DEBUG
+#if defined(DEBUG)
 	if (animId == SEED_INVALID_ID || p == NULL)
 	{
 		//Log(TAG "WARNING: Calling an animation '%s' that does not exists inside sprite '%s'.", anim, stFile.GetName());
@@ -296,6 +291,5 @@ void SpriteObject::operator delete(void *ptr)
 {
 	pMemoryManager->Free(ptr, pDefaultPool);
 }
-
 
 } // namespace

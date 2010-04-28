@@ -34,22 +34,19 @@
 	\brief Input Implementation
 */
 
-
 #ifndef __SDL_INPUT_H__
 #define __SDL_INPUT_H__
 
-#ifdef _SDL_
+#if defined(_SDL_)
 
 #include "interface/IInput.h"
 #include "interface/IInputPointer.h"
 #include "interface/IInputKeyboard.h"
 #include "Enum.h"
 
-
 namespace Seed { namespace SDL {
 
-
-class Input : public IInput, public IInputPointer, public IInputKeyboard
+class SEED_CORE_API Input : public IInput, public IInputPointer, public IInputKeyboard
 {
 	public:
 		Input();
@@ -104,16 +101,13 @@ class Input : public IInput, public IInputPointer, public IInputKeyboard
 		f32 fY;
 };
 
-
-Input *const pInput = &Input::instance;
-
+extern "C" {
+SEED_CORE_API extern Input *const pInput;
+}
 
 }} // namespace
 
-
 #else // _SDL_
-
 	#error "Include 'Input.h' instead 'platform/sdl/SdlInput.h' directly."
-
 #endif // _SDL_
 #endif // __SDL_INPUT_H__

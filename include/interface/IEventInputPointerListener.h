@@ -38,16 +38,13 @@
 #ifndef __IEVENT_INPUT_POINTER_LISTENER_H__
 #define __IEVENT_INPUT_POINTER_LISTENER_H__
 
-
 #include "interface/IEventListener.h"
 #include "EventInputPointer.h"
 #include "EventInputMotion.h"
 
-
 namespace Seed {
 
-
-class IEventInputPointerListener : public IEventListener
+class SEED_CORE_API IEventInputPointerListener : public IEventListener
 {
 	public:
 		IEventInputPointerListener();
@@ -66,9 +63,6 @@ class IEventInputPointerListener : public IEventListener
 		SEED_DISABLE_COPY(IEventInputPointerListener);
 };
 
-
 } // namespace
 
-
 #endif // __IEVENT_INPUT_POINTER_LISTENER_H__
-

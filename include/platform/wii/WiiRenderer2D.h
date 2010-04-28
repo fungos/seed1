@@ -40,7 +40,7 @@
 #include "Renderer.h"
 #include "interface/IRenderer2D.h"
 
-#ifdef _WII_
+#if defined(_WII_)
 
 namespace Seed { namespace WII {
 

@@ -34,21 +34,16 @@
 	\brief A event from resource loader
 */
 
-
 #ifndef __EVENTRESOURCE_LOADER_H__
 #define __EVENTRESOURCE_LOADER_H__
 
-
 #include "interface/IEvent.h"
-
 
 namespace Seed {
 
-
 class ResourceGroup;
 
-
-class EventResourceLoader : public IEvent
+class SEED_CORE_API EventResourceLoader : public IEvent
 {
 	public:
 		EventResourceLoader();
@@ -67,8 +62,6 @@ class EventResourceLoader : public IEvent
 		SEED_DISABLE_COPY(EventResourceLoader);
 };
 
-
 } // namespace
-
 
 #endif // __EVENTRESOURCE_LOADER_H__

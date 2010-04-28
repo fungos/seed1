@@ -17,10 +17,10 @@
 	</ToolFiles>
 	<Configurations>
 		<Configuration
-			Name="Debug|Win32"
-			OutputDirectory="..\bin\debug"
+			Name="Debug LGPL|Win32"
+			OutputDirectory="..\bin\debug\vs8"
 			IntermediateDirectory="..\bin\obj\debug\vs8"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			>
@@ -43,7 +43,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include;&quot;$(SEEDSDK)\dependency\common\include&quot;;&quot;$(SEEDSDK)\dependency\vc8\include&quot;"
-				PreprocessorDefinitions="WIN32;DEBUG;YMEM_DEBUG;_CONSOLE;_SDL_;_CRT_SECURE_NO_WARNINGS;YMEM_PARANOID_CHECK"
+				PreprocessorDefinitions="WIN32;DEBUG;YMEM_DEBUG;_CONSOLE;_SDL_;_CRT_SECURE_NO_WARNINGS;YMEM_PARANOID_CHECK;SEED_BUILD"
 				IgnoreStandardIncludePath="false"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -54,7 +54,7 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -66,12 +66,20 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\vs8\Seed.lib"
-				AdditionalLibraryDirectories=""
+				Name="VCLinkerTool"
+				AdditionalDependencies="opengl32.lib glu32.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib sdl.lib sdlmain.lib openal32.lib sdl_image.lib liboggplay_static.lib"
+				AdditionalLibraryDirectories="&quot;$(SEEDSDK)\dependency\vc8\lib&quot;"
+				IgnoreDefaultLibraryNames="libcmt;libcmtd"
+				GenerateDebugInformation="true"
+				AssemblyDebug="1"
+				GenerateMapFile="true"
+				MapExports="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -83,14 +91,17 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
+			Name="Release LGPL|Win32"
 			OutputDirectory="..\bin\release"
 			IntermediateDirectory="..\bin\obj\release\vs8"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			CharacterSet="2"
 			>
@@ -114,7 +125,7 @@
 				InlineFunctionExpansion="0"
 				FavorSizeOrSpeed="0"
 				AdditionalIncludeDirectories="..\include;&quot;$(SEEDSDK)\dependency\common\include&quot;;&quot;$(SEEDSDK)\dependency\vc8\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_SDL_;_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_SDL_;_CRT_SECURE_NO_WARNINGS;SEED_BUILD"
 				ExceptionHandling="0"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -132,75 +143,7 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(OutDir)\vs8\Seed.lib"
-				AdditionalLibraryDirectories=""
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Debug DLL|Win32"
-			OutputDirectory="..\bin\debug"
-			IntermediateDirectory="..\bin\obj\debugdll\vs8"
-			ConfigurationType="2"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="..\include;&quot;$(SEEDSDK)\dependency\common\include&quot;;&quot;$(SEEDSDK)\dependency\vc8\include&quot;"
-				PreprocessorDefinitions="WIN32;DEBUG;YMEM_DEBUG;_CONSOLE;_SDL_;_CRT_SECURE_NO_WARNINGS;YMEM_PARANOID_CHECK;SEED_BUILD_DLL"
-				MinimalRebuild="true"
-				ExceptionHandling="0"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="2"
-				WarningLevel="4"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib sdl.lib sdlmain.lib openal32.lib sdl_image.lib vorbis_static.lib vorbisfile_static.lib ogg_static.lib libtheora_static.lib liboggz_static.lib liboggplay_static.lib"
-				OutputFile="$(OutDir)\vs8\Seed.dll"
-				AdditionalLibraryDirectories="&quot;$(SEEDSDK)\seed\bin\debug\vs8&quot;;&quot;$(SEEDSDK)\dependency\vc8\lib&quot;"
-				IgnoreDefaultLibraryNames="libcmt.lib;LIBCMTD.lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -680,10 +623,6 @@
 				</File>
 				<File
 					RelativePath="..\source\interface\IObject.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\source\interface\IPlayable.cpp"
 					>
 				</File>
 				<File
@@ -1335,10 +1274,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\include\interface\IPlayable.h"
-					>
-				</File>
-				<File
 					RelativePath="..\include\interface\IRenderable.h"
 					>
 				</File>
@@ -1742,14 +1677,6 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
-		<File
-			RelativePath=".\ClassDiagram1.cd"
-			>
-		</File>
-		<File
-			RelativePath=".\VTune\Seed.vpj"
-			>
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

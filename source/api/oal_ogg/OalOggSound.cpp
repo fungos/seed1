@@ -36,16 +36,14 @@
 
 #include "Sound.h"
 
-#ifdef _OAL_OGG_
+#if defined(_OAL_OGG_)
 
 #include "Log.h"
-
 
 #define TAG "[Sound] "
 #define BUFFER_SIZE		8512
 
 namespace Seed { namespace OAL {
-
 
 IResource *SoundResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
@@ -167,8 +165,6 @@ INLINE u32 Sound::GetUsedMemory() const
 	return ISound::GetUsedMemory() + sizeof(this) + stFile.GetSize();
 }
 
-
 }} // namespace
-
 
 #endif // _OAL_OGG_

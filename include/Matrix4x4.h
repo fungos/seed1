@@ -102,16 +102,12 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef __MATRIX4X4_H__
 #define __MATRIX4X4_H__
 
-
 #include "MathUtil.h"
 
-
 namespace Seed {
-
 
 // Type definitions
 enum eAxis
@@ -120,7 +116,6 @@ enum eAxis
 	AxisY,
 	AxisZ
 };
-
 
 template <typename T> class Matrix4x4
 {
@@ -192,7 +187,6 @@ template <typename T> class Matrix4x4
 		};
 };
 
-
 //
 // Nonmember Matrix4x4 functions
 //
@@ -229,7 +223,6 @@ template <typename T> Matrix4x4<T> FrustumMatrix(T l, T r, T b, T t, T n, T f);
 template <typename T> Matrix4x4<T> PerspectiveMatrix(T fovY, T aspect, T n, T f);
 template <typename T> Matrix4x4<T> OrthoMatrix(T l, T r, T b, T t, T n, T f);
 template <typename T> Matrix4x4<T> OrthoNormalMatrix(const Vector3<T> &xdir, const Vector3<T> &ydir, const Vector3<T> &zdir);
-
 
 // Predefined Matrix4x4 types
 typedef Matrix4x4<f32> Matrix4x4f;
@@ -1114,8 +1107,6 @@ inline Matrix4x4<T> OrthoNormalMatrix(const Vector3<T> &xdir, const Vector3<T> &
 	return res;
 }
 
-
 } // namespace
-
 
 #endif // __MATRIX4X4_H__

@@ -320,9 +320,9 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 
 			par->SetColor(par->fColorR, par->fColorG, par->fColorB, par->fColorA);
 			if (psInfo.iBlendMode == 6)
-				par->SetBlending(IRenderable::MODULATE);
+				par->SetBlending(Seed::BlendModulate);
 			else
-				par->SetBlending(IRenderable::ADDITIVE);
+				par->SetBlending(Seed::BlendAdditive);
 			//par->SetScale(par->fSize);
 			par->fScaleX = par->fSize;
 			par->fScaleY = par->fSize;

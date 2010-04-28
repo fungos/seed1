@@ -36,7 +36,7 @@ void *yalloc(YMemoryManager *mm, unsigned long size, const char *desc, const cha
 	if (!mm)
 		return NULL;
 
-#ifdef YMEM_DEBUG
+#if defined(YMEM_DEBUG)
 	void *ptr = mm->Alloc(size, desc, owner);
 	//mm->PrintSnapshot();
 #else
@@ -55,7 +55,7 @@ void yfree(YMemoryManager *mm, void *ptr)
 
 	mm->Free(ptr);
 
-#ifdef YMEM_DEBUG
+#if defined(YMEM_DEBUG)
 	//mm->PrintSnapshot();
 #endif // YMEM_DEBUG
 }

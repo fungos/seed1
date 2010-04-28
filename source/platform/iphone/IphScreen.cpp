@@ -34,7 +34,7 @@
 	\brief Screen Iphone Implementation
 */
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 #include "Defines.h"
 #include "Screen.h"
@@ -46,12 +46,11 @@
 #define FADE_OUT_SOLID  0xff
 #define FADE_OUT_TRANS	0x00
 
-#ifdef DEBUG
+#if defined(DEBUG)
 #define FADE_INCREMENT	0x10
 #else
 #define FADE_INCREMENT	0x10
 #endif // DEBUG
-
 
 #define TAG "[Screen] "
 

@@ -37,9 +37,7 @@
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
-
 #include "Config.h"
-
 
 #if defined(_WII_)
 	#include "platform/wii/WiiImage.h"
@@ -60,6 +58,5 @@
 	#include "platform/qt/QtImage.h"
 	using namespace Seed::QT;
 #endif // _QT_
-
 
 #endif // __IMAGE_H__

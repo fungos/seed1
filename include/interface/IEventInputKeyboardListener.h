@@ -34,19 +34,15 @@
 	\brief Defines the event keyboard listener class interface
 */
 
-
 #ifndef __IEVENT_INPUT_KEYBOARD_LISTENER_H__
 #define __IEVENT_INPUT_KEYBOARD_LISTENER_H__
-
 
 #include "interface/IEventListener.h"
 #include "EventInputKeyboard.h"
 
-
 namespace Seed {
 
-
-class IEventInputKeyboardListener : public IEventListener
+class SEED_CORE_API IEventInputKeyboardListener : public IEventListener
 {
 	public:
 		IEventInputKeyboardListener();
@@ -59,9 +55,6 @@ class IEventInputKeyboardListener : public IEventListener
 		SEED_DISABLE_COPY(IEventInputKeyboardListener);
 };
 
-
 } // namespace
 
-
 #endif // __IEVENT_INPUT_KEYBOARD_LISTENER_H__
-

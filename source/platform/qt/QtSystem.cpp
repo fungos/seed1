@@ -34,7 +34,7 @@
 	\brief System QT Implementation
 */
 
-#ifdef _QT_
+#if defined(_QT_)
 
 #include "Defines.h"
 #include "System.h"
@@ -222,9 +222,6 @@ INLINE void System::SetWidget(QWidget *widget)
 	pWidget = widget;
 }
 
-
 }} // namespace
 
-
 #endif // _QT_
-

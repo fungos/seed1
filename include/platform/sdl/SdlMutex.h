@@ -34,20 +34,16 @@
 	\brief Mutex
 */
 
-
 #ifndef __SDL_MUTEX_H__
 #define __SDL_MUTEX_H__
 
-
-#ifdef _SDL_
+#if defined(_SDL_)
 
 #include "interface/IMutex.h"
 
-
 namespace Seed { namespace SDL {
 
-
-class Mutex : public IMutex
+class SEED_CORE_API Mutex : public IMutex
 {
 	public:
 		Mutex();
@@ -63,13 +59,9 @@ class Mutex : public IMutex
 		SDL_mutex		*pMutex;
 };
 
-
 }} // namespace
 
-
 #else // _SDL_
-
 	#error "Include 'Mutex.h' instead 'platform/sdl/SdlMutex.h' directly."
-
 #endif // _SDL_
 #endif // __SDL_MUTEX_H__

@@ -37,17 +37,14 @@
 #ifndef __GUI_WIDGET_CONTAINER_H__
 #define __GUI_WIDGET_CONTAINER_H__
 
-
 #include "Array.h"
 #include "../interface/IWidget.h"
 #include "interface/IEventInputPointerListener.h"
 #include <vector>
 
-
 namespace Seed {
 
-
-class WidgetContainer : public IWidget
+class SEED_CORE_API WidgetContainer : public IWidget
 {
 	public:
 		WidgetContainer();
@@ -64,7 +61,6 @@ class WidgetContainer : public IWidget
 		virtual void Remove(IWidget *widget);
 
 		virtual BOOL IsEventConsumed() const;
-
 
 		// ITransformable2D
 		virtual void SetDisabled(BOOL b);
@@ -98,9 +94,6 @@ class WidgetContainer : public IWidget
 		WidgetVector vWidget;
 };
 
-
 } // namespace
 
-
 #endif // __GUI_WIDGET_CONTAINER_H__
-

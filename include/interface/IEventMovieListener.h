@@ -34,23 +34,18 @@
 	\brief Defines the event movie listener class interface
 */
 
-
 #ifndef __IEVENT_MOVIE_LISTENER_H__
 #define __IEVENT_MOVIE_LISTENER_H__
-
 
 #include "interface/IEventListener.h"
 #include "interface/IEvent.h"
 
-
 namespace Seed {
-
 
 class EventMovie;
 class Timeline;
 
-
-class IEventMovieListener : public IEventListener
+class SEED_CORE_API IEventMovieListener : public IEventListener
 {
 	public:
 		IEventMovieListener();
@@ -63,9 +58,6 @@ class IEventMovieListener : public IEventListener
 		SEED_DISABLE_COPY(IEventMovieListener);
 };
 
-
 } // namespace
 
-
 #endif // __IEVENT_MOVIE_LISTENER_H__
-

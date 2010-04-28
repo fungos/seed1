@@ -34,20 +34,17 @@
 	\brief A movie event
 */
 
-
 #ifndef __EVENTMOVIE_H__
 #define __EVENTMOVIE_H__
 
-
 #include "interface/IEvent.h"
-
 
 namespace Seed {
 
 class Timeline;
 class Keyframe;
 
-class EventMovie : public IEvent
+class SEED_CORE_API EventMovie : public IEvent
 {
 	public:
 		EventMovie(const Timeline *timeline, const Keyframe *keyframe, u32 frame);
@@ -69,8 +66,6 @@ class EventMovie : public IEvent
 		SEED_DISABLE_COPY(EventMovie);
 };
 
-
 } // namespace
-
 
 #endif // __EVENTKEYFRAME_H__

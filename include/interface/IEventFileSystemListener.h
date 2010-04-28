@@ -34,21 +34,17 @@
 	\brief Defines the event file system listener class interface
 */
 
-
 #ifndef __IEVENTFILESYSTEMLISTENER_H__
 #define __IEVENTFILESYSTEMLISTENER_H__
 
 #include "IEventListener.h"
 #include "Defines.h"
 
-
 namespace Seed {
-
 
 class EventFileSystem;
 
-
-class IEventFileSystemListener : public IEventListener
+class SEED_CORE_API IEventFileSystemListener : public IEventListener
 {
 	public:
 		IEventFileSystemListener();
@@ -65,9 +61,6 @@ class IEventFileSystemListener : public IEventListener
 		SEED_DISABLE_COPY(IEventFileSystemListener);
 };
 
-
 } // namespace
-
-
 
 #endif // __IEVENTFILESYSTEMLISTENER_H__

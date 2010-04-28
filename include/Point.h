@@ -34,18 +34,16 @@
 	\brief Point utils
 */
 
-
 #ifndef __POINT_H__
 #define __POINT_H__
 
 #include <math.h>
 #include <stdlib.h>
 
-
 namespace Seed {
 
 // was fixed32
-template <class TYPE> class Point
+template <class TYPE> class SEED_CORE_API Point
 {
 	public:
 		TYPE x;
@@ -64,7 +62,7 @@ template <class TYPE> class Point
 			LoadPoint(point);
 		}
 
-		virtual ~Point()
+		~Point()
 		{
 		}
 
@@ -136,7 +134,7 @@ template <class TYPE> class Point
 			return ret;
 		}
 
-		virtual void operator*=(TYPE f)
+		void operator*=(TYPE f)
 		{
 			x *= f;
 			y *= f;
@@ -151,7 +149,7 @@ template <class TYPE> class Point
 			return ret;
 		}
 
-		virtual void operator*=(const Point<TYPE> &point)
+		void operator*=(const Point<TYPE> &point)
 		{
 			x *= point.x;
 			y *= point.y;
@@ -166,7 +164,7 @@ template <class TYPE> class Point
 			return ret;
 		}
 
-		virtual void operator/=(TYPE f)
+		void operator/=(TYPE f)
 		{
 			(*this) *= 1/f;
 		}
@@ -267,9 +265,16 @@ template <class TYPE> class Point
 		}
 };
 
+// Predefined Point2 and Vector2 types
+typedef Point<f32> Vector2f;
+typedef Point<f32> Point2f;
+typedef Point<double> Vector2d;
+typedef Point<double> Point2d;
+typedef Point<u32> Vector2u;
+typedef Point<u32> Point2u;
+typedef Point<s32> Vector2i;
+typedef Point<s32> Point2i;
 
 } // namespace
 
-
 #endif // _POINT_H__
-

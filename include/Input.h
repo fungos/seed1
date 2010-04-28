@@ -37,9 +37,7 @@
 #ifndef __INPUT_H__
 #define __INPUT_H__
 
-
 #include "Config.h"
-
 
 #if defined(_WII_)
 	#include "platform/wii/WiiInput.h"
@@ -60,6 +58,5 @@
 	#include "platform/qt/QtInput.h"
 	using namespace Seed::QT;
 #endif // _QT_
-
 
 #endif // __INPUT_H__

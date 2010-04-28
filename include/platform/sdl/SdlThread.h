@@ -37,18 +37,14 @@
 #ifndef __SDL_THREAD_H__
 #define __SDL_THREAD_H__
 
-
-#ifdef _SDL_
-
+#if defined(_SDL_)
 
 #include "Defines.h"
 #include "interface/IThread.h"
 
-
 namespace Seed { namespace SDL {
 
-
-class Thread : public IThread
+class SEED_CORE_API Thread : public IThread
 {
 	public:
 		Thread();
@@ -67,13 +63,9 @@ class Thread : public IThread
 		SDL_Thread 	*pThread;
 };
 
-
 }} // namespace
 
-
 #else // _SDL_
-
 	#error "Include 'Thread.h' instead 'platform/sdl/SdlThread.h' directly."
-
 #endif // _SDL_
 #endif // __SDL_THREAD_H__

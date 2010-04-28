@@ -43,13 +43,10 @@
 #include "ISoundSource.h"
 #include "../Array.h"
 
-
 #define DEFAULT_FADE_OUT		15
 #define SOUND_MAX_SOURCES		128
 
-
 namespace Seed {
-
 
 class ISound;
 class IMusic;
@@ -58,7 +55,7 @@ class IMusic;
 /**
 Interface for sound implementations.
 */
-class ISoundSystem : public IModule, public IUpdatable
+class SEED_CORE_API ISoundSystem : public IModule, public IUpdatable
 {
 	public:
 		ISoundSystem();
@@ -105,8 +102,6 @@ class ISoundSystem : public IModule, public IUpdatable
 		SEED_DISABLE_COPY(ISoundSystem);
 };
 
-
 } // namespace
-
 
 #endif // __ISOUND_SYSTEM_H__

@@ -37,7 +37,7 @@
 #ifndef __IPH_TIMER_H__
 #define __IPH_TIMER_H__
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 #include "interface/ITimer.h"
 #include <time.h>

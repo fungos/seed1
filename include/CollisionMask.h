@@ -37,20 +37,16 @@
 #ifndef __COLLISION_MASK_H__
 #define __COLLISION_MASK_H__
 
-
 #include "interface/IResource.h"
 #include "MemoryManager.h"
 #include "SeedInit.h"
 #include "File.h"
 
-
 namespace Seed {
-
 
 IResource *CollisionMaskResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 
-
-class CollisionMask : public IResource
+class SEED_CORE_API CollisionMask : public IResource
 {
 	friend IResource *CollisionMaskResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 
@@ -72,8 +68,8 @@ class CollisionMask : public IResource
 	protected:
 		void *operator new(size_t len);
 		void operator delete(void *ptr);
-		void *operator new [](size_t);
-		void operator delete [] (void *);
+		void *operator new[](size_t) { return NULL; };
+		void operator delete[](void *) {};
 
 	private:
 		SEED_DISABLE_COPY(CollisionMask);
@@ -85,8 +81,6 @@ class CollisionMask : public IResource
 		const u8	*pData;
 };
 
-
 } // namespace
-
 
 #endif // __COLLISION_MASK_H__

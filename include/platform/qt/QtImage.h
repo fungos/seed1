@@ -37,7 +37,7 @@
 #ifndef __QT_IMAGE_H__
 #define __QT_IMAGE_H__
 
-#ifdef _QT_
+#if defined(_QT_)
 
 #include "Defines.h"
 #include "File.h"

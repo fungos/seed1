@@ -45,7 +45,6 @@
 
 namespace Seed {
 
-
 enum eMusicState
 {
 	MusicNone,
@@ -63,8 +62,7 @@ enum eMusicState
 	MusicFading
 };
 
-
-class IMusic : public IResource
+class SEED_CORE_API IMusic : public IResource
 {
 	friend class ISoundSystem;
 	public:
@@ -94,8 +92,8 @@ class IMusic : public IResource
 
 		void *operator new(size_t len);
 		void operator delete(void *ptr);
-		void *operator new [](size_t);
-		void operator delete [] (void *);
+		void *operator new[](size_t) { return NULL; };
+		void operator delete[](void *) {};
 
 	protected:
 		f32					fVolume;
@@ -105,7 +103,6 @@ class IMusic : public IResource
 	private:
 		SEED_DISABLE_COPY(IMusic);
 };
-
 
 } // namespace
 

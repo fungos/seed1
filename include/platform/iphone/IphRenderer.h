@@ -37,7 +37,7 @@
 #ifndef __IPH_RENDERER_H__
 #define __IPH_RENDERER_H__
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 #include "interface/IRenderer.h"
 #include <vector>

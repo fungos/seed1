@@ -34,10 +34,8 @@
 	\brief Package system
 */
 
-
 #ifndef __PACKAGE_H__
 #define __PACKAGE_H__
-
 
 #include "Base.h"
 #include "interface/IResource.h"
@@ -45,20 +43,16 @@
 #include "File.h"
 #include "SeedInit.h"
 
-
 #include <map>
 
-
 namespace Seed {
-
 
 class ResourceManager;
 class IResource;
 
 IResource *PackageResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 
-
-class Package : public IResource
+class SEED_CORE_API Package : public IResource
 {
 	friend IResource *PackageResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 	friend class PackageManager;
@@ -85,8 +79,8 @@ class Package : public IResource
 
 		void *operator new(size_t len);
 		void operator delete(void *ptr);
-		void *operator new [](size_t);
-		void operator delete [](void *);
+		void *operator new[](size_t) { return NULL; };
+		void operator delete[](void *) {};
 
 	private:
 		Package();
@@ -97,9 +91,7 @@ class Package : public IResource
 		u32					iFilesAmount;
 };
 
-
 } // namespace
-
 
 #endif // __PACKAGE_H__
 

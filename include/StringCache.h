@@ -34,10 +34,8 @@
 	\brief Static String Cache
 */
 
-
 #ifndef __STRING_CACHE_H__
 #define __STRING_CACHE_H__
-
 
 #include "interface/IModule.h"
 #include "Base.h"
@@ -49,15 +47,13 @@
 
 #define _S(x)	pStringCache->GetStringById(x)
 
-
 namespace Seed {
-
 
 /// StringCache
 /**
 Static string cache
 */
-class StringCache : public IModule
+class SEED_CORE_API StringCache : public IModule
 {
 	public:
 		StringCache();
@@ -92,11 +88,8 @@ class StringCache : public IModule
 		CachedString	*pStringTable;
 };
 
-
 StringCache *const pStringCache = &StringCache::instance;
 
-
 } // namespace
-
 
 #endif // __STRING_CACHE_H__

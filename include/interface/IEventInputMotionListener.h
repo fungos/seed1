@@ -35,19 +35,15 @@
 	\brief Defines the event motion listener class interface
 */
 
-
 #ifndef __IEVENT_INPUT_MOTION_LISTENER_H__
 #define __IEVENT_INPUT_MOTION_LISTENER_H__
-
 
 #include "interface/IEventListener.h"
 #include "EventInputMotion.h"
 
-
 namespace Seed {
 
-
-class IEventInputMotionListener : public IEventListener
+class SEED_CORE_API IEventInputMotionListener : public IEventListener
 {
 	public:
 		IEventInputMotionListener();
@@ -59,9 +55,6 @@ class IEventInputMotionListener : public IEventListener
 		SEED_DISABLE_COPY(IEventInputMotionListener);
 };
 
-
 } // namespace
 
-
 #endif // __IEVENT_INPUT_POINTER_LISTENER_H__
-

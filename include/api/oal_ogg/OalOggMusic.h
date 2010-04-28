@@ -34,21 +34,18 @@
 	\brief Music Implementation for OpenAL + Ogg
 */
 
-
 #ifndef __OAL_OGG_MUSIC_H__
 #define __OAL_OGG_MUSIC_H__
 
-
 #include "Defines.h"
 
-#ifdef _OAL_OGG_
+#if defined(_OAL_OGG_)
 
 #include "File.h"
 #include "interface/IMusic.h"
 #include "SeedInit.h"
 #include "Sound.h"
 #include "api/oal_ogg/vorbis_util.h"
-
 
 #if defined(__APPLE_CC__)
 #include <OpenAL/al.h>
@@ -62,11 +59,9 @@
 
 namespace Seed { namespace OAL {
 
-
 IResource *MusicResourceLoader(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
 
-
-class Music : public IMusic
+class SEED_CORE_API Music : public IMusic
 {
 	friend IResource *MusicResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 	friend class SoundSystem;
@@ -108,13 +103,9 @@ class Music : public IMusic
 		File			stFile;
 };
 
-
 }} // namespace
 
-
 #else // _OAL_OGG_
-
 	#error "Include 'Music.h' instead 'api/oal_ogg/OalOggMusic.h' directly."
-
 #endif // _OAL_OGG_
 #endif // __OAL_OGG_MUSIC_H__

@@ -37,15 +37,12 @@
 #ifndef __KEYFRAME_H__
 #define __KEYFRAME_H__
 
-
 #include "Defines.h"
 #include "Point.h"
 
-
 namespace Seed {
 
-
-class Keyframe
+class SEED_CORE_API Keyframe
 {
 	public:
 		enum
@@ -84,8 +81,6 @@ class Keyframe
 		SEED_DISABLE_COPY(Keyframe);
 };
 
-
 } // namespace
-
 
 #endif // __KEYFRAME_H__

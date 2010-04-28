@@ -34,19 +34,15 @@
 	\brief Mutex
 */
 
-
 #ifndef __QT_MUTEX_H__
 #define __QT_MUTEX_H__
 
-
-#ifdef _QT_
+#if defined(_QT_)
 
 #include "interface/IMutex.h"
 #include <QMutex>
 
-
 namespace Seed { namespace QT {
-
 
 class Mutex : public IMutex
 {
@@ -62,16 +58,12 @@ class Mutex : public IMutex
 		SEED_DISABLE_COPY(Mutex);
 
 	private:
-		QMutex	 mutex;
+		QMutex	mutex;
 };
-
 
 }} // namespace
 
-
 #else // _QT_
-
 	#error "Include 'Mutex.h' instead 'platform/qt/QtMutex.h' directly."
-
 #endif // _QT_
 #endif // __QT_MUTEX_H__

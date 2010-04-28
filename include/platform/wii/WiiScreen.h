@@ -39,7 +39,7 @@
 
 #include "Defines.h"
 
-#ifdef _WII_
+#if defined(_WII_)
 
 #include "interface/IScreen.h"
 #include "interface/IRenderer.h"
@@ -95,7 +95,7 @@ class Screen : public IScreen
 		void DestroyHardwareSurfaces();
 		void ApplyFade();
 
-#ifdef DEBUG
+#if defined(DEBUG)
 		void PrintVideoMode();
 #endif // DEBUG
 

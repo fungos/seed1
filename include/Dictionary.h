@@ -48,15 +48,12 @@
 #include "MemoryManager.h"
 #include "Enum.h"
 
-
 #define _(id)			pDictionary->GetString(id)
 #define _2(id, len)		pDictionary->GetString(id, len)
 
-
 namespace Seed {
 
-
-class Dictionary : public IModule, public IEventSystemListener
+class SEED_CORE_API Dictionary : public IModule, public IEventSystemListener
 {
 	public:
 		Dictionary();
@@ -96,11 +93,8 @@ class Dictionary : public IModule, public IEventSystemListener
 		const u16	*pStrings;
 };
 
-
 Dictionary *const pDictionary = &Dictionary::instance;
 
-
 } // namespace
-
 
 #endif // __DICTIONARY_H__

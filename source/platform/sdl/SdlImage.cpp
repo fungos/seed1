@@ -34,8 +34,7 @@
 	\brief Image SDL Implementation
 */
 
-
-#ifdef _SDL_
+#if defined(_SDL_)
 
 #include "Image.h"
 #include "FileSystem.h"
@@ -46,9 +45,7 @@
 
 #define TAG "[Image] "
 
-
 namespace Seed { namespace SDL {
-
 
 const char *const pImageFormatTable[] = {"TGA", "PNG", "JPG"};
 enum eImageFormat
@@ -161,12 +158,15 @@ BOOL Image::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 			iWidth	= pSurface->w;
 			iHeight = pSurface->h;
 
+			/*
+			If the image isn't power of two, we need fix it.
+			*/
 			u32 width = 1;
-			while (width < iWidth) 
+			while (width < iWidth)
 				width *= 2;
 
 			u32 height = 1;
-			while (height < iHeight) 
+			while (height < iHeight)
 				height *= 2;
 
 			if (width != iWidth || height != iHeight)
@@ -200,10 +200,13 @@ BOOL Image::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 				pSurface = pTempSurface;
 			}
 
-			iWidth = pSurface->w;
-			iHeight = pSurface->h;
 			fWidth = (f32)iWidth / (f32)pScreen->GetWidth();
 			fHeight = (f32)iHeight / (f32)pScreen->GetHeight();
+
+			// Lets keep the iWidth and iHeight the original one so the sprite rect can match it.
+			// For texture UV mapping, we use the relation between original W and H and the converted texture W and H.
+			//iWidth = pSurface->w;
+			//iHeight = pSurface->h;
 
 			iBytesPerPixel = pSurface->format->BytesPerPixel;
 			iPitch = pSurface->pitch;
@@ -280,6 +283,16 @@ BOOL Image::Unload()
 INLINE const void *Image::GetData() const
 {
 	return pData;
+}
+
+INLINE u32 Image::GetAtlasWidthInPixel() const
+{
+	return pSurface->w;
+}
+
+INLINE u32 Image::GetAtlasHeightInPixel() const
+{
+	return pSurface->h;
 }
 
 INLINE void Image::PutPixel(u32 x, u32 y, PIXEL px)
@@ -493,8 +506,6 @@ INLINE void Image::UnloadTexture()
 	iTextureId = 0;
 }
 
-
 }} // namespace
-
 
 #endif // _SDL_

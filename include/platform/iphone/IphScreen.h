@@ -37,7 +37,7 @@
 #ifndef __IPH_SCREEN_H__
 #define __IPH_SCREEN_H__
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 #include "interface/IScreen.h"
 #include "interface/IRenderer2D.h"

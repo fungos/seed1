@@ -37,9 +37,7 @@
 #ifndef __SCREEN_H__
 #define __SCREEN_H__
 
-
 #include "Config.h"
-
 
 #if defined(_WII_)
 	#include "platform/wii/WiiScreen.h"
@@ -60,6 +58,5 @@
 	#include "platform/qt/QtScreen.h"
 	using namespace Seed::QT;
 #endif // _QT_
-
 
 #endif // __SCREEN_H__

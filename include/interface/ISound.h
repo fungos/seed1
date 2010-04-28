@@ -37,17 +37,14 @@
 #ifndef __ISOUND_H__
 #define __ISOUND_H__
 
-
 #include "SeedInit.h"
 #include "IResource.h"
 #include "MemoryManager.h"
 #include "ResourceManager.h"
 
-
 namespace Seed {
 
-
-class ISound : public IResource
+class SEED_CORE_API ISound : public IResource
 {
 	public:
 		ISound();
@@ -66,13 +63,12 @@ class ISound : public IResource
 	protected:
 		void *operator new(size_t len);
 		void operator delete(void *ptr);
-		void *operator new [](size_t);
-		void operator delete [] (void *);
+		void *operator new[](size_t) { return NULL; };
+		void operator delete[](void *) {};
 
 	private:
 		SEED_DISABLE_COPY(ISound);
 };
-
 
 } // namespace
 

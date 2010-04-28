@@ -37,14 +37,12 @@
 #ifndef __QT_SYSTEM_H__
 #define __QT_SYSTEM_H__
 
-#ifdef _QT_
+#if defined(_QT_)
 
 #include <QWidget>
 #include "interface/ISystem.h"
 
-
 namespace Seed { namespace QT {
-
 
 class System : public ISystem
 {
@@ -104,13 +102,9 @@ class System : public ISystem
 
 System *const pSystem = &System::instance;
 
-
 }} // namespace
 
-
 #else // _QT_
-
 	#error "Include 'System.h' instead 'platform/qt/QtSystem.h' directly."
-
 #endif // _QT_
 #endif // __QT_SYSTEM_H__

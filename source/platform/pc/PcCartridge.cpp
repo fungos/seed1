@@ -36,7 +36,7 @@
 
 #include "Cartridge.h"
 
-#ifdef _PC_
+#if defined(_PC_)
 
 #include "Log.h"
 #include "MemoryManager.h"
@@ -46,9 +46,7 @@
 
 #define TAG "[Cartridge] "
 
-
 namespace Seed { namespace PC {
-
 
 Cartridge Cartridge::instance;
 
@@ -361,8 +359,6 @@ BOOL Cartridge::CreateSaveFile()
 	return TRUE;
 }
 
-
 }} // namespace
-
 
 #endif // _PC_

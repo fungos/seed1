@@ -39,15 +39,13 @@
 
 #include "IModule.h"
 
-
 namespace Seed {
-
 
 /// Timer Interface
 /**
 Interface for working with Ticks and Milliseconds
 */
-class ITimer : public IModule
+class SEED_CORE_API ITimer : public IModule
 {
 	public:
 		ITimer();
@@ -68,9 +66,6 @@ class ITimer : public IModule
 		SEED_DISABLE_COPY(ITimer);
 };
 
-
 } // namespace
 
-
 #endif // __ITIMER_H__
-

@@ -34,14 +34,13 @@
 	\brief Log Iphone Implementation
 */
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 #include "Defines.h"
 #include "Log.h"
 #include <stdio.h>
 
 #include <UIKit/UIKit.h>
-
 
 void Info(const char *pMessage, ...)
 {
@@ -55,7 +54,7 @@ void Info(const char *pMessage, ...)
 	fprintf(stdout, "%s\n", t);
 }
 
-#ifdef DEBUG
+#if defined(DEBUG)
 
 #define HALT	do {} while (1);
 

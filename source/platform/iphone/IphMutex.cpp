@@ -34,7 +34,7 @@
 	\brief Mutex
 */
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 #include "IphMutex.h"
 

@@ -34,10 +34,8 @@
 	\brief Defines the File System class interface
 */
 
-
 #ifndef __IFILESYSTEM_H__
 #define __IFILESYSTEM_H__
-
 
 #include "IModule.h"
 #include "MemoryManager.h"
@@ -50,9 +48,7 @@
 
 #define _F(x)	pFileSystem->GetFileNameById(x)
 
-
 namespace Seed {
-
 
 class File;
 class EventFileSystem;
@@ -60,12 +56,11 @@ class IMemoryPool;
 class PackageManager;
 class IEventFileSystemListener;
 
-
 /// FileSystem Interface
 /**
 Any FileSystem implementation must implement this interface.
 */
-class IFileSystem : public IModule, public IEventSystemListener
+class SEED_CORE_API IFileSystem : public IModule, public IEventSystemListener
 {
 	typedef std::vector<IEventFileSystemListener *> 	ListenerVector;
 	typedef ListenerVector::iterator			  		ListenerIterator;
@@ -130,8 +125,6 @@ class IFileSystem : public IModule, public IEventSystemListener
 		StringFile	*pOldTable;
 };
 
-
 } // namespace
-
 
 #endif // __IFILESYSTEM_H__

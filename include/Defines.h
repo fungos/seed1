@@ -41,16 +41,17 @@
 
 /*
 Compiler specific pragmas here
+
+About warning 4251 - DLL export for templatized classes (std and others)
+http://www.unknownroad.com/rtfm/VisualStudio/warningC4251.html
 */
 #if defined(_MSC_VER)
 #pragma warning(disable:4127) // conditional expression is constant
 #pragma warning(disable:4201) // anonymous union
 #pragma warning(disable:4530)
 #pragma warning(disable:4996) // _CRT_SECURE_NO_WARNINGS
+#pragma warning(disable:4251) // stl + dll
 #endif
-#if defined(__MWERKS__)
-#pragma warning off (10342)
-#endif // __MWERKS__
 
 #if defined(_WII_)
 	#include "platform/wii/WiiDefines.h"
@@ -67,6 +68,19 @@ Compiler specific pragmas here
 		#endif // IPHONE
 	#endif // SDL
 #endif // WII
+
+
+#ifndef SEED_CORE_API
+#define SEED_CORE_API
+#endif
+
+#ifndef SEED_PLATFORM_API
+#define SEED_PLATFORM_API
+#endif
+
+#ifndef SEED_EXTRA_API
+#define SEED_EXTRA_API
+#endif
 
 #define STRING_LENGTH					LIB_STRLEN
 #define SIZE_T							LIB_SIZE_T
@@ -121,8 +135,7 @@ Compiler specific pragmas here
 
 
 // Debugging
-#ifdef DEBUG
-
+#if defined(DEBUG)
 	#ifndef ASSERT
 	#define ASSERT							LIB_ASSERT
 	#endif // ASSERT
@@ -220,12 +233,10 @@ typedef u16  WideChar;
 #define WideString 	u16*
 #define WideChar	u16
 
-#ifdef DEBUG
+#if defined(DEBUG)
 #define DEBUG_RECT(x, y, w, h, c) static_cast<Renderer2D *>(Seed::Private::pRenderer)->DrawRect(x, y, w, h, c);
 #else
 #define DEBUG_RECT(x, y, w, h, c)
 #endif
 
-
 #endif // __SEED_DEFINES_H__
-

@@ -34,7 +34,6 @@
 	\brief Defines the resource group class
 */
 
-
 #ifndef __RESOURCEGROUP_H__
 #define __RESOURCEGROUP_H__
 
@@ -50,14 +49,11 @@
 #include <vector>
 #include <algorithm>
 
-
 namespace Seed {
 
-
-class ResourceGroup
+class SEED_CORE_API ResourceGroup
 {
 	friend class ResourceLoader;
-
 
 	public:
 		ResourceGroup();
@@ -65,9 +61,8 @@ class ResourceGroup
 
 		void Add(const char *filename, Seed::eObjectType resourceType = Seed::ObjectSprite, IMemoryPool *pool = pDefaultPool, ResourceManager *res = &glResourceManager);
 
-
 	protected:
-		typedef struct QueueItem
+		typedef struct SEED_CORE_API QueueItem
 		{
 			const char 			*filename;
 			IResource			*resource;
@@ -88,18 +83,14 @@ class ResourceGroup
 		void SetLoaded();
 		BOOL IsLoaded() const;
 
-
 	protected:
 		QueueVector		queue;
 		BOOL			bLoaded;
-
 
 	private:
 		SEED_DISABLE_COPY(ResourceGroup);
 };
 
-
 } // namespace
-
 
 #endif // __RESOURCEGROUP_H__

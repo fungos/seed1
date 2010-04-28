@@ -40,19 +40,16 @@
 #include "interface/IInput.h"
 #include "Array.h"
 
-
 namespace Seed {
-
 
 class EventInputPointer;
 class IEventInputPointerListener;
-
 
 /// Pointer Input Interface
 /**
 Platforms that support Pointer (mouse like) input must implement this interface.
 */
-class IInputPointer
+class SEED_CORE_API IInputPointer
 {
 	public:
 		IInputPointer();
@@ -93,9 +90,6 @@ class IInputPointer
 		SEED_DISABLE_COPY(IInputPointer);
 };
 
-
 } // namespace
 
-
 #endif // __IINPUT_POINTER_H__
-

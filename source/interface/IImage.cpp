@@ -92,6 +92,16 @@ INLINE u8 IImage::GetPixelAlpha(u32 x, u32 y) const
 	return 0;
 }
 
+INLINE u32 IImage::GetAtlasWidthInPixel() const
+{
+	return iWidth;
+}
+
+INLINE u32 IImage::GetAtlasHeightInPixel() const
+{
+	return iHeight;
+}
+
 INLINE u32 IImage::GetWidthInPixel() const
 {
 	return iWidth;

@@ -37,11 +37,9 @@
 #ifndef __NUMBER_H__
 #define __NUMBER_H__
 
-
 namespace Seed {
 
-
-class Number
+class SEED_CORE_API Number
 {
 	public:
 		static u32 Floor(f32 number)
@@ -71,9 +69,7 @@ class Number
 		}
 };
 
-
 } // namespace
-
 
 #endif // __NUMBER_H__
 

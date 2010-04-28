@@ -46,11 +46,9 @@
 
 #define FILESYSTEM_DEFAULT_PATH	"data/"
 
-
 namespace Seed { namespace PC {
 
-
-class FileSystem : public IFileSystem
+class SEED_CORE_API FileSystem : public IFileSystem
 {
 	public:
 		FileSystem();
@@ -79,16 +77,13 @@ class FileSystem : public IFileSystem
 		u32 iLastLength;
 };
 
-FileSystem *const pFileSystem = &FileSystem::instance;
-
+extern "C" {
+SEED_CORE_API extern FileSystem *const pFileSystem;
+}
 
 }} // namespace
 
-
 #else // _PC_
-
 	#error "Include 'FileSystem.h' instead 'platform/pc/PcFileSystem.h' directly."
-
 #endif // _PC_
 #endif // __PC_FILESYSTEM_H__
-

@@ -47,8 +47,7 @@ FIXME: 2009-06-25 | WISH | CORE | Utilizar Point para storage dos dados | Danny 
 
 namespace Seed {
 
-
-class ITransformable2D : public IRenderable
+class SEED_CORE_API ITransformable2D : public IRenderable
 {
 	public:
 		ITransformable2D();
@@ -147,8 +146,6 @@ class ITransformable2D : public IRenderable
 		SEED_DISABLE_COPY(ITransformable2D);
 };
 
-
 } // namespace
-
 
 #endif // __ITRANSFORMABLE2D_H__

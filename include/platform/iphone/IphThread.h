@@ -37,7 +37,7 @@
 #ifndef __IPH_THREAD_H__
 #define __IPH_THREAD_H__
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 #include "Defines.h"
 #include "interface/IThread.h"

@@ -37,12 +37,14 @@
 #ifndef __SEED_INIT_H__
 #define __SEED_INIT_H__
 
-
 #include "ResourceManager.h"
 #include "StringPool.h"
 #include "interface/IGameApp.h"
 #include "interface/IInput.h"
 #include "interface/IRenderer.h"
+#include "Timer.h"
+
+extern "C" {
 
 /// Seed SDK base namespace
 /**
@@ -50,11 +52,11 @@ Everything from Seed SDK will be inside Seed namespace.
 */
 namespace Seed {
 
-	extern ResourceManager glResourceManager;
-	extern const Configuration *pConfiguration;
+	SEED_CORE_API extern ResourceManager glResourceManager;
+	SEED_CORE_API extern const Configuration *pConfiguration;
 
 	#if SEED_USE_STRING_POOL == 1
-	extern StringPoolManager<u16> glStringPool;
+	SEED_CORE_API extern StringPoolManager<u16> glStringPool;
 	#endif // SEED_USE_STRING_POOL
 
 	/// Set the Game Application main class.
@@ -66,7 +68,7 @@ namespace Seed {
 	\param argc Command line argument count.
 	\param argv A pointer to the command line arguments.
  	*/
-	void SetGameApp(IGameApp *app, int argc, char **argv);
+	SEED_CORE_API void SetGameApp(IGameApp *app, int argc, char **argv);
 
 	/// Set which IRenderer to use.
 	/**
@@ -75,7 +77,7 @@ namespace Seed {
 
 	\param renderer A pointer to the IRenderer that you instantiated.
  	*/
-	void SetRenderer(IRenderer *renderer);
+	SEED_CORE_API void SetRenderer(IRenderer *renderer);
 
 	/// Displays a output message by using IGameApp::WriteOut implementation.
 	/**
@@ -84,60 +86,60 @@ namespace Seed {
 
 	\param msg Pointer to a string to be displayed.
  	*/
-	void WriteOut(const char *msg);
+	SEED_CORE_API void WriteOut(const char *msg);
 
 	/// Displays a error message by using IGameApp::WriteErr implementation.
 	/**
  	This method is a channeling point to all error messages that Seed will use. If you do not override IGameApp::WriteErr, it
 	will use the default stderr output pipe.
  	*/
-	void WriteErr(const char *msg);
+	SEED_CORE_API void WriteErr(const char *msg);
 
 	/// Initialize Seed
 	/**
  	This will initialize all Seed states and subsystems and must be called before anything and after Seed::SetGameApp.
  	*/
-	BOOL Initialize();
+	SEED_CORE_API BOOL Initialize();
 
 	/// Update Seed
 	/**
  	Will update all Seed states and subsystems and will be called once per tick until a shutdown or error happens.
  	*/
-	void Update();
+	SEED_CORE_API void Update();
 
 	/// Render
 	/**
  	Renders the game state and will be called once per frame.
  	*/
-	void Render(f32 delta);
+	SEED_CORE_API void Render(f32 delta);
 
 	/// Shutdown Seed
 	/**
  	Will reset all Seed states and shutdown all subsystems. Nothing more from Seed can be used until a new Initialize happens.
  	*/
-	void Shutdown();
+	SEED_CORE_API void Shutdown();
 
 
 	/// Private states that Seed maintain, must not be accessed directly.
 	namespace Private
 	{
 		/// A pointer to the IGameApp implementation.
-		extern IGameApp	*pApplication;
+		SEED_CORE_API extern IGameApp	*pApplication;
 
 		/// A pointer to the user IRenderer so Seed can query for informations and do operations with it.
-		extern IRenderer	*pRenderer;
+		SEED_CORE_API extern IRenderer	*pRenderer;
 
 		/// Flag indicating that Seed is Initialized or not.
-		extern BOOL		bInitialized;
+		SEED_CORE_API extern BOOL		bInitialized;
 
 		/// Command line argument count.
-		extern int		iArgc;
+		SEED_CORE_API extern int		iArgc;
 		
 		/// Command line command string.
-		extern char		**pcArgv;
+		SEED_CORE_API extern char		**pcArgv;
 
 		/// Last frame time
-		extern f32 fCurrentTime;
+		SEED_CORE_API extern f32 fCurrentTime;
 	} // namespace
 
 	/// iPhone platform related implementation using iPhoneOS SDK
@@ -161,5 +163,6 @@ namespace Seed {
 	} // namespace
 } // namespace
 
+} // extern C
 
 #endif // __SEED_INIT_H__

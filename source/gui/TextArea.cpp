@@ -94,7 +94,7 @@ void TextArea::Reset()
 	this->iLines			= 0;
 	this->eHAlign 			= HorizontalAlignLeft;
 	this->eVAlign 			= VerticalAlignTop;
-	this->eBlendOperation	= IRenderable::NONE;
+	this->eBlendOperation	= Seed::BlendNone;
 
 	this->pLines			= NULL;
 

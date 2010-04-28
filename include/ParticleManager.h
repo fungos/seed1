@@ -37,11 +37,9 @@
 #ifndef __PARTICLE_MANAGER_H__
 #define __PARTICLE_MANAGER_H__
 
-
 #include "interface/IModule.h"
 #include "interface/IUpdatable.h"
 #include "Array.h"
-
 
 #define MAX_PARTICLE_EMITTERS	128
 
@@ -49,7 +47,7 @@ namespace Seed {
 
 class ParticleEmitter;
 
-class ParticleManager : public IModule, public IUpdatable
+class SEED_CORE_API ParticleManager : public IModule, public IUpdatable
 {
 	public:
 		static ParticleManager instance;
@@ -99,12 +97,8 @@ class ParticleManager : public IModule, public IUpdatable
 		BOOL	bStopped;
 };
 
-
 ParticleManager *const pParticleManager = &ParticleManager::instance;
-
 
 } // namespace
 
-
 #endif // __PARTICLE_MANAGER_H__
-

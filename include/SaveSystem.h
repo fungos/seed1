@@ -37,20 +37,16 @@
 #ifndef __SAVESYSTEM_H__
 #define __SAVESYSTEM_H__
 
-
 #include "Cartridge.h"
-
 
 #define SAVESYSTEM_SLOT_UNUSED		(255)
 
-
 namespace Seed {
 
-
-class SaveSystem
+class SEED_CORE_API SaveSystem
 {
 	public:
-		struct sSaveInfo
+		struct SEED_CORE_API sSaveInfo
 		{
 			u32 iID;
 			u32 iLastSlot;
@@ -109,8 +105,6 @@ class SaveSystem
 
 SaveSystem *const pSaveSystem = &SaveSystem::instance;
 
-
 } // namespace
 
 #endif // __SAVESYSTEM_H__
-

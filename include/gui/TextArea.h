@@ -41,11 +41,9 @@
 #include "Text.h"
 #include "GuiManager.h"
 
-
 namespace Seed {
 
-
-class TextArea : public IWidget
+class SEED_CORE_API TextArea : public IWidget
 {
 	public:
 		TextArea();
@@ -85,7 +83,7 @@ class TextArea : public IWidget
 		virtual void RebuildPosY(u32 usedLines);
 
 	protected:
-		struct sLineInfo
+		struct SEED_CORE_API sLineInfo
 		{
 			public:
 				sLineInfo():fPosX(0.0f), fPosY(0.0f), iIndex(0), iSize(0){};
@@ -116,9 +114,6 @@ class TextArea : public IWidget
 		BOOL		bAutoAdjust;
 };
 
-
 } // namespace
 
-
 #endif // __GUI_TEXTAREA_H__
-

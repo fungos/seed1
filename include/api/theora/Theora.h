@@ -68,7 +68,7 @@
 	typedef void*				semaphore;
 #elif defined(WIN32)
 	#include <windows.h>
-	#define SEM_CREATE(p,s) (!(p = CreateSemaphore(NULL, (long)(s), (long)(s), NULL)))
+	#define SEM_CREATE(p,s) ((p = CreateSemaphore(NULL, (long)(s), (long)(s), NULL)) == 0)
 	#define SEM_SIGNAL(p)   (!ReleaseSemaphore(p, 1, NULL))
 	#define SEM_WAIT(p)     WaitForSingleObject(p, INFINITE)
 	#define SEM_CLOSE(p)    (!CloseHandle(p))
@@ -93,7 +93,7 @@
 
 namespace Seed {
 
-class Theora : /*public IVideo,*/ public IRenderable, public Thread
+class SEED_CORE_API Theora : /*public IVideo,*/ public IRenderable, public Thread
 {
 	public:
 		Theora();

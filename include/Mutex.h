@@ -37,9 +37,7 @@
 #ifndef __MUTEX_H__
 #define __MUTEX_H__
 
-
 #include "Config.h"
-
 
 #if defined(_WII_)
 	#include "platform/wii/WiiMutex.h"
@@ -60,6 +58,5 @@
 	#include "platform/qt/QtMutex.h"
 	using namespace Seed::QT;
 #endif // _QT_
-
 
 #endif // __MUTEX_H__

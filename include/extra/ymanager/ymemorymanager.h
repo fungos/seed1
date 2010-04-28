@@ -13,7 +13,7 @@ Description:
 #include "Defines.h"
 #include "ydefines.h"
 
-class YMemoryManager
+class SEED_CORE_API YMemoryManager
 {
 	friend YMemoryManager *ycreate(unsigned long size);
 	friend void ydestroy(YMemoryManager *mm);

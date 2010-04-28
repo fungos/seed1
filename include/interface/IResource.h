@@ -37,19 +37,15 @@
 #ifndef __IRESOURCE_H__
 #define __IRESOURCE_H__
 
-
 #include "Defines.h"
 #include "IObject.h"
 
-
 namespace Seed {
-
 
 class ResourceManager;
 class IMemoryPool;
 
-
-class IResource : public IObject
+class SEED_CORE_API IResource : public IObject
 {
 	friend class ResourceManager;
 
@@ -86,9 +82,6 @@ class IResource : public IObject
 		u32				iRefCount;
 };
 
-
 } // namespace
 
-
 #endif // __IRESOURCE_H__
-

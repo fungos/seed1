@@ -37,15 +37,12 @@
 #ifndef __EVENT_INPUT_KEYBOARD_H__
 #define __EVENT_INPUT_KEYBOARD_H__
 
-
 #include "interface/IEventInput.h"
 #include "Key.h"
 
-
 namespace Seed {
 
-
-class EventInputKeyboard : public IEventInput
+class SEED_CORE_API EventInputKeyboard : public IEventInput
 {
 	public:
 		EventInputKeyboard(u32 key, u32 modifier, u32 scan, u32 keyboard = 0);
@@ -110,9 +107,6 @@ class EventInputKeyboard : public IEventInput
 		SEED_DISABLE_COPY(EventInputKeyboard);
 };
 
-
 } // namespace
 
-
 #endif // __EVENT_INPUT_KEYBOARD_H__
-

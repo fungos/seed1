@@ -40,14 +40,11 @@
 #include "Formats.h"
 #include "Log.h"
 
-
 #define TAG		"[Package] "
-
 
 namespace Seed {
 
-
-struct PackageFSTable
+struct SEED_CORE_API PackageFSTable
 {
 	u32 offset;
 	u32 fileSize;
@@ -195,6 +192,5 @@ void Package::operator delete(void *ptr)
 {
 	pMemoryManager->Free(ptr, pDefaultPool);
 }
-
 
 } // namespace

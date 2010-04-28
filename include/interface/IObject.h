@@ -37,18 +37,15 @@
 #ifndef __IOBJECT_H__
 #define __IOBJECT_H__
 
-
 #include "Defines.h"
 
-
 namespace Seed {
-
 
 /// Object Interface
 /**
 Interface for basic object
 */
-class IObject
+class SEED_CORE_API IObject
 {
 	public:
 		IObject();
@@ -61,8 +58,6 @@ class IObject
 		SEED_DISABLE_COPY(IObject);
 };
 
-
 } // namespace
-
 
 #endif // __IOBJECT_H__

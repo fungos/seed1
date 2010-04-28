@@ -37,7 +37,6 @@
 #ifndef __GUI_MANAGER_H__
 #define __GUI_MANAGER_H__
 
-
 #include "Defines.h"
 #include "interface/IWidget.h"
 #include "interface/IObject.h"
@@ -46,11 +45,9 @@
 #include "interface/IEventInputPointerListener.h"
 #include "WidgetContainer.h"
 
-
 namespace Seed {
 
-
-class GuiManager : public IModule, public IUpdatable, public IEventInputPointerListener
+class SEED_CORE_API GuiManager : public IModule, public IUpdatable, public IEventInputPointerListener
 {
 	public:
 		static GuiManager instance;
@@ -92,9 +89,6 @@ class GuiManager : public IModule, public IUpdatable, public IEventInputPointerL
 
 GuiManager *const pGuiManager = &GuiManager::instance;
 
-
 } // namespace
 
-
 #endif // __GUI_MANAGER_H__
-

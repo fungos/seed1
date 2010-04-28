@@ -34,18 +34,14 @@
 	\brief A file system event
 */
 
-
 #ifndef __EVENT_FILESYSTEM_H__
 #define __EVENT_FILESYSTEM_H__
 
-
 #include "interface/IEvent.h"
-
 
 namespace Seed {
 
-
-class EventFileSystem : public IEvent
+class SEED_CORE_API EventFileSystem : public IEvent
 {
 	public:
 		EventFileSystem();
@@ -63,8 +59,6 @@ class EventFileSystem : public IEvent
 		SEED_DISABLE_COPY(EventFileSystem);
 };
 
-
 } // namespace
-
 
 #endif // __EVENT_FILESYSTEM_H__

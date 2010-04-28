@@ -37,15 +37,13 @@
 #ifndef __SDL_SYSTEM_H__
 #define __SDL_SYSTEM_H__
 
-#ifdef _SDL_
+#if defined(_SDL_)
 
 #include "interface/ISystem.h"
 
-
 namespace Seed { namespace SDL {
 
-
-class System : public ISystem
+class SEED_CORE_API System : public ISystem
 {
 	public:
 		System();
@@ -104,15 +102,13 @@ class System : public ISystem
 		u64 		iFpsTime;
 };
 
-System *const pSystem = &System::instance;
-
+extern "C" {
+SEED_CORE_API extern System *const pSystem;
+}
 
 }} // namespace
 
-
 #else // _SDL_
-
 	#error "Include 'System.h' instead 'platform/sdl/SdlSystem.h' directly."
-
 #endif // _SDL_
 #endif // __SDL_SYSTEM_H__

@@ -37,9 +37,7 @@
 #ifndef __CARTRIDGE_H__
 #define __CARTRIDGE_H__
 
-
 #include "Config.h"
-
 
 #if defined(_WII_)
 	#include "platform/wii/WiiCartridge.h"
@@ -50,6 +48,5 @@
 	#include "platform/pc/PcCartridge.h"
 	using namespace Seed::PC;
 #endif // _SDL_
-
 
 #endif // __CARTRIDGE_H__

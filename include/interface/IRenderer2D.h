@@ -37,14 +37,11 @@
 #ifndef __IRENDERER2D_H__
 #define __IRENDERER2D_H__
 
-
 #include "Defines.h"
-
 
 namespace Seed {
 
-
-class IRenderer2D
+class SEED_CORE_API IRenderer2D
 {
 	public:
 		IRenderer2D();
@@ -57,8 +54,6 @@ class IRenderer2D
 		SEED_DISABLE_COPY(IRenderer2D);
 };
 
-
 } // namespace
-
 
 #endif // __IRENDERER2D_H__

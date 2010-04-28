@@ -34,8 +34,7 @@
 	\brief Screen QT implementation
 */
 
-
-#ifdef _QT_
+#if defined(_QT_)
 
 #include "Defines.h"
 #include "Screen.h"
@@ -44,16 +43,14 @@
 #include "MemoryManager.h"
 
 /*
-#ifndef GL_MULTISAMPLE
+##if !defined(GL_MULTISAMPLE)
 #define GL_MULTISAMPLE  0x809D
 #endif // GL_MULTISAMPLE
 */
 
 #define TAG "[Screen] "
 
-
 namespace Seed { namespace QT {
-
 
 Screen Screen::instance;
 Scene *Screen::pScene = NULL;
@@ -396,6 +393,4 @@ INLINE void *Screen::GetSurface() const
 
 }} // namespace
 
-
 #endif // _QT_
-

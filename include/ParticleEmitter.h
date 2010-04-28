@@ -47,8 +47,7 @@
 
 namespace Seed {
 
-
-class ParticleEmitter : public ITransformable2D
+class SEED_CORE_API ParticleEmitter : public ITransformable2D
 {
 	public:
 		ParticleEmitter();
@@ -128,9 +127,6 @@ class ParticleEmitter : public ITransformable2D
 		Particle					arParticles[SEED_PARTICLES_MAX];
 };
 
-
 } // namespace
 
-
 #endif // __PARTICLE_EMITTER_H__
-

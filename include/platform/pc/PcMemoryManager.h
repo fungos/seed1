@@ -49,11 +49,9 @@
 #define MB60	(u32)(59 * 1024 * 1024)
 #define MB20	(u32)(19 * 1024 * 1024)
 
-
 namespace Seed { namespace PC {
 
-
-class MemoryManager : public IMemoryManager
+class SEED_CORE_API MemoryManager : public IMemoryManager
 {
 	public:
 		MemoryManager();
@@ -79,17 +77,15 @@ class MemoryManager : public IMemoryManager
 		SEED_DISABLE_COPY(MemoryManager);
 };
 
-MemoryManager *const pMemoryManager = &MemoryManager::instance;
-DefaultMemoryPool *const pDefaultPool = &MemoryManager::defaultPool;
-LargeMemoryPool *const pLargePool = &MemoryManager::largePool;
-
+extern "C" {
+SEED_CORE_API extern MemoryManager *const pMemoryManager;
+SEED_CORE_API extern DefaultMemoryPool *const pDefaultPool;
+SEED_CORE_API extern LargeMemoryPool *const pLargePool;
+}
 
 }} // namespace
 
-
 #else // _PC_
-
 	#error "Include 'MemoryManager.h' instead 'platform/pc/PcMemoryManager.h' directly."
-
 #endif // _PC_
 #endif // __PC_MEMORY_MANAGER_H__

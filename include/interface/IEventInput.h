@@ -37,14 +37,11 @@
 #ifndef __IEVENTINPUT_H__
 #define __IEVENTINPUT_H__
 
-
 #include "IEvent.h"
-
 
 namespace Seed {
 
-
-class IEventInput : public IEvent
+class SEED_CORE_API IEventInput : public IEvent
 {
 	public:
 		IEventInput();
@@ -52,8 +49,6 @@ class IEventInput : public IEvent
 		virtual ~IEventInput();
 };
 
-
 } // namespace
-
 
 #endif // __IEVENTINPUT_H__

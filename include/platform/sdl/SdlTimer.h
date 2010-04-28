@@ -37,16 +37,14 @@
 #ifndef __SDL_TIMER_H__
 #define __SDL_TIMER_H__
 
-#ifdef _SDL_
+#if defined(_SDL_)
 
 #include "interface/ITimer.h"
 #include <time.h>
 
-
 namespace Seed { namespace SDL {
 
-
-class Timer : public ITimer
+class SEED_CORE_API Timer : public ITimer
 {
 	public:
 		Timer();
@@ -63,21 +61,17 @@ class Timer : public ITimer
 		static Timer instance;
 		u64 fStart;
 
-
 	private:
-		Timer(const Timer &);
-		Timer &operator=(const Timer &);
+		SEED_DISABLE_COPY(Timer);
 };
 
-Timer *const pTimer = &Timer::instance;
-
+extern "C" {
+SEED_CORE_API extern Timer *const pTimer;
+}
 
 }} // namespace
 
-
 #else // _SDL_
-
 	#error "Include 'Timer.h' instead 'platform/sdl/SdlTimer.h' directly."
-
 #endif // _SDL_
 #endif // __SDL_TIMER_H__

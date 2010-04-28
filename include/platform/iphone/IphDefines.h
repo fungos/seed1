@@ -38,14 +38,14 @@
 #ifndef __IPH_DEFINES_H__
 #define __IPH_DEFINES_H__
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 #include <string.h>
 
 #define PLATFORM iPhone
 
 // Workaround EAGL.h including Debugging.h and giving error on Release build.
-#ifdef RELEASE
+#if defined(RELEASE)
 	#define __DEBUGGING__
 #endif // RELEASE
 

@@ -34,7 +34,7 @@
 	\brief Image Iphone Implementation
 */
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 #include "Image.h"
 #include "FileSystem.h"
@@ -92,7 +92,7 @@ INLINE void Image::Load(const char *filename, IMemoryPool *pool)
 	ASSERT_NULL(pool);
 	this->pPool = pool;
 
-#ifndef ENABLE_NATIVE_PVRTC_FORMAT
+#if !defined(ENABLE_NATIVE_PVRTC_FORMAT)
 	this->LoadPNG(filename); // Ja configura W e H
 #else
 	this->LoadPVRTC(filename);
@@ -141,7 +141,7 @@ INLINE const void *Image::GetData() const
 
 INLINE void Image::PutPixel(u32 x, u32 y, PIXEL px)
 {
-#ifndef ENABLE_NATIVE_PVRTC_FORMAT
+#if !defined(ENABLE_NATIVE_PVRTC_FORMAT)
 	if (this->pImage || pixelFormat != kTexture2DPixelFormat_RGB565 || pixelFormat != kTexture2DPixelFormat_A8)
 	{
 		const PIXEL *data1 = static_cast<const PIXEL *>(pImage);
@@ -159,7 +159,7 @@ INLINE void Image::PutPixel(u32 x, u32 y, PIXEL px)
 
 INLINE PIXEL Image::GetPixel(u32 x, u32 y) const
 {
-#ifndef ENABLE_NATIVE_PVRTC_FORMAT
+#if !defined(ENABLE_NATIVE_PVRTC_FORMAT)
 	if (!this->pImage)
 		return 0;
 
@@ -180,7 +180,7 @@ INLINE PIXEL Image::GetPixel(u32 x, u32 y) const
 
 INLINE u8 Image::GetPixelAlpha(u32 x, u32 y) const
 {
-#ifndef ENABLE_NATIVE_PVRTC_FORMAT
+#if !defined(ENABLE_NATIVE_PVRTC_FORMAT)
 	if (!this->pImage)
 		return 255;
 
@@ -300,7 +300,7 @@ void Image::LoadPVRTC(const char *file)
 	this->pImage = stFile.GetData();
 	this->bCompressed = TRUE;
 
-//#ifdef ENABLE_PRELOAD_TEXTURE
+//#if defined(ENABLE_PRELOAD_TEXTURE)
 	this->LoadTexture();
 //#endif // ENABLE_PRELOAD_TEXTURE
 

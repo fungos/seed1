@@ -37,9 +37,7 @@
 #ifndef __THREAD_H__
 #define __THREAD_H__
 
-
 #include "Config.h"
-
 
 #if defined(_WII_)
 	#include "platform/wii/WiiThread.h"
@@ -60,6 +58,5 @@
 	#include "platform/qt/QtThread.h"
 	using namespace Seed::QT;
 #endif // _QT_
-
 
 #endif // __THREAD_H__

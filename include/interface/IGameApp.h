@@ -49,7 +49,7 @@ namespace Seed {
 Game application interface. This is responsible for pre-initialization setup (being deprecated soon) and Seed modules configurations.
 You can reimplement WriteOut, WriteErr and WriteDbg to a better suited output of your platform.
 */
-class IGameApp : public IUpdatable, public IModule
+class SEED_CORE_API IGameApp : public IUpdatable, public IModule
 {
 	public:
 		IGameApp();

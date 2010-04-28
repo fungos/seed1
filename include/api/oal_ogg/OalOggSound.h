@@ -34,13 +34,12 @@
 	\brief Sound Implementation for OpenAL + Ogg
 */
 
-
 #ifndef __OAL_OGG_SOUND_H__
 #define __OAL_OGG_SOUND_H__
 
 #include "Defines.h"
 
-#ifdef _OAL_OGG_
+#if defined(_OAL_OGG_)
 
 #include "File.h"
 #include "SeedInit.h"
@@ -56,11 +55,9 @@
 
 namespace Seed { namespace OAL {
 
-
 IResource *SoundResourceLoader(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
 
-
-class Sound : public ISound
+class SEED_CORE_API Sound : public ISound
 {
 	friend IResource *SoundResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 	friend class SoundSystem;
@@ -88,13 +85,9 @@ class Sound : public ISound
 		File			stFile;
 };
 
-
 }} // namespace
 
-
 #else // _OAL_OGG_
-
 	#error "Include 'Sound.h' instead 'api/oal_ogg/OalOggSound.h' directly."
-
 #endif // _OAL_OGG_
 #endif // __OAL_OGG_SOUND_H__

@@ -34,7 +34,6 @@
 	\brief State Machine
 */
 
-
 #ifndef __STATEMACHINE_H__
 #define __STATEMACHINE_H__
 
@@ -46,7 +45,7 @@
 
 namespace Seed {
 
-class STMEvent : public IEvent
+class SEED_CORE_API STMEvent : public IEvent
 {
 	public:
 		STMEvent()
@@ -79,7 +78,7 @@ class STMEvent : public IEvent
 		}
 };
 
-class STMState
+class SEED_CORE_API STMState
 {
 	public:
 		virtual ~STMState() {}
@@ -89,7 +88,7 @@ class STMState
 };
 
 //Class to define a TRANSITION
-class STMTransition
+class SEED_CORE_API STMTransition
 {
 	private:
 		STMState *from;
@@ -120,12 +119,12 @@ class STMTransition
 		};
 };
 
-#ifdef ERROR
+#if defined(ERROR)
 #undef ERROR
 #endif // ERROR
 
 //template<unsigned int TRANSITIONNUMBER>
-class StateMachine
+class SEED_CORE_API StateMachine
 {
 	public:
 		enum eReturnCode

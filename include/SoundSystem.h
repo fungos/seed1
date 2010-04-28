@@ -37,9 +37,7 @@
 #ifndef __SOUND_SYSTEM_H__
 #define __SOUND_SYSTEM_H__
 
-
 #include "Config.h"
-
 
 #if defined(_WII_)
 	#include "platform/wii/WiiSoundSystem.h"
@@ -55,6 +53,5 @@
 	#include "platform/iphone/IphSoundSystem.h"
 	using namespace Seed::iPhone;
 #endif // _IPHONE_
-
 
 #endif // __SOUND_SYSTEM_H__

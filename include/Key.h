@@ -32,17 +32,14 @@
 #ifndef __KEY_H__
 #define __KEY_H__
 
-
 #include "Defines.h"
 
-
 namespace Seed {
-
 
 /*!
 Represents a key (or a character).
 */
-class Key
+class SEED_CORE_API Key
 {
 	public:
 		//!	Key constructor.
@@ -100,7 +97,6 @@ class Key
 	//private:
 		//SEED_DISABLE_COPY(Key);
 };
-
 
 } // namespace
 

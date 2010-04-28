@@ -37,7 +37,6 @@
 #ifndef __ISYSTEM_H__
 #define __ISYSTEM_H__
 
-
 #include "Log.h"
 #include "IModule.h"
 #include "IUpdatable.h"
@@ -52,17 +51,15 @@
 
 namespace Seed {
 
-
 class EventSystem;
 class IRenderer;
 class IEventSystemListener;
-
 
 /// System Interface
 /**
 Platform system interface.
 */
-class ISystem : public IModule, public IUpdatable
+class SEED_CORE_API ISystem : public IModule, public IUpdatable
 {
 	typedef std::vector<IEventSystemListener *> 	ListenerVector;
 	typedef ListenerVector::iterator			  	ListenerIterator;
@@ -326,9 +323,6 @@ class ISystem : public IModule, public IUpdatable
 		SEED_DISABLE_COPY(ISystem);
 };
 
-
 } // namespace
 
-
 #endif // __ISYSTEM_H__
-

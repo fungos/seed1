@@ -37,9 +37,7 @@
 #ifndef __QT_THREAD_H__
 #define __QT_THREAD_H__
 
-
-#ifdef _QT_
-
+#if defined(_QT_)
 
 #include "Defines.h"
 #include "interface/IThread.h"
@@ -47,7 +45,6 @@
 #include <QThread>
 
 namespace Seed { namespace QT {
-
 
 class Thread : public IThread, public QThread
 {
@@ -69,13 +66,9 @@ class Thread : public IThread, public QThread
 		s32 iPriority;
 };
 
-
 }} // namespace
 
-
 #else // _QT_
-
 	#error "Include 'Thread.h' instead 'platform/qt/QtThread.h' directly."
-
 #endif // _QT_
 #endif // __QT_THREAD_H__

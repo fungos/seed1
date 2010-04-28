@@ -37,7 +37,6 @@
 #ifndef __RENDERER_H__
 #define __RENDERER_H__
 
-
 #include "Config.h"
 
 #if defined(_WII_)
@@ -54,6 +53,5 @@
 	#include "platform/iphone/IphRenderer.h"
 	using namespace Seed::iPhone;
 #endif // _IPHONE_
-
 
 #endif // __RENDERER_H__

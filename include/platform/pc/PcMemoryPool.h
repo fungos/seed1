@@ -46,8 +46,7 @@
 #include "interface/IMemoryManager.h"
 #include "extra/ymanager/ymemorymanager.h"
 
-
-#ifdef DEBUG
+#if defined(DEBUG)
 #define YMANAGER_INIT	: pMgr(NULL)
 #define YMANAGER_VAR	YMemoryManager *pMgr
 #else
@@ -55,11 +54,9 @@
 #define YMANAGER_VAR
 #endif // DEBUG
 
-
 namespace Seed { namespace PC {
 
-
-class PcMemoryPool : public IMemoryPool
+class SEED_CORE_API PcMemoryPool : public IMemoryPool
 {
 	friend class MemoryManager;
 
@@ -81,8 +78,7 @@ class PcMemoryPool : public IMemoryPool
 		YMANAGER_VAR;
 };
 
-
-class DefaultMemoryPool : public PcMemoryPool
+class SEED_CORE_API DefaultMemoryPool : public PcMemoryPool
 {
 	friend class MemoryManager;
 
@@ -96,8 +92,7 @@ class DefaultMemoryPool : public PcMemoryPool
 		SEED_DISABLE_COPY(DefaultMemoryPool);
 };
 
-
-class LargeMemoryPool : public PcMemoryPool
+class SEED_CORE_API LargeMemoryPool : public PcMemoryPool
 {
 	friend class MemoryManager;
 
@@ -111,13 +106,9 @@ class LargeMemoryPool : public PcMemoryPool
 		SEED_DISABLE_COPY(LargeMemoryPool);
 };
 
-
 }} // namespace
 
-
 #else // _PC_
-
 	#error "Include 'MemoryManager.h' instead 'platform/pc/PcMemoryManager.h' directly."
-
 #endif // _PC_
 #endif // __PC_MEMORY_POOL_H__

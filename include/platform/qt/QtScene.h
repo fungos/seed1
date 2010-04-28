@@ -34,20 +34,16 @@
 	\brief QT Rendering Scene
 */
 
-
 #ifndef __QT_SCENE_H__
 #define __QT_SCENE_H__
 
-#ifdef _QT_
-
+#if defined(_QT_)
 
 #include "Defines.h"
 #include <QPainter>
 #include <QGraphicsScene>
 
-
 namespace Seed { namespace QT {
-
 
 class Scene : public QGraphicsScene
 {
@@ -82,9 +78,7 @@ class Scene : public QGraphicsScene
 		f32 fLastTime;
 };
 
-
 }} // namespace
-
 
 #endif // _QT_
 #endif // __QT_SCENE_H__

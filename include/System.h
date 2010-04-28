@@ -37,9 +37,7 @@
 #ifndef __SYSTEM_H__
 #define __SYSTEM_H__
 
-
 #include "Config.h"
-
 
 #if defined(_WII_)
 	#include "platform/wii/WiiSystem.h"
@@ -60,6 +58,5 @@
 	#include "platform/qt/QtSystem.h"
 	using namespace Seed::QT;
 #endif // _QT_
-
 
 #endif // __SYSTEM_H__

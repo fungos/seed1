@@ -36,11 +36,9 @@
 
 #include "Trigonometry.h"
 
-
 namespace Seed {
 
-
-struct sAtan
+struct SEED_CORE_API sAtan
 {
 	f32 atan_val;
 	f32 atan_delta;
@@ -83,10 +81,8 @@ sAtan sArcTanTbl[32+1] =
 	{32.000000000f, 0.626776175f}     // Atan(1.00000) * 256/2pi
 };
 
-
 INLINE f32 Atan2FIdx(f32 y, f32 x);
 INLINE f32 AtanFIdx_(f32 x);
-
 
 INLINE f32 AtanFIdx_(f32 x)
 {
@@ -202,7 +198,6 @@ INLINE f32 Atan2FIdx(f32 y, f32 x)
 
 	return minus ? c - AtanFIdx_(b/a) : c + AtanFIdx_(b/a);
 }
-
 
 f32 Atan2Deg(f32 y, f32 x)
 {

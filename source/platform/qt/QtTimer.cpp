@@ -34,7 +34,7 @@
 	\brief Timer QT Implementation
 */
 
-#ifdef _QT_
+#if defined(_QT_)
 
 #include <QWaitCondition>
 
@@ -42,15 +42,11 @@
 #include "Timer.h"
 #include "Log.h"
 
-
 #define TAG "[Timer] "
-
 
 namespace Seed { namespace QT {
 
-
 Timer Timer::instance;
-
 
 Timer::Timer()
 {
@@ -98,9 +94,6 @@ INLINE void Timer::Sleep(u32 ms) const
 	//sleep.wait(ms);
 }
 
-
 }} // namespace
 
-
 #endif // _QT_
-

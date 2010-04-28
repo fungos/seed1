@@ -44,15 +44,12 @@
 
 #include <map>
 
-
 namespace Seed {
-
 
 class ResourceManager;
 class Package;
 
-
-class PackageManager : public IModule
+class SEED_CORE_API PackageManager : public IModule
 {
 	friend class IFileSystem;
 
@@ -82,8 +79,8 @@ class PackageManager : public IModule
 	protected:
 		void *operator new(size_t len);
 		void operator delete(void *ptr);
-		void *operator new [](size_t);
-		void operator delete [](void *);
+		void *operator new[](size_t) { return NULL; };
+		void operator delete[](void *) {};
 
 		const void *GetFile(const char *fileName, u32 *fileSize);
 
@@ -96,9 +93,6 @@ class PackageManager : public IModule
 
 PackageManager *const pPackageManager = &PackageManager::instance;
 
-
 } // namespace
 
-
 #endif // __PACKAGEMANAGER_H__
-

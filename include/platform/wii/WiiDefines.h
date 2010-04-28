@@ -37,7 +37,7 @@
 #ifndef __WII_DEFINES_H__
 #define __WII_DEFINES_H__
 
-#ifdef _WII_
+#if defined(_WII_)
 
 #include <string.h>
 #include <wchar.h>

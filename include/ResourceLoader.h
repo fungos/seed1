@@ -46,17 +46,15 @@
 
 namespace Seed {
 
-
 class ResourceGroup;
 class EventResourceLoader;
 class IEventResourceLoaderListener;
-
 
 /// Resource Loader
 /**
 Platform resource loader
 */
-class ResourceLoader : public IModule, public IUpdatable, public Thread
+class SEED_CORE_API ResourceLoader : public IModule, public IUpdatable, public Thread
 {
 	public:
 		typedef std::vector<IEventResourceLoaderListener *> 	ListenerVector;
@@ -113,12 +111,8 @@ class ResourceLoader : public IModule, public IUpdatable, public Thread
 		Mutex			stMutex;
 };
 
-
 ResourceLoader *const pResourceLoader = &ResourceLoader::instance;
-
 
 } // namespace
 
-
 #endif // __RESOURCE_LOADER_H__
-

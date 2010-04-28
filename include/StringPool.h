@@ -48,7 +48,6 @@
 #include <string.h>
 #include "TString.h"
 
-
 #if defined(DEBUG)
 #define DBLOCK(x)	x
 #else
@@ -129,17 +128,15 @@ Define buffers amount
 #define b32(x)	(b16(x) | (b16(x) >> 16))
 #define np2(x) 	(b32(x-1) + 1)
 
-
 namespace Seed {
 
-
-template <int SIZE, int COUNT, typename T> struct StringPool
+template <int SIZE, int COUNT, typename T> struct SEED_CORE_API StringPool
 {
 	StringPool() {}
 	virtual ~StringPool() {}
 
 #if defined(DEBUG)
-	struct StringEntry
+	struct SEED_CORE_API StringEntry
 	{
 		u32 iFrontGuard;
 		u32 iFlags;
@@ -154,7 +151,7 @@ template <int SIZE, int COUNT, typename T> struct StringPool
 		{}// { memset(pData, '\0', SIZE); }
 	} mBuff[COUNT];
 #else
-	struct StringEntry
+	struct SEED_CORE_API StringEntry
 	{
 		int iFlags;
 		T pData[SIZE];
@@ -164,7 +161,7 @@ template <int SIZE, int COUNT, typename T> struct StringPool
 
 #define DEFINE_POOL(size)	StringPool<size, STRING_POOL_##size, T> _p##size; u32 iCurrentCount##size; u32 iTotalCount##size;
 
-template <typename T> class StringPoolManager
+template <typename T> class SEED_CORE_API StringPoolManager
 {
 	public:
 		StringPoolManager()
@@ -394,8 +391,7 @@ template <typename T> class StringPoolManager
 		}
 
 	private:
-		StringPoolManager<T>(const StringPoolManager<T> &);
-		const StringPoolManager<T> &operator=(const StringPoolManager<T> &);
+		SEED_DISABLE_COPY(StringPoolManager<T>);
 
 	private:
 		DEFINE_POOL(32);
@@ -412,11 +408,9 @@ template <typename T> class StringPoolManager
 
 } // namespace
 
-
 #endif // SEED_USE_STRING_POOL
 
 #endif // __STRING_POOL_H__
-
 
 /* Sample usage - Implement unity test */
 /*

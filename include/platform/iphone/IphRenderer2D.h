@@ -40,7 +40,7 @@
 #include "Renderer.h"
 #include "interface/IRenderer2D.h"
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 namespace Seed { namespace iPhone {
 

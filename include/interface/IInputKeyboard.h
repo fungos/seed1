@@ -40,19 +40,16 @@
 #include "interface/IInput.h"
 #include "Array.h"
 
-
 namespace Seed {
-
 
 class EventInputKeyboard;
 class IEventInputKeyboardListener;
-
 
 /// Keyboard Input Interface
 /**
 Platforms that support Keyboard (physical) input must implement this interface.
 */
-class IInputKeyboard
+class SEED_CORE_API IInputKeyboard
 {
 	public:
 		IInputKeyboard();
@@ -76,9 +73,6 @@ class IInputKeyboard
 		SEED_DISABLE_COPY(IInputKeyboard);
 };
 
-
 } // namespace
 
-
 #endif // __IINPUT_POINTER_H__
-

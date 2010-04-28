@@ -36,18 +36,15 @@
 
 #include "Music.h"
 
-#ifdef _OAL_OGG_
+#if defined(_OAL_OGG_)
 
 #include "Log.h"
 #include "SoundSystem.h"
 #include "Formats.h"
 
-
 #define TAG "[Music] "
 
-
 namespace Seed { namespace OAL {
-
 
 IResource *MusicResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
@@ -268,8 +265,6 @@ INLINE const void *Music::GetData() const
 	return this->iBuffers;
 }
 
-
 }} // namespace
-
 
 #endif // _OAL_

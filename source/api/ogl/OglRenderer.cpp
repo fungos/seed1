@@ -34,10 +34,9 @@
 	\brief Renderer OpenGL implementation
 */
 
-
 #include "Renderer.h"
 
-#ifdef _OGL_
+#if defined(_OGL_)
 
 #include "Log.h"
 #include "MemoryManager.h"
@@ -70,9 +69,7 @@ PFNGLUNMAPBUFFERARBPROC glUnmapBufferARB = 0;
 // Multi Draw Array
 PFNGLMULTIDRAWARRAYSEXTPROC glMultiDrawArraysEXT = 0;
 
-
 namespace Seed { namespace OGL {
-
 
 Renderer::Renderer()
 	: bufferMode()
@@ -265,8 +262,6 @@ INLINE GLint Renderer::GetOpenGLMeshType(eMeshType type)
 	return ret;
 }
 
-
 }} // namespace
-
 
 #endif // _OGL_

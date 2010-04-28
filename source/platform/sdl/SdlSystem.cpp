@@ -34,7 +34,7 @@
 	\brief System SDL Implementation
 */
 
-#ifdef _SDL_
+#if defined(_SDL_)
 
 #include "Defines.h"
 #include "System.h"
@@ -52,9 +52,8 @@
 
 namespace Seed { namespace SDL {
 
-
 System System::instance;
-
+System *const pSystem = &System::instance;
 
 System::System()
 	: iRetraceCount(0)
@@ -276,6 +275,5 @@ INLINE void System::EnableDefaultCursor(BOOL b)
 }
 
 }} // namespace
-
 
 #endif // _SDL_

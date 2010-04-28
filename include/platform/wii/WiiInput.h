@@ -47,7 +47,7 @@
 
 #include "WiiHomeButton.h"
 
-#ifdef USE_AILIVE
+#if defined(USE_AILIVE)
 #include "WiiAiLive.h"
 #endif // USE_AILIVE
 
@@ -55,7 +55,7 @@ namespace Seed { namespace WII {
 
 class Input : public IInput, public IInputPointer, public IInputMotion
 {
-#ifdef USE_AILIVE
+#if defined(USE_AILIVE)
 	friend class Seed::WII::AiLive;
 #endif // USE_AILIVE
 	friend class HomeButton;

@@ -9,10 +9,23 @@
 // FIXME: Xcode or cmake isnt setting these defines correcly - quick hack to get it working on mac
 #if defined(__APPLE_CC__)
 #define DEBUG
-//#define _SDL_
-//#define YMEM_DEBUG
 #endif
 
+#if defined(SEED_BUILD)
+	#if !defined(SEED_BUILD_COMMERCIAL)
+		#define SEED_BUILD_LGPL
+		#define SEED_LICENSE "LGPL"
+	#else
+		#define SEED_LICENSE "Commercial"
+	#endif // SEED_BUILD
+#else
+	#if !defined(SEED_USE_COMMERCIAL)
+		#define SEED_USE_LGPL 1
+		#define SEED_LICENSE "LGPL"
+	#else
+		#define SEED_LICENSE "Commercial"
+	#endif
+#endif
 
 #define DANNY	"Danny Angelo Carminati Grein"
 #define PATUTI	"Everton Fernando Patitucci da Silva"
@@ -22,13 +35,13 @@
 #define SEED_VERSION_MINOR			1			// Developer version (features, fixes)
 #define SEED_VERSION_MIDDLE			0			// Client version
 #define SEED_VERSION_MAJOR			0			// Release version (final trunk)
-#define SEED_VERSION_STRING			"0.0.1"
+#define SEED_VERSION_STRING			"0.0.3"
 #define SEED_NAME					"Seed SDK"
 #define SEED_COPYRIGHT				"Copyright (c) 2008-2009 Danny Angelo Carminati Grein\nCopyright (c) 2009 TechFront Studios"
 #define SEED_AUTHORS				"Authors:\n\t" DANNY "\n\t" PATUTI "\n\t" RAPTOR
 
 
-#ifdef DEBUG
+#if defined(DEBUG)
 	#define SEED_TYPE "Debug"
 #else
 	#define SEED_TYPE "Release"
@@ -44,7 +57,7 @@
 	#define SEED_PLATFORM_NAME "Qt"
 #endif // _IPHONE_
 
-#define SEED_MESSAGE		SEED_NAME " " SEED_VERSION_STRING " [" SEED_PLATFORM_NAME " " SEED_TYPE "]\n" SEED_COPYRIGHT "\n" SEED_AUTHORS
+#define SEED_MESSAGE		SEED_NAME " " SEED_VERSION_STRING " [" SEED_PLATFORM_NAME " " SEED_TYPE " " SEED_LICENSE "]\n" SEED_COPYRIGHT "\n" SEED_AUTHORS
 
 
 //#include "AutoConfig.h"
@@ -108,7 +121,7 @@ Try to keep these values at a minimum.
 //================================================================================
 // DEBUGGING DEFINES
 //================================================================================
-#ifdef DEBUG
+#if defined(DEBUG)
 	#define DEBUG_GAMESTATE_NOWAIT			1	// To disable save system sync delay
 	#define DEBUG_ENABLE_RECT_TEXTAREA		1	// Enable TextArea Wireframe debugging
 	#define DEBUG_ENABLE_RECT_LABEL			1	// Enable Label Wireframe debugging

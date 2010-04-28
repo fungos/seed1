@@ -41,7 +41,7 @@
 
 namespace Seed {
 
-template <class TYPE, int SIZE> class Array
+template <class TYPE, int SIZE> class SEED_CORE_API Array
 {
 	private:
 		TYPE array[SIZE];

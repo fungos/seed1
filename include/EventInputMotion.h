@@ -38,16 +38,12 @@
 #ifndef __EVENT_INPUT_MOTION_H__
 #define __EVENT_INPUT_MOTION_H__
 
-
 #include "interface/IEventInput.h"
 #include "Vector.h"
 
-
 namespace Seed {
 
-
-
-class EventInputMotion : public IEventInput
+class SEED_CORE_API EventInputMotion : public IEventInput
 {
 	public:
 		EventInputMotion(u32 j, Vector3f ptAcc, f32 fMag, f32 fVel);
@@ -71,9 +67,6 @@ class EventInputMotion : public IEventInput
 		SEED_DISABLE_COPY(EventInputMotion);
 };
 
-
 } // namespace
 
-
 #endif // __EVENT_INPUT_MOTION_H__
-

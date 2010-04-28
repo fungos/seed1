@@ -36,7 +36,7 @@
 
 #include "SoundSource.h"
 
-#ifdef _OAL_OGG_
+#if defined(_OAL_OGG_)
 
 #include "SoundSystem.h"
 #include "Sound.h"
@@ -44,12 +44,9 @@
 #include "File.h"
 #include "Formats.h"
 
-
 #define TAG		"[SoundSource] "
 
-
 namespace Seed { namespace OAL {
-
 
 SoundSource::SoundSource()
 	: iSource(0)
@@ -173,8 +170,6 @@ INLINE void SoundSource::Resume()
 	}
 }
 
-
 }} // namespace
-
 
 #endif // _OAL_OGG_

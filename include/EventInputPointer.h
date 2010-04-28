@@ -37,14 +37,11 @@
 #ifndef __EVENT_INPUT_POINTER_H__
 #define __EVENT_INPUT_POINTER_H__
 
-
 #include "interface/IEventInput.h"
-
 
 namespace Seed {
 
-
-class EventInputPointer : public IEventInput
+class SEED_CORE_API EventInputPointer : public IEventInput
 {
 	public:
 		EventInputPointer(u32 j, u32 pressed, u32 hold, u32 released, f32 x, f32 y);
@@ -72,9 +69,6 @@ class EventInputPointer : public IEventInput
 		SEED_DISABLE_COPY(EventInputPointer);
 };
 
-
 } // namespace
 
-
 #endif // __EVENT_INPUT_POINTER_H__
-

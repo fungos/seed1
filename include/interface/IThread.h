@@ -37,18 +37,15 @@
 #ifndef __ITHREAD_H__
 #define __ITHREAD_H__
 
-
 #include "Defines.h"
 
-
 namespace Seed {
-
 
 /// Thread interface
 /**
 Thread interface
 */
-class IThread
+class SEED_CORE_API IThread
 {
 	public:
 		IThread();
@@ -62,8 +59,6 @@ class IThread
 		SEED_DISABLE_COPY(IThread);
 };
 
-
 } // namespace
-
 
 #endif // __ITHREAD_H__

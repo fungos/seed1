@@ -37,7 +37,7 @@
 #ifndef __SDL_DEFINES_H__
 #define __SDL_DEFINES_H__
 
-#ifdef _SDL_
+#if defined(_SDL_)
 
 #define _OGL_		1
 #define _PC_		1
@@ -59,40 +59,39 @@
 #include <SDL/SDL_image.h>
 #endif
 
-#if defined(__MINGW32__) && defined(SEED_BUILD_DLL)
-	#define SEED_CORE __declspec(dllexport)
-#elif defined(__MINGW32__) && defined(SEED_EXTRA_BUILD)
-	#define SEED_PLATFORM __declspec(dllexport)
-	#define SEED_EXTRA __declspec(dllexport)
-	#define SEED_CORE __declspec(dllimport)
-#elif defined(__MINGW32__) && defined(SEED_DLL_IMPORT)
-	#define SEED_CORE __declspec(dllimport)
-	#define SEED_EXTRA __declspec(dllimport)
-	#define SEED_PLATFORM _declspec(dllimport)
-#elif defined(_MSC_VER) && defined(SEED_BUILD_DLL)
-	#define SEED_CORE _declspec(dllexport)
-#elif defined(_MSC_VER) && defined(SEED_EXTRA_BUILD)
-	#define SEED_CORE _declspec(dllimport)
-	#define SEED_EXTRA _declspec(dllexport)
-	#define SEED_PLATFORM _declspec(dllexport)
-#endif
+#if defined(__MWERKS__)
+#pragma warning off (10342)
+#endif // __MWERKS__
 
-#ifndef SEED_CORE
-#define SEED_CORE
+#if defined(__MINGW32__)
+	#if defined(SEED_BUILD_LGPL)
+		#define SEED_CORE_API __declspec(dllexport)
+	#elif defined(SEED_EXTRA_BUILD)
+		#define SEED_PLATFORM_API __declspec(dllexport)
+		#define SEED_EXTRA_API __declspec(dllexport)
+		#define SEED_CORE_API __declspec(dllimport)
+	#elif defined(SEED_USE_LGPL)
+		#define SEED_CORE_API __declspec(dllimport)
+		#define SEED_EXTRA_API __declspec(dllimport)
+		#define SEED_PLATFORM_API _declspec(dllimport)
+	#endif // __MINGW32__
+#elif defined(_MSC_VER)
+	#if defined(SEED_BUILD_LGPL)
+		#define SEED_CORE_API _declspec(dllexport)
+	#elif defined(SEED_EXTRA_BUILD)
+		#define SEED_CORE_API _declspec(dllimport)
+		#define SEED_EXTRA_API _declspec(dllexport)
+		#define SEED_PLATFORM_API _declspec(dllexport)
+	#elif defined(_MSC_VER) && defined(SEED_USE_LGPL)
+		#define SEED_CORE_API __declspec(dllimport)
+		#define SEED_EXTRA_API __declspec(dllimport)
+		#define SEED_PLATFORM_API _declspec(dllimport)
+	#endif // _MSC_VER
 #endif
-
-#ifndef SEED_PLATFORM
-#define SEED_PLATFORM
-#endif
-
-#ifndef SEED_EXTRA
-#define SEED_EXTRA
-#endif
-
 
 #define PLATFORM SDL
 
-#ifdef _SDL_EMULATE_WII_
+#if defined(_SDL_EMULATE_WII_)
 	#define PLATFORM_MAX_SCREEN_WIDTH		640
 	#define PLATFORM_MAX_SCREEN_HEIGHT		480
 #elif _SDL_EMULATE_IPH_
@@ -244,11 +243,11 @@ typedef u32 					PIXEL;
 union uPixel
 {
 	PIXEL pixel;
-	struct _sPixel
+	struct SEED_CORE_API _sPixel
 	{
 		u8 c[4];
 	} pComponent;
-	struct _cPixel
+	struct SEED_CORE_API _cPixel
 	{
 		u8 a;
 		u8 b;

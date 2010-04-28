@@ -34,8 +34,7 @@
 	\brief Screen SDL implementation
 */
 
-
-#ifdef _SDL_
+#if defined(_SDL_)
 
 #include "Defines.h"
 #include "Screen.h"
@@ -45,19 +44,18 @@
 #include "Renderer.h"
 #include "SeedInit.h"
 
-#ifdef WIN32
+#if defined(WIN32)
 #include <SDL/SDL_syswm.h>
 #endif
 
 #define TAG "[Screen] "
 
-
 namespace Seed { namespace SDL {
 
-
 Screen Screen::instance;
-SDL_Surface *Screen::pSurface = NULL;
+Screen *const pScreen = &Screen::instance;
 
+SDL_Surface *Screen::pSurface = NULL;
 
 Screen::Screen()
 	: surfaceSize(0)
@@ -161,16 +159,17 @@ void Screen::PrepareMode()
 			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL;
 		}
 		break;
-/*
-		case SCREEN_480x272x32W_SW:
+
+		case SCREEN_IPHONE_PORTRAIT:
 		{
-			iWidth = 480;
-			iHeight = 272;
-			iFlags = SDL_SWSURFACE | SDL_DOUBLEBUF;
+			iWidth = 320;
+			iHeight = 480;
+			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL;
 		}
 		break;
-*/
+
 		case SCREEN_IPHONE:
+		case SCREEN_IPHONE_LANDSCAPE:
 		case SCREEN_480x320x32W_OPENGL:
 		{
 			iWidth = 480;
@@ -178,15 +177,7 @@ void Screen::PrepareMode()
 			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL;
 		}
 		break;
-/*
-		case SCREEN_480x320x32W_SW:
-		{
-			iWidth = 480;
-			iHeight = 320;
-			iFlags = SDL_SWSURFACE | SDL_DOUBLEBUF;
-		}
-		break;
-*/
+
 		case SCREEN_WII:
 		case SCREEN_640X480X32W_OPENGL:
 		{
@@ -195,15 +186,7 @@ void Screen::PrepareMode()
 			iHeight = 480;
 		}
 		break;
-/*
-		case SCREEN_640X480X32W_SW:
-		{
-			iFlags = SDL_SWSURFACE | SDL_DOUBLEBUF;
-			iWidth = 640;
-			iHeight = 480;
-		}
-		break;
-*/
+
 		case SCREEN_800X600X32W_OPENGL:
 		{
 			iWidth = 800;
@@ -211,15 +194,7 @@ void Screen::PrepareMode()
 			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL;
 		}
 		break;
-/*
-		case SCREEN_800X600X32W_SW:
-		{
-			iWidth = 800;
-			iHeight = 600;
-			iFlags = SDL_SWSURFACE | SDL_DOUBLEBUF;
-		}
-		break;
-*/
+
 		case SCREEN_1024X768X32W_OPENGL:
 		{
 			iWidth = 1024;
@@ -227,15 +202,7 @@ void Screen::PrepareMode()
 			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL;
 		}
 		break;
-/*
-		case SCREEN_1024X768X32W_SW:
-		{
-			iWidth = 1024;
-			iHeight = 768;
-			iFlags = SDL_SWSURFACE | SDL_DOUBLEBUF;
-		}
-		break;
-*/
+
 		case SCREEN_2048X1024X32W_OPENGL:
 		{
 			iWidth = 2048;
@@ -243,15 +210,7 @@ void Screen::PrepareMode()
 			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL;
 		}
 		break;
-/*
-		case SCREEN_2048X1024X32W_SW:
-		{
-			iWidth = 2048;
-			iHeight = 1024;
-			iFlags = SDL_SWSURFACE | SDL_DOUBLEBUF;
-		}
-		break;
-*/
+
 		case SCREEN_480x272x32FS_OPENGL:
 		{
 			iWidth = 480;
@@ -259,15 +218,7 @@ void Screen::PrepareMode()
 			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL | SDL_FULLSCREEN;
 		}
 		break;
-/*
-		case SCREEN_480x272x32FS_SW:
-		{
-			iWidth = 480;
-			iHeight = 272;
-			iFlags = SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN;
-		}
-		break;
-*/
+
 		case SCREEN_480x320x32FS_OPENGL:
 		{
 			iWidth = 480;
@@ -275,15 +226,7 @@ void Screen::PrepareMode()
 			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL | SDL_FULLSCREEN;
 		}
 		break;
-/*
-		case SCREEN_480x320x32FS_SW:
-		{
-			iWidth = 480;
-			iHeight = 320;
-			iFlags = SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN;
-		}
-		break;
-*/
+
 		case SCREEN_640X480X32FS_OPENGL:
 		{
 			iWidth = 640;
@@ -291,15 +234,7 @@ void Screen::PrepareMode()
 			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL | SDL_FULLSCREEN;
 		}
 		break;
-/*
-		case SCREEN_640X480X32FS_SW:
-		{
-			iWidth = 640;
-			iHeight = 480;
-			iFlags = SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN;
-		}
-		break;
-*/
+
 		case SCREEN_800X600X32FS_OPENGL:
 		{
 			iWidth = 800;
@@ -307,15 +242,7 @@ void Screen::PrepareMode()
 			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL | SDL_FULLSCREEN;
 		}
 		break;
-/*
-		case SCREEN_800X600X32FS_SW:
-		{
-			iWidth = 800;
-			iHeight = 600;
-			iFlags = SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN;
-		}
-		break;
-*/
+
 		case SCREEN_1024X768X32FS_OPENGL:
 		{
 			iWidth = 1024;
@@ -323,15 +250,7 @@ void Screen::PrepareMode()
 			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL | SDL_FULLSCREEN;
 		}
 		break;
-/*
-		case SCREEN_1024X768X32FS_SW:
-		{
-			iWidth = 1024;
-			iHeight = 768;
-			iFlags = SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN;
-		}
-		break;
-*/
+
 		case SCREEN_2048X1024X32FS_OPENGL:
 		{
 			iWidth = 2048;
@@ -339,15 +258,7 @@ void Screen::PrepareMode()
 			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL | SDL_FULLSCREEN;
 		}
 		break;
-/*
-		case SCREEN_2048X1024X32FS_SW:
-		{
-			iWidth = 2048;
-			iHeight = 1024;
-			iFlags = SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN;
-		}
-		break;
-*/
+
 		default:
 			Log(TAG "Invalid mode!");
 		break;
@@ -408,7 +319,7 @@ INLINE BOOL Screen::InitializeVideo()
 		this->SetupOpenGL();
 	}
 
-#ifdef WIN32
+#if defined(WIN32)
 	BOOL icon = FALSE;
 
 	/*
@@ -650,7 +561,6 @@ void Screen::ApplyFade()
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
 	glColor4ub(0, 0, 0, c);
 
 	glPushMatrix();
@@ -662,8 +572,6 @@ void Screen::ApplyFade()
 	glPopAttrib();
 }
 
-
 }} // namespace
-
 
 #endif // _SDL_

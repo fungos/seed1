@@ -34,16 +34,13 @@
 	\brief Thread implementation
 */
 
-
-#ifdef _SDL_
+#if defined(_SDL_)
 
 #include "platform/sdl/SdlThread.h"
 
 #define TAG 	"[Thread] "
 
-
 namespace Seed { namespace SDL {
-
 
 static int __seed_thread_loop_callback(void *param)
 {
@@ -95,8 +92,6 @@ INLINE BOOL Thread::Run()
 	return bRunning;
 }
 
-
 }} // namespace
-
 
 #endif // _SDL_

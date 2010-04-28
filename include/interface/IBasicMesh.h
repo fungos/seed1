@@ -47,7 +47,7 @@ namespace Seed {
 class ResourceManager;
 class IMemoryPool;
 
-class IBasicMesh : public ITransformable2D
+class SEED_CORE_API IBasicMesh : public ITransformable2D
 {
 	public:
 		IBasicMesh();
@@ -63,8 +63,8 @@ class IBasicMesh : public ITransformable2D
 	protected:
 		void *operator new(size_t len);
 		void operator delete(void *ptr);
-		void *operator new [](size_t);
-		void operator delete [](void *);
+		void *operator new[](size_t) { return NULL; };
+		void operator delete[](void *) {};
 
 	private:
 		SEED_DISABLE_COPY(IBasicMesh);

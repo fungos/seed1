@@ -34,14 +34,11 @@
 	\brief Mutex
 */
 
-
-#ifdef _QT_
+#if defined(_QT_)
 
 #include "platform/qt/QtMutex.h"
 
-
 namespace Seed { namespace QT {
-
 
 Mutex::Mutex()
 {
@@ -68,8 +65,6 @@ INLINE BOOL Mutex::TryLock()
 	return mutex.tryLock();
 }
 
-
 }} // namespace
-
 
 #endif // _QT_

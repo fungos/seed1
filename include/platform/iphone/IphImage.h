@@ -37,7 +37,7 @@
 #ifndef __IPH_IMAGE_H__
 #define __IPH_IMAGE_H__
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 #include "Defines.h"
 #include "SeedInit.h"

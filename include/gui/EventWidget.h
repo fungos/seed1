@@ -34,21 +34,16 @@
 	\brief Defines a widget event class
 */
 
-
 #ifndef __EVENT_WIDGET_H__
 #define __EVENT_WIDGET_H__
 
-
 #include "interface/IEvent.h"
-
 
 namespace Seed {
 
-
 class IWidget;
 
-
-class EventWidget : public IEvent
+class SEED_CORE_API EventWidget : public IEvent
 {
 	public:
 		enum eType
@@ -98,9 +93,6 @@ class EventWidget : public IEvent
 		u32 iReleased;
 };
 
-
 } // namespace
 
-
 #endif // __EVENT_WIDGET_H__
-

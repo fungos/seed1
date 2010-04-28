@@ -37,9 +37,7 @@
 #ifndef __TIMER_H__
 #define __TIMER_H__
 
-
 #include "Config.h"
-
 
 #if defined(_WII_)
 	#include "platform/wii/WiiTimer.h"
@@ -60,6 +58,5 @@
 	#include "platform/qt/QtTimer.h"
 	using namespace Seed::QT;
 #endif // _QT_
-
 
 #endif // __TIMER_H__

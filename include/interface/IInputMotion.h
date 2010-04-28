@@ -42,19 +42,16 @@
 #include "Array.h"
 #include "Vector.h"
 
-
 namespace Seed {
-
 
 class EventInputMotion;
 class IEventInputMotionListener;
-
 
 /// Pointer Input Interface
 /**
 Platforms that support Accelerometer like input must implement this interface.
 */
-class IInputMotion
+class SEED_CORE_API IInputMotion
 {
 	public:
 		IInputMotion();
@@ -77,9 +74,6 @@ class IInputMotion
 		SEED_DISABLE_COPY(IInputMotion);
 };
 
-
 } // namespace
 
-
 #endif // __IINPUT_POINTER_H__
-

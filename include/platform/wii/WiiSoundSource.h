@@ -37,7 +37,7 @@
 #ifndef __WII_SOUND_SOURCE_H__
 #define __WII_SOUND_SOURCE_H__
 
-#ifdef _WII_
+#if defined(_WII_)
 
 #include "Sound.h"
 #include "interface/ISoundSource.h"

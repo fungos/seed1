@@ -44,7 +44,7 @@ namespace Seed {
 
 class IModule;
 
-class ModuleManager
+class SEED_CORE_API ModuleManager
 {
 	public:
 		ModuleManager();

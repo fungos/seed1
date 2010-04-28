@@ -37,7 +37,7 @@
 #ifndef __IPH_SOUND_SYSTEM_H__
 #define __IPH_SOUND_SYSTEM_H__
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 #include "Config.h"
 #include "interface/ISoundSystem.h"
@@ -127,8 +127,7 @@ class SoundSystem : public ISoundSystem, public IResource
 		static SoundSystem instance;
 
 	private:
-		SoundSystem(const SoundSystem &);
-		SoundSystem &operator=(const SoundSystem &);
+		SEED_DISABLE_COPY(SoundSystem);
 
 		void UpdateMusic();
 		void UpdateSounds();

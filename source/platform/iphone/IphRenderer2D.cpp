@@ -34,7 +34,7 @@
 	\brief Renderer2D Iphone Implementation
 */
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 #include "Defines.h"
 #include "Log.h"

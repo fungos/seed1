@@ -39,7 +39,6 @@
 
 #include "Config.h"
 
-
 #if defined(_WII_)
 	#include "platform/wii/WiiSound.h"
 	using namespace Seed::WII;
@@ -50,10 +49,9 @@
 	using namespace Seed::OAL;
 #endif // _SDL_ || _QT_
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 	#include "platform/iphone/IphSound.h"
 	using namespace Seed::iPhone;
 #endif // _IPHONE_
-
 
 #endif // __SOUND_H__

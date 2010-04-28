@@ -34,12 +34,10 @@
 	\brief Image SDL Implementation
 */
 
-
 #ifndef __SDL_IMAGE_H__
 #define __SDL_IMAGE_H__
 
-
-#ifdef _SDL_
+#if defined(_SDL_)
 
 #include "Defines.h"
 #include "File.h"
@@ -50,11 +48,9 @@ namespace Seed { namespace OGL { class Sprite; }}
 
 namespace Seed { namespace SDL {
 
-
 IResource *ImageResourceLoader(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
 
-
-class Image : public IImage
+class SEED_CORE_API Image : public IImage
 {
 	friend IResource *ImageResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 	friend class OGL::Sprite;
@@ -75,6 +71,9 @@ class Image : public IImage
 		virtual void Reset();
 		virtual BOOL Load(u32 width, u32 height, PIXEL *buffer, IMemoryPool *pool = pDefaultPool); // O que acontece no Reload?
 
+		virtual u32 GetAtlasWidthInPixel() const;
+		virtual u32 GetAtlasHeightInPixel() const;
+
 		// IResource
 		virtual BOOL Load(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual BOOL Unload();
@@ -92,7 +91,7 @@ class Image : public IImage
 		SDL_Surface *pSurface;
 		void *pData;
 
-#ifdef DEBUG
+#if defined(DEBUG)
 		File stFile;
 #endif
 		GLuint iTextureId;
@@ -101,13 +100,9 @@ class Image : public IImage
 		u32 iPitch;
 };
 
-
 }} // namespace
 
-
 #else // _SDL_
-
 	#error "Include 'Image.h' instead 'platform/sdl/SdlImage.h' directly."
-
 #endif // _SDL_
 #endif // __SDL_IMAGE__

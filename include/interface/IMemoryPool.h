@@ -34,23 +34,19 @@
 	\brief Defines the Memory Pool class interface
 */
 
-
 #ifndef __IMEMORYPOOL_H__
 #define __IMEMORYPOOL_H__
 
-
 #include "Defines.h"
 
-
 namespace Seed {
-
 
 /// MemoryPool Interface
 /**
 Systems that has multiple ways or kinds of memory must implement its own MemoryPool. At least
 one MemoryPool is needed and it must be called DefaultMemoryPool.
 */
-class IMemoryPool
+class SEED_CORE_API IMemoryPool
 {
 	public:
 		IMemoryPool();
@@ -70,8 +66,6 @@ class IMemoryPool
 		SEED_DISABLE_COPY(IMemoryPool);
 };
 
-
 } // namespace
-
 
 #endif // __IMEMORYPOOL_H__

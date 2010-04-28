@@ -44,17 +44,13 @@
 #include "ResourceManager.h"
 #include "MemoryManager.h"
 
-
 namespace Seed {
-
 
 class ResourceManager;
 class SpriteObject;
 class CollisionMask;
 
-
 IResource *ButtonResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
-
 
 enum eCollisionType
 {
@@ -64,8 +60,7 @@ enum eCollisionType
 	CollisionByPixel		= 2
 };
 
-
-class Button : public IWidget, public IResource
+class SEED_CORE_API Button : public IWidget, public IResource
 {
 	friend IResource *ButtonResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 
@@ -96,7 +91,7 @@ class Button : public IWidget, public IResource
 		virtual void SetCollisionType(eCollisionType type);
 		virtual eCollisionType GetCollisionType() const;
 
-		virtual void SetBlending(Seed::IRenderable::eBlendMode op);
+		virtual void SetBlending(eBlendMode op);
 		virtual void SetColor(u8 r, u8 g, u8 b, u8 a);
 		virtual void SetColor(PIXEL color);
 
@@ -206,7 +201,7 @@ class Button : public IWidget, public IResource
 		virtual BOOL IsSpriteAutoUpdate() const;
 
 		// Sprite
-		virtual void SetSpriteBlending(Seed::IRenderable::eBlendMode op);
+		virtual void SetSpriteBlending(eBlendMode op);
 		virtual void SetSpriteColor(u8 r, u8 g, u8 b, u8 a);
 		virtual void SetSpriteColor(PIXEL px);
 		virtual PIXEL GetSpriteColor();
@@ -233,8 +228,8 @@ class Button : public IWidget, public IResource
 	protected:
 		void *operator new(size_t len);
 		void operator delete(void *ptr);
-		void *operator new [](size_t);
-		void operator delete [] (void *);
+		void *operator new[](size_t) { return NULL; };
+		void operator delete[](void *) {};
 
 	protected:
 		Sprite	cSprite;
@@ -290,9 +285,6 @@ class Button : public IWidget, public IResource
 		CollisionMask	*pMask;
 };
 
-
 } // namespace
 
-
 #endif // __GUI_BUTTON_H__
-

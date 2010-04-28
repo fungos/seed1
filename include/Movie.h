@@ -37,18 +37,14 @@
 #ifndef __MOVIE_H__
 #define __MOVIE_H__
 
-
 #include "Timeline.h"
 #include "Array.h"
 
-
 namespace Seed {
-
 
 #define MAX_TIMELINES 36
 
-
-class Movie : public ITransformable2D
+class SEED_CORE_API Movie : public ITransformable2D
 {
 	public:
 		Movie();
@@ -76,8 +72,6 @@ class Movie : public ITransformable2D
 		Array<Timeline *, MAX_TIMELINES> arTimelines;
 };
 
-
 } // namespace
-
 
 #endif // __MOVIE_H__

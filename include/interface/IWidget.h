@@ -41,29 +41,17 @@
 #include "interface/IEventWidgetListener.h"
 #include "interface/ITransformable2D.h"
 #include "interface/IInput.h"
+#include "Enum.h"
 
 #include <vector>
 #include <algorithm>
-
 
 namespace Seed {
 
 class WidgetContainer;
 
-class IWidget : public ITransformable2D, public IEventWidgetListener
+class SEED_CORE_API IWidget : public ITransformable2D, public IEventWidgetListener
 {
-	public:
-		enum eState
-		{
-			NONE,
-			FOCUSED,
-			OVER,
-			PRESSED,
-			PRESSED_OVER,
-			PRESSED_OUT,
-			DRAG
-		};
-
 	public:
 		IWidget();
 		IWidget(u32 id, f32 w, f32 h, f32 x, f32 y);
@@ -85,11 +73,11 @@ class IWidget : public ITransformable2D, public IEventWidgetListener
 		virtual void SetDraggable(BOOL b);
 		virtual BOOL IsDraggable() const;
 
-		void SetState(IWidget::eState s);
-		IWidget::eState GetState() const;
+		void SetState(eWidgetState s);
+		eWidgetState GetState() const;
 
-		void SetPlayerState(IWidget::eState s, u32 i = 0);
-		IWidget::eState GetPlayerState(u32 i = 0) const;
+		void SetPlayerState(eWidgetState s, u32 i = 0);
+		eWidgetState GetPlayerState(u32 i = 0) const;
 
 		u64 GetPlayerStateStartTime(u32 i) const;
 		u64 GetStateStartTime() const;
@@ -126,9 +114,9 @@ class IWidget : public ITransformable2D, public IEventWidgetListener
 		BOOL	bChanged;
 		BOOL	bDraggable;
 
-		IWidget::eState 	iState;
-		IWidget::eState 	iPlayerState[PLATFORM_MAX_INPUT];
-		u64					arPlayerStateStartTime[PLATFORM_MAX_INPUT];
+		eWidgetState	iState;
+		eWidgetState	iPlayerState[PLATFORM_MAX_INPUT];
+		u64				arPlayerStateStartTime[PLATFORM_MAX_INPUT];
 
 		Seed::eInputButton iButton;
 

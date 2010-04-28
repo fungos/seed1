@@ -76,7 +76,7 @@ void Label::Reset()
 {
 	this->iId				= 0;
 	this->iColor			= 0;
-	this->eBlendOperation	= IRenderable::NONE;
+	this->eBlendOperation	= Seed::BlendNone;
 
 	IWidget::Reset();
 

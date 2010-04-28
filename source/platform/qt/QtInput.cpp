@@ -34,8 +34,7 @@
 	\brief Input Implementation
 */
 
-
-#ifdef _QT_
+#if defined(_QT_)
 
 #include "Defines.h"
 #include "Input.h"
@@ -516,6 +515,5 @@ INLINE eKey Input::TranslateKey(u32 key)
 }
 
 }} // namespace
-
 
 #endif // _QT_

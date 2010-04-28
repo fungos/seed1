@@ -36,7 +36,7 @@
 
 #include "SoundSystem.h"
 
-#ifdef _OAL_OGG_
+#if defined(_OAL_OGG_)
 
 #include "Log.h"
 #include "MemoryManager.h"
@@ -50,7 +50,6 @@
 #include "interface/IMusic.h"
 #include "interface/ISoundSource.h"
 #include "Timer.h"
-
 
 #include <stdio.h>
 #include <algorithm>
@@ -68,17 +67,13 @@
 #define AUDIO_FRAME_TIME	3
 #define AUDIO_DATA_PATH		"/" FILESYSTEM_DEFAULT_PATH
 
-
 // http://www.gamedev.net/reference/articles/article2031.asp
 // http://icculus.org/SDL_sound/
 // http://www.devmaster.net/articles.php?catID=6
 
-
 namespace Seed { namespace OAL {
 
-
 SoundSystem SoundSystem::instance;
-
 
 SoundSystem::SoundSystem()
 	: pDevice(NULL)
@@ -497,9 +492,6 @@ INLINE void SoundSystem::Resume()
 	ISoundSystem::Resume();
 }
 
-
 }} // namespace
 
-
 #endif // _OAL_OGG_
-

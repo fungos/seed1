@@ -34,18 +34,14 @@
 	\brief Rectangle utils
 */
 
-
 #ifndef __RECT_H__
 #define __RECT_H__
 
-
 #include "Log.h"
-
 
 namespace Seed {
 
-
-template <class TYPE> class Rect
+template <class TYPE> class SEED_CORE_API Rect
 {
 	public:
 		TYPE x;
@@ -62,7 +58,6 @@ template <class TYPE> class Rect
 		{
 		}
 
-
 		Rect(const Rect<TYPE> &rect)
 			: x(0)
 			, y(0)
@@ -71,7 +66,6 @@ template <class TYPE> class Rect
 		{
 			LoadRect(rect);
 		}
-
 
 		Rect<TYPE> &operator=(const Rect<TYPE> &rect)
 		{
@@ -83,25 +77,21 @@ template <class TYPE> class Rect
 			return *this;
 		}
 
-
 		BOOL operator==(const Rect<TYPE> &rect) const
 		{
 			return((x == rect.x) && (y == rect.y) && (width == rect.width) && (height == rect.height));
 		}
-
 
 		BOOL operator!=(const Rect<TYPE> &rect) const
 		{
 			return(!(x == rect.x) || !(y == rect.y) || !(width == rect.width) || !(height == rect.height));
 		}
 
-
 		Rect<TYPE> & LoadRect(const Rect<TYPE> &rect)
 		{
 			*this = rect;
 			return *this;
 		}
-
 
 		BOOL IsCollidedWith(const Rect<TYPE> &rect)
 		{
@@ -127,7 +117,6 @@ template <class TYPE> class Rect
 
 			return TRUE;
 		}
-
 
 		void GetOverlappedRect(const Rect<TYPE> &rect, Rect<TYPE> &rectDst)
 		{
@@ -167,7 +156,6 @@ template <class TYPE> class Rect
 			rectDst.width  = (TYPE)(over_right - over_left);
 			rectDst.height = (TYPE)(over_bottom - over_top);
 		}
-
 
 		BOOL Contains(TYPE pX, TYPE pY)
 		{
@@ -224,9 +212,6 @@ template <class TYPE> class Rect
 		}
 };
 
-
 } // namespace
 
-
 #endif // __RECT_H__
-

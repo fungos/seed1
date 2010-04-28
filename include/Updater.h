@@ -45,7 +45,7 @@ namespace Seed {
 
 class IUpdatable;
 
-class Updater
+class SEED_CORE_API Updater
 {
 	public:
 		Updater();

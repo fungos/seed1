@@ -37,7 +37,7 @@
 #ifndef __IPH_INPUT_H__
 #define __IPH_INPUT_H__
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 #include "interface/IInput.h"
 #include "interface/IInputPointer.h"

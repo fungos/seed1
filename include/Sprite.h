@@ -37,9 +37,7 @@
 #ifndef __SPRITE_H__
 #define __SPRITE_H__
 
-
 #include "Config.h"
-
 
 #if defined(_WII_)
 	#include "platform/wii/WiiSprite.h"
@@ -55,6 +53,5 @@
 	#include "platform/iphone/IphSprite.h"
 	using namespace Seed::iPhone;
 #endif // _IPHONE_
-
 
 #endif // __SPRITE_H__

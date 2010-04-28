@@ -37,14 +37,11 @@
 #ifndef __RAND_H__
 #define __RAND_H__
 
-
 #include "Defines.h"
-
 
 namespace Seed {
 
-
-class Rand
+class SEED_CORE_API Rand
 {
 	public:
 		Rand();
@@ -68,9 +65,6 @@ class Rand
 
 Rand *const pRand = &Rand::instance;
 
-
 } // namespace
-
-
 
 #endif // __RAND_H__

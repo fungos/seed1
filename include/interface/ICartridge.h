@@ -37,20 +37,17 @@
 #ifndef __ICARTRIDGE_H__
 #define __ICARTRIDGE_H__
 
-
 #include "IModule.h"
 #include "../Enum.h"
 
-
 namespace Seed {
-
 
 /// Cartridge Interface
 /**
 Interface for cartridge/save data, it can be a real cartridge like Nintendo DS builtin EPROM
 and/or even a file in a PC implementation.
 */
-class ICartridge : public IModule
+class SEED_CORE_API ICartridge : public IModule
 {
 	public:
 		ICartridge();
@@ -114,8 +111,6 @@ class ICartridge : public IModule
 		SEED_DISABLE_COPY(ICartridge);
 };
 
-
 } // namespace
-
 
 #endif // __ICARTRIDGE_H__

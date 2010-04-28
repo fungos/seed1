@@ -38,7 +38,6 @@
 #ifndef __MATH_UTIL_H__
 #define __MATH_UTIL_H__
 
-
 #include <math.h>
 
 #define LIB_SQRT sqrt
@@ -61,7 +60,6 @@ template <typename T> class Quaternion;
 
 namespace Seed {
 
-
 // Declare a global constant for pi and a few multiples.
 // Math constants
 const f32 kPi = 3.14159265358979323846f; // M_PI
@@ -74,7 +72,6 @@ const f32 k2OverPi = 2.0f / kPi; // M_2_PI 0.636619772367581343076f
 const f32 k1Over2Pi = 1.0f / k2Pi;
 const f32 kPiOver180 = kPi / 180.0f;
 const f32 k180OverPi = 180.0f / kPi;
-
 
 // "Wrap" an angle in range -pi...pi by adding the correct multiple of 2 pi
 template <typename T>
@@ -199,8 +196,6 @@ inline void CanonizeEulerAngles(T &roll, T &pitch, T &yaw)
 	yaw = WrapPi(yaw);
 }
 
-
 } // namespace
-
 
 #endif // __MATH_UTIL_H__

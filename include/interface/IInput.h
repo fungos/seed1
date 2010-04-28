@@ -34,7 +34,6 @@
 	\brief Defines the Input base interface
 */
 
-
 #ifndef __IINPUT_H__
 #define __IINPUT_H__
 
@@ -42,20 +41,17 @@
 #include "IUpdatable.h"
 #include "Enum.h"
 
-
 namespace Seed {
-
 
 class IEventInputMotionListener;
 class IEventInputKeyboardListener;
 class IEventInputPointerListener;
 
-
 /// Abstract Input Interface
 /**
 All kind of inputs must implement this interface.
 */
-class IInput : public IModule, public IUpdatable
+class SEED_CORE_API IInput : public IModule, public IUpdatable
 {
 	public:
 		IInput();
@@ -80,8 +76,6 @@ class IInput : public IModule, public IUpdatable
 		SEED_DISABLE_COPY(IInput);
 };
 
-
 } // namespace
-
 
 #endif // __IINPUT_H__

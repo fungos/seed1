@@ -34,8 +34,7 @@
 	\brief Image QT Implementation
 */
 
-
-#ifdef _QT_
+#if defined(_QT_)
 
 #include "Image.h"
 #include "FileSystem.h"
@@ -46,9 +45,7 @@
 
 #define TAG "[Image] "
 
-
 namespace Seed { namespace QT {
-
 
 IResource *ImageResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {

@@ -37,7 +37,7 @@
 #ifndef __IPH_FILESYSTEM_H__
 #define __IPH_FILESYSTEM_H__
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 #include "MemoryManager.h"
 #include "interface/IFileSystem.h"

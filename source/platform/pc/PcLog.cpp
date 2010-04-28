@@ -36,7 +36,7 @@
 
 #include "Log.h"
 
-#ifdef _PC_
+#if defined(_PC_)
 
 #include <stdio.h>
 #include "SeedInit.h"
@@ -54,7 +54,7 @@ void Info(const char *pMessage, ...)
 		Seed::Private::pApplication->WriteOut(t);
 }
 
-#ifdef DEBUG
+#if defined(DEBUG)
 
 void Log(const char *pMessage, ...)
 {

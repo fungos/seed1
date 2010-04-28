@@ -48,7 +48,7 @@ namespace Seed {
 /**
 Base texture class. This IResource must not be instanciable. It has basic information about the texture image.
 */
-class IImage : public IResource
+class SEED_CORE_API IImage : public IResource
 {
 	public:
 		IImage();
@@ -66,11 +66,17 @@ class IImage : public IResource
 		/// GetPixelAlpha returns only the alpha component of the pixel.
 		virtual u8 GetPixelAlpha(u32 x, u32 y) const;
 
-		/// Gets the texture image width in pixels.
+		/// Gets the texture width in pixels.
 		virtual u32 GetWidthInPixel() const;
 
-		/// Gets the texture image height in pixels.
+		/// Gets the texture height in pixels.
 		virtual u32 GetHeightInPixel() const;
+
+		/// Gets the full atlas width in pixels.
+		virtual u32 GetAtlasWidthInPixel() const;
+
+		/// Gets the full atlas height in pixels.
+		virtual u32 GetAtlasHeightInPixel() const;
 
 		/// Gets the texture image width normalized (0.0f - 1.0f).
 		virtual f32 GetWidth() const;
@@ -126,8 +132,8 @@ class IImage : public IResource
 	protected:
 		void *operator new(size_t len);
 		void operator delete(void *ptr);
-		void *operator new [](size_t);
-		void operator delete [](void *);
+		void *operator new[](size_t) { return NULL; };
+		void operator delete[](void *) {};
 
 	protected:
 		eTextureFilter		nMinFilter;

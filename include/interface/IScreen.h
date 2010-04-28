@@ -37,13 +37,10 @@
 #ifndef __ISCREEN_H__
 #define __ISCREEN_H__
 
-
 #include "IModule.h"
 #include "IUpdatable.h"
 
-
 namespace Seed {
-
 
 class IRenderer;
 
@@ -51,7 +48,7 @@ class IRenderer;
 /**
 Any Screen implementation must implement this interface.
 */
-class IScreen : public IModule, public IUpdatable
+class SEED_CORE_API IScreen : public IModule, public IUpdatable
 {
 	public:
 		IScreen();
@@ -144,8 +141,6 @@ class IScreen : public IModule, public IUpdatable
 		SEED_DISABLE_COPY(IScreen);
 };
 
-
 } // namespace
-
 
 #endif // __ISCREEN_H__

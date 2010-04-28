@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -60,6 +60,8 @@ enum eObjectType
 	ObjectParticleEmitter,
 	ObjectParticleEmitterObject,
 	ObjectParticleManager,
+	ObjectViewManager,
+	ObjectRendererManager,
 
 	// System
 	ObjectConfiguration,
@@ -69,6 +71,7 @@ enum eObjectType
 
 	// GUI Elements
 	ObjectGuiManager,
+	ObjectGuiWidget,
 	ObjectGuiButton,
 	ObjectGuiLabel,
 	ObjectGuiTextArea,
@@ -408,7 +411,151 @@ enum eMeshType
 {
 	TriangleStrip,
 	Triangles,
-	LineStrip
+	LineStrip,
+	Quads
+};
+
+enum eRendererPacketType
+{
+	RendererLastType,
+	RendererImmediate,
+	RendererDrawArray,
+	RendererDisplayList,
+
+	/*
+	VertexBuffer/VBO is better when using one large object/mesh.
+	It can be used with a lot of tiny objects, but they must have the same setings (eg. texture and blending).
+	Even thought vertex, texcoord and normal can differ.
+	*/
+	RendererVertexBuffer
+};
+
+/*
+TODO: Rewrite blending logic to use Blending classes and use http://www.opengl.org/sdk/docs/man/xhtml/glBlendFuncSeparate.xml
+TODO: Blending based on http://www.w3.org/TR/2009/WD-SVGCompositing-20090430/ and http://kobalicek.com/data/articles/Fog-Graphics.html (Compositing)
+
+All operations following this will use these variables:
+
+Variables:
+	- C is the color component (RGB);
+	- A is the alpha component;
+
+Subscripts:
+	- r is the rasterized output (result);
+	- t is the texture source component input (pixel);
+	- d is the texture destiny component input (pixel);
+	- f is the color fragment intput (glColor*);
+
+Base formula:
+	Cr = Ct * paramSrc + Cd * paramDst
+	Ar = At * paramSrc + Ad * paramDst
+
+* REPLACE operations *
+
+Just will replace the rasterized fragment with the newly computed one.
+
+BlendNone
+
+Will blend the incoming texture with the background respecting the texture alpha
+and not the background alfa.
+
+Cr = Ct * At + Cr * 0
+Ar = At * At + Ar * 0
+
+* DECAL operations
+
+BlendDecalOverlay
+
+Cr = Ct * Cr + Cf * 1.0f
+Ar = At * Ar + Af * 1.0f
+
+* BLEND operations *
+
+All operations from here are blending between two textures:
+- the source texture (currently selected texture);
+- the destiny texture or rasterized texture (whatever is in the framebuffer / background);
+
+
+BlendDefault
+
+Cr = Ct * 1.0f + Cd * 1.0f = Ct + Cd
+Ar = At * 1.0f + Ad * 1.0f = At + Ad
+
+
+BlendMerge
+
+It's an average between source and destiny (Morpho's screen):
+
+Cr = Ct * At + Cd * Ad
+Ar = At * At + Ad * Ad (this is correct?)
+
+
+BlendScreen
+
+This is based in this article:
+http://gmc.yoyogames.com/index.php?s=321b708f77c5e17d0fca772ef7dcd6f9&showtopic=254433&st=0
+
+Where it try to simulate photo shop screen blending.
+
+Cr = Ct + Cd * (1.0f - Ct)
+Ar = At + Ad * (1.0f - At)
+
+
+* MODULATE operations *
+
+Modulate is applied based in a Texture Pixel with a Color Fragment (glColor*) based
+in the following formula:
+
+
+BlendOverlay
+
+Cr = Ct * Cr + Cf * 1.0f
+Ar = At * Ar + Af * 1.0f
+
+
+BlendLighten
+
+Cr = Ct * (1.0f - At) + Cf * (1.0f - At)
+Ar = At * (1.0f - At) + Af * (1.0f - At)
+
+
+BlendColorDodge
+
+Cr = Ct + Cf
+Ar = At + Af
+
+
+BlendModulateAlpha
+
+Cr = Ct * At +  1 * (1.0f - At)
+Ar = At * At + Af * (1.0f - At)
+
+
+BlendModulate
+
+Cr = Ct * At + Cf * (1.0f - At)
+Ar = At * At + Af * (1.0f - At)
+
+
+BlendAdditive
+
+Cr = Ct * At + Cd
+Ar = At * At + Ad
+
+*/
+enum eBlendMode
+{
+	BlendNone = 0,
+	BlendDefault,
+	BlendMerge,
+	BlendScreen,
+	BlendOverlay,
+	BlendLighten,
+	BlendColorDodge,
+	BlendDecalOverlay,
+	BlendModulateAlpha,
+	BlendModulate,
+	BlendAdditive
 };
 
 enum ePlayableState
@@ -416,6 +563,32 @@ enum ePlayableState
 	PlayableStopped,
 	PlayablePaused,
 	PlayablePlaying
+};
+
+enum eWidgetEventType
+{
+	WidgetEventNone,
+	WidgetEventFocusLost,
+	WidgetEventFocusReceived,
+	WidgetEventOver,
+	WidgetEventOut,
+	WidgetEventPressedOut,
+	WidgetEventReleasedOut,
+	WidgetEventPressed,
+	WidgetEventReleased,
+	WidgetEventDrag,
+	WidgetEventDrop
+};
+
+enum eWidgetState
+{
+	WidgetStateNone,
+	WidgetStateFocused,
+	WidgetStateOver,
+	WidgetStatePressed,
+	WidgetStatePressedOver,
+	WidgetStatePressedOut,
+	WidgetStateDrag
 };
 
 } // namespace

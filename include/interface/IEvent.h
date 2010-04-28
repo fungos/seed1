@@ -34,13 +34,11 @@
 	\brief Defines the event class interface
 */
 
-
 #ifndef __IEVENT_H__
 #define __IEVENT_H__
 
 #include "Defines.h"
 #include "IObject.h"
-
 
 #define EVENT_UNDEFINED			0
 #define	EVENT_INPUT_POINTER		1
@@ -52,11 +50,9 @@
 #define EVENT_FILE_SYSTEM		7
 #define EVENT_MOVIE				8
 
-
 namespace Seed {
 
-
-class IEvent : public IObject
+class SEED_CORE_API IEvent : public IObject
 {
 	public:
 		enum eType
@@ -93,8 +89,6 @@ class IEvent : public IObject
 		SEED_DISABLE_COPY(IEvent);
 };
 
-
 } // namespace
-
 
 #endif // __IEVENT_H__

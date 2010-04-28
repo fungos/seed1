@@ -34,11 +34,10 @@
 	\brief Global engine defines - all engine files must include this header
 */
 
-
 #ifndef __QT_DEFINES_H__
 #define __QT_DEFINES_H__
 
-#ifdef _QT_
+#if defined(_QT_)
 
 #include "platform/qt/QtPch.h"
 
@@ -47,7 +46,7 @@
 #define _OAL_OGG_	1
 #define _PC_		1
 
-#ifdef _QT_EMULATE_WII_
+#if defined(_QT_EMULATE_WII_)
 	#define PLATFORM_MAX_SCREEN_WIDTH		640
 	#define PLATFORM_MAX_SCREEN_HEIGHT		480
 #elif _QT_EMULATE_IPH_
@@ -78,14 +77,13 @@ typedef float 					fixed32;
 typedef int 					PIXEL;
 typedef int						BOOL;
 
-
-#ifdef WIN32
+#if defined(WIN32)
 	#undef BOOL
 	#define BOOL bool
 	#undef OUT
 	#define ATTRIBUTE_ALIGN(x)
 
-	#ifdef _MSC_VER
+	#if defined(_MSC_VER)
 		#include <direct.h>
 		#pragma warning(disable:4351)
 		#define getcwd _getcwd
@@ -164,8 +162,6 @@ union uPixel
 #define LIB_ASSERT_NULL(x)			if (!((void *)x)) { fprintf(stderr, "Failed assertion " #x); HALT; }
 
 #else // _QT_
-
 	#error "Include 'Defines.h' instead 'platform/qt/QtDefines.h' directly."
-
 #endif // _QT_
 #endif // __QT_DEFINES_H__

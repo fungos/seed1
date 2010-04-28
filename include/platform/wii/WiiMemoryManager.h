@@ -39,7 +39,7 @@
 
 #include "Defines.h"
 
-#ifdef _WII_
+#if defined(_WII_)
 
 #include "interface/IMemoryPool.h"
 #include "interface/IMemoryManager.h"

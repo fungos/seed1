@@ -34,22 +34,17 @@
 	\brief Defines the event widget listener class interface
 */
 
-
 #ifndef __IEVENT_WIDGET_LISTENER_H__
 #define __IEVENT_WIDGET_LISTENER_H__
-
 
 #include "interface/IEventListener.h"
 #include "interface/IEvent.h"
 
-
 namespace Seed {
-
 
 class EventWidget;
 
-
-class IEventWidgetListener : public IEventListener
+class SEED_CORE_API IEventWidgetListener : public IEventListener
 {
 	public:
 		IEventWidgetListener();
@@ -69,9 +64,6 @@ class IEventWidgetListener : public IEventListener
 		SEED_DISABLE_COPY(IEventWidgetListener);
 };
 
-
 } // namespace
 
-
 #endif // __IEVENT_WIDGET_LISTENER_H__
-

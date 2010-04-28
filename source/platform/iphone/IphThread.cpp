@@ -34,7 +34,7 @@
 	\brief Thread implementation
 */
 
-#ifdef _IPHONE_
+#if defined(_IPHONE_)
 
 #include "IphThread.h"
 

@@ -42,7 +42,7 @@ namespace Seed {
 
 IRenderable::IRenderable()
 	: IObject()
-	, eBlendOperation(NONE)
+	, eBlendOperation(Seed::BlendNone)
 	, iPriority(0)
 	, iColor(0)
 	, bPersistent(FALSE)
@@ -61,7 +61,7 @@ IRenderable::~IRenderable()
 
 INLINE void IRenderable::Reset()
 {
-	this->eBlendOperation = NONE;
+	this->eBlendOperation = Seed::BlendNone;
 	this->iPriority = 0;
 	this->iColor = 0;
 	this->bPersistent = FALSE;
@@ -104,7 +104,7 @@ INLINE BOOL IRenderable::IsPersistent() const
 	return this->bPersistent;
 }
 
-INLINE void IRenderable::SetBlending(IRenderable::eBlendMode op)
+INLINE void IRenderable::SetBlending(eBlendMode op)
 {
 	eBlendOperation = op;
 }
