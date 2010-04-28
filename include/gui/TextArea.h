@@ -55,6 +55,7 @@ class SEED_CORE_API TextArea : public IWidget
 		virtual void SetText(const WideString str);
 		virtual void SetText(const String &str);
 		virtual void SetFont(const Font *font);
+		virtual void ReleaseText();
 
 		virtual void SetPriority(u32 p);
 		virtual void SetAlignment(eHorizontalAlignment align);

@@ -101,6 +101,24 @@ void TextArea::Reset()
 	IWidget::Reset();
 }
 
+void TextArea::ReleaseText()
+{
+	if (this->pLines)
+		pMemoryManager->Free(this->pLines, pDefaultPool);
+
+	this->iId				= 0;
+	this->bDisabled			= TRUE;
+	this->iColor			= 0;
+	this->iLines			= 0;
+	this->eHAlign 			= HorizontalAlignLeft;
+	this->eVAlign 			= VerticalAlignTop;
+	this->eBlendOperation	= IRenderable::NONE;
+
+	this->pLines			= NULL;
+
+	this->cText.Reset();
+}
+
 void TextArea::Update(f32 dt)
 {
 	//IWidget::Update(dt);
