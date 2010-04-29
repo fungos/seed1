@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -75,17 +75,17 @@ class SEED_CORE_API SpriteObject : public IResource
 	public:
 		//typedef std::map<const char *, ISprite::Animation *, LowerThanStringComparator>   AnimationMap;
 		//typedef AnimationMap::iterator 													AnimationIterator;
-		
+
 		//typedef std::map<u32, ISprite::Animation *>  AnimationMap;
 		//typedef AnimationMap::iterator					AnimationMapIt;
-		
+
 	public:
 		SpriteObject();
 		virtual ~SpriteObject();
 
 		const ISprite::Animation *GetAnimation(const char *anim) const;
 		const ISprite::Animation *GetAnimation(u32 index) const;
-		
+
 		const ISprite::Frame *GetFrames(const ISprite::Animation *anim) const;
 
 		u32 GetNumAnimations() const;
@@ -98,14 +98,11 @@ class SEED_CORE_API SpriteObject : public IResource
 		virtual int GetObjectType() const;
 
 	protected:
-		void *operator new(size_t len);
-		void operator delete(void *ptr);
-		void *operator new[](size_t) { return NULL; };
-		void operator delete[](void *) {};
-
 		// IResource
 		virtual BOOL Unload();
 		virtual BOOL Load(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+
+		SEED_DISABLE_INSTANCING;
 
 	private:
 		SEED_DISABLE_COPY(SpriteObject);
@@ -126,7 +123,7 @@ class SEED_CORE_API SpriteObject : public IResource
 		ISprite::Animation		*pAnimations;
 		ISprite::Frame			*pFrames;
 		ISprite::Frame			**pAnimationFrames;
-		
+
 		//AnimationMap			mapAnim;
 };
 

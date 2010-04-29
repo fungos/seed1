@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -126,8 +126,7 @@ BOOL Theora::Run()
 		if (bPlaying && !bFinished)
 		{
 			OggPlayErrorCode r = E_OGGPLAY_TIMEOUT;
-			if (sem)
-				SEM_WAIT(sem);
+			SEM_CHECK(sem) SEM_WAIT(sem);
 
 			while (r == E_OGGPLAY_TIMEOUT && !bTerminateThread)
 			{
@@ -139,8 +138,7 @@ BOOL Theora::Run()
 				//bPlaying = FALSE;
 				bFinished = TRUE;
 				pTimer->Sleep(10);
-				if (sem)
-					SEM_WAIT(sem);
+				SEM_CHECK(sem) SEM_WAIT(sem);
 			}
 		}
 
@@ -149,9 +147,8 @@ BOOL Theora::Run()
 
 	if (bTerminateThread)
 	{
-		if (sem)
-			SEM_CLOSE(sem);
-		sem = 0;
+		SEM_CHECK(sem) SEM_CLOSE(sem);
+		SEM_CLEAR(sem);
 
 		if (pPlayer)
 			oggplay_close(pPlayer);
@@ -327,8 +324,7 @@ INLINE BOOL Theora::GoToFrame(u32 frame)
 	else
 	{
 		ret = TRUE;
-		if (sem)
-			SEM_SIGNAL(sem);
+		SEM_CHECK(sem) SEM_SIGNAL(sem);
 	}
 
 	return ret;
@@ -342,8 +338,7 @@ INLINE void Theora::Rewind()
 		Log(TAG "Cant seek backwards.");
 	}
 
-	if (sem)
-		SEM_SIGNAL(sem);
+	SEM_CHECK(sem) SEM_SIGNAL(sem);
 }
 
 INLINE u32 Theora::GetFrameCount() const

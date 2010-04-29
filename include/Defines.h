@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -207,6 +207,23 @@ http://www.unknownroad.com/rtfm/VisualStudio/warningC4251.html
 
 #define SEED_DISABLE_COPY(Class)		Class(const Class &); \
 										Class &operator=(const Class &)
+
+#define SEED_DISABLE_INSTANCING			protected: \
+											void *operator new(size_t len); \
+											void operator delete(void *ptr); \
+											void *operator new[](size_t) throw() { return NULL; }; \
+											void operator delete[](void *) {};
+
+#define SEED_DISABLE_INSTANCING_IMPL(Class)	\
+										INLINE void *Class::operator new(size_t len) \
+										{ \
+											return pMemoryManager->Alloc(len, pDefaultPool); \
+										} \
+										 \
+										INLINE void Class::operator delete(void *ptr) \
+										{ \
+											pMemoryManager->Free(ptr, pDefaultPool); \
+										}
 
 #define SEED_FORWARD_DECLARATION(Class) namespace Seed { class Class; }
 

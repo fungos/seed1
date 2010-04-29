@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -40,14 +40,14 @@ size_t vorbis_read(void *ptr, size_t byteSize, size_t sizeToRead, void *datasour
 	size_t actualSizeToRead;
 	sOggFile *vorbisData;
 
-	vorbisData = (sOggFile*)datasource;
+	vorbisData = (sOggFile *)datasource;
 
 	spaceToEOF = static_cast<size_t>(vorbisData->dataSize - vorbisData->dataRead);
 	if ((sizeToRead*byteSize) < spaceToEOF)
 		actualSizeToRead = (sizeToRead*byteSize);
 	else
 		actualSizeToRead = spaceToEOF;
-	
+
 	if (actualSizeToRead)
 	{
 		memcpy(ptr, (char*)vorbisData->dataPtr + vorbisData->dataRead, actualSizeToRead);
@@ -64,7 +64,7 @@ int vorbis_seek(void *datasource, ogg_int64_t offset, int whence)
 	ogg_int64_t actualOffset;
 	sOggFile *vorbisData;
 
-	vorbisData = (sOggFile*)datasource;
+	vorbisData = (sOggFile *)datasource;
 
 	switch (whence)
 	{
@@ -81,7 +81,7 @@ int vorbis_seek(void *datasource, ogg_int64_t offset, int whence)
 		case SEEK_CUR:
 		{
 			spaceToEOF = static_cast<size_t>(vorbisData->dataSize - vorbisData->dataRead);
-			if (offset < spaceToEOF)
+			if (offset < (ogg_int64_t)spaceToEOF)
 				actualOffset = (offset);
 			else
 				actualOffset = spaceToEOF;
@@ -140,7 +140,7 @@ bool ogg_update_stream(OggVorbis_File *oggStream, ogg_int64_t rate, ALenum forma
 				else
 					break;
 			}
-				
+
 	}
 
 	if (size == 0)

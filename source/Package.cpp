@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -183,14 +183,6 @@ INLINE void Package::LockUnload()
 	stFile.bPackaged = TRUE; // FIXME: Hackerish so the package marked Locked won't be freed - ie.: ROM
 }
 
-void *Package::operator new(size_t len)
-{
-	return pMemoryManager->Alloc(len, pDefaultPool);
-}
-
-void Package::operator delete(void *ptr)
-{
-	pMemoryManager->Free(ptr, pDefaultPool);
-}
+SEED_DISABLE_INSTANCING_IMPL(Package);
 
 } // namespace

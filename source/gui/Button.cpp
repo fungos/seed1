@@ -695,7 +695,7 @@ INLINE void Button::SetDisabled(BOOL b)
 				{
 					BOOL hasAnim = FALSE;
 					hasAnim = cSprite.SetAnimation("idle");
-					if (hasAnim) 
+					if (hasAnim)
 					{
 						pPreviousEnabledAnimation = "idle";
 					}
@@ -1354,16 +1354,6 @@ INLINE void Button::SetDragCentered(BOOL b)
 	this->bCenterDrag = b;
 }
 
-INLINE void *Button::operator new(size_t len)
-{
-	return pMemoryManager->Alloc(len, pDefaultPool);
-}
-
-INLINE void Button::operator delete(void *ptr)
-{
-	pMemoryManager->Free(ptr, pDefaultPool);
-}
-
 INLINE const char *Button::GetObjectName() const
 {
 	return "Button";
@@ -1373,5 +1363,7 @@ INLINE int Button::GetObjectType() const
 {
 	return Seed::ObjectGuiButton;
 }
+
+SEED_DISABLE_INSTANCING_IMPL(Button);
 
 } // namespace

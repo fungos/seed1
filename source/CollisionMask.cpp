@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -116,16 +116,6 @@ INLINE u32 CollisionMask::GetUsedMemory() const
 	return sizeof(this) + stFile.GetSize();
 }
 
-INLINE void *CollisionMask::operator new(size_t len)
-{
-	return pMemoryManager->Alloc(len, pDefaultPool);
-}
-
-INLINE void CollisionMask::operator delete(void *ptr)
-{
-	pMemoryManager->Free(ptr, pDefaultPool);
-}
-
 INLINE const char *CollisionMask::GetObjectName() const
 {
 	return "CollisionMask";
@@ -135,5 +125,7 @@ INLINE int CollisionMask::GetObjectType() const
 {
 	return Seed::ObjectCollisionMask;
 }
+
+SEED_DISABLE_INSTANCING_IMPL(CollisionMask);
 
 } // namespace

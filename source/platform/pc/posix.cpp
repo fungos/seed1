@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -144,13 +144,13 @@ void get_current_directory(char *buff, int size)
 {
 #if defined(__APPLE_CC__)
 	int len = strlen(Seed::Private::pcArgv[0]);
-	
+
 	memcpy(pcBundle, Seed::Private::pcArgv[0], len);
 	while (pcBundle[len] != '/') len--;
 	len -= strlen("MacOS");
 	memset(&pcBundle[len], '\0', sizeof(pcBundle) - len);
 	strcpy(&pcBundle[len], "Resources");
-	
+
 	memcpy(buff, pcBundle, size);
 #else
 	getcwd(buff, size);
@@ -164,12 +164,14 @@ BOOL change_directory(const char *to)
 
 void print_system_info()
 {
-	#warning "Must implement function " ## __PRETTY_FUNCTION__
+	#warning "Must implement function print_system_info"
 }
 
 BOOL system_check_multiple_instance(bool warnUser)
 {
-	#warning "Must implement function " ## __PRETTY_FUNCTION__
+	UNUSED(warnUser);
+	#warning "Must implement function system_check_multiple_instance"
+	return TRUE;
 }
 
 #endif // _LINUX_

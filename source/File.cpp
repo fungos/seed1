@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -34,7 +34,6 @@
 	\brief A system event
 */
 
-
 #include "Defines.h"
 #include "MemoryManager.h"
 #include "File.h"
@@ -42,7 +41,6 @@
 #include "Log.h"
 
 #define TAG		"[File] "
-
 
 namespace Seed {
 
@@ -54,7 +52,6 @@ File::File()
 	, bPackaged(FALSE)
 {
 }
-
 
 File::File(const char *filename, IMemoryPool *pool)
 	: pName(filename)
@@ -69,12 +66,10 @@ File::File(const char *filename, IMemoryPool *pool)
 	// file don't need to know about filesystem.. but, this will make the usage simplier.
 }
 
-
 File::~File()
 {
 	this->Close();
 }
-
 
 void File::Close()
 {
@@ -90,24 +85,10 @@ void File::Close()
 	bPackaged = FALSE;
 }
 
-
-void *File::operator new(size_t len)
-{
-	return pMemoryManager->Alloc(len, pDefaultPool);
-}
-
-
-void File::operator delete(void *ptr)
-{
-	pMemoryManager->Free(ptr, pDefaultPool);
-}
-
-
 INLINE void File::SetSize(u32 size)
 {
 	iSize = size;
 }
-
 
 INLINE u32 File::GetSize() const
 {
@@ -124,23 +105,21 @@ INLINE const void *File::GetData() const
 	return pData;
 }
 
-
 INLINE IMemoryPool *File::GetPool() const
 {
 	return pPool;
 }
-
 
 INLINE const char *File::GetName() const
 {
 	return pName;
 }
 
-
 INLINE void File::SetName(const char *name)
 {
 	pName = name;
 }
 
+SEED_DISABLE_INSTANCING_IMPL(File);
 
 } // namespace
