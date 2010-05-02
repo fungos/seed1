@@ -41,6 +41,8 @@
 #include <stdio.h>
 #include "Log.h"
 
+#define TAG "[GameApp] "
+
 namespace Seed {
 
 IGameApp::IGameApp()
@@ -55,8 +57,9 @@ IGameApp::~IGameApp()
 
 INLINE BOOL IGameApp::Shutdown()
 {
+	Log(TAG "Shutting down...");
 	pDictionary->Reset();
-	glResourceManager.Reset();
+	cResourceManager.Reset();
 
 	return TRUE;
 }

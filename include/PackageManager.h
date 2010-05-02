@@ -62,7 +62,7 @@ class SEED_CORE_API PackageManager : public IModule
 		virtual ~PackageManager();
 
 		void AddRomPackage(const void *addr, const char *name);
-		void Add(const char *fileName, IMemoryPool *pool = pDefaultPool, ResourceManager *res = &glResourceManager);
+		void Add(const char *fileName, IMemoryPool *pool = pDefaultPool, ResourceManager *res = pResourceManager);
 		void Remove(const char *fileName);
 		void Clear();
 

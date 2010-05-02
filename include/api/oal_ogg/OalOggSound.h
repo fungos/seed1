@@ -55,7 +55,7 @@
 
 namespace Seed { namespace OAL {
 
-IResource *SoundResourceLoader(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+IResource *SoundResourceLoader(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 
 class SEED_CORE_API Sound : public ISound
 {
@@ -70,7 +70,7 @@ class SEED_CORE_API Sound : public ISound
 		void Reset();
 
 		// IResource
-		virtual BOOL Load(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual BOOL Unload();
 		virtual u32 GetUsedMemory() const;
 

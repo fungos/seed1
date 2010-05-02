@@ -71,7 +71,7 @@ class SEED_CORE_API ISoundSource : public IObject
 		//virtual void SetSound(ISound *sound);
 		//virtual ISound *GetSound() const;
 		virtual void Load(const char *filename, IMemoryPool *pool = pDefaultPool);
-		virtual void Load(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual void Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual void Unload();
 
 		virtual void SetPosition(f32 x, f32 y, f32 z);

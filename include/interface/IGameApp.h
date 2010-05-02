@@ -86,11 +86,12 @@ class SEED_CORE_API IGameApp : public IUpdatable, public IModule
 		virtual const char *GetObjectName() const;
 		virtual int GetObjectType() const;
 
-	private:
-		SEED_DISABLE_COPY(IGameApp);
-
+	protected:
 		Configuration	cConfig;
 		ResourceManager	cResourceManager;
+
+	private:
+		SEED_DISABLE_COPY(IGameApp);
 };
 
 } // namespace

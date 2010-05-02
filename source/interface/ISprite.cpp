@@ -135,7 +135,7 @@ INLINE BOOL ISprite::Unload()
 
 INLINE BOOL ISprite::Load(const char *filename, IMemoryPool *pool)
 {
-	return this->Load(filename, &glResourceManager, pool);
+	return this->Load(filename, pResourceManager, pool);
 }
 
 BOOL ISprite::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)

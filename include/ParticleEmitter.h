@@ -58,7 +58,7 @@ class SEED_CORE_API ParticleEmitter : public ITransformable2D
 
 		virtual void SetFilter(eTextureFilterType type, eTextureFilter filter);
 
-		virtual void Load(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual void Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual void Unload();
 		virtual void Reset();
 

@@ -243,11 +243,11 @@ typedef u32 					PIXEL;
 union uPixel
 {
 	PIXEL pixel;
-	struct SEED_CORE_API _sPixel
+	struct _sPixel
 	{
 		u8 c[4];
 	} pComponent;
-	struct SEED_CORE_API _cPixel
+	struct _cPixel
 	{
 		u8 a;
 		u8 b;

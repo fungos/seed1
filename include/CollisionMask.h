@@ -57,7 +57,7 @@ class SEED_CORE_API CollisionMask : public IResource
 		virtual BOOL CheckPixel(u32 x, u32 y) const;
 
 		// IResource
-		virtual BOOL Load(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual BOOL Unload();
 		virtual u32 GetUsedMemory() const;
 

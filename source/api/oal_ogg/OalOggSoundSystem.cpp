@@ -144,7 +144,7 @@ BOOL SoundSystem::Reset()
 		pNewMusic = NULL;
 
 		arSource.Truncate();
-		IModule::Reset();
+		// abstract IModule::Reset();
 	}
 	return TRUE;
 }

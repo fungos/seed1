@@ -48,7 +48,7 @@ namespace Seed { namespace OGL { class Sprite; }}
 
 namespace Seed { namespace SDL {
 
-IResource *ImageResourceLoader(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+IResource *ImageResourceLoader(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 
 class SEED_CORE_API Image : public IImage
 {
@@ -75,7 +75,7 @@ class SEED_CORE_API Image : public IImage
 		virtual u32 GetAtlasHeightInPixel() const;
 
 		// IResource
-		virtual BOOL Load(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual BOOL Unload();
 		virtual u32 GetUsedMemory() const;
 

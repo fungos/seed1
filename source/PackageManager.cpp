@@ -104,7 +104,7 @@ void PackageManager::AddRomPackage(const void *addr, const char *name)
 {
 	ASSERT_NULL(addr);
 
-	Package *p = new Package(name);
+	Package *p = New(Package(name));
 	p->LockUnload();
 	p->Load(addr);
 

@@ -79,7 +79,7 @@ namespace Private
 	f32			fCurrentTime	= 0.0f;
 }
 
-ResourceManager glResourceManager("global");
+ResourceManager *pResourceManager = NULL;//("global");
 const Configuration *pConfiguration = NULL;
 
 #define MAX_FRAME_DELTA (1.0f / 60.0f) * 5.0f
@@ -114,7 +114,7 @@ INLINE void SetGameApp(IGameApp *app, int argc, char **argv)
 	Private::pApplication = app;
 	Private::pApplication->Setup(argc, argv);
 	pConfiguration  = app->GetConfiguration();
-	//glResourceManager = app->GetResourceManager();
+	pResourceManager = app->GetResourceManager();
 
 	CommandLineParse(argc, argv);
 }
@@ -234,6 +234,9 @@ void Shutdown()
 
 	Info(SEED_TAG "Shutting down subsystems...");
 	pModuleManager->Shutdown();
+
+	//LeakReportPrint;
+
 	Private::bInitialized = FALSE;
 
 	Private::pApplication = NULL;

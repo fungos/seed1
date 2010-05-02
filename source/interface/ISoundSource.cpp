@@ -61,7 +61,7 @@ ISoundSource::~ISoundSource()
 
 void ISoundSource::Load(const char *filename, IMemoryPool *pool)
 {
-	this->Load(filename, &glResourceManager, pool);
+	this->Load(filename, pResourceManager, pool);
 }
 
 void ISoundSource::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)

@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -49,7 +49,7 @@ IResource *SoundResourceLoader(const char *filename, ResourceManager *res, IMemo
 {
 	UNUSED(res);
 
-	Sound *sound = new Sound();
+	Sound *sound = New(Sound());
 	sound->Load(filename, res, pool);
 	return sound;
 }
@@ -100,7 +100,7 @@ BOOL Sound::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		if (ov_open_callbacks(&oggFile, &oggStream, NULL, 0, vorbisCb) != 0)
 		{
 			Log(TAG "Could not read ogg file from memory");
-		
+
 			memset(&oggFile, '\0', sizeof(oggFile));
 			stFile.Close();
 		}
@@ -112,7 +112,7 @@ BOOL Sound::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 
 			ALsizei freq;
 			std::vector<char> buffer;
-			
+
 			vorbis_info *info = ov_info(&oggStream, -1);
 
 			if (info->channels > 1)

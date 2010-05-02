@@ -49,7 +49,7 @@ namespace Seed {
 
 IResource *FontResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
-	Font *fnt = new Font();
+	Font *fnt = New(Font());
 	fnt->Load(filename, res, pool);
 
 	return fnt;

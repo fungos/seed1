@@ -48,7 +48,9 @@
 #include "EventInputKeyboard.h"
 #include "EventSystem.h"
 
+#if defined(WIN32)
 #include <SDL/SDL_syswm.h>
+#endif
 
 #define TAG "[Input] "
 

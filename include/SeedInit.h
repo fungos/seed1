@@ -52,7 +52,7 @@ Everything from Seed SDK will be inside Seed namespace.
 */
 namespace Seed {
 
-	SEED_CORE_API extern ResourceManager glResourceManager;
+	SEED_CORE_API extern ResourceManager *pResourceManager;
 	SEED_CORE_API extern const Configuration *pConfiguration;
 
 	#if SEED_USE_STRING_POOL == 1

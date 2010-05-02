@@ -100,7 +100,7 @@ class SEED_CORE_API SpriteObject : public IResource
 	protected:
 		// IResource
 		virtual BOOL Unload();
-		virtual BOOL Load(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 
 		SEED_DISABLE_INSTANCING;
 

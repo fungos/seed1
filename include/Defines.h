@@ -69,7 +69,6 @@ http://www.unknownroad.com/rtfm/VisualStudio/warningC4251.html
 	#endif // SDL
 #endif // WII
 
-
 #ifndef SEED_CORE_API
 #define SEED_CORE_API
 #endif

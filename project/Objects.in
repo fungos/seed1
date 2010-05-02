@@ -71,7 +71,6 @@ OBJECTS = \
 ../source/File.o \
 ../source/Font.o \
 ../source/Formats.o \
-../source/gui/.kdbgrc.Button.o \
 ../source/gui/Button.o \
 ../source/gui/EventWidget.o \
 ../source/gui/GuiManager.o \
@@ -139,4 +138,5 @@ OBJECTS = \
 ../source/Updater.o \
 ../source/EventSystem.o \
 ../source/Particle.o \
-../source/ResourceManager.o
+../source/ResourceManager.o \
+../source/LeakReport.o

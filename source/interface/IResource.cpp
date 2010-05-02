@@ -85,12 +85,12 @@ INLINE u32 IResource::GetReferenceCount() const
 
 INLINE BOOL IResource::Load(const char *filename, IMemoryPool *pool)
 {
-	return this->Load(filename, &glResourceManager, pool);
+	return this->Load(filename, pResourceManager, pool);
 }
 
 INLINE BOOL IResource::Load(const char *filename)
 {
-	return this->Load(filename, &glResourceManager, pDefaultPool);
+	return this->Load(filename, pResourceManager, pDefaultPool);
 }
 /*
 INLINE BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool)

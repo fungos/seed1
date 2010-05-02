@@ -156,7 +156,7 @@ INLINE BOOL Renderer::Initialize()
 
 INLINE BOOL Renderer::Reset()
 {
-	return IRenderer::Reset();
+	return TRUE; // abstract IRenderer::Reset();
 }
 
 INLINE void Renderer::SetBufferMode(eBufferMode mode)

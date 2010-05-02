@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -29,65 +29,63 @@
  **
  *****************************************************************************/
 
-/*! \file OalOggSoundSource.h
+/*! \file LeakReport.h
 	\author	Danny Angelo Carminati Grein
-	\brief Sound source implementation using OpenAL API
+	\brief Leak Report
 */
 
-#ifndef __OAL_OGG_SOUND_SOURCE_H__
-#define __OAL_OGG_SOUND_SOURCE_H__
+#ifndef __LEAK_REPORT_H__
+#define __LEAK_REPORT_H__
 
+#if defined(DEBUG)
+
+#include "Config.h"
 #include "Defines.h"
+#include "Log.h"
 
-#if defined(_OAL_OGG_)
+#include <map>
 
-#include "Sound.h"
-#include "interface/ISoundSource.h"
-#include "interface/ISound.h"
-#include "File.h"
+#define New(T)			new T	//pLeakReport->LogNew((new T), __FILE__, __LINE__)
+#define Delete(ptr)		{pLeakReport->LogDelete(ptr); if (ptr) delete ptr; ptr = NULL; }
+#define LeakReportPrint		pLeakReport->Print();
 
-#if defined(__APPLE_CC__)
-#include <OpenAL/al.h>
-#include <OpenAL/alc.h>
-#else
-#include <AL/al.h>
-#include <AL/alc.h>
-#endif
+namespace Seed {
 
-namespace Seed { namespace OAL {
+typedef std::map<void *, char *> PointerMap;
+typedef PointerMap::iterator PointerMapIterator;
 
-class SEED_CORE_API SoundSource : public ISoundSource
+class LeakReport
 {
-	friend class SoundSystem;
-
 	public:
-		SoundSource();
-		virtual ~SoundSource();
+		LeakReport();
+		~LeakReport();
 
-		// ISoundSource
-		virtual void Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
-		virtual void Unload();
+		bool LogNew(void *ptr, const char *func, int line);
+		void LogDelete(void *ptr);
+		void Print();
 
-		virtual void SetLoop(BOOL b);
-		virtual void Play();
-		virtual void Stop(f32 ms = 0.0f);
-		virtual void Resume();
-
-		virtual void SetVolume(f32 vol);
-		virtual void UpdateVolume();
-
+		static LeakReport instance;
 	private:
-		SEED_DISABLE_COPY(SoundSource);
+		SEED_DISABLE_COPY(LeakReport);
 
-	private:
-		ALuint			iSource;
-		Sound			*pSound;
-		File			stFile;
+		PointerMap mapAddress;
 };
 
-}} // namespace
+extern "C" {
+SEED_CORE_API extern LeakReport *const pLeakReport;
+}
 
-#else // _OAL_OGG_
-	#error "Include 'SoundSource.h' instead 'api/oal_ogg/OalOggSoundSource.h' directly."
-#endif // _OAL_OGG_
-#endif // __OAL_OGG_SOUND_SOURCE_H__
+}; // namespace
+
+#else
+
+#define New(T)			new T
+#define Delete(ptr)		if (ptr) \
+					delete ptr; \
+				ptr = NULL;
+
+#define LeakReportPrint
+
+#endif // DEBUG
+
+#endif // __LEAK_REPORT_H__

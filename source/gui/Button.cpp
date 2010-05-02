@@ -30,7 +30,7 @@ namespace Seed {
 
 IResource *ButtonResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
-	Button *btn = new Button();
+	Button *btn = New(Button());
 	btn->Load(filename, res, pool);
 
 	return btn;

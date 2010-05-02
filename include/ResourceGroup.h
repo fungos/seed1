@@ -59,7 +59,7 @@ class SEED_CORE_API ResourceGroup
 		ResourceGroup();
 		virtual ~ResourceGroup();
 
-		void Add(const char *filename, Seed::eObjectType resourceType = Seed::ObjectSprite, IMemoryPool *pool = pDefaultPool, ResourceManager *res = &glResourceManager);
+		void Add(const char *filename, Seed::eObjectType resourceType = Seed::ObjectSprite, IMemoryPool *pool = pDefaultPool, ResourceManager *res = pResourceManager);
 
 	protected:
 		typedef struct SEED_CORE_API QueueItem

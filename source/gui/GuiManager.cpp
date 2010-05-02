@@ -74,7 +74,7 @@ INLINE BOOL GuiManager::Initialize()
 INLINE BOOL GuiManager::Reset()
 {
 	this->pFocused = NULL;
-	return IModule::Reset();
+	return TRUE; // abstract IModule::Reset();
 }
 
 INLINE BOOL GuiManager::Shutdown()

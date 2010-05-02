@@ -47,7 +47,7 @@ namespace Seed {
 
 IResource *SpriteResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
-	SpriteObject *spt = new SpriteObject();
+	SpriteObject *spt = New(SpriteObject());
 	spt->Load(filename, res, pool);
 
 	return spt;

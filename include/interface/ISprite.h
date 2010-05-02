@@ -100,7 +100,7 @@ class SEED_CORE_API ISprite : public IBasicMesh
 		virtual ~ISprite();
 
 		virtual BOOL Load(const char *filename, IMemoryPool *pool);
-		virtual BOOL Load(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual BOOL Unload();
 
 		virtual const IImage *GetImage() const;

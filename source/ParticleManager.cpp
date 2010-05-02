@@ -66,7 +66,7 @@ INLINE BOOL ParticleManager::Reset()
 	this->Kill();
 	vEmitter.Truncate();
 
-	return IModule::Reset();
+	return TRUE; // abstract IModule::Reset();
 }
 
 INLINE BOOL ParticleManager::Shutdown()

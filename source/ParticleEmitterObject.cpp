@@ -43,7 +43,7 @@ namespace Seed {
 
 IResource *ParticleEmitterObjectResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
-	ParticleEmitterObject *obj = new ParticleEmitterObject();
+	ParticleEmitterObject *obj = New(ParticleEmitterObject());
 	obj->Load(filename, res, pool);
 
 	return obj;

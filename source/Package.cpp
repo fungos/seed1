@@ -34,7 +34,6 @@
 	\brief Package system
 */
 
-
 #include "Package.h"
 #include "FileSystem.h"
 #include "Formats.h"
@@ -53,7 +52,7 @@ struct SEED_CORE_API PackageFSTable
 
 IResource *PackageResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
-	Package *pkg = new Package();
+	Package *pkg = New(Package());
 	pkg->Load(filename, res, pool);
 
 	return pkg;

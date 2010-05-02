@@ -41,7 +41,7 @@ namespace Seed {
 
 IResource *CollisionMaskResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
-	CollisionMask *mask = new CollisionMask();
+	CollisionMask *mask = New(CollisionMask());
 	mask->Load(filename, res, pool);
 
 	return mask;

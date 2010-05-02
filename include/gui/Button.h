@@ -78,7 +78,7 @@ class SEED_CORE_API Button : public IWidget, public IResource
 		virtual void SetDraggingPriority(u32 i);
 		virtual u32 GetDraggingPriority() const;
 		virtual void SetDragCentered(BOOL b);
-		virtual void SetSprite(const char *spriteName, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual void SetSprite(const char *spriteName, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual void SetVisible(BOOL b);
 		virtual void SetFrameControl(BOOL b);
 		virtual void SetEnableHover(BOOL b);
@@ -87,7 +87,7 @@ class SEED_CORE_API Button : public IWidget, public IResource
 		virtual void SetPressOffset(f32 x, f32 y);
 		virtual void SetHoverOffset(f32 x, f32 y);
 
-		virtual void SetMask(const char *maskName, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual void SetMask(const char *maskName, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual void SetCollisionType(eCollisionType type);
 		virtual eCollisionType GetCollisionType() const;
 
@@ -216,7 +216,7 @@ class SEED_CORE_API Button : public IWidget, public IResource
 		virtual void Render(f32 delta);
 
 		// IResource
-		virtual BOOL Load(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual BOOL Unload();
 
 		// IObject

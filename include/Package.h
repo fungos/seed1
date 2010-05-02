@@ -73,8 +73,8 @@ class SEED_CORE_API Package : public IResource
 		void LockUnload();
 
 		// IResource
-		virtual BOOL Load(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
-		virtual BOOL Load(const void *data, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual BOOL Load(const void *data, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual BOOL Unload();
 
 		SEED_DISABLE_INSTANCING;

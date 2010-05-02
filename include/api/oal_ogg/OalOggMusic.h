@@ -59,7 +59,7 @@
 
 namespace Seed { namespace OAL {
 
-IResource *MusicResourceLoader(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+IResource *MusicResourceLoader(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 
 class SEED_CORE_API Music : public IMusic
 {
@@ -79,7 +79,7 @@ class SEED_CORE_API Music : public IMusic
 		virtual void UpdateVolume();
 
 		// IResouce
-		virtual BOOL Load(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual BOOL Unload();
 
 	protected:

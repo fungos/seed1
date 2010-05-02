@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -56,7 +56,7 @@ ResourceGroup::~ResourceGroup()
 
 void ResourceGroup::Add(const char *filename, Seed::eObjectType resourceType, IMemoryPool *pool, ResourceManager *res)
 {
-	QueueItem *pNewItem 	= new QueueItem();
+	QueueItem *pNewItem 	= New(QueueItem());
 	pNewItem->filename 		= filename;
 	pNewItem->resource 		= NULL;
 	pNewItem->resourceType 	= resourceType;
@@ -111,7 +111,7 @@ BOOL ResourceGroup::Unload()
 			pQueueItem->resource->Release();
 		}
 
-		delete pQueueItem;
+		Delete(pQueueItem);
 	}
 
 	queue.clear();
