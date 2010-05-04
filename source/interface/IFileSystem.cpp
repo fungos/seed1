@@ -64,7 +64,6 @@ IFileSystem::IFileSystem()
 
 IFileSystem::~IFileSystem()
 {
-	this->DestroyFileTable();
 }
 
 INLINE BOOL IFileSystem::Initialize()
