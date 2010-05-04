@@ -45,9 +45,9 @@
 
 #include <map>
 
-#define New(T)			new T	//pLeakReport->LogNew((new T), __FILE__, __LINE__)
-#define Delete(ptr)		{pLeakReport->LogDelete(ptr); if (ptr) delete ptr; ptr = NULL; }
-#define LeakReportPrint		pLeakReport->Print();
+#define New(T)				(new T)
+#define Delete(ptr)			{ if (ptr) delete ptr; ptr = NULL; }
+#define LeakReportPrint		
 
 namespace Seed {
 
@@ -60,9 +60,7 @@ class LeakReport
 		LeakReport();
 		~LeakReport();
 
-		bool LogNew(void *ptr, const char *func, int line);
-		void LogDelete(void *ptr);
-		void Print();
+		// To be implemented
 
 		static LeakReport instance;
 	private:

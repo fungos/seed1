@@ -239,6 +239,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\LeakReport.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\ModuleManager.cpp"
 				>
 			</File>
@@ -900,6 +904,10 @@
 			</File>
 			<File
 				RelativePath="..\include\Keyframe.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\LeakReport.h"
 				>
 			</File>
 			<File

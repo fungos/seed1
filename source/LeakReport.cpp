@@ -57,48 +57,6 @@ LeakReport::~LeakReport()
 {
 }
 
-bool LeakReport::LogNew(void *ptr, const char *func, int line)
-{
-	char buf[1024];
-	memset(buf, '\0', 1024);
-	snprintf(buf, 1024, "%s:%d", func, line);
-
-	mapAddress[ptr] = strdup(buf);
-
-	return false;
-}
-
-void LeakReport::LogDelete(void *ptr)
-{/*
-	if (ptr)
-	{
-		char *str = mapAddress[ptr];
-
-		if (str)
-		{
-			free(str);
-		}
-
-		mapAddress[ptr] = NULL;
-
-		PointerMapIterator it = mapAddress.find(ptr);
-		mapAddress.erase(it);
-	}*/
-}
-
-void LeakReport::Print()
-{
-	Log(TAG "LeakReport: %d leaks.", mapAddress.size());
-
-	PointerMapIterator it = mapAddress.begin();
-	PointerMapIterator end = mapAddress.end();
-
-	for (; it != end; ++it)
-	{
-		Log(TAG "\t[0x%8x] %s", (*it).first, (*it).second);
-	}
-}
-
 }; // namespace
 
 #endif // DEBUG
