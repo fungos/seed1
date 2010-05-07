@@ -54,61 +54,62 @@ BOOL create_directory(const char *path)
 	BOOL ret = FALSE;
 	int err = mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
-	switch (err)
+	if (err == -1)
 	{
-		case EACCES:
+		switch (errno)
 		{
-			Info(TAG "Permission denied to create '%s'.", path);
-		}
-		break;
+			case EACCES:
+			{
+				Info(TAG "Permission denied to create '%s'.", path);
+			}
+			break;
 
-		case EEXIST:
-		{
-			Info(TAG "Path '%s' already exists.", path);
-		}
-		break;
+			case EEXIST:
+			{
+				Info(TAG "Path '%s' already exists.", path);
+			}
+			break;
 
-		case ENAMETOOLONG:
-		{
-			Info(TAG "Path name too long: '%s'", path);
-		}
-		break;
+			case ENAMETOOLONG:
+			{
+				Info(TAG "Path name too long: '%s'", path);
+			}
+			break;
 
-		case ENOENT:
-		{
-			Info(TAG "Path '%s' does not name an existin entry.", path);
-		}
-		break;
+			case ENOENT:
+			{
+				Info(TAG "Path '%s' does not name an existin entry.", path);
+			}
+			break;
 
-		case ENOSPC:
-		{
-			Info(TAG "Not enought space to create '%s'.", path);
-		}
-		break;
+			case ENOSPC:
+			{
+				Info(TAG "Not enought space to create '%s'.", path);
+			}
+			break;
 
-		case ENOTDIR:
-		{
-			Info(TAG "A component of the path '%s' is not a directory.", path);
-		}
-		break;
+			case ENOTDIR:
+			{
+				Info(TAG "A component of the path '%s' is not a directory.", path);
+			}
+			break;
 
-		case EROFS:
-		{
-			Info(TAG "Read-only filesystem, could not create '%s'.", path);
-		}
-		break;
+			case EROFS:
+			{
+				Info(TAG "Read-only filesystem, could not create '%s'.", path);
+			}
+			break;
 
-		case 0:
-		{
-			ret = TRUE;
+			default:
+			{
+				Info(TAG "An error '%d' ocurred trying to create '%s'.", err, path);
+			}
+			break;
 		}
-		break;
-
-		default:
-		{
-			Info(TAG "An error '%d' ocurred trying to create '%s'.", err, path);
-		}
-		break;
+	}
+	else
+	{
+		ret = TRUE;
 	}
 
 	return ret;

@@ -475,14 +475,13 @@ INLINE void Screen::ToggleFullscreen()
 #else
 	bFullScreen = !bFullScreen;
 	iFlags ^= SDL_FULLSCREEN;
-
-	glResourceManager.Unload(Seed::ObjectImage);
+	pResourceManager->Unload(Seed::ObjectImage);
 	pRenderer->Shutdown();
 	this->InitializeVideo();
 	//this->Shutdown();
 	//this->Initialize();
 	pRenderer->Initialize();
-	glResourceManager.Reload(Seed::ObjectImage);
+	pResourceManager->Reload(Seed::ObjectImage);
 #endif
 }
 
@@ -493,13 +492,13 @@ INLINE void Screen::SetMode(u32 mode)
 	this->PrepareMode();
 	this->InitializeVideo();
 #else
-	glResourceManager.Unload(Seed::ObjectImage);
+	pResourceManager->Unload(Seed::ObjectImage);
 	pRenderer->Shutdown();
 	this->Shutdown();
 	IScreen::SetMode(mode);
 	this->Initialize();
 	pRenderer->Initialize();
-	glResourceManager.Reload(Seed::ObjectImage);
+	pResourceManager->Reload(Seed::ObjectImage);
 #endif
 }
 
