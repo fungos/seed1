@@ -104,12 +104,7 @@ BOOL ResourceGroup::Unload()
 		QueueItem *pQueueItem = (*it);
 
 		ASSERT_NULL(pQueueItem);
-
-		//already loaded
-		if (pQueueItem->resource)
-		{
-			pQueueItem->resource->Release();
-		}
+		sRelease(pQueueItem->resource);
 
 		Delete(pQueueItem);
 	}

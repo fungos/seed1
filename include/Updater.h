@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -38,6 +38,7 @@
 #define __UPDATER_H__
 
 #include "Array.h"
+#include "Singleton.h"
 
 #define MAX_UPDATEABLES 32
 
@@ -47,16 +48,11 @@ class IUpdatable;
 
 class SEED_CORE_API Updater
 {
+	SEED_SINGLETON_DECLARE(Updater);
 	public:
-		Updater();
-		~Updater();
-
 		void Run(f32 dt, f32 resolution);
 		void Add(IUpdatable *obj);
 		void Remove(IUpdatable *obj);
-
-	public:
-		static Updater instance;
 
 	private:
 		SEED_DISABLE_COPY(Updater);
@@ -66,7 +62,9 @@ class SEED_CORE_API Updater
 		Array<IUpdatable *, MAX_UPDATEABLES> arUpdatable;
 };
 
-Updater *const pUpdater = &Updater::instance;
+extern "C" {
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Updater);
+}
 
 } // namespace
 

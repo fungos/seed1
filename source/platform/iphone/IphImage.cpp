@@ -429,7 +429,7 @@ void Image::LoadPNG(const char *file)
 		for (i = 0; i < width * height; ++i, ++inPixel32)
 			*outPixel16++ = ((((*inPixel32 >> 0) & 0xFF) >> 3) << 11) | ((((*inPixel32 >> 8) & 0xFF) >> 2) << 5) | ((((*inPixel32 >> 16) & 0xFF) >> 3) << 0);
 
-		pMemoryManager->Free(data, this->pPool);
+		pMemoryManager->Free(data, pPool);
 		data = tempData;
 	}
 
@@ -453,7 +453,7 @@ void Image::LoadPNG(const char *file)
 
 	//pImage = data;
 #if SEED_ENABLE_KEEP_IMAGE_DATA == 0 // Release texture memory?
-	pMemoryManager->Free(const_cast<void *>(this->pImage), this->pPool);
+	pMemoryManager->Free(const_cast<void *>(pImage), pPool);
 	pImage = NULL;
 #endif // SEED_ENABLE_KEEP_IMAGE_DATA
 }

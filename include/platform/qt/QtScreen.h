@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -56,6 +56,7 @@
 #include "QtScene.h"
 
 #include "Renderer.h"
+#include "Singleton.h"
 
 namespace Seed { namespace QT {
 
@@ -65,6 +66,8 @@ class Screen : public IScreen
 {
 	friend class Renderer;
 	friend class Renderer2D;
+
+	SEED_SINGLETON_DECLARE(Screen);
 
 	public:
 		enum eMode
@@ -90,12 +93,7 @@ class Screen : public IScreen
 			SCREEN_2048X1024X32FS_OPENGL
 		};
 
-		static Screen instance;
-
 	public:
-		Screen();
-		virtual ~Screen();
-
 		virtual void Setup(u32 mode = SCREEN_AUTODETECTFS);
 		virtual void FadeOut();
 		virtual void FadeIn();
@@ -150,7 +148,9 @@ class Screen : public IScreen
 		//QColor		cBackgroundColor;
 };
 
-Screen *const pScreen = &Screen::instance;
+extern "C" {
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Screen);
+}
 
 }} // namespace
 

@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -41,15 +41,14 @@
 
 #include <QWidget>
 #include "interface/ISystem.h"
+#include "Singleton.h"
 
 namespace Seed { namespace QT {
 
 class System : public ISystem
 {
+	SEED_SINGLETON_DECLARE(System);
 	public:
-		System();
-		virtual ~System();
-
 		// ISystem
 		virtual void GoToMenu();
 		virtual void Sleep();
@@ -83,9 +82,6 @@ class System : public ISystem
 		virtual BOOL Shutdown();
 		virtual BOOL Reset();
 
-	public:
-		static System instance;
-
 	private:
 		SEED_DISABLE_COPY(System);
 
@@ -100,7 +96,9 @@ class System : public ISystem
 		QWidget		*pWidget;
 };
 
-System *const pSystem = &System::instance;
+extern "C" {
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(System);
+}
 
 }} // namespace
 

@@ -64,7 +64,6 @@ IFileSystem::IFileSystem()
 
 IFileSystem::~IFileSystem()
 {
-	this->DestroyFileTable();
 }
 
 INLINE BOOL IFileSystem::Initialize()
@@ -120,9 +119,7 @@ void IFileSystem::BuildFileTable()
 void IFileSystem::DestroyFileTable()
 {
 	Delete(pFile);
-
-	if (pFileTable)
-		pMemoryManager->Free(pFileTable);
+	pMemoryManager->Free(pFileTable);
 
 	pSystem->RemoveListener(this);
 }

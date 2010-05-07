@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -44,6 +44,7 @@
 #include "interface/IInputPointer.h"
 #include "interface/IInputMotion.h"
 #include "Vector.h"
+#include "Singleton.h"
 
 #include "WiiHomeButton.h"
 
@@ -60,10 +61,8 @@ class Input : public IInput, public IInputPointer, public IInputMotion
 #endif // USE_AILIVE
 	friend class HomeButton;
 
+	SEED_SINGLETON_DECLARE(Input);
 	public:
-		Input();
-		virtual ~Input();
-
 		// IInputPointer
 		virtual BOOL IsHold(u32 button, u16 joystick = 0) const;
 		virtual BOOL IsPressed(u32 button, u16 joystick = 0) const;
@@ -99,9 +98,6 @@ class Input : public IInput, public IInputPointer, public IInputMotion
 		virtual BOOL Shutdown();
 		virtual BOOL Reset();
 
-	public:
-		static Input instance;
-
 	protected:
 		WiiInputStatus pad[PLATFORM_MAX_INPUT][WII_MAX_READ_BUFS];
 		int padReads[PLATFORM_MAX_INPUT];
@@ -116,7 +112,9 @@ class Input : public IInput, public IInputPointer, public IInputMotion
 		void SendEvents();
 };
 
-Input *const pInput = &Input::instance;
+extern "C" {
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Input);
+}
 
 }} // namespace
 

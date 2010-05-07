@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -41,6 +41,7 @@
 #include "interface/IUpdatable.h"
 #include "Mutex.h"
 #include "Thread.h"
+#include "Singleton.h"
 
 #include <vector>
 
@@ -56,6 +57,8 @@ Platform resource loader
 */
 class SEED_CORE_API ResourceLoader : public IModule, public IUpdatable, public Thread
 {
+	SEED_SINGLETON_DECLARE(ResourceLoader);
+
 	public:
 		typedef std::vector<IEventResourceLoaderListener *> 	ListenerVector;
 		typedef ListenerVector::iterator						ListenerIterator;
@@ -64,9 +67,6 @@ class SEED_CORE_API ResourceLoader : public IModule, public IUpdatable, public T
 		typedef GroupVector::iterator							GroupIterator;
 
 	public:
-		ResourceLoader();
-		virtual ~ResourceLoader();
-
 		//! Add a load request to the queue.
 		/*!
 			Add a load request to the queue.
@@ -94,9 +94,6 @@ class SEED_CORE_API ResourceLoader : public IModule, public IUpdatable, public T
 		// IObject
 		virtual const char *GetObjectName() const;
 
-	public:
-		static ResourceLoader instance;
-
 	protected:
 		void SendEventGroupLoaded(const EventResourceLoader *ev);
 		void SendEventQueueEmpty(const EventResourceLoader *ev);
@@ -111,7 +108,9 @@ class SEED_CORE_API ResourceLoader : public IModule, public IUpdatable, public T
 		Mutex			stMutex;
 };
 
-ResourceLoader *const pResourceLoader = &ResourceLoader::instance;
+extern "C" {
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(ResourceLoader);
+}
 
 } // namespace
 

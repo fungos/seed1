@@ -85,50 +85,40 @@ ISprite::~ISprite()
 
 INLINE void ISprite::Reset()
 {
-	if (pFrameImage)
-		pFrameImage->Release();
+	sRelease(pFrameImage);
+	sRelease(pSprite);
 
-	if (pSprite)
-		pSprite->Release();
+	pAnimation		= NULL;
+	pFrame			= NULL;
+	pAnimationFrames = NULL;
+	bInitialized	= FALSE;
+	bChanged 		= FALSE;
+	bAnimation		= FALSE;
+	bLoop			= FALSE;
+	bVisible 		= TRUE;
+	bPlaying 		= FALSE;
 
-	this->pSprite = NULL;
-	this->pAnimation	= NULL;
-	this->pFrame		= NULL;
-	this->pFrameImage	= NULL;
-	this->pAnimationFrames = NULL;
-	this->bInitialized	= FALSE;
-	this->bChanged 		= FALSE;
-	this->bAnimation 	= FALSE;
-	this->bLoop 		= FALSE;
-	this->bVisible 		= TRUE;
-	this->bPlaying 		= FALSE;
-
-	this->iCurrentFrame = 0;
-	this->iFrames 		= 0;
+	iCurrentFrame = 0;
+	iFrames 		= 0;
 	fCurrentFrameRate	= 1.0f / SPRITE_GLOBAL_FRAME_TIME;
-	this->fFrameTime	= 0.0f;
-	this->iWidth 		= 0;
-	this->iHeight 		= 0;
-	this->iHalfWidth 	= 0;
-	this->iHalfHeight 	= 0;
+	fFrameTime	= 0.0f;
+	iWidth 		= 0;
+	iHeight 		= 0;
+	iHalfWidth 	= 0;
+	iHalfHeight 	= 0;
 
 	this->SetPriority(0);
 }
 
 INLINE BOOL ISprite::Unload()
 {
-	if (pFrameImage)
-		pFrameImage->Release();
+	sRelease(pFrameImage);
+	sRelease(pSprite);
 
-	if (pSprite)
-		pSprite->Release();
-
-	this->pSprite = NULL;
-	this->pAnimation	= NULL;
-	this->pFrame		= NULL;
-	this->pFrameImage	= NULL;
-	this->pAnimationFrames = NULL;
-	this->bInitialized = FALSE;
+	pAnimation		= NULL;
+	pFrame			= NULL;
+	pAnimationFrames = NULL;
+	bInitialized	= FALSE;
 
 	return TRUE;
 }
@@ -184,8 +174,8 @@ INLINE void ISprite::ReconfigureAnimation()
 	fFrameTime = 0.0f;
 
 	pFrame = &pAnimationFrames[iCurrentFrame];
-	if (pFrameImage)
-		pFrameImage->Release();
+
+	sRelease(pFrameImage);
 	pFrameImage = static_cast<IImage *>(pRes->Get(_F(pFrame->iFileId), Seed::ObjectImage, pPool));
 
 	this->ReconfigureFrame();
@@ -492,8 +482,8 @@ void ISprite::Update(f32 delta)
 				iCurrentFrame++;
 
 			pFrame = &pAnimationFrames[iCurrentFrame];
-			if (pFrameImage)
-				pFrameImage->Release();
+
+			sRelease(pFrameImage);
 			pFrameImage = static_cast<IImage *>(pRes->Get(_F(pFrame->iFileId), Seed::ObjectImage, pPool));
 
 			this->ReconfigureFrame();

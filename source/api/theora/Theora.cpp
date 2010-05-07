@@ -108,11 +108,9 @@ INLINE BOOL Theora::Unload()
 	if (iTextureId)
 		glDeleteTextures(1, &iTextureId);
 
-	if (pTexData)
-		pMemoryManager->Free(pTexData);
+	pMemoryManager->Free(pTexData);
 
 	iTextureId = 0;
-	pTexData = NULL;
 	pPlayer = NULL;
 
 	return TRUE;

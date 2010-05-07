@@ -816,8 +816,7 @@ INLINE void Button::SetMask(const char *maskName, ResourceManager *res, IMemoryP
 {
 	ASSERT_NULL(pool);
 
-	if (pMask)
-		pMask->Release();
+	sRelease(pMask);
 
 	if (!pRes)
 		pRes = res;
@@ -830,8 +829,7 @@ INLINE void Button::SetCollisionType(eCollisionType type)
 {
 	if (pMask && type != CollisionByMask)
 	{
-		pMask->Release();
-		pMask = NULL;
+		sRelease(pMask);
 	}
 
 	this->eButtonCollision = type;

@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -41,6 +41,7 @@
 #include "Base.h"
 #include "Enum.h"
 #include "File.h"
+#include "Singleton.h"
 
 #include <vector>
 #include <algorithm>
@@ -55,10 +56,8 @@ Static string cache
 */
 class SEED_CORE_API StringCache : public IModule
 {
+	SEED_SINGLETON_DECLARE(StringCache);
 	public:
-		StringCache();
-		virtual ~StringCache();
-
 		const char *GetStringById(u32 fileId) const;
 		u32 GetIdByString(const char *str) const;
 
@@ -69,10 +68,7 @@ class SEED_CORE_API StringCache : public IModule
 
 		// IObject
 		virtual const char *GetObjectName() const;
-		
-	public:
-		static StringCache instance;
-		
+
 	protected:
 		void BuildStringTable();
 		void DestroyStringTable();
@@ -83,12 +79,14 @@ class SEED_CORE_API StringCache : public IModule
 	private:
 		File	stFile;
 		u32		iStringCount;
-		
+
 		typedef char* 	CachedString;
 		CachedString	*pStringTable;
 };
 
-StringCache *const pStringCache = &StringCache::instance;
+extern "C" {
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(StringCache);
+}
 
 } // namespace
 

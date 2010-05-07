@@ -32,14 +32,15 @@
 #define RAPTOR	"Rafael Eduardo Gonchor"
 
 #define SEED_TAG					"[Seed] "
-#define SEED_VERSION_MINOR			1			// Developer version (features, fixes)
+#define SEED_VERSION_MINOR			4			// Developer version (features, fixes)
 #define SEED_VERSION_MIDDLE			0			// Client version
 #define SEED_VERSION_MAJOR			0			// Release version (final trunk)
-#define SEED_VERSION_STRING			"0.0.3"
+#define SEED_VERSION_STRING			"%d.%d.%d"	//"0.0.3"
 #define SEED_NAME					"Seed SDK"
 #define SEED_COPYRIGHT				"Copyright (c) 2008-2009 Danny Angelo Carminati Grein\nCopyright (c) 2009 TechFront Studios"
 #define SEED_AUTHORS				"Authors:\n\t" DANNY "\n\t" PATUTI "\n\t" RAPTOR
 
+#define SEED_MESSAGE		SEED_NAME " " SEED_VERSION_STRING " [" SEED_PLATFORM_NAME " " SEED_TYPE " " SEED_LICENSE "]\n" SEED_COPYRIGHT "\n" SEED_AUTHORS
 
 #if defined(DEBUG)
 	#define SEED_TYPE "Debug"
@@ -56,11 +57,6 @@
 #elif defined(_QT_)
 	#define SEED_PLATFORM_NAME "Qt"
 #endif // _IPHONE_
-
-#define SEED_MESSAGE		SEED_NAME " " SEED_VERSION_STRING " [" SEED_PLATFORM_NAME " " SEED_TYPE " " SEED_LICENSE "]\n" SEED_COPYRIGHT "\n" SEED_AUTHORS
-
-
-//#include "AutoConfig.h"
 
 //================================================================================
 // FEATURES CAPPING
@@ -99,6 +95,11 @@ Maximum amount of particles per emitter.
 #define SEED_PARTICLES_MAX					500
 
 /*
+Toggle between instancing Singleton classes in the (0) Stack or in the (1) Heap
+*/
+#define SEED_SINGLETON_HEAP					1
+
+/*
 String Pools - Define the amount of each pool
 You MUST fine tune this accordingly your target platform, your needs and your use.
 Try to keep these values at a minimum.
@@ -135,7 +136,6 @@ Try to keep these values at a minimum.
 
 	#define SEED_LOG_RESOURCEMANAGER		1
 #endif // DEBUG
-
 
 #if SEED_BUILTIN == 1
 	#define INLINE inline

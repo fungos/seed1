@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -40,15 +40,14 @@
 #if defined(_SDL_)
 
 #include "interface/ISystem.h"
+#include "Singleton.h"
 
 namespace Seed { namespace SDL {
 
 class SEED_CORE_API System : public ISystem
 {
+	SEED_SINGLETON_DECLARE(System);
 	public:
-		System();
-		virtual ~System();
-
 		// ISystem
 		virtual void GoToMenu();
 		virtual void Sleep();
@@ -85,9 +84,6 @@ class SEED_CORE_API System : public ISystem
 		// IUpdatable
 		virtual BOOL Update(f32 dt);
 
-	public:
-		static System instance;
-
 	private:
 		SEED_DISABLE_COPY(System);
 
@@ -103,7 +99,7 @@ class SEED_CORE_API System : public ISystem
 };
 
 extern "C" {
-SEED_CORE_API extern System *const pSystem;
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(System);
 }
 
 }} // namespace

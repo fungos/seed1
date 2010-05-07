@@ -41,6 +41,7 @@
 #include "MemoryManager.h"
 #include "SeedInit.h"
 #include "interface/IFileSystem.h"
+#include "Singleton.h"
 
 #include <map>
 
@@ -52,15 +53,13 @@ class Package;
 class SEED_CORE_API PackageManager : public IModule
 {
 	friend class IFileSystem;
+	SEED_SINGLETON_DECLARE(PackageManager);
 
 	public:
 		typedef std::map<const char *, Package *, LowerThanStringComparator> PackageMap;
 		typedef std::map<const char *, Package *, LowerThanStringComparator>::iterator PackageMapIterator;
 
 	public:
-		PackageManager();
-		virtual ~PackageManager();
-
 		void AddRomPackage(const void *addr, const char *name);
 		void Add(const char *fileName, IMemoryPool *pool = pDefaultPool, ResourceManager *res = pResourceManager);
 		void Remove(const char *fileName);
@@ -73,13 +72,8 @@ class SEED_CORE_API PackageManager : public IModule
 		// IObject
 		virtual const char *GetObjectName() const;
 
-	public:
-		static PackageManager instance;
-
 	protected:
 		const void *GetFile(const char *fileName, u32 *fileSize);
-
-		SEED_DISABLE_INSTANCING;
 
 	private:
 		SEED_DISABLE_COPY(PackageManager);
@@ -88,7 +82,9 @@ class SEED_CORE_API PackageManager : public IModule
 		PackageMap 	mapPackage;
 };
 
-PackageManager *const pPackageManager = &PackageManager::instance;
+extern "C" {
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(PackageManager);
+}
 
 } // namespace
 

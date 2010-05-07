@@ -46,56 +46,23 @@
 
 namespace Seed {
 
-LeakReport LeakReport::instance;
-LeakReport *const pLeakReport = &LeakReport::instance;
+SEED_SINGLETON_DEFINE(LeakReport);
 
 LeakReport::LeakReport()
 {
+	memset(arInfo, '\0', sizeof(arInfo));
 }
 
 LeakReport::~LeakReport()
 {
 }
 
-bool LeakReport::LogNew(void *ptr, const char *func, int line)
-{
-	char buf[1024];
-	memset(buf, '\0', 1024);
-	snprintf(buf, 1024, "%s:%d", func, line);
-
-	mapAddress[ptr] = strdup(buf);
-
-	return false;
-}
-
-void LeakReport::LogDelete(void *ptr)
-{/*
-	if (ptr)
-	{
-		char *str = mapAddress[ptr];
-
-		if (str)
-		{
-			free(str);
-		}
-
-		mapAddress[ptr] = NULL;
-
-		PointerMapIterator it = mapAddress.find(ptr);
-		mapAddress.erase(it);
-	}*/
-}
-
 void LeakReport::Print()
 {
-	Log(TAG "LeakReport: %d leaks.", mapAddress.size());
-
-	PointerMapIterator it = mapAddress.begin();
-	PointerMapIterator end = mapAddress.end();
-
-	for (; it != end; ++it)
+	for (int i = 0; i < SEED_LEAK_MAX; i++)
 	{
-		Log(TAG "\t[0x%8x] %s", (*it).first, (*it).second);
+		if (arInfo[i].ptrAddr)
+			Log(TAG "\t[0x%8x] %s:%d: %s -> %s", arInfo[i].ptrAddr, arInfo[i].strFile, arInfo[i].iLine, arInfo[i].strFunc, arInfo[i].strCall);
 	}
 }
 

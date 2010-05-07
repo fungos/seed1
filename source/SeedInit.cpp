@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -136,6 +136,18 @@ INLINE void WriteErr(const char *msg)
 		Private::pApplication->WriteErr(msg);
 }
 
+INLINE void GetVersion(u32 *major, u32 *middle, u32 *minor)
+{
+	if (major)
+		*major = SEED_VERSION_MAJOR;
+
+	if (middle)
+		*middle = SEED_VERSION_MAJOR;
+
+	if (minor)
+		*minor = SEED_VERSION_MAJOR;
+}
+
 BOOL Initialize()
 {
 	if (!Private::pApplication)
@@ -144,7 +156,16 @@ BOOL Initialize()
 		HALT;
 	}
 
-	Info(SEED_MESSAGE);
+	Info(SEED_MESSAGE, SEED_VERSION_MAJOR, SEED_VERSION_MIDDLE, SEED_VERSION_MINOR);
+
+	Info("");
+	Info(SEED_TAG "Build Configuration:");
+
+	Info(SEED_TAG "\tTheora: %s", SEED_USE_THEORA ? "Yes" : "No");
+	Info(SEED_TAG "\tBuiltIn: %s", SEED_BUILTIN ? "Yes" : "No");
+	Info(SEED_TAG "\tSingleton: %s", SEED_SINGLETON_HEAP ? "Heap" : "Stack");
+	Info(SEED_TAG "\tParticles: %d", SEED_PARTICLES_MAX);
+	Info(SEED_TAG "\tMusic Buffer: %d", SEED_MUSIC_STREAMING_BUFFER_SIZE);
 	Info(SEED_TAG "Initializing...");
 
 	BOOL ret = TRUE;
@@ -235,7 +256,7 @@ void Shutdown()
 	Info(SEED_TAG "Shutting down subsystems...");
 	pModuleManager->Shutdown();
 
-	//LeakReportPrint;
+	LeakReportPrint;
 
 	Private::bInitialized = FALSE;
 
