@@ -108,9 +108,11 @@ class SEED_CORE_API ResourceLoader : public IModule, public IUpdatable, public T
 		Mutex			stMutex;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(ResourceLoader);
-}
+//extern "C" {
+//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(ResourceLoader);
+//}
+
+#define pResourceLoader ResourceLoader::GetInstance()
 
 } // namespace
 

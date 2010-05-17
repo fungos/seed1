@@ -140,9 +140,11 @@ class SEED_CORE_API Screen : public IScreen
 		SDL_VideoInfo *videoInfo;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Screen);
-}
+//extern "C" {
+//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Screen);
+//}
+
+#define pScreen Screen::GetInstance()
 
 }} // namespace
 

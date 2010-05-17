@@ -94,9 +94,11 @@ class SEED_CORE_API ParticleManager : public IModule, public IUpdatable
 		BOOL	bStopped;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(ParticleManager);
-}
+//extern "C" {
+//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(ParticleManager);
+//}
+
+#define pParticleManager ParticleManager::GetInstance()
 
 } // namespace
 

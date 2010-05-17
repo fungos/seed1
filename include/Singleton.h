@@ -52,8 +52,8 @@
 													return type::Instance; \
 												}
 
-#define SEED_SINGLETON_HEAP_DEFINE(type)		type *type::Instance = NULL; \
-												type *const p##type = type::GetInstance();
+#define SEED_SINGLETON_HEAP_DEFINE(type)		type *type::Instance = NULL;
+												//type *const p##type = type::GetInstance();
 
 #define SEED_SINGLETON_STACK_DECLARE(type)	\
 											public: \
@@ -61,17 +61,15 @@
 												virtual ~type(); \
 												\
 												static type instance; \
-												static type *Instance; \
 												\
 												static inline type *GetInstance() \
 												{ \
-													type::Instance = &type::instance; \
 													return &type::instance; \
 												}
 
-#define SEED_SINGLETON_STACK_DEFINE(type)		type type::instance; \
-												type *type::Instance = &type::instance; \
-												type *const p##type = type::GetInstance();
+#define SEED_SINGLETON_STACK_DEFINE(type)		type type::instance;
+												//type *type::Instance = &type::instance; \
+												//type *const p##type = type::GetInstance();
 
 
 #if SEED_SINGLETON_HEAP == 1
@@ -86,6 +84,6 @@
 
 #endif
 
-#define SEED_SINGLETON_EXTERNALIZE(type)	extern type *const p##type;
+//#define SEED_SINGLETON_EXTERNALIZE(type)		extern type *const p##type = &type::instance;
 
 #endif // __SIGNLETON_H__

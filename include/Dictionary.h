@@ -90,9 +90,11 @@ class SEED_CORE_API Dictionary : public IModule, public IEventSystemListener
 		const u16	*pStrings;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Dictionary);
-}
+//extern "C" {
+//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Dictionary);
+//}
+
+#define pDictionary Dictionary::GetInstance()
 
 } // namespace
 

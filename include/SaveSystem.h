@@ -99,9 +99,11 @@ class SEED_CORE_API SaveSystem
 		BOOL bInitialized;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(SaveSystem);
-}
+//extern "C" {
+//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(SaveSystem);
+//}
+
+#define pSaveSystem SaveSystem::GetInstance()
 
 } // namespace
 

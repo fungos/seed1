@@ -84,9 +84,11 @@ class SEED_CORE_API StringCache : public IModule
 		CachedString	*pStringTable;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(StringCache);
-}
+//extern "C" {
+//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(StringCache);
+//}
+
+#define pStringCache StringCache::GetInstance()
 
 } // namespace
 

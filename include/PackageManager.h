@@ -82,9 +82,11 @@ class SEED_CORE_API PackageManager : public IModule
 		PackageMap 	mapPackage;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(PackageManager);
-}
+//extern "C" {
+//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(PackageManager);
+//}
+
+#define pPackageManager PackageManager::GetInstance()
 
 } // namespace
 

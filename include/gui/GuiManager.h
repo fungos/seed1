@@ -83,9 +83,11 @@ class SEED_CORE_API GuiManager : public IModule, public IUpdatable, public IEven
 		WidgetContainer cContainer;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(GuiManager);
-}
+//extern "C" {
+//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(GuiManager);
+//}
+
+#define pGuiManager GuiManager::GetInstance()
 
 } // namespace
 

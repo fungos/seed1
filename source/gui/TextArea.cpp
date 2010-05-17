@@ -85,7 +85,8 @@ TextArea::~TextArea()
 
 void TextArea::Reset()
 {
-	pMemoryManager->Free(pLines);
+	MemoryManager *p  = MemoryManager::GetInstance();
+	p->Free(pLines);
 
 	this->iId				= 0;
 	this->bDisabled			= TRUE;

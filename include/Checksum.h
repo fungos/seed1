@@ -78,9 +78,11 @@ class SEED_CORE_API Checksum
 
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Checksum);
-}
+//extern "C" {
+//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Checksum);
+//}
+
+#define pChecksum Checksum::GetInstance()
 
 } // namespace
 

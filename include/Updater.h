@@ -62,9 +62,10 @@ class SEED_CORE_API Updater
 		Array<IUpdatable *, MAX_UPDATEABLES> arUpdatable;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Updater);
-}
+//extern "C" {
+//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Updater);
+//}
+#define pUpdater Updater::GetInstance()
 
 } // namespace
 

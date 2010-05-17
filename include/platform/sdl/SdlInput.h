@@ -97,9 +97,11 @@ class SEED_CORE_API Input : public IInput, public IInputPointer, public IInputKe
 		f32 fY;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Input);
-}
+//extern "C" {
+//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Input);
+//}
+
+#define pInput Input::GetInstance()
 
 }} // namespace
 

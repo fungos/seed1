@@ -83,9 +83,11 @@ class Cartridge : public ICartridge
 		u8 *pData;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Cartridge);
-}
+//extern "C" {
+//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Cartridge);
+//}
+
+#define pCartridge Cartridge::GetInstance()
 
 }} // namespace
 

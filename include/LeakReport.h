@@ -129,9 +129,11 @@ class LeakReport
 		PointerInfo arInfo[SEED_LEAK_MAX];
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(LeakReport);
-}
+//extern "C" {
+//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(LeakReport);
+//}
+
+#define pLeakReport LeakReport::GetInstance()
 
 }; // namespace
 

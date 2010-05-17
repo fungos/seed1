@@ -92,9 +92,11 @@ class SEED_CORE_API SoundSystem : public ISoundSystem
 		ALCcontext			*pContext;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(SoundSystem);
-}
+//extern "C" {
+//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(SoundSystem);
+//}
+
+#define pSoundSystem SoundSystem::GetInstance()
 
 }} // namespace
 

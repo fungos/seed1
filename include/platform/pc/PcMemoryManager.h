@@ -55,6 +55,7 @@ namespace Seed { namespace PC {
 class SEED_CORE_API MemoryManager : public IMemoryManager
 {
 	SEED_SINGLETON_DECLARE(MemoryManager);
+
 	public:
 		virtual u32 GetFreeMemory();
 
@@ -75,11 +76,21 @@ class SEED_CORE_API MemoryManager : public IMemoryManager
 		SEED_DISABLE_COPY(MemoryManager);
 };
 
+/*
 extern "C" {
 SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(MemoryManager);
 SEED_CORE_API extern DefaultMemoryPool *const pDefaultPool;
 SEED_CORE_API extern LargeMemoryPool *const pLargePool;
 }
+*/
+
+#define pMemoryManager MemoryManager::GetInstance()
+
+extern "C" {
+SEED_CORE_API extern DefaultMemoryPool *const pDefaultPool;
+SEED_CORE_API extern LargeMemoryPool *const pLargePool;
+}
+
 
 }} // namespace
 
