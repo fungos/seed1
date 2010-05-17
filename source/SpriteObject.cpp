@@ -71,10 +71,7 @@ BOOL SpriteObject::Unload()
 {
 	if (pAnimations)
 	{
-		if (pAnimationFrames)
-			pMemoryManager->Free(pAnimationFrames, pPool);
-
-		pAnimationFrames 	= NULL;
+		pMemoryManager->Free(pAnimationFrames, pPool);
 		pAnimations 		= NULL;
 		pFrames 			= NULL;
 
@@ -207,7 +204,7 @@ THIS IS A HACK for Wii To use tpl as a container of images
 #endif // _WII_
 				// Force frame caching
 				IResource *obj = res->Get(_F(frame->iFileId), Seed::ObjectImage, pool);
-				obj->Release(); // any garbage collect after this will wipe this object from cache
+				sRelease(obj); // any garbage collect after this will wipe this object from cache
 
 				READ_STRUCT(frame, ISprite::Frame, ptr);
 			}

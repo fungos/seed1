@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -38,23 +38,19 @@
 #define __RAND_H__
 
 #include "Defines.h"
+#include "Singleton.h"
 
 namespace Seed {
 
 class SEED_CORE_API Rand
 {
+	SEED_SINGLETON_DECLARE(Rand);
 	public:
-		Rand();
-		virtual ~Rand();
-
 		virtual void Initialize(u32 seed = 0);
 		virtual u32 Get(u32 max);
 		virtual f32 Get(f32 max);
 		virtual u32 Get(u32 min, u32 max);
 		virtual f32 Get(f32 min, f32 max);
-
-	public:
-		static Rand instance;
 
 	private:
 		SEED_DISABLE_COPY(Rand);
@@ -63,7 +59,9 @@ class SEED_CORE_API Rand
 		u32 iSeed;
 };
 
-Rand *const pRand = &Rand::instance;
+extern "C" {
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Rand);
+}
 
 } // namespace
 

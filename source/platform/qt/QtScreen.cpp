@@ -52,9 +52,9 @@
 
 namespace Seed { namespace QT {
 
-Screen Screen::instance;
-Scene *Screen::pScene = NULL;
+SEED_SINGLETON_DEFINE(Screen);
 
+Scene *Screen::pScene = NULL;
 
 Screen::Screen()
 {

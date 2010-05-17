@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -40,6 +40,7 @@
 #if defined(_WII_)
 
 #include "interface/ICartridge.h"
+#include "Singleton.h"
 
 #define CARTRIDGE_SECTOR_ROUND(n, a)     (((u32) (n) + (a) - 1) & ~((a) - 1))
 #define CARTRIDGE_FILENAME	"savefile.dat"
@@ -48,10 +49,8 @@ namespace Seed { namespace WII {
 
 class Cartridge : public ICartridge
 {
+	SEED_SINGLETON_DECLARE(Cartridge);
 	public:
-		Cartridge();
-		virtual ~Cartridge();
-
 		// ICartridge
 		virtual BOOL Prepare(eCartridgeSize size);
 
@@ -66,9 +65,6 @@ class Cartridge : public ICartridge
 		virtual BOOL Initialize();
 		virtual BOOL Reset();
 		virtual BOOL Shutdown();
-
-	public:
-		static Cartridge instance;
 
 	private:
 		SEED_DISABLE_COPY(Cartridge);
@@ -90,7 +86,9 @@ class Cartridge : public ICartridge
 		WiiFileInfo pFp;
 };
 
-Cartridge *const pCartridge = &Cartridge::instance;
+extern "C" {
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Cartridge);
+}
 
 }} // namespace
 

@@ -152,12 +152,29 @@ http://www.unknownroad.com/rtfm/VisualStudio/warningC4251.html
 	#endif // SECURITY_CHECK
 
 	#if defined(__GNUC__)
-		#define SEED_ABSTRACT_METHOD		Dbg(SEED_TAG "WARNING: Calling an 'abstract' method: [%s] (%s:%d).", __PRETTY_FUNCTION__, __FILE__, __LINE__);
+		#define __FUNC__					__PRETTY_FUNCTION__
 	#else
-		#define SEED_ABSTRACT_METHOD		Dbg(SEED_TAG "WARNING: Calling an 'abstract' method: [%s] (%s:%d).", __FUNCSIG__, __FILE__, __LINE__);
+		#define __FUNC__					__FUNCSIG__
 	#endif
+
+	#define SEED_ABSTRACT_METHOD		Dbg(SEED_TAG "WARNING: Calling an 'abstract' method: [%s] (%s:%d).", __FUNC__, __FILE__, __LINE__);
+
+	#define SEED_DISABLE_INSTANCING		public: \
+											friend class LeakReport; \
+										protected: \
+											void *operator new(size_t len); \
+											void operator delete(void *ptr); \
+											void *operator new[](size_t) throw() { return NULL; }; \
+											void operator delete[](void *) {};
+
 #else
 	#define SEED_ABSTRACT_METHOD
+
+	#define SEED_DISABLE_INSTANCING		protected: \
+											void *operator new(size_t len); \
+											void operator delete(void *ptr); \
+											void *operator new[](size_t) throw() { return NULL; }; \
+											void operator delete[](void *) {};
 
 	#if defined(__GNUC__) || defined(_WII_)
 		#ifndef ASSERT
@@ -207,21 +224,16 @@ http://www.unknownroad.com/rtfm/VisualStudio/warningC4251.html
 #define SEED_DISABLE_COPY(Class)		Class(const Class &); \
 										Class &operator=(const Class &)
 
-#define SEED_DISABLE_INSTANCING			protected: \
-											void *operator new(size_t len); \
-											void operator delete(void *ptr); \
-											void *operator new[](size_t) throw() { return NULL; }; \
-											void operator delete[](void *) {};
 
 #define SEED_DISABLE_INSTANCING_IMPL(Class)	\
 										INLINE void *Class::operator new(size_t len) \
 										{ \
-											return pMemoryManager->Alloc(len, pDefaultPool); \
+											return pMemoryManager->Alloc(len); \
 										} \
 										 \
 										INLINE void Class::operator delete(void *ptr) \
 										{ \
-											pMemoryManager->Free(ptr, pDefaultPool); \
+											pMemoryManager->Free(ptr); \
 										}
 
 #define SEED_FORWARD_DECLARATION(Class) namespace Seed { class Class; }

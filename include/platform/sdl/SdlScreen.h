@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -38,6 +38,7 @@
 #define __SDL_SCREEN_H__
 
 #include "interface/IScreen.h"
+#include "Singleton.h"
 
 #if defined(_SDL_)
 
@@ -62,6 +63,7 @@ class SEED_CORE_API Screen : public IScreen
 	friend class OGL::Renderer;
 	friend class OGL::Renderer2D;
 
+	SEED_SINGLETON_DECLARE(Screen);
 	public:
 		enum eMode
 		{
@@ -87,12 +89,7 @@ class SEED_CORE_API Screen : public IScreen
 			SCREEN_2048X1024X32FS_OPENGL
 		};
 
-		static Screen instance;
-
 	public:
-		Screen();
-		virtual ~Screen();
-
 		virtual BOOL Initialize();
 		virtual BOOL Reset();
 		virtual BOOL Shutdown();
@@ -144,7 +141,7 @@ class SEED_CORE_API Screen : public IScreen
 };
 
 extern "C" {
-SEED_CORE_API extern Screen *const pScreen;
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Screen);
 }
 
 }} // namespace

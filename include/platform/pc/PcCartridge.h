@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -42,6 +42,8 @@
 #if defined(_PC_)
 
 #include "interface/ICartridge.h"
+#include "Singleton.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -54,10 +56,8 @@ namespace Seed { namespace PC {
 
 class SEED_CORE_API Cartridge : public ICartridge
 {
+	SEED_SINGLETON_DECLARE(Cartridge);
 	public:
-		Cartridge();
-		virtual ~Cartridge();
-
 		// IModule
 		virtual BOOL Initialize();
 		virtual BOOL Reset();
@@ -67,9 +67,6 @@ class SEED_CORE_API Cartridge : public ICartridge
 
 		virtual BOOL Read(u32 src, void *dest, u32 len);
 		virtual BOOL Write(u32 dest, const void *src, u32 len);
-
-	public:
-		static Cartridge instance;
 
 	private:
 		SEED_DISABLE_COPY(Cartridge);
@@ -86,7 +83,9 @@ class SEED_CORE_API Cartridge : public ICartridge
 		u8 *pData;
 };
 
-Cartridge *const pCartridge = &Cartridge::instance;
+extern "C" {
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Cartridge);
+}
 
 }} // namespace
 

@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -43,6 +43,7 @@
 
 #include "interface/IMemoryPool.h"
 #include "interface/IMemoryManager.h"
+#include "Singleton.h"
 
 #include <stdlib.h>
 
@@ -95,9 +96,8 @@ class LargeMemoryPool : public WiiMemoryPool
 
 class MemoryManager : public IMemoryManager
 {
+	SEED_SINGLETON_DECLARE(MemoryManager);
 	public:
-		virtual ~MemoryManager() {}
-
 		// IModule
 		virtual BOOL Initialize();
 		virtual BOOL Reset();
@@ -109,18 +109,24 @@ class MemoryManager : public IMemoryManager
 
 		virtual void Info();
 
-		static MemoryManager instance;
 		static DefaultMemoryPool defaultPool;
 		static LargeMemoryPool largePool;
+
+	private:
+		SEED_DISABLE_COPY(MemoryManager);
 };
 
-MemoryManager *const pMemoryManager = &MemoryManager::instance;
+extern "C" {
+
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(MemoryManager);
 
 /// Default Pool for Memory Manager
-DefaultMemoryPool *const pDefaultPool = &MemoryManager::defaultPool;
+SEED_CORE_API extern DefaultMemoryPool *const pDefaultPool = &MemoryManager::defaultPool;
 
 /// Memory Pool for Wii MEM2 memory
-LargeMemoryPool *const pLargePool = &MemoryManager::largePool;
+SEED_CORE_API extern LargeMemoryPool *const pLargePool = &MemoryManager::largePool;
+
+}
 
 }} // namespace
 

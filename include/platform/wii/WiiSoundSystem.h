@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -48,6 +48,7 @@
 #include "Array.h"
 #include "SoundSource.h"
 #include "platform/wii/WiiSoundHelper.h"
+#include "Singleton.h"
 
 #define SOUND_MASTER_VOLUME_FACTOR		1.4f
 
@@ -63,10 +64,8 @@ class SoundSystem : public ISoundSystem
 	friend class SoundSource;
 	friend void sounds_frame_callback();
 
+	SEED_SINGLETON_DECLARE(SoundSystem);
 	public:
-		SoundSystem();
-		virtual ~SoundSystem();
-
 		// ISoundSystem
 		//virtual void PlayMusic(IMusic *mus, f32 ms = 0);
 		//virtual void StopMusic(f32 ms = 0, IMusic *mus = NULL);
@@ -86,9 +85,6 @@ class SoundSystem : public ISoundSystem
 		virtual BOOL Initialize();
 		virtual BOOL Reset();
 		virtual BOOL Shutdown();
-
-	public:
-		static SoundSystem instance;
 
 	protected:
 		struct VoiceInfo
@@ -120,7 +116,9 @@ class SoundSystem : public ISoundSystem
 		void 		*pMixBuffer;
 };
 
-SoundSystem *const pSoundSystem = &SoundSystem::instance;
+extern "C" {
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(SoundSystem);
+}
 
 }} // namespace
 

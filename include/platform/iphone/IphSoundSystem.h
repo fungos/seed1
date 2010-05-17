@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -43,6 +43,7 @@
 #include "interface/ISoundSystem.h"
 #include "interface/IResource.h"
 #include "File.h"
+#include "Singleton.h"
 
 #include <vector>
 #include <OpenAL/al.h>
@@ -59,10 +60,8 @@ class SoundSystem : public ISoundSystem, public IResource
 {
 	friend IResource *AudioResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
 
+	SEED_SINGLETON_DECLARE(SoundSystem);
 	public:
-		SoundSystem();
-		virtual ~SoundSystem();
-
 		// ISoundSystem
 		virtual BOOL Prepare(void *workBuffer, u32 bufferLength);
 
@@ -123,9 +122,6 @@ class SoundSystem : public ISoundSystem, public IResource
 			eSoundState iState;
 		};
 
-	public:
-		static SoundSystem instance;
-
 	private:
 		SEED_DISABLE_COPY(SoundSystem);
 
@@ -154,7 +150,9 @@ class SoundSystem : public ISoundSystem, public IResource
 		u32					iCurrentStream;
 };
 
-SoundSystem *const pSoundSystem = &SoundSystem::instance;
+extern "C" {
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(SoundSystem);
+}
 
 }} // namespace
 

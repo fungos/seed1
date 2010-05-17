@@ -46,15 +46,24 @@
 
 namespace Seed {
 
-LeakReport LeakReport::instance;
-LeakReport *const pLeakReport = &LeakReport::instance;
+SEED_SINGLETON_DEFINE(LeakReport);
 
 LeakReport::LeakReport()
 {
+	memset(arInfo, '\0', sizeof(arInfo));
 }
 
 LeakReport::~LeakReport()
 {
+}
+
+void LeakReport::Print()
+{
+	for (int i = 0; i < SEED_LEAK_MAX; i++)
+	{
+		if (arInfo[i].ptrAddr)
+			Log(TAG "\t[0x%8x] %s:%d: %s -> %s", arInfo[i].ptrAddr, arInfo[i].strFile, arInfo[i].iLine, arInfo[i].strFunc, arInfo[i].strCall);
+	}
 }
 
 }; // namespace

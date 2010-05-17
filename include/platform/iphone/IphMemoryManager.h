@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -42,15 +42,14 @@
 #include <stdlib.h>
 #include "interface/IMemoryManager.h"
 #include "platform/iphone/IphMemoryPool.h"
+#include "Singleton.h"
 
 namespace Seed { namespace iPhone {
 
 class MemoryManager : public IMemoryManager
 {
+	SEED_SINGLETON_DECLARE(MemoryManager);
 	public:
-		MemoryManager();
-		virtual ~MemoryManager();
-
 		virtual u32 GetFreeMemory() const;
 
 		virtual void *Alloc(SIZE_T len, IMemoryPool *pool = &defaultPool, const char *desc = "Unknown", const char *owner = "Nobody");
@@ -65,15 +64,17 @@ class MemoryManager : public IMemoryManager
 		virtual BOOL Shutdown();
 
 	public:
-		static MemoryManager instance;
 		static IphoneMemoryPool defaultPool;
 
 	private:
 		SEED_DISABLE_COPY(MemoryManager);
 };
 
-MemoryManager *const pMemoryManager = &MemoryManager::instance;
-IphoneMemoryPool *const pDefaultPool = &MemoryManager::defaultPool;
+extern "C" {
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(MemoryManager);
+SEED_CORE_API extern IphoneMemoryPool *const pDefaultPool = &MemoryManager::defaultPool;
+}
+
 #define pLargePool pDefaultPool
 
 }} // namespace

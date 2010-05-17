@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -34,7 +34,6 @@
 	\brief Save System
 */
 
-
 #include "Defines.h"
 #include "SaveSystem.h"
 #include "Log.h"
@@ -44,13 +43,10 @@
 
 #define TAG "[SaveSystem] "
 
-
 namespace Seed {
 
-
-SaveSystem SaveSystem::instance;
+SEED_SINGLETON_DEFINE(SaveSystem);
 BOOL SaveSystem::bIsSaving = FALSE;
-
 
 SaveSystem::SaveSystem()
 	: iTotalSlots(PLATFORM_SAVESYSTEM_SLOTS_MAX)
@@ -164,7 +160,7 @@ eCartridgeError SaveSystem::Prepare(u32 myId, void *slotBlankData, u32 slotDataS
 			}
 		}
 
-		pMemoryManager->Free(sharedTestMemory, pDefaultPool);
+		pMemoryManager->Free(sharedTestMemory);
 	}
 
 	if (error == Seed::ErrorNone)
@@ -188,7 +184,7 @@ eCartridgeError SaveSystem::Prepare(u32 myId, void *slotBlankData, u32 slotDataS
 			}
 		}
 
-		pMemoryManager->Free(slotTestMemory, pDefaultPool);
+		pMemoryManager->Free(slotTestMemory);
 	}
 
 	bIsSaving = FALSE;
@@ -509,6 +505,5 @@ BOOL SaveSystem::IsSaving() const
 {
 	return bIsSaving;
 }
-
 
 } // namespace

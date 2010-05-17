@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -47,6 +47,7 @@
 #include "File.h"
 #include "MemoryManager.h"
 #include "Enum.h"
+#include "Singleton.h"
 
 #define _(id)			pDictionary->GetString(id)
 #define _2(id, len)		pDictionary->GetString(id, len)
@@ -55,10 +56,9 @@ namespace Seed {
 
 class SEED_CORE_API Dictionary : public IModule, public IEventSystemListener
 {
-	public:
-		Dictionary();
-		virtual ~Dictionary();
+	SEED_SINGLETON_DECLARE(Dictionary);
 
+	public:
 		virtual const u16 *GetGlyphTable(u32 *outLen) const;
 		virtual const u16 *GetString(u32 stringId, u32 *outLen = NULL) const;
 		virtual u32 GetSize() const;
@@ -73,9 +73,6 @@ class SEED_CORE_API Dictionary : public IModule, public IEventSystemListener
 		// IObject
 		virtual const char *GetObjectName() const;
 		virtual int GetObjectType() const;
-
-	public:
-		static Dictionary instance;
 
 	protected:
 		virtual void SetLanguage(Seed::eLanguage lang, IMemoryPool *pool = pDefaultPool);
@@ -93,7 +90,9 @@ class SEED_CORE_API Dictionary : public IModule, public IEventSystemListener
 		const u16	*pStrings;
 };
 
-Dictionary *const pDictionary = &Dictionary::instance;
+extern "C" {
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Dictionary);
+}
 
 } // namespace
 

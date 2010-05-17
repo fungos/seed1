@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -38,6 +38,8 @@
 #define __MODULE_MANAGER_H__
 
 #include "Array.h"
+#include "Singleton.h"
+
 #define MAX_MODULES 32
 
 namespace Seed {
@@ -46,10 +48,8 @@ class IModule;
 
 class SEED_CORE_API ModuleManager
 {
+	SEED_SINGLETON_DECLARE(ModuleManager);
 	public:
-		ModuleManager();
-		~ModuleManager();
-
 		BOOL Add(IModule *obj);
 		BOOL Remove(IModule *obj);
 
@@ -63,9 +63,6 @@ class SEED_CORE_API ModuleManager
 
 		void Print();
 
-	public:
-		static ModuleManager instance;
-
 	private:
 		SEED_DISABLE_COPY(ModuleManager);
 
@@ -73,7 +70,9 @@ class SEED_CORE_API ModuleManager
 		Array<IModule *, MAX_MODULES> arModule;
 };
 
-ModuleManager *const pModuleManager = &ModuleManager::instance;
+extern "C" {
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(ModuleManager);
+}
 
 } // namespace
 

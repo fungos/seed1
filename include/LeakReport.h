@@ -42,45 +42,105 @@
 #include "Config.h"
 #include "Defines.h"
 #include "Log.h"
+#include "Singleton.h"
+#include "MemoryManager.h"
 
 #include <map>
 
-#define New(T)				(new T)
-#define Delete(ptr)			{ if (ptr) delete ptr; ptr = NULL; }
-#define LeakReportPrint		
+#define SEED_LEAK_MAX			2048
+
+#define New(T)					pLeakReport->LogNew((new T), #T, __FILE__, __LINE__, __FUNC__)
+#define Delete(ptr)				pLeakReport->LogDelete(ptr);
+
+#define LeakReportPrint			pLeakReport->Print();
 
 namespace Seed {
 
-typedef std::map<void *, char *> PointerMap;
-typedef PointerMap::iterator PointerMapIterator;
-
 class LeakReport
 {
+	SEED_SINGLETON_DECLARE(LeakReport);
+
 	public:
-		LeakReport();
-		~LeakReport();
+		template <class T>
+		T *LogNew(T* ptr, const char *call, const char *file, int line, const char *func)
+		{
+			for (int i = 0; i < SEED_LEAK_MAX; ++i)
+			{
+				if (arInfo[i].ptrAddr == NULL)
+				{
+					arInfo[i].ptrAddr = ptr;
 
-		// To be implemented
+					strncpy(arInfo[i].strCall, call, 64);
+					strncpy(arInfo[i].strFile, file, 128);
+					strncpy(arInfo[i].strFunc, func, 256);
 
-		static LeakReport instance;
+					arInfo[i].iLine = line;
+
+					//Log("New: [0x%8x] %s:%d: %s -> %s", arInfo[i].ptrAddr, arInfo[i].strFile, arInfo[i].iLine, arInfo[i].strFunc, arInfo[i].strCall);
+					break;
+				}
+			}
+
+			return ptr;
+		}
+
+		template <class T>
+		void LogDelete(T *ptr)
+		{
+			void *addr = (void *)ptr;
+
+			for (int i = 0; i < SEED_LEAK_MAX; ++i)
+			{
+				if (addr == arInfo[i].ptrAddr)
+				{
+					//Log("Delete: [0x%8x] %s:%d: %s -> %s", arInfo[i].ptrAddr, arInfo[i].strFile, arInfo[i].iLine, arInfo[i].strFunc, arInfo[i].strCall);
+					arInfo[i].ptrAddr = NULL;
+
+					memset(arInfo[i].strCall, '\0', 64);
+					memset(arInfo[i].strFile, '\0', 128);
+					memset(arInfo[i].strFunc, '\0', 256);
+
+					arInfo[i].iLine = 0;
+					break;
+				}
+			}
+
+			if (ptr)
+			{
+				delete ptr;
+				ptr = NULL;
+			}
+		}
+
+		void Print();
+
 	private:
 		SEED_DISABLE_COPY(LeakReport);
 
-		PointerMap mapAddress;
+		struct PointerInfo
+		{
+			void *ptrAddr;
+			char strCall[64];
+			char strFile[128];
+			char strFunc[256];
+			int  iLine;
+		};
+
+		PointerInfo arInfo[SEED_LEAK_MAX];
 };
 
 extern "C" {
-SEED_CORE_API extern LeakReport *const pLeakReport;
+SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(LeakReport);
 }
 
 }; // namespace
 
 #else
 
-#define New(T)			new T
-#define Delete(ptr)		if (ptr) \
-					delete ptr; \
-				ptr = NULL;
+#define New(T)					new T
+#define Delete(ptr)				if (ptr) \
+									delete ptr; \
+								ptr = NULL;
 
 #define LeakReportPrint
 

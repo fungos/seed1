@@ -34,19 +34,15 @@
 	\brief Package system
 */
 
-
 #include "PackageManager.h"
 #include "Log.h"
 #include "Package.h"
 
-
 #define TAG		"[PackageManager] "
-
 
 namespace Seed {
 
-
-PackageManager PackageManager::instance;
+SEED_SINGLETON_DEFINE(PackageManager);
 
 PackageManager::PackageManager()
 	: mapPackage()
@@ -68,7 +64,7 @@ void PackageManager::Clear()
 		Package *pkg = (*itb).second;
 
 		Log(TAG "Removing package %s.", (*itb).first);
-		pkg->Release();
+		sRelease(pkg);
 	}
 
 	mapPackage.clear();
@@ -93,8 +89,7 @@ void PackageManager::Remove(const char *fileName)
 	if (it != mapPackage.end())
 	{
 		Package *p = (*it).second;
-		p->Release();
-		//glResourceManager.GarbageCollect();
+		sRelease(p);
 
 		mapPackage.erase(it);
 	}
@@ -147,7 +142,5 @@ INLINE const char *PackageManager::GetObjectName() const
 {
 	return "PackageManager";
 }
-
-SEED_DISABLE_INSTANCING_IMPL(PackageManager);
 
 } // namespace

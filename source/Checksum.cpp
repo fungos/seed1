@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -34,14 +34,11 @@
 \brief Checksum calculation
 */
 
-
 #include "Checksum.h"
-
 
 namespace Seed {
 
-Checksum Checksum::instance;
-
+SEED_SINGLETON_DEFINE(Checksum);
 
 Checksum::Checksum()
 	: iPolynomial1(0)
@@ -51,11 +48,9 @@ Checksum::Checksum()
 	this->SetPolynomial2(0x12477cdf);
 }
 
-
 Checksum::~Checksum()
 {
 }
-
 
 void Checksum::SetPolynomial1(unsigned int polynomial)
 {
@@ -72,7 +67,6 @@ void Checksum::SetPolynomial1(unsigned int polynomial)
 	}
 }
 
-
 void Checksum::SetPolynomial2(unsigned int polynomial)
 {
 	iPolynomial2 = polynomial;
@@ -87,7 +81,6 @@ void Checksum::SetPolynomial2(unsigned int polynomial)
 		aiCRCTable2[n] = c;
 	}
 }
-
 
 u64 Checksum::Calculate(const char *name)
 {
@@ -110,7 +103,6 @@ u64 Checksum::Calculate(const char *name)
 	return ((static_cast<u64>(crc1) << 32) | static_cast<u64>(crc2));
 }
 
-
 u64 Checksum::Calculate(const char *data, u32 len)
 {
 	u32 crc1 = 0;
@@ -127,6 +119,4 @@ u64 Checksum::Calculate(const char *data, u32 len)
 	return ((static_cast<u64>(crc1) << 32) | static_cast<u64>(crc2));
 }
 
-
 } // namespace
-

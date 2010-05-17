@@ -85,8 +85,7 @@ TextArea::~TextArea()
 
 void TextArea::Reset()
 {
-	if (this->pLines)
-		pMemoryManager->Free(this->pLines, pDefaultPool);
+	pMemoryManager->Free(pLines);
 
 	this->iId				= 0;
 	this->bDisabled			= TRUE;
@@ -95,16 +94,13 @@ void TextArea::Reset()
 	this->eHAlign 			= HorizontalAlignLeft;
 	this->eVAlign 			= VerticalAlignTop;
 	this->eBlendOperation	= Seed::BlendNone;
-
-	this->pLines			= NULL;
 
 	IWidget::Reset();
 }
 
 void TextArea::ReleaseText()
 {
-	if (this->pLines)
-		pMemoryManager->Free(this->pLines, pDefaultPool);
+	pMemoryManager->Free(pLines);
 
 	this->iId				= 0;
 	this->bDisabled			= TRUE;
@@ -113,8 +109,6 @@ void TextArea::ReleaseText()
 	this->eHAlign 			= HorizontalAlignLeft;
 	this->eVAlign 			= VerticalAlignTop;
 	this->eBlendOperation	= Seed::BlendNone;
-
-	this->pLines			= NULL;
 
 	this->cText.Reset();
 }
@@ -197,9 +191,8 @@ void TextArea::Rebuild()
 	if (lines != iLines)
 	{
 		iLines = lines;
-		if (pLines)
-			pMemoryManager->Free(pLines, pDefaultPool);
 
+		pMemoryManager->Free(pLines);
 		pLines = static_cast<struct sLineInfo *>(pMemoryManager->Alloc(sizeBuff, pDefaultPool));
 	}
 	MEMSET(pLines, '\0', sizeBuff);

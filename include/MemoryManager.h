@@ -39,7 +39,6 @@
 
 #include "Config.h"
 #include "Defines.h"
-#include "LeakReport.h"
 
 #if defined(_WII_)
 	#include "platform/wii/WiiMemoryManager.h"
@@ -50,5 +49,7 @@
 	#include "platform/pc/PcMemoryManager.h"
 	using namespace Seed::PC;
 #endif // _SDL_ || _QT_ || _IPHONE_
+
+#include "LeakReport.h"
 
 #endif // __MEMORY_MANAGER_H__
