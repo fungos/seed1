@@ -83,7 +83,7 @@ class SEED_CORE_API STMState
 	public:
 		virtual ~STMState() {}
 		virtual void OnStart(IObject *) {};
-		virtual void OnUpdate(IObject *) {};
+		virtual void OnUpdate(f32) {};
 		virtual void OnStop(IObject *) {};
 };
 
@@ -221,7 +221,7 @@ class SEED_CORE_API StateMachine
 			return OK;
 		};
 
-		inline eReturnCode Update(IObject *pUserData)
+		inline eReturnCode Update(f32 dt)
 		{
 			if (!currentState) //not initialized
 			{
@@ -230,7 +230,7 @@ class SEED_CORE_API StateMachine
 			}
 
 			//State Looping callback
-			currentState->OnUpdate(pUserData);
+			currentState->OnUpdate(dt);
 
 			return OK;
 		}
