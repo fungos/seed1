@@ -244,11 +244,10 @@ INLINE void IWidget::SendOnRollOver(const EventWidget *ev)
 	{
 		IEventWidgetListener *obj = (*it);
 		ASSERT_NULL(obj);
+
 		obj->OnWidgetRollOver(ev);
 		if (ev->IsConsumed())
-		{
 			break;
-		}
 	}
 }
 
@@ -263,6 +262,7 @@ INLINE void IWidget::SendOnRollOut(const EventWidget *ev)
 	{
 		IEventWidgetListener *obj = (*it);
 		ASSERT_NULL(obj);
+
 		obj->OnWidgetRollOut(ev);
 		if (ev->IsConsumed())
 			break;
@@ -280,6 +280,7 @@ INLINE void IWidget::SendOnPress(const EventWidget *ev)
 	{
 		IEventWidgetListener *obj = (*it);
 		ASSERT_NULL(obj);
+
 		obj->OnWidgetPress(ev);
 		if (ev->IsConsumed())
 			break;
@@ -297,6 +298,7 @@ INLINE void IWidget::SendOnDrag(const EventWidget *ev)
 	{
 		IEventWidgetListener *obj = (*it);
 		ASSERT_NULL(obj);
+
 		obj->OnWidgetDrag(ev);
 		if (ev->IsConsumed())
 			break;
@@ -317,6 +319,7 @@ INLINE void IWidget::SendOnDrop(const EventWidget *ev)
 
 		IEventWidgetListener *obj = (*it);
 		ASSERT_NULL(obj);
+
 		obj->OnWidgetDrop(ev);
 	}
 }
@@ -332,6 +335,7 @@ INLINE void IWidget::SendOnRelease(const EventWidget *ev)
 	{
 		IEventWidgetListener *obj = (*it);
 		ASSERT_NULL(obj);
+
 		obj->OnWidgetRelease(ev);
 		if (ev->IsConsumed())
 			break;
@@ -349,6 +353,7 @@ INLINE void IWidget::SendOnReleaseOut(const EventWidget *ev)
 	{
 		IEventWidgetListener *obj = (*it);
 		ASSERT_NULL(obj);
+
 		obj->OnWidgetReleaseOut(ev);
 		if (ev->IsConsumed())
 			break;

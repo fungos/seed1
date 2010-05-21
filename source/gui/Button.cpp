@@ -393,7 +393,7 @@ INLINE BOOL Button::CheckPixel(f32 x, f32 y)
 	return ret;
 }
 
-void Button::OnWidgetRollOver(const EventWidget *ev)
+INLINE void Button::OnWidgetRollOver(const EventWidget *ev)
 {
 	UNUSED(ev);
 
@@ -403,25 +403,25 @@ void Button::OnWidgetRollOver(const EventWidget *ev)
 		{
 			if (bSpriteBased)
 			{
-				//this->cSprite.SetCurrentFrame(1);
-				this->cSprite.SetAnimation("rollover");
-				this->cSprite.AddPosition(fSpriteHoverOffsetX, fSpriteHoverOffsetY);
+				//cSprite.SetCurrentFrame(1);
+				cSprite.SetAnimation("rollover");
+				cSprite.AddPosition(fSpriteHoverOffsetX, fSpriteHoverOffsetY);
 			}
 
 			if (bLabelBased)
 			{
-				this->cLabel.AddPosition(fLabelHoverOffsetX, fLabelHoverOffsetY);
+				cLabel.AddPosition(fLabelHoverOffsetX, fLabelHoverOffsetY);
 				if (iLabelHoverColor)
 				{
-					this->cLabel.SetColor(this->iLabelHoverColor);
-					this->cLabel.SetBlending(this->eLabelBlendOperation);
+					cLabel.SetColor(iLabelHoverColor);
+					cLabel.SetBlending(eLabelBlendOperation);
 				}
 			}
 		}
 	}
 }
 
-void Button::OnWidgetRollOut(const EventWidget *ev)
+INLINE void Button::OnWidgetRollOut(const EventWidget *ev)
 {
 	UNUSED(ev);
 
@@ -436,23 +436,23 @@ void Button::OnWidgetRollOut(const EventWidget *ev)
 			{
 				//this->cSprite.SetCurrentFrame(static_cast<u32>((bSelected ? 1 : 0)));
 				if (!bSelected)
-					this->cSprite.SetAnimation("rollout");
+					cSprite.SetAnimation("rollout");
 				else
-					this->cSprite.SetAnimation("selected");
+					cSprite.SetAnimation("selected");
 
-				this->cSprite.AddPosition(fSpriteHoverOffsetX * -1.0f, fSpriteHoverOffsetY * -1.0f);
+				cSprite.AddPosition(fSpriteHoverOffsetX * -1.0f, fSpriteHoverOffsetY * -1.0f);
 			}
 
 			if (bLabelBased)
 			{
-				this->cLabel.AddPosition(fLabelHoverOffsetX * -1.0f, fLabelHoverOffsetY * -1.0f);
+				cLabel.AddPosition(fLabelHoverOffsetX * -1.0f, fLabelHoverOffsetY * -1.0f);
 				if (iLabelHoverColor)
 				{
-					this->cLabel.SetBlending(Seed::BlendNone);
-					if (this->iLabelColor)
+					cLabel.SetBlending(Seed::BlendNone);
+					if (iLabelColor)
 					{
-						this->cLabel.SetColor(this->iLabelColor);
-						this->cLabel.SetBlending(eLabelBlendOperation);
+						cLabel.SetColor(this->iLabelColor);
+						cLabel.SetBlending(eLabelBlendOperation);
 					}
 				}
 			}
@@ -460,7 +460,7 @@ void Button::OnWidgetRollOut(const EventWidget *ev)
 	}
 }
 
-void Button::OnWidgetPress(const EventWidget *ev)
+INLINE void Button::OnWidgetPress(const EventWidget *ev)
 {
 	UNUSED(ev);
 
@@ -502,17 +502,17 @@ void Button::OnWidgetPress(const EventWidget *ev)
 	}
 }
 
-void Button::OnWidgetRelease(const EventWidget *ev)
+INLINE void Button::OnWidgetRelease(const EventWidget *ev)
 {
 	UNUSED(ev);
 
 	if (bDraggable)
 	{
-		this->fDragOffsetX = 0.0f;
-		this->fDragOffsetY = 0.0f;
+		fDragOffsetX = 0.0f;
+		fDragOffsetY = 0.0f;
 		/*this->SetPriority(iOldPriority);
-		this->cSprite.SetPriority(iOldPriority);
-		this->cLabel.SetPriority(iOldPriority + 1);*/
+		cSprite.SetPriority(iOldPriority);
+		cLabel.SetPriority(iOldPriority + 1);*/
 		this->SetPriority(iOldPriority);
 	}
 
@@ -520,38 +520,38 @@ void Button::OnWidgetRelease(const EventWidget *ev)
 	{
 		if (bSpriteBased)
 		{
-			//this->cSprite.SetCurrentFrame(1);
-			this->cSprite.SetAnimation("release");
-			this->cSprite.AddPosition(fSpritePressOffsetX * -1.0f, fSpritePressOffsetY * -1.0f);
+			//cSprite.SetCurrentFrame(1);
+			cSprite.SetAnimation("release");
+			cSprite.AddPosition(fSpritePressOffsetX * -1.0f, fSpritePressOffsetY * -1.0f);
 		}
 
 		if (bLabelBased)
 		{
-			this->cLabel.AddPosition(this->fLabelPressOffsetX * -1.0f, this->fLabelPressOffsetY * -1.0f);
-			if (this->iLabelPressColor)
+			cLabel.AddPosition(fLabelPressOffsetX * -1.0f, fLabelPressOffsetY * -1.0f);
+			if (iLabelPressColor)
 			{
-				this->cLabel.SetBlending(Seed::BlendNone);
-				if (this->iLabelColor)
+				cLabel.SetBlending(Seed::BlendNone);
+				if (iLabelColor)
 				{
-					this->cLabel.SetColor(this->iLabelColor);
-					this->cLabel.SetBlending(eLabelBlendOperation);
+					cLabel.SetColor(this->iLabelColor);
+					cLabel.SetBlending(eLabelBlendOperation);
 				}
 			}
 		}
 	}
 }
 
-void Button::OnWidgetReleaseOut(const EventWidget *ev)
+INLINE void Button::OnWidgetReleaseOut(const EventWidget *ev)
 {
 	UNUSED(ev);
 
 	if (bDraggable)
 	{
 		/*this->SetPriority(iOldPriority);
-		this->cSprite.SetPriority(iOldPriority);
-		this->cLabel.SetPriority(iOldPriority + 1);*/
-		this->fDragOffsetX = 0.0f;
-		this->fDragOffsetY = 0.0f;
+		cSprite.SetPriority(iOldPriority);
+		cLabel.SetPriority(iOldPriority + 1);*/
+		fDragOffsetX = 0.0f;
+		fDragOffsetY = 0.0f;
 		this->SetPriority(iOldPriority);
 	}
 
@@ -561,22 +561,22 @@ void Button::OnWidgetReleaseOut(const EventWidget *ev)
 		{
 			//this->cSprite.SetCurrentFrame(static_cast<u32>((bSelected ? 1 : 0)));
 			if (bSelected)
-				this->cSprite.SetAnimation("selected");
+				cSprite.SetAnimation("selected");
 			else
-				this->cSprite.SetAnimation("releaseout");
-			this->cSprite.AddPosition(fSpritePressOffsetX * -1.0f, fSpritePressOffsetY * -1.0f);
+				cSprite.SetAnimation("releaseout");
+			cSprite.AddPosition(fSpritePressOffsetX * -1.0f, fSpritePressOffsetY * -1.0f);
 		}
 
 		if (bLabelBased)
 		{
-			this->cLabel.AddPosition(this->fLabelPressOffsetX * -1.0f, this->fLabelPressOffsetY * -1.0f);
-			if (this->iLabelPressColor)
+			cLabel.AddPosition(fLabelPressOffsetX * -1.0f, fLabelPressOffsetY * -1.0f);
+			if (iLabelPressColor)
 			{
-				this->cLabel.SetBlending(Seed::BlendNone);
-				if (this->iLabelColor)
+				cLabel.SetBlending(Seed::BlendNone);
+				if (iLabelColor)
 				{
-					this->cLabel.SetColor(this->iLabelColor);
-					this->cLabel.SetBlending(eLabelBlendOperation);
+					cLabel.SetColor(this->iLabelColor);
+					cLabel.SetBlending(eLabelBlendOperation);
 				}
 			}
 		}
@@ -594,11 +594,11 @@ INLINE void Button::OnWidgetDrag(const EventWidget *ev)
 	{
 		this->SetPriority(iDraggingPriority);
 
-		f32 offsetXbtn = this->fDragOffsetX;
-		f32 offsetYbtn = this->fDragOffsetY;
+		f32 offsetXbtn = fDragOffsetX;
+		f32 offsetYbtn = fDragOffsetY;
 
-		f32 offsetXlbl = this->fDragOffsetX;
-		f32 offsetYlbl = this->fDragOffsetY;
+		f32 offsetXlbl = fDragOffsetX;
+		f32 offsetYlbl = fDragOffsetY;
 
 		if (bCenterDrag)
 		{
@@ -614,14 +614,14 @@ INLINE void Button::OnWidgetDrag(const EventWidget *ev)
 			this->SetX(pInput->GetX() - offsetXbtn);
 			this->SetY(pInput->GetY() - offsetYbtn);
 
-			this->bButtonChanged = TRUE;
+			bButtonChanged = TRUE;
 		}
 		else if (bLabelBased)
 		{
 			this->SetX(pInput->GetX() - offsetXlbl);
 			this->SetY(pInput->GetY() - offsetYlbl);
 
-			this->bButtonChanged = TRUE;
+			bButtonChanged = TRUE;
 		}
 	}
 }
@@ -641,12 +641,12 @@ INLINE void Button::OnWidgetDrop(const EventWidget *ev)
 
 INLINE void Button::Select()
 {
-	this->bSelected = TRUE;
+	bSelected = TRUE;
 
 	if (bSpriteBased && bFrameControl && !bDisabled)
 	{
 		//this->cSprite.SetCurrentFrame(1);
-		this->cSprite.SetAnimation("selected");
+		cSprite.SetAnimation("selected");
 	}
 
 	// what to do with label?

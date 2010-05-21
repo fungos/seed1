@@ -114,10 +114,15 @@ void PackageManager::Add(const char *fileName, IMemoryPool *pool, ResourceManage
 	ASSERT_NULL(res);
 
 	Package *p = static_cast<Package *>(res->Get(fileName, Seed::ObjectPackage, pool));
-	ASSERT_NULL(p);
-
-	Log(TAG "Adding package %s.", fileName);
-	mapPackage[fileName] = p;
+	if (p)
+	{
+		Log(TAG "Adding package %s.", fileName);
+		mapPackage[fileName] = p;
+	}
+	else
+	{
+		Log(TAG "WARNING: Package %s not found, skipping.", fileName);
+	}
 }
 
 const void *PackageManager::GetFile(const char *fileName, u32 *fileSize)
