@@ -140,9 +140,7 @@ class LeakReport
 #else
 
 #define New(T)					new T
-#define Delete(ptr)				if (ptr) \
-									delete ptr; \
-								ptr = NULL;
+#define Delete(ptr)				{ if (ptr) delete ptr; ptr = NULL; }
 
 #define LeakReportPrint
 

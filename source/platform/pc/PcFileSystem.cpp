@@ -78,7 +78,7 @@ BOOL FileSystem::Initialize()
 		get_current_directory(dir, 1024);
 
 		snprintf(dir2, 1024, "%s/%s", dir, FILESYSTEM_DEFAULT_PATH);
-		Log(TAG "Working dir is: %s", dir2);
+		Info(TAG "Working dir is: %s", dir2);
 
 		if (change_directory(dir2))
 		{

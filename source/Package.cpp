@@ -56,7 +56,9 @@ IResource *PackageResourceLoader(const char *filename, ResourceManager *res, IMe
 	BOOL loaded = pkg->Load(filename, res, pool);
 
 	if (!loaded)
+	{
 		Delete(pkg);
+	}
 
 	return pkg;
 }
@@ -95,7 +97,7 @@ BOOL Package::Load(const char *filename, ResourceManager *res, IMemoryPool *pool
 
 	if (!ret)
 	{
-		Log(TAG "WARNING: Could not open package file '%s'.", filename);
+		Info(TAG "WARNING: Could not open package file '%s'.", filename);
 	}
 	else
 	{
