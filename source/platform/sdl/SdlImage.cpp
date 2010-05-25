@@ -141,7 +141,7 @@ BOOL Image::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 				Info(TAG "IMG_Load_RW ERROR: %s\n", IMG_GetError());
 
 				if (format == PNG)
-					Info(TAG "Make sure that libpng12-0.dll and zlib1.dll is in the exact same folder than this application.");
+					Info(TAG "Make sure that libpng12-0.dll and zlib1.dll are in the exact same folder than this application binary.");
 
 				ASSERT(false);
 			}

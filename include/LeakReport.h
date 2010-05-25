@@ -50,7 +50,7 @@
 #define SEED_LEAK_MAX			2048
 
 #define New(T)					pLeakReport->LogNew((new T), #T, __FILE__, __LINE__, __FUNC__)
-#define Delete(ptr)				pLeakReport->LogDelete(ptr);
+#define Delete(ptr)				{ if (ptr) pLeakReport->LogDelete(ptr); ptr = NULL; }
 
 #define LeakReportPrint			pLeakReport->Print();
 

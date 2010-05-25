@@ -105,14 +105,24 @@ IResource *ResourceManager::Get(const char *filename, Seed::eObjectType resource
 		}
 
 		res = ((*it).second)(filename, this, pool);
-		this->Add(filename, res);
+
+		if (res)
+		{
+			this->Add(filename, res);
+		}
+		else
+		{
+			Log(TAG "WARNING: Resource file '%s' not found - couldn't load.", filename);
+		}
 	}
 	else
 	{
 		res = mapResources[filename];
 	}
 
-	res->IncrementReference();
+	if (res)
+		res->IncrementReference();
+
 	return res;
 }
 

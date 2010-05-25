@@ -53,7 +53,10 @@ struct SEED_CORE_API PackageFSTable
 IResource *PackageResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
 	Package *pkg = New(Package());
-	pkg->Load(filename, res, pool);
+	BOOL loaded = pkg->Load(filename, res, pool);
+
+	if (!loaded)
+		Delete(pkg);
 
 	return pkg;
 }
@@ -88,9 +91,18 @@ BOOL Package::Load(const char *filename, ResourceManager *res, IMemoryPool *pool
 	ASSERT_NULL(filename);
 
 	this->pFilename = filename;
-	SECURITY_CHECK(pFileSystem->Open(filename, &stFile, pool), "Could not open package file.");
+	BOOL ret = pFileSystem->Open(filename, &stFile, pool);
 
-	return this->Load(stFile.GetData(), res, pool);
+	if (!ret)
+	{
+		Log(TAG "WARNING: Could not open package file '%s'.", filename);
+	}
+	else
+	{
+		ret = this->Load(stFile.GetData(), res, pool);
+	}
+
+	return ret;
 }
 
 BOOL Package::Load(const void *data, ResourceManager *res, IMemoryPool *pool)
