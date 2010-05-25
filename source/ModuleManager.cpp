@@ -129,8 +129,9 @@ BOOL ModuleManager::Shutdown()
 	BOOL ret = TRUE;
 
 	u32 len = arModule.Size() - 1;
-	for (u32 i = len; i > 0; --i)
+	for (s32 i = len; i >= 0; i--)
 	{
+		fprintf(stdout, "%d", i);
 		IModule *obj = arModule[i];
 		ret = ret && (obj->Shutdown() || !obj->IsRequired());
 	}

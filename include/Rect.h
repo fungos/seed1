@@ -212,6 +212,12 @@ template <class TYPE> class SEED_CORE_API Rect
 		}
 };
 
+typedef Rect<f32> Rect4f;
+typedef Rect<double> Rect4d;
+typedef Rect<u32> Rect4u;
+typedef Rect<s32> Rect4i;
+
+
 } // namespace
 
 #endif // __RECT_H__

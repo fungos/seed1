@@ -72,7 +72,6 @@ TextArea::TextArea()
 	, cText()
 	, bAutoAdjust(FALSE)
 {
-	this->Reset();
 }
 
 TextArea::~TextArea()
@@ -85,8 +84,7 @@ TextArea::~TextArea()
 
 void TextArea::Reset()
 {
-	MemoryManager *p  = MemoryManager::GetInstance();
-	p->Free(pLines);
+	pMemoryManager->Free(pLines);
 
 	this->iId				= 0;
 	this->bDisabled			= TRUE;

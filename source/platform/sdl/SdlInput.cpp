@@ -66,7 +66,7 @@ Input::Input()
 
 Input::~Input()
 {
-	Reset();
+	this->Reset();
 }
 
 INLINE BOOL Input::Shutdown()

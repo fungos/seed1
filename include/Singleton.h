@@ -48,8 +48,12 @@
 												static inline type *GetInstance() \
 												{ \
 													if (type::Instance == NULL) \
-														type::Instance = new type(); \
+														type::Instance = New(type()); \
 													return type::Instance; \
+												} \
+												static inline void DestroyInstance() \
+												{ \
+													Delete(type::Instance); \
 												}
 
 #define SEED_SINGLETON_HEAP_DEFINE(type)		type *type::Instance = NULL;
@@ -65,6 +69,9 @@
 												static inline type *GetInstance() \
 												{ \
 													return &type::instance; \
+												} \
+												static inline void DestroyInstance() \
+												{ \
 												}
 
 #define SEED_SINGLETON_STACK_DEFINE(type)		type type::instance;

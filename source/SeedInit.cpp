@@ -256,10 +256,24 @@ void Shutdown()
 	Info(SEED_TAG "Shutting down subsystems...");
 	pModuleManager->Shutdown();
 
+	pParticleManager->DestroyInstance();
+	pStringCache->DestroyInstance();
+	pDictionary->DestroyInstance();
+	pInput->DestroyInstance();
+	pResourceLoader->DestroyInstance();
+	pGuiManager->DestroyInstance();
+	pSoundSystem->DestroyInstance();
+	pScreen->DestroyInstance();
+	pCartridge->DestroyInstance();
+	pFileSystem->DestroyInstance();
+	pPackageManager->DestroyInstance();
+	pTimer->DestroyInstance();
+	pMemoryManager->DestroyInstance();
+	pSystem->DestroyInstance();
+
 	LeakReportPrint;
 
 	Private::bInitialized = FALSE;
-
 	Private::pApplication = NULL;
 }
 
