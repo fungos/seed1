@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -29,39 +29,14 @@
  **
  *****************************************************************************/
 
-/*! \file IRenderer2D.cpp
+/*! \file SceneNode.cpp
 	\author	Danny Angelo Carminati Grein
-	\brief Defines the Renderer 2D class interface
+	\brief Scene Node
 */
 
-#include "interface/IRenderer2D.h"
-#include "Log.h"
+#include "SceneNode.h"
 
 namespace Seed {
 
-IRenderer2D::IRenderer2D()
-{
-}
-
-IRenderer2D::~IRenderer2D()
-{
-}
-
-INLINE void IRenderer2D::ClearScreen(const PIXEL color) const
-{
-	UNUSED(color);
-	SEED_ABSTRACT_METHOD;
-}
-
-INLINE void IRenderer2D::DrawRect(f32 x, f32 y, f32 w, f32 h, PIXEL color, BOOL fill) const
-{
-	UNUSED(x);
-	UNUSED(y);
-	UNUSED(w);
-	UNUSED(h);
-	UNUSED(color);
-	UNUSED(fill);
-	SEED_ABSTRACT_METHOD;
-}
 
 } // namespace

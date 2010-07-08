@@ -37,8 +37,6 @@
 #ifndef __CARTRIDGE_H__
 #define __CARTRIDGE_H__
 
-#include "Config.h"
-
 #if defined(_WII_)
 	#include "platform/wii/WiiCartridge.h"
 	using namespace Seed::WII;

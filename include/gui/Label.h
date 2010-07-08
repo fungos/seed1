@@ -63,12 +63,24 @@ class SEED_CORE_API Label : public IWidget
 		f32 GetTextWidth();
 
 		// IRenderable
-		virtual void Render(f32 delta);
-		virtual void SetColor(u8 r, u8 g, u8 b, u8 a);
-		virtual void SetColor(PIXEL px);
+		virtual void Render();
 
 		// ITransformable2D
 		virtual void SetWidth(f32 w);
+		virtual void SetScaleX(f32 scaleX);
+		virtual void SetScaleY(f32 scaleY);
+		virtual void SetScale(f32 scale);
+		virtual void SetScale(f32 scaleX, f32 scaleY);
+		virtual void SetScale(const Point<f32> &scale);
+
+		virtual void AddScaleX(f32 scaleX);
+		virtual void AddScaleY(f32 scaleY);
+		virtual void AddScale(f32 scale);
+		virtual void AddScale(f32 scaleX, f32 scaleY);
+		virtual void AddScale(const Point<f32> &scale);
+
+		virtual f32 GetScaleX() const;
+		virtual f32 GetScaleY() const;
 
 		// IObject
 		virtual const char *GetObjectName() const;
@@ -76,8 +88,9 @@ class SEED_CORE_API Label : public IWidget
 
 	protected:
 		eHorizontalAlignment	iAlign;
-		PIXEL		iColor;
 		BOOL		bAutoAdjust;
+		f32			fTextScaleX;
+		f32			fTextScaleY;
 		Text		cText;
 		const Font	*pFont;
 

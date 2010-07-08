@@ -34,12 +34,11 @@
 	\brief Seed Initialization / Shutdown
 */
 
-
+#include "Defines.h"
 #include "SeedInit.h"
-#include "Config.h"
 #include "ResourceManager.h"
 #include "ResourceLoader.h"
-#include "Image.h"
+#include "Texture.h"
 #include "MemoryManager.h"
 #include "Timer.h"
 #include "Package.h"
@@ -65,13 +64,18 @@
 #include "Updater.h"
 #include "ModuleManager.h"
 #include "Cartridge.h"
+#include "ViewManager.h"
+#include "RendererManager.h"
+#include "SceneManager.h"
+#include "RendererDevice.h"
+#include "Checksum.h"
+#include "Profiler.h"
 
 namespace Seed {
 
 namespace Private
 {
 	IGameApp	*pApplication 	= NULL;
-	IRenderer	*pRenderer 		= NULL;
 	BOOL		bInitialized 	= FALSE;
 	int			iArgc			= 0;
 	char		**pcArgv		= NULL;
@@ -79,7 +83,7 @@ namespace Private
 	f32			fCurrentTime	= 0.0f;
 }
 
-ResourceManager *pResourceManager = NULL;//("global");
+ResourceManager *pResourceManager = NULL;
 const Configuration *pConfiguration = NULL;
 
 #define MAX_FRAME_DELTA (1.0f / 60.0f) * 5.0f
@@ -102,7 +106,7 @@ INLINE void CommandLineParse(int argc, char **argv)
 	while (i < argc)
 	{
 		const char *param = argv[i];
-		CommandLineParameter(param);
+		Seed::CommandLineParameter(param);
 		i++;
 	}
 }
@@ -116,12 +120,7 @@ INLINE void SetGameApp(IGameApp *app, int argc, char **argv)
 	pConfiguration  = app->GetConfiguration();
 	pResourceManager = app->GetResourceManager();
 
-	CommandLineParse(argc, argv);
-}
-
-INLINE void SetRenderer(IRenderer *renderer)
-{
-	Private::pRenderer = renderer;
+	Seed::CommandLineParse(argc, argv);
 }
 
 INLINE void WriteOut(const char *msg)
@@ -171,6 +170,8 @@ BOOL Initialize()
 	BOOL ret = TRUE;
 	//Private::bDisableSound = TRUE;
 
+	pChecksum = Checksum::GetInstance();
+
 	ret = ret && pModuleManager->Add(pSystem);
 	ret = ret && pModuleManager->Add(pMemoryManager);
 	ret = ret && pModuleManager->Add(pTimer);
@@ -178,6 +179,9 @@ BOOL Initialize()
 	ret = ret && pModuleManager->Add(pFileSystem);
 	ret = ret && pModuleManager->Add(pCartridge);
 	ret = ret && pModuleManager->Add(pScreen);
+	ret = ret && pModuleManager->Add(pRendererDevice);
+	ret = ret && pModuleManager->Add(pViewManager);
+	ret = ret && pModuleManager->Add(pRendererManager);
 
 	if (!Private::bDisableSound)
 		ret = ret && pModuleManager->Add(pSoundSystem);
@@ -199,8 +203,10 @@ BOOL Initialize()
 	pUpdater->Add(pSystem);
 	pUpdater->Add(pResourceLoader);
 	pUpdater->Add(pParticleManager);
+	pUpdater->Add(pRendererManager);
+	pUpdater->Add(pSceneManager);
 
-	ResourceManager::Register(Seed::ObjectImage,			ImageResourceLoader);
+	ResourceManager::Register(Seed::ObjectTexture,			TextureResourceLoader);
 	ResourceManager::Register(Seed::ObjectSprite,			SpriteResourceLoader);
 	ResourceManager::Register(Seed::ObjectFont,				FontResourceLoader);
 	ResourceManager::Register(Seed::ObjectPackage,			PackageResourceLoader);
@@ -215,7 +221,6 @@ BOOL Initialize()
 	//ready during Setup
 	Private::bInitialized = TRUE;
 
-	//Private::pApplication->Initialize();
 	ret = ret && pModuleManager->Add(Private::pApplication);
 
 	pModuleManager->Print();
@@ -235,17 +240,19 @@ void Update()
 	if (dt > MAX_FRAME_DELTA)
 		dt = MAX_FRAME_DELTA;
 
-	pUpdater->Run(dt, 1.0f / 60.0f); //60
+	pUpdater->Run(dt, 1.0f / 60.0f);
+	// maybe this? pUpdater->Run(dt, 1.0f / (f32)pConfiguration->GetFrameRate());
 
-	Seed::Render(dt);
+	Seed::Render();
 }
 
-void Render(f32 delta)
+void Render()
 {
+	pScreen->Update();
+	// FIXME: Viewport Render and Screen Update must be generic
 #if !defined(_QT_)
-	Private::pRenderer->Render(delta);
+	pViewManager->Render();
 #endif
-	pScreen->Update(delta);
 }
 
 void Shutdown()
@@ -259,10 +266,13 @@ void Shutdown()
 	pParticleManager->DestroyInstance();
 	pStringCache->DestroyInstance();
 	pDictionary->DestroyInstance();
+	pSceneManager->DestroyInstance();
 	pInput->DestroyInstance();
 	pResourceLoader->DestroyInstance();
 	pGuiManager->DestroyInstance();
 	pSoundSystem->DestroyInstance();
+	pRendererManager->DestroyInstance();
+	pViewManager->DestroyInstance();
 	pScreen->DestroyInstance();
 	pCartridge->DestroyInstance();
 	pFileSystem->DestroyInstance();
@@ -271,6 +281,7 @@ void Shutdown()
 	pMemoryManager->DestroyInstance();
 	pSystem->DestroyInstance();
 
+	ProfilerReportPrint;
 	LeakReportPrint;
 
 	Private::bInitialized = FALSE;

@@ -13,9 +13,9 @@ Description:
 	memory layout:
 
 		DEBUG              RELEASE
-		|.-25|| -21|| -17|-| -13||  -9||  -5||  -4||0 ...   n|
+		|.-28|| -24|| -20|-| -16|| -12||  -8||  -4||0 ...   n|
 		[KEEP][OWNR][DESC]-[PREV][NEXT][USED][SIZE][user area]
-		u32   str   str   -u32   u32   u8    u32   ?
+		u32   str   str   -u32   u32   u32   u32   ?
 
 struct block
 {
@@ -24,21 +24,21 @@ struct block
 	const char *desc;
 	u32			prev;
 	u32			next;
-	u8			used;
+	u32			used;
 	u32			size;
 };
 */
 
 #if defined(YMEM_DEBUG)
-#define KEEP(i)			(*((u32 *)(&this->pPool[i - 25])))
-#define OWNR(i)			(*((u32 *)(&this->pPool[i - 21])))
-#define DESC(i)			(*((u32 *)(&this->pPool[i - 17])))
-#define SIZE_HEADER		25
+#define KEEP(i)			(*((u32 *)(&this->pPool[i - 28])))
+#define OWNR(i)			(*((u32 *)(&this->pPool[i - 24])))
+#define DESC(i)			(*((u32 *)(&this->pPool[i - 20])))
+#define SIZE_HEADER		32
 #else
 #define KEEP(i)
 #define OWNR(i)
 #define DESC(i)
-#define SIZE_HEADER		13
+#define SIZE_HEADER		16
 #endif // YMEM_DEBUG
 
 #define NO_OWNR		"Nobody"
@@ -49,9 +49,9 @@ struct block
 
 #define START		SIZE_HEADER		/*address of first payload*/
 
-#define PREV(i)		(*((u32 *)(&this->pPool[i - 13])))
-#define NEXT(i)		(*((u32 *)(&this->pPool[i -  9])))
-#define USED(i)		(*(( u8 *)(&this->pPool[i -  5])))
+#define PREV(i)		(*((u32 *)(&this->pPool[i - 16])))
+#define NEXT(i)		(*((u32 *)(&this->pPool[i - 12])))
+#define USED(i)		(*((u32 *)(&this->pPool[i -  8])))
 #define SIZE(i)		(*((u32 *)(&this->pPool[i -  4])))
 
 #define GUARD		0xdeadbeef

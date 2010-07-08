@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -69,11 +69,15 @@ class SEED_CORE_API Text
 		virtual f32 GetY() const;
 
 		virtual void SetPosition(f32 x, f32 y);
+		virtual void SetLocalPosition(f32 x, f32 y);
 		virtual void SetFont(Font *f);
 		virtual void SetBlending(eBlendMode op);
 		virtual void SetColor(u8 r, u8 g, u8 b, u8 a);
 		virtual void SetColor(PIXEL px);
 		virtual void SetScale(f32 scaleX, f32 scaleY);
+
+		virtual f32 GetScaleX() const;
+		virtual f32 GetScaleY() const;
 
 		virtual const WideString GetText() const;
 
@@ -81,11 +85,15 @@ class SEED_CORE_API Text
 		SEED_DISABLE_COPY(Text);
 
 	private:
-		Font		*pFont;
-		const WideString	pStrData;
+		BOOL bChanged;
+		Font *pFont;
+
+		const WideString pStrData;
 
 		f32 fPosX;
 		f32 fPosY;
+		f32 fLocalX;
+		f32 fLocalY;
 		f32 fWidth;
 		f32 fHeight;
 		f32 fScaleX;

@@ -52,7 +52,7 @@ The use of SEED_USE_MULTIPLE_IMAGES_PER_ANIMATION will enable the SDK to load si
 */
 
 #include "interface/IResource.h"
-#include "interface/IImage.h"
+#include "interface/ITexture.h"
 #include "interface/ISprite.h"
 #include "SeedInit.h"
 #include "MemoryManager.h"

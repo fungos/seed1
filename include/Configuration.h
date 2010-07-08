@@ -44,24 +44,58 @@ class SEED_CORE_API Configuration : public IObject
 		Configuration();
 		~Configuration();
 
-		void SetVideoMode(u32 videoMode);
-		u32 GetVideoMode() const;
+		void SetVideoMode(eVideoMode videoMode);
+		eVideoMode GetVideoMode() const;
 
-		void SetResolution(u32 width, u32 height);
+		//void SetResolution(u32 width, u32 height);
 		u32 GetResolutionWidth() const;
 		u32 GetResolutionHeight() const;
 
 		void SetWorkingDirectory(const char *path);
 		const char *GetWorkingDirectory() const;
 
+		//! Sets the desired frame rate.
+		/*!
+			Sets the desired frame rate for running the entire system.
+			\param frameRate Frame rate of the system
+		 */
 		void SetFrameRate(eSystemFrameRate frameRate);
+
+		//! Gets the desired frame rate.
+		/*!
+			Returns the selected frame rate.
+			\returns a ISystem::eFrameRate enumeration;
+		 */
 		eSystemFrameRate GetFrameRate() const;
 
+		//! Sets the application title.
+		/*!
+			Sets the application title, mainly used for savegame data.
+			\param title Title of the application;
+		 */
 		void SetApplicationTitle(const char *title);
+
+		//! Returns the application title.
+		/*!
+			Returns the application title.
+			\returns a const char * string;
+		 */
 		const char *GetApplicationTitle() const;
 
+		//! Sets the application description.
+		/*!
+			Sets the application description, mainly used for savegame data.
+			\param descr Description of the application ;
+		 */
 		void SetApplicationDescription(const char *desc);
+
+		//! Returns the application description.
+		/*!
+			Returns the application description.
+			\returns a const char * string;
+		 */
 		const char *GetApplicationDescription() const;
+
 
 		void SetPlatformSimulation(ePlatformSimulation platform);
 		ePlatformSimulation GetPlatformSimulation() const;
@@ -72,6 +106,9 @@ class SEED_CORE_API Configuration : public IObject
 		void SetWarningMultipleInstances(BOOL warnUser);
 		BOOL GetWarningMultipleInstances() const;
 
+		void SetRendererDeviceType(eRendererDeviceType deviceType);
+		eRendererDeviceType GetRendererDeviceType() const;
+
 		void SetMemorySize(u32 memsize);
 		u32 GetMemorySize() const;
 
@@ -79,11 +116,16 @@ class SEED_CORE_API Configuration : public IObject
 		virtual const char *GetObjectName() const;
 		virtual int GetObjectType() const;
 
+		BOOL bDebugSprite;
+		BOOL bDebugButton;
+		BOOL bDebugText;
+		BOOL bDebugContainer;
+
 	private:
 		SEED_DISABLE_COPY(Configuration);
 
 		// Screen
-		u32	iVideoMode;
+		eVideoMode nVideoMode;
 		u32 iResolutionWidth;
 		u32 iResolutionHeight;
 
@@ -102,6 +144,7 @@ class SEED_CORE_API Configuration : public IObject
 
 		// General
 		ePlatformSimulation iPlatformSimulation;
+		eRendererDeviceType iRendererDeviceType;
 };
 
 } // namespace

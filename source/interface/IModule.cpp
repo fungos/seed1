@@ -94,11 +94,6 @@ INLINE BOOL IModule::IsRequired() const
 	return FALSE;
 }
 
-INLINE const char *IModule::GetObjectName() const
-{
-	return "IModule";
-}
-
 INLINE int IModule::GetObjectType() const
 {
 	return Seed::ObjectInterfaceModule;

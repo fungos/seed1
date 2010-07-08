@@ -70,10 +70,6 @@ class SEED_CORE_API ModuleManager
 		Array<IModule *, MAX_MODULES> arModule;
 };
 
-//extern "C" {
-//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(ModuleManager);
-//}
-
 #define pModuleManager ModuleManager::GetInstance()
 
 } // namespace

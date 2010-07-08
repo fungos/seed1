@@ -51,7 +51,6 @@
 #include <wchar.h>
 
 #include <SDL/SDL.h>
-#include <SDL/SDL_opengl.h>
 
 #if defined(__APPLE_CC__)
 #include <SDL_image/SDL_image.h>
@@ -239,22 +238,6 @@ typedef u32 					PIXEL;
 #define	LIB_PIXEL_COMPONENT(x)		(x&0xff)
 #define	LIB_PIXEL_COLOR(r, g, b, a)	((LIB_PIXEL_COMPONENT(b)<<LIB_PIXEL_B_SHIFT) | (LIB_PIXEL_COMPONENT(g)<<LIB_PIXEL_G_SHIFT) | (LIB_PIXEL_COMPONENT(r)<<LIB_PIXEL_R_SHIFT) | (LIB_PIXEL_COMPONENT(a)<<LIB_PIXEL_A_SHIFT))
 #define LIB_PIXEL_ALPHA_MAX_VALUE	255
-
-union uPixel
-{
-	PIXEL pixel;
-	struct _sPixel
-	{
-		u8 c[4];
-	} pComponent;
-	struct _cPixel
-	{
-		u8 a;
-		u8 b;
-		u8 g;
-		u8 r;
-	} component;
-};
 
 #if defined(WIN32)
 #define HALT	do { __asm { int 3 }; exit(-1); } while (1);

@@ -37,8 +37,6 @@
 #ifndef __INPUT_H__
 #define __INPUT_H__
 
-#include "Config.h"
-
 #if defined(_WII_)
 	#include "platform/wii/WiiInput.h"
 	using namespace Seed::WII;

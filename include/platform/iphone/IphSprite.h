@@ -40,11 +40,11 @@
 #if defined(_IPHONE_)
 
 #include "Defines.h"
-#include "interface/IImage.h"
+#include "interface/ITexture.h"
 #include "interface/ISprite.h"
 #include "SeedInit.h"
 #include "SpriteObject.h"
-#include "Image.h"
+#include "Texture.h"
 #include "ResourceManager.h"
 
 #include <math.h>

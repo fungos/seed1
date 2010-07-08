@@ -129,9 +129,4 @@ INLINE const char *GuiManager::GetObjectName() const
 	return "GuiManager";
 }
 
-INLINE int GuiManager::GetObjectType() const
-{
-	return Seed::ObjectGuiManager;
-}
-
 } // namespace

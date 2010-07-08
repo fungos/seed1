@@ -78,13 +78,13 @@ Theora::Theora()
 	, bFinished(FALSE)
 	, bTerminateThread(FALSE)
 	, sem(0)
-	, iTextureId(0)
 {
 }
 
 Theora::~Theora()
 {
 	this->Reset();
+	pPlayer = NULL;
 }
 
 INLINE void Theora::Reset()
@@ -101,17 +101,15 @@ INLINE void Theora::Reset()
 
 INLINE BOOL Theora::Unload()
 {
+	Image::Unload();
+
 	bFinished = TRUE;
 	bTerminateThread = TRUE;
 	bPlaying = FALSE;
 
-	if (iTextureId)
-		glDeleteTextures(1, &iTextureId);
-
-	pMemoryManager->Free(pTexData);
-
-	iTextureId = 0;
-	pPlayer = NULL;
+	if (pTexData)
+		pMemoryManager->Free(pTexData);
+	pTexData = NULL;
 
 	return TRUE;
 }
@@ -157,8 +155,16 @@ BOOL Theora::Run()
 	return ret;
 }
 
-BOOL Theora::Load(const char *filename)
+BOOL Theora::Load(const char *filename, IMemoryPool *pool)
 {
+	return this->Load(filename, pResourceManager, pool);
+}
+
+BOOL Theora::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
+{
+	pRes = res;
+	pPool = pool;
+
 	if (this->Unload())
 	{
 		OggPlayReader *reader = oggplay_file_reader_new(filename);
@@ -198,15 +204,8 @@ BOOL Theora::Load(const char *filename)
 
 			oggplay_use_buffer(pPlayer, OGGPLAY_BUFFER_SIZE);
 
-			bLoaded = TRUE;
-			bPlaying = FALSE;
-			bFinished = FALSE;
-
-			SEM_CREATE(sem, OGGPLAY_BUFFER_SIZE);
+			SEM_CHECK(sem) {} else SEM_CREATE(sem, OGGPLAY_BUFFER_SIZE);
 			SEM_WAIT(sem);
-
-			this->Create();
-			this->Run();
 
 			this->ConfigureRendering();
 		}
@@ -226,6 +225,7 @@ void Theora::Update(f32 delta)
 
 	if (bPlaying)
 	{
+		Image::Update(delta);
 		if (iUntilFrame && iUntilFrame == iFrameCount)
 		{
 			this->Pause();
@@ -430,7 +430,19 @@ INLINE void Theora::ProcessVideoData(OggPlayVideoData *data)
 	rgb.rgb_width = iTexWidth;
 	rgb.rgb_height = iTexHeight;
 
-	oggplay_yuv2rgba(&yuv, &rgb);
+	/*eRendererDeviceType type = pConfiguration->GetRendererDeviceType();
+	if (type == Seed::RendererDeviceOpenGL14 || type == Seed::RendererDeviceOpenGL20 ||
+		type == Seed::RendererDeviceOpenGL30 || type == Seed::RendererDeviceOpenGL40)
+	{
+		oggplay_yuv2bgra(&yuv, &rgb);
+	}
+	else // DirectX
+	{
+		oggplay_yuv2argb(&yuv, &rgb);
+	}*/
+
+	oggplay_yuv2bgra(&yuv, &rgb);
+	cTexture.Update(static_cast<PIXEL *>((void *)pTexData));
 }
 
 INLINE BOOL Theora::WaitFrameRate()
@@ -458,15 +470,6 @@ void Theora::ConfigureRendering()
 	u32 po2_width = 0;
 	u32 po2_height = 0;
 
-	glGenTextures(1, &iTextureId);
-	glBindTexture(GL_TEXTURE_2D, iTextureId);
-
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
 	oggplay_get_video_y_size(pPlayer, iTrack, reinterpret_cast<int *>(&iWidth), reinterpret_cast<int *>(&iHeight));
 	oggplay_get_video_uv_size(pPlayer, iTrack, reinterpret_cast<int *>(&iUVWidth), reinterpret_cast<int *>(&iUVHeight));
 
@@ -488,85 +491,22 @@ void Theora::ConfigureRendering()
 		iTexWidth = po2_width;
 		iTexHeight = po2_height;
 	}
-	/*
-	else if (iTexWidth != po2_width || iTexHeight != po2_height)
-	{
-		//free(pTexData);
-		//pTexData = reinterpret_cast<u8 *>(calloc(1, po2_width * po2_height * 4));
-		pMemoryManager->Free(pTexData);
-		pTexData = reinterpret_cast<u8 *>(pMemoryManager->Alloc(po2_width * po2_height * 4));
-		iTexWidth = po2_width;
-		iTexHeight = po2_height;
-	}
-	*/
 
-	coords[0] = 0.0f;
-	coords[1] = 0.0f;
-	coords[2] = fTexScaleX;
-	coords[3] = 0.0f;
-	coords[4] = fTexScaleX;
-	coords[5] = fTexScaleY;
-	coords[6] = 0.0f;
-	coords[7] = fTexScaleY;
+	cTexture.Load(iWidth, iHeight, static_cast<PIXEL *>((void *)pTexData), iTexWidth, iTexHeight);
+	Image::Load(&cTexture);
 
-	#if defined(SEED_USE_REAL_COORDINATE_SYSTEM)
-		// A
-		vertices[0] = 0.0f;
-		vertices[1] = 0.0f;
+	bTerminateThread = FALSE;
+	bLoaded = TRUE;
+	bPlaying = FALSE;
+	bFinished = FALSE;
 
-		// B
-		vertices[2] = (f32)pScreen->GetWidth();
-		vertices[3] = 0.0f;
-
-		// C
-		vertices[4] = (f32)pScreen->GetWidth();
-		vertices[5] = (f32)pScreen->GetHeight();
-
-		// D
-		vertices[6] = 0.0f;
-		vertices[7] = (f32)pScreen->GetHeight();
-	#else
-		f32 y = 1.0f * pScreen->GetAspectRatio();
-
-		// A
-		vertices[0] = 0.0f;
-		vertices[1] = 0.0f;
-
-		// B
-		vertices[2] = 1.0f;
-		vertices[3] = 0.0f;
-
-		// C
-		vertices[4] = 1.0f;
-		vertices[5] = y;
-
-		// D
-		vertices[6] = 0.0f;
-		vertices[7] = y;
-	#endif
+	this->Create();
+	this->Run();
 }
 
-void Theora::Render(f32 delta)
+void Theora::Render()
 {
-	UNUSED(delta);
-
-	if (pTexData != NULL)
-	{
-		glEnable(GL_TEXTURE_2D);
-		glDisable(GL_CULL_FACE);
-
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, iTextureId);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, iTexWidth, iTexHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, pTexData);
-
-		glTexCoordPointer(2, GL_FLOAT, 0, coords);
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-		glVertexPointer(2, GL_FLOAT, 0, vertices);
-		glEnableClientState(GL_VERTEX_ARRAY);
-
-		glDrawArrays(GL_QUADS, 0, 4);
-	}
+	Image::Render();
 }
 
 

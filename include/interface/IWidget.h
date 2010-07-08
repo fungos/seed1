@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -39,7 +39,7 @@
 
 #include "Defines.h"
 #include "interface/IEventWidgetListener.h"
-#include "interface/ITransformable2D.h"
+#include "interface/ISceneObject.h"
 #include "interface/IInput.h"
 #include "Enum.h"
 
@@ -50,7 +50,7 @@ namespace Seed {
 
 class WidgetContainer;
 
-class SEED_CORE_API IWidget : public ITransformable2D, public IEventWidgetListener
+class SEED_CORE_API IWidget : public ISceneObject, public IEventWidgetListener
 {
 	public:
 		IWidget();
@@ -97,6 +97,10 @@ class SEED_CORE_API IWidget : public ITransformable2D, public IEventWidgetListen
 		virtual void SendOnDrop(const EventWidget *ev);
 		virtual void SendOnDrag(const EventWidget *ev);
 
+		// IObject
+		virtual const char *GetObjectName() const;
+		virtual int GetObjectType() const;
+
 	protected:
 		void Reset();
 
@@ -118,14 +122,12 @@ class SEED_CORE_API IWidget : public ITransformable2D, public IEventWidgetListen
 		eWidgetState	iPlayerState[PLATFORM_MAX_INPUT];
 		u64				arPlayerStateStartTime[PLATFORM_MAX_INPUT];
 
-		Seed::eInputButton iButton;
+		eInputButton iButton;
 
 	private:
 		SEED_DISABLE_COPY(IWidget);
 };
 
-
 } // namespace
-
 
 #endif // __IWIDGET_H__

@@ -77,7 +77,6 @@ class SEED_CORE_API IModule : public IObject
 		virtual BOOL IsRequired() const;
 
 		// IObject
-		virtual const char *GetObjectName() const;
 		virtual int GetObjectType() const;
 
 	protected:

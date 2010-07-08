@@ -34,37 +34,26 @@
 	\brief GUI TextArea Widget
 */
 
-
 #include "Defines.h"
 #include "Input.h"
 #include "Log.h"
 #include "Rect.h"
 #include "gui/TextArea.h"
-#include "Renderer2D.h"
+#include "ViewManager.h"
 #include "Screen.h"
 #include "Number.h"
-
+#include "RendererDevice.h"
 
 #define TAG		"[GUI::TextArea] "
 
-
-#if DEBUG_ENABLE_RECT_TEXTAREA == 1
-#define DEBUG_TEXTAREA_RECT DEBUG_RECT(this->GetX(), this->GetY(), this->GetWidth(), this->GetHeight(), DEBUG_RECT_COLOR_TEXTAREA);
-#else
-#define DEBUG_TEXTAREA_RECT
-#endif
-
-
 namespace Seed {
-
 
 TextArea::TextArea()
 	: IWidget()
 	, iLines(0)
 	, fDiffX(0.0f)
-	, fScaleX(0.0f)
-	, fScaleY(0.0f)
-	, iColor(0)
+	, fTextScaleX(1.0f)
+	, fTextScaleY(1.0f)
 	, eHAlign(HorizontalAlignLeft)
 	, eVAlign(VerticalAlignTop)
 	, pFont(NULL)
@@ -76,76 +65,75 @@ TextArea::TextArea()
 
 TextArea::~TextArea()
 {
-	this->Reset();
-
 	if (Private::bInitialized)
 		pGuiManager->Remove(this);
 }
 
 void TextArea::Reset()
 {
-	pMemoryManager->Free(pLines);
+	if (pLines)
+		pMemoryManager->Free(pLines);
 
-	this->iId				= 0;
-	this->bDisabled			= TRUE;
-	this->iColor			= 0;
-	this->iLines			= 0;
-	this->eHAlign 			= HorizontalAlignLeft;
-	this->eVAlign 			= VerticalAlignTop;
-	this->eBlendOperation	= Seed::BlendNone;
+	iId				= 0;
+	bDisabled		= TRUE;
+	iColor.pixel	= 0;
+	iLines			= 0;
+	eHAlign 		= HorizontalAlignLeft;
+	eVAlign 		= VerticalAlignTop;
+	eBlendOperation	= BlendNone;
+	pLines			= NULL;
 
 	IWidget::Reset();
 }
 
 void TextArea::ReleaseText()
 {
-	pMemoryManager->Free(pLines);
+	if (pLines)
+		pMemoryManager->Free(pLines);
 
-	this->iId				= 0;
-	this->bDisabled			= TRUE;
-	this->iColor			= 0;
-	this->iLines			= 0;
-	this->eHAlign 			= HorizontalAlignLeft;
-	this->eVAlign 			= VerticalAlignTop;
-	this->eBlendOperation	= Seed::BlendNone;
+	pLines			= NULL;
+	iId				= 0;
+	bDisabled		= TRUE;
+	iColor.pixel	= 0;
+	iLines			= 0;
+	eHAlign 		= HorizontalAlignLeft;
+	eVAlign 		= VerticalAlignTop;
+	eBlendOperation	= Seed::BlendNone;
 
-	this->cText.Reset();
+	cText.Reset();
 }
 
 void TextArea::Update(f32 dt)
 {
-	//IWidget::Update(dt);
 	UNUSED(dt);
 
-	if (this->bChanged)
+	if (bChanged)
 	{
 		this->Rebuild();
 	}
 
-	this->bChanged = FALSE;
-	this->bTransformationChanged = FALSE;
+	bChanged = FALSE;
+	bTransformationChanged = FALSE;
 }
 
-void TextArea::Render(f32 delta)
+void TextArea::Render()
 {
-	UNUSED(delta);
+	cText.SetBlending(eBlendOperation);
+	cText.SetColor(iColor.pixel);
+	cText.SetScale(fTextScaleX, fTextScaleY);
 
-	DEBUG_TEXTAREA_RECT;
-
-	this->cText.SetBlending(this->eBlendOperation);
-	this->cText.SetColor(this->iColor);
-	this->cText.SetScale(this->GetScaleX(), this->GetScaleY());
-
-	for (u32 i = 0; i < this->iLines; i++)
+	for (u32 i = 0; i < iLines; i++)
 	{
 		if (!pLines[i].iIndex && !pLines[i].iSize)
 			break;
 
-		this->cText.SetPosition(pLines[i].fPosX + this->GetX(), pLines[i].fPosY + this->GetY());
-		this->cText.Draw(pLines[i].iIndex, pLines[i].iSize);
+		cText.SetPosition(pLines[i].fPosX + this->GetX(), pLines[i].fPosY + this->GetY());
+		cText.Draw(pLines[i].iIndex, pLines[i].iSize);
 	}
-}
 
+	if (pConfiguration->bDebugText)
+		pRendererDevice->DrawRect(this->GetX(), this->GetY(), this->GetWidth(), this->GetHeight(), PIXEL_COLOR(255, 0, 0, 255));
+}
 
 u32 TextArea::GetLineCount() const
 {
@@ -170,7 +158,7 @@ u32 TextArea::CalculateLineCount()
 			lines++;
 			index += size;
 		}
-		this->SetHeight(lines * (cText.GetHeight() + cText.GetFontTracking()));
+		IWidget::SetHeight(lines * (cText.GetHeight() + cText.GetFontTracking()));
 	}
 	else
 	{
@@ -207,30 +195,31 @@ u32 TextArea::RebuildPosX()
 	u32 size = 0;
 	f32 lineWidth = 0.0f;
 	u32 usedLines = 0;
-	for (u32 i = 0; i < this->iLines; i++)
+
+	cText.SetScale(fTextScaleX, fTextScaleY);
+	for (u32 i = 0; i < iLines; i++)
 	{
 		size = cText.GetLengthNonBreakMaxWidth(&index, this->GetWidth(), &lineWidth);
 
 		if (!size)
 			break;
 
-		this->pLines[i].iSize = size;
-		this->pLines[i].iIndex = index;
-		//this->pLines[i].fPosY = y + ((cText.GetHeight() + cText.GetFontTracking()) * i * this->GetScaleY());
+		pLines[i].iSize = size;
+		pLines[i].iIndex = index;
 
 		f32 diffX = this->GetWidth() - lineWidth;
 		switch (eHAlign)
 		{
 			case HorizontalAlignLeft:
-				this->pLines[i].fPosX = 0.0f;
+				pLines[i].fPosX = 0.0f;
 			break;
 
 			case HorizontalAlignRight:
-				this->pLines[i].fPosX = diffX;
+				pLines[i].fPosX = diffX;
 			break;
 
 			case HorizontalAlignCenter:
-				this->pLines[i].fPosX = (diffX / 2.0f);
+				pLines[i].fPosX = (diffX / 2.0f);
 			break;
 
 			case HorizontalAlignNone:
@@ -248,7 +237,7 @@ u32 TextArea::RebuildPosX()
 void TextArea::RebuildPosY(u32 usedLines)
 {
 	f32 y = 0.0f;
-	f32 textHeight = ((cText.GetHeight() + cText.GetFontTracking()) * usedLines) * this->GetScaleY();
+	f32 textHeight = (cText.GetHeight() + cText.GetFontTracking()) * usedLines;
 	switch (eVAlign)
 	{
 		case VerticalAlignCenter:
@@ -265,83 +254,155 @@ void TextArea::RebuildPosY(u32 usedLines)
 	}
 
 	for (u32 i = 0; i < usedLines; i++)
-		this->pLines[i].fPosY = y + ((cText.GetHeight() + cText.GetFontTracking()) * i * this->GetScaleY());
+		pLines[i].fPosY = y + (cText.GetHeight() + cText.GetFontTracking()) * i;
 }
 
 INLINE void TextArea::SetText(const WideString str)
 {
-	this->cText.SetText(str);
+	cText.SetScale(fTextScaleX, fTextScaleY);
+	cText.SetText(str);
 
 	if (!this->GetHeight())
-		this->SetHeight(cText.GetHeight());
+		IWidget::SetHeight(cText.GetHeight() + cText.GetFontTracking());
 
 	if (!this->GetWidth())
-		this->SetWidth(cText.GetWidth());
+		IWidget::SetWidth(cText.GetWidth());
 
 	this->Rebuild();
-	this->bChanged = FALSE;
-//	this->bChanged = TRUE;
 }
-
 
 INLINE void TextArea::SetText(const String &str)
 {
-	this->cText.SetText(str);
+	cText.SetScale(fTextScaleX, fTextScaleY);
+	cText.SetText(str);
 
 	if (!this->GetHeight())
-		this->SetHeight(cText.GetHeight());
+		IWidget::SetHeight(cText.GetHeight() + cText.GetFontTracking());
 
 	if (!this->GetWidth())
-		this->SetWidth(cText.GetWidth());
+		IWidget::SetWidth(cText.GetWidth());
 
 	this->Rebuild();
-	this->bChanged = FALSE;
-//	this->bChanged = TRUE;
+}
+
+void TextArea::SetScaleX(f32 scaleX)
+{
+	this->SetScale(scaleX, this->GetScaleY());
+}
+
+void TextArea::SetScaleY(f32 scaleY)
+{
+	this->SetScale(this->GetScaleX(), scaleY);
+}
+
+void TextArea::SetScale(f32 scale)
+{
+	this->SetScale(scale, scale);
+}
+
+void TextArea::SetScale(f32 scaleX, f32 scaleY)
+{
+	fTextScaleX = scaleX;
+	fTextScaleY = scaleY;
+
+	cText.SetScale(scaleX, scaleY);
+
+	if (bAutoAdjust)
+	{
+		if (this->GetWidth() != cText.GetWidth())
+			IWidget::SetWidth(cText.GetWidth());
+
+		if (this->GetHeight() != cText.GetHeight())
+			IWidget::SetHeight(cText.GetHeight());
+	}
+
+	bChanged = TRUE;
+}
+
+void TextArea::SetScale(const Point<f32> &scale)
+{
+	this->SetScale(scale.x, scale.y);
+}
+
+void TextArea::AddScaleX(f32 scaleX)
+{
+	this->SetScale(this->GetScaleX() + scaleX, this->GetScaleY());
+}
+
+void TextArea::AddScaleY(f32 scaleY)
+{
+	this->SetScale(this->GetScaleX(), this->GetScaleY() + scaleY);
+}
+
+void TextArea::AddScale(f32 scale)
+{
+	this->SetScale(this->GetScaleX() + scale, this->GetScaleY() + scale);
+}
+
+void TextArea::AddScale(f32 scaleX, f32 scaleY)
+{
+	this->SetScale(this->GetScaleX() + scaleX, this->GetScaleY() + scaleY);
+}
+
+void TextArea::AddScale(const Point<f32> &scale)
+{
+	this->SetScale(this->GetScaleX() + scale.x, this->GetScaleY() + scale.y);
+}
+
+INLINE void TextArea::SetWidth(f32 w)
+{
+	IWidget::SetWidth(w);
+
+	bAutoAdjust = FALSE;
+	bChanged = TRUE;
+}
+
+INLINE void TextArea::SetHeight(f32 h)
+{
+	IWidget::SetHeight(h);
+
+	bAutoAdjust = FALSE;
+	bChanged = TRUE;
+}
+
+INLINE f32 TextArea::GetScaleX() const
+{
+	return cText.GetScaleX();
+}
+
+INLINE f32 TextArea::GetScaleY() const
+{
+	return cText.GetScaleY();
 }
 
 INLINE void TextArea::SetAutoAdjust(BOOL b)
 {
-	this->bAutoAdjust = b;
+	bAutoAdjust = b;
 }
 
 INLINE void TextArea::SetFont(const Font *font)
 {
-	this->pFont = font;
-	this->cText.SetFont(const_cast<Font*>(pFont));
-	this->bChanged = TRUE;
+	pFont = font;
+	cText.SetFont(const_cast<Font*>(pFont));
+	bChanged = TRUE;
 }
 
 INLINE void TextArea::SetPriority(u32 p)
 {
-	IRenderable::iPriority = p;
+	ITransformable2D::iPriority = p;
 	IWidget::iPriority = p;
 }
 
 INLINE void TextArea::SetAlignment(eHorizontalAlignment align)
 {
-	this->eHAlign = align;
-	this->bChanged = TRUE;
+	eHAlign = align;
+	bChanged = TRUE;
 }
 
 INLINE void TextArea::SetAlignment(eVerticalAlignment align)
 {
-	this->eVAlign = align;
-	this->bChanged = TRUE;
-}
-
-INLINE void TextArea::SetColor(u8 r, u8 g, u8 b, u8 a)
-{
-	this->iColor = PIXEL_COLOR(r, g, b, a);
-}
-
-INLINE void TextArea::SetColor(PIXEL px)
-{
-	this->iColor = px;
-}
-
-INLINE PIXEL TextArea::GetColor() const
-{
-	return this->iColor;
+	eVAlign = align;
+	bChanged = TRUE;
 }
 
 INLINE const char *TextArea::GetObjectName() const
@@ -353,7 +414,6 @@ INLINE int TextArea::GetObjectType() const
 {
 	return Seed::ObjectGuiTextArea;
 }
-
 
 } // namespace
 

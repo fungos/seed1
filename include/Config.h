@@ -6,11 +6,6 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
-// FIXME: Xcode or cmake isnt setting these defines correcly - quick hack to get it working on mac
-#if defined(__APPLE_CC__)
-#define DEBUG
-#endif
-
 #if defined(SEED_BUILD)
 	#if !defined(SEED_BUILD_COMMERCIAL)
 		#define SEED_BUILD_LGPL
@@ -65,19 +60,6 @@
 #define SEED_USE_3D							0
 #define SEED_USE_UNSTABLE					0
 #define SEED_ENABLE_DEPTH_TEST				0
-//#define SEED_USE_REAL_COORDINATE_SYSTEM		1
-
-/*
-During load, upload texture to vga and keep it there.
-*/
-#define SEED_ENABLE_PRELOAD_TEXTURE			1
-
-/*
-Keep a local ram copy of the image uploaded to vram, this is used in SDL and iPhone
-only. On SDL so that we can see memory consumption, and on iPhone and SDL so we can
-use Alpha test per-pixel.
-*/
-#define SEED_ENABLE_KEEP_IMAGE_DATA			0
 
 /*
 If the Seed will be added to the game project.
@@ -94,10 +76,30 @@ Maximum amount of particles per emitter.
 */
 #define SEED_PARTICLES_MAX					500
 
+
+/*
+Maxium amount of viewports.
+*/
+#define SEED_VIEWPORT_MAX	32
+
+/*
+Maximum amount of renderers.
+*/
+#define SEED_RENDERER_MAX	16
+
+/*
+Maximum amount of objects per scene node.
+*/
+#define SEED_SCENENODE_MAX	32
+
 /*
 Toggle between instancing Singleton classes in the (0) Stack or in the (1) Heap
 */
 #define SEED_SINGLETON_HEAP					0
+
+/*
+*/
+#define SEED_MAX_PRIORITY					1000000
 
 /*
 String Pools - Define the amount of each pool
@@ -123,17 +125,6 @@ Try to keep these values at a minimum.
 // DEBUGGING DEFINES
 //================================================================================
 #if defined(DEBUG)
-	#define DEBUG_GAMESTATE_NOWAIT			1	// To disable save system sync delay
-	#define DEBUG_ENABLE_RECT_TEXTAREA		1	// Enable TextArea Wireframe debugging
-	#define DEBUG_ENABLE_RECT_LABEL			1	// Enable Label Wireframe debugging
-	#define DEBUG_ENABLE_RECT_BUTTON		1	// Enable Button Wireframe debugging
-	#define DEBUG_ENABLE_RECT_SPRITE		1	// Enable Sprite Wireframe debugging
-
-	#define DEBUG_RECT_COLOR_TEXTAREA		PIXEL_COLOR(255, 0, 0, 255)
-	#define DEBUG_RECT_COLOR_LABEL			PIXEL_COLOR(0, 255, 0, 255)
-	#define DEBUG_RECT_COLOR_BUTTON			PIXEL_COLOR(0, 0, 255, 255)
-	#define DEBUG_RECT_COLOR_SPRITE			PIXEL_COLOR(255, 255, 255, 255)
-
 	#define SEED_LOG_RESOURCEMANAGER		1
 #endif // DEBUG
 
@@ -143,9 +134,5 @@ Try to keep these values at a minimum.
 #else
 	#define INLINE
 #endif // SEED_BUILTIN
-
-#if SEED_ENABLE_KEEP_IMAGE_DATA == 1 && defined(RELEASE)
-#warning "SEED_ENABLE_KEEP_IMAGE_DATA is on!"
-#endif // SEED_ENABLE_KEEP_IMAGE_DATA
 
 #endif // __CONFIG_H__

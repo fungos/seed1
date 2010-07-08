@@ -38,32 +38,27 @@
 #define __VIEW_MANAGER_H__
 
 #include "Array.h"
-#include "Config.h"
 #include "interface/IModule.h"
-#include "interface/IUpdatable.h"
-
-class IViewport
-{
-	public:
-		void Update(f32 dt) {};
-		void Render() {};
-};
+#include "Singleton.h"
 
 namespace Seed {
 
-class ViewManager : public IModule, public IUpdatable
+class Viewport;
+class Renderer;
+
+class SEED_CORE_API ViewManager : public IModule
 {
+	SEED_SINGLETON_DECLARE(ViewManager);
 	public:
-		static ViewManager instance;
+		virtual void Add(Viewport *view);
+		virtual void Remove(Viewport *view);
 
-	public:
-		ViewManager();
-		virtual ~ViewManager();
+		virtual void Render();
 
-		virtual void Add(IViewport *view);
-		virtual void Remove(IViewport *view);
-
-		//BOOL Render();
+		virtual Renderer *GetCurrentRenderer() const;
+		virtual Viewport *GetCurrentViewport() const;
+		
+		virtual Viewport *GetViewportAt(f32 x, f32 y);
 
 		// IModule
 		virtual BOOL Initialize();
@@ -73,11 +68,6 @@ class ViewManager : public IModule, public IUpdatable
 		virtual void Disable();
 		virtual void Enable();
 
-		virtual void Render();
-
-		// IUpdatable
-		virtual BOOL Update(f32 dt);
-
 		// IObject
 		virtual const char *GetObjectName() const;
 		virtual int GetObjectType() const;
@@ -85,11 +75,13 @@ class ViewManager : public IModule, public IUpdatable
 	private:
 		SEED_DISABLE_COPY(ViewManager);
 
-		Array<IViewport *, SEED_VIEWPORT_MAX> arViewport;
+	private:
+		Array<Viewport *, SEED_VIEWPORT_MAX> arViewport;
+		Viewport *pCurrentViewport;
 		BOOL bEnabled;
 };
 
-ViewManager *const pViewManager = &ViewManager::instance;
+#define pViewManager ViewManager::GetInstance()
 
 } // namespace
 

@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -34,7 +34,6 @@
 	\brief GUI WidgetContainer Widget
 */
 
-
 #include "Defines.h"
 #include "gui/WidgetContainer.h"
 #include "gui/GuiManager.h"
@@ -42,23 +41,14 @@
 #include "Input.h"
 #include "Log.h"
 #include "Rect.h"
-#include "Renderer2D.h"
 #include "Screen.h"
 #include "Timer.h"
 #include "Enum.h"
 #include "SeedInit.h"
-
+#include "RendererDevice.h"
 
 #define TAG						"[GUI::WidgetContainer] "
 #define DRAG_START_THRESHOLD	30
-
-
-#if DEBUG_ENABLE_RECT_WidgetContainer == 1
-#define DEBUG_WIDGETCONTAINER_RECT DEBUG_RECT(this->GetX(), this->GetY(), this->GetWidth(), this->GetHeight(), DEBUG_RECT_COLOR_WIDGETCONTAINER);
-#else
-#define DEBUG_WIDGETCONTAINER_RECT
-#endif
-
 
 #if defined(SEED_LOG_GUIMANAGER)
 	#define LOG		Log
@@ -70,7 +60,6 @@
 		UNUSED(pMessage);
 	}
 #endif
-
 
 namespace Seed {
 
@@ -85,31 +74,26 @@ WidgetContainer::~WidgetContainer()
 {
 	this->Reset();
 
-	if(Private::bInitialized)
+	if (Private::bInitialized)
 		pGuiManager->Remove(this);
 }
 
 void WidgetContainer::Reset()
 {
-	this->iId				= 0;
-	this->iColor			= 0;
-	this->eBlendOperation	= Seed::BlendNone;
+	iId				= 0;
+	iColor.pixel	= 0;
+	eBlendOperation	= BlendNone;
 
 	IWidget::Reset();
 
-#if defined(SEED_USE_REAL_COORDINATE_SYSTEM)
-	this->SetWidth(1024.0f); //f32(pScreen->GetWidth()));
-	this->SetHeight(768.0f); //f32(pScreen->GetHeight()));
-#else
 	this->SetWidth(1.0f);
 	this->SetHeight(1.0f);
-#endif
 
-	this->bVisible			= TRUE;
-	this->bChanged			= TRUE;
-	this->bTransformationChanged = TRUE;
-	this->bDisabled			= FALSE;
-	this->bEventConsumed	= FALSE;
+	bVisible			= TRUE;
+	bChanged			= TRUE;
+	bTransformationChanged = TRUE;
+	bDisabled			= FALSE;
+	bEventConsumed	= FALSE;
 
 	vWidget.clear();
 	WidgetVector().swap(vWidget);
@@ -117,8 +101,6 @@ void WidgetContainer::Reset()
 
 void WidgetContainer::Update(f32 dt)
 {
-	UNUSED(dt);
-
 	WidgetIterator it = vWidget.begin();
 	WidgetIterator end = vWidget.end();
 	for (; it != end; ++it)
@@ -129,7 +111,7 @@ void WidgetContainer::Update(f32 dt)
 		w->Update(dt);
 	}
 
-	std::sort(vWidget.begin(), vWidget.end(), IRenderableDescendingPrioritySort());
+	std::sort(vWidget.begin(), vWidget.end(), ITransformable2DDescendingPrioritySort());
 }
 
 INLINE void WidgetContainer::SetVisible(BOOL b)
@@ -162,9 +144,20 @@ INLINE void WidgetContainer::SetDisabled(BOOL b)
 	}
 }
 
-INLINE void WidgetContainer::Render(f32 delta)
+INLINE void WidgetContainer::Render()
 {
-	UNUSED(delta);
+	WidgetIterator it = vWidget.begin();
+	WidgetIterator end = vWidget.end();
+	for (; it != end; ++it)
+	{
+		IWidget *w = (*it);
+		ASSERT_NULL(w);
+
+		w->Render();
+	}
+
+	if (pConfiguration->bDebugContainer)
+		pRendererDevice->DrawRect(this->GetX(), this->GetY(), this->GetWidth(), this->GetHeight(), PIXEL_COLOR(255, 0, 255, 255));
 }
 
 INLINE void WidgetContainer::Add(IWidget *widget)
@@ -174,11 +167,9 @@ INLINE void WidgetContainer::Add(IWidget *widget)
 	WidgetIterator p = std::find(vWidget.begin(), vWidget.end(), widget);
 	if (p == vWidget.end())
 	{
-		widget->SetParent(this);
-		//widget->SetVisible(this->IsVisible());
-		//widget->SetDisabled(this->IsDisabled());
+		//widget->SetParent(this);
 		vWidget.push_back(widget);
-		std::sort(vWidget.begin(), vWidget.end(), IRenderableDescendingPrioritySort());
+		std::sort(vWidget.begin(), vWidget.end(), ITransformable2DDescendingPrioritySort());
 	}
 }
 
@@ -189,8 +180,8 @@ INLINE void WidgetContainer::Remove(IWidget *widget)
 	WidgetIterator p = std::find(vWidget.begin(), vWidget.end(), widget);
 	if (p != vWidget.end())
 	{
-		IWidget *widget = (*p);
-		widget->SetParent(NULL);
+		//IWidget *widget = (*p);
+		//widget->SetParent(NULL);
 
 		vWidget.erase(p);
 	}
@@ -198,12 +189,10 @@ INLINE void WidgetContainer::Remove(IWidget *widget)
 	WidgetVector(vWidget).swap(vWidget);
 }
 
-
 INLINE BOOL WidgetContainer::IsEventConsumed() const
 {
 	return bEventConsumed;
 }
-
 
 void WidgetContainer::OnInputPointerPress(const EventInputPointer *ev)
 {
@@ -226,7 +215,7 @@ void WidgetContainer::OnInputPointerPress(const EventInputPointer *ev)
 		f32 cY = ev->GetY();
 
 		if (!w->ContainsPoint(cX, cY))
-				continue;
+			continue;
 
 		if (w->GetObjectType() == Seed::ObjectGuiWidgetContainer)
 		{
@@ -250,7 +239,7 @@ void WidgetContainer::OnInputPointerPress(const EventInputPointer *ev)
 			continue;
 		}
 
-		const EventWidget newEvent(w, NULL, EventWidget::PRESSED, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
+		const EventWidget newEvent(w, NULL, WidgetEventPressed, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
 
 		LOG(">PRESSED_OVER [id: %d]", w->GetId());
 		// GetState eh o baseado em prioridade a partir de todos os inputs.
@@ -394,7 +383,7 @@ BOOL WidgetContainer::DoDrag(const EventInputPointer *ev, IWidget *widget)
 			receiver = w;
 			//break;
 
-			const EventWidget newEvent(widget, receiver, EventWidget::DRAG, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
+			const EventWidget newEvent(widget, receiver, WidgetEventDrag, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
 
 			LOG(">DRAG OVER [id: %d]", receiver->GetId());
 			LOG("\tEstado WIDGET");
@@ -410,7 +399,7 @@ BOOL WidgetContainer::DoDrag(const EventInputPointer *ev, IWidget *widget)
 
 	if (!receiver)
 	{
-		const EventWidget newEvent(widget, NULL, EventWidget::DRAG, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
+		const EventWidget newEvent(widget, NULL, WidgetEventDrag, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
 
 		LOG(">DRAG [id: %d]", widget->GetId());
 		LOG("\tEstado WIDGET");
@@ -450,7 +439,7 @@ BOOL WidgetContainer::DoDrop(const EventInputPointer *ev, IWidget *widget)
 			receiver = w;
 			//break;
 
-			const EventWidget newEvent(widget, receiver, EventWidget::DROP, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
+			const EventWidget newEvent(widget, receiver, WidgetEventDrop, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
 
 			LOG(">DROP OVER [id: %d]", widget->GetId());
 			LOG("\tEstado WIDGET");
@@ -469,7 +458,7 @@ BOOL WidgetContainer::DoDrop(const EventInputPointer *ev, IWidget *widget)
 
 	if (!receiver)
 	{
-		const EventWidget newEvent(widget, NULL, EventWidget::DROP, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
+		const EventWidget newEvent(widget, NULL, WidgetEventDrop, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
 
 		LOG(">DROP [id: %d]", widget->GetId());
 		LOG("\tEstado WIDGET");
@@ -494,7 +483,7 @@ BOOL WidgetContainer::DoReleaseOut(const EventInputPointer *ev, IWidget *widget)
 	f32 cY = ev->GetY();
 	u32 j = ev->GetJoystick();
 
-	const EventWidget newEvent(widget, NULL, EventWidget::RELEASED_OUT, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
+	const EventWidget newEvent(widget, NULL, WidgetEventReleasedOut, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
 
 	u32 count = 0;
 
@@ -530,7 +519,7 @@ BOOL WidgetContainer::DoRelease(const EventInputPointer *ev, IWidget *widget)
 	u32 j = ev->GetJoystick();
 	//LOG("> RELEASE OVER [%d, %f, %f]", j, cX, cY);
 
-	const EventWidget newEvent(widget, NULL, EventWidget::RELEASED, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
+	const EventWidget newEvent(widget, NULL, WidgetEventReleased, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
 
 	u32 count = 0;
 
@@ -567,7 +556,7 @@ BOOL WidgetContainer::DoOut(const EventInputPointer *ev, IWidget *widget)
 	u32 j = ev->GetJoystick();
 	//LOG("> OUT [%d, %f, %f]", j, cX, cY);
 
-	const EventWidget newEvent(widget, NULL, EventWidget::OUT, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
+	const EventWidget newEvent(widget, NULL, WidgetEventOut, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
 
 	u32 count = 0;
 
@@ -621,7 +610,7 @@ BOOL WidgetContainer::DoOver(const EventInputPointer *ev, IWidget *widget)
 		return FALSE;
 	}
 
-	const EventWidget newEvent(widget, NULL, EventWidget::OVER, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
+	const EventWidget newEvent(widget, NULL, WidgetEventOver, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
 
 	if (widget->GetState() == Seed::WidgetStateNone)
 	{
@@ -670,7 +659,7 @@ BOOL WidgetContainer::UpdateStates(const EventInputPointer *ev, IWidget *widget)
 		}
 		else if (widget->GetState() == Seed::WidgetStatePressed)
 		{
-			if (widget->GetPlayerState(j) != Seed::WidgetStatePressedOver)// && widget->GetPlayerState(j) != IWidget::PRESSED_OUT)
+			if (widget->GetPlayerState(j) != Seed::WidgetStatePressedOver)// && widget->GetPlayerState(j) != Seed::WidgetStatePressedOut)
 			{
 				//LOG("> PRESSED OVER [%d, %f, %f]", j, cX, cY);
 				ret = this->DoOver(ev, widget);

@@ -37,9 +37,6 @@
 #ifndef __FILE_SYSTEM_H__
 #define __FILE_SYSTEM_H__
 
-
-#include "Config.h"
-
 #if defined(_WII_)
 	#include "platform/wii/WiiFileSystem.h"
 	using namespace Seed::WII;

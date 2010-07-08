@@ -65,6 +65,7 @@ HEADERS += ../include/StateMachine.h \
 	../include/Updater.h \
 	../include/Profiler.h \
 	../include/ModuleManager.h \
+	../include/ViewManager.h \
 	../include/LeakReport.h \
 	../include/interface/IBasicMesh.h \
 	../include/interface/IRenderer2D.h \
@@ -108,6 +109,9 @@ HEADERS += ../include/StateMachine.h \
 	../include/interface/IGameApp.h \
 	../include/interface/IFileSystem.h \
 	../include/interface/IPlayable.h \
+	../include/interface/IViewport.h \
+	../include/interface/ISceneObject.h \
+	../include/SceneNode.h \
 	../include/EventMovie.h \
 	../include/Enum.h \
 	../include/EventInputPointer.h \
@@ -210,6 +214,7 @@ HEADERS += ../include/StateMachine.h \
 	../include/Vector.h \
 	../include/Checksum.h \
 	../include/SaveSystem.h \
+	../include/Viewport.h \
 	../include/api/oal_ogg/vorbis_util.h \
 	../include/api/oal_ogg/OalOggMusic.h \
 	../include/api/oal_ogg/OalOggSound.h \
@@ -218,13 +223,16 @@ HEADERS += ../include/StateMachine.h \
 	../include/api/ogl/OglRenderer.h \
 	../include/api/ogl/OglRenderer2D.h \
 	../include/api/ogl/OglSprite.h \
+	../include/api/ogl/OglViewport.h \
 	../include/api/theora/Theora.h \
 	../include/interface/IUpdatable.h \
 	../include/interface/IVideo.h \
 	../include/StringPool.h \
 	../include/TString.h \
+	../include/SceneManager.h \
 	../include/Singleton.h \
 	../include/platform/qt/QtPch.h
+
 SOURCES += ../source/EventInputPointer.cpp \
 	../source/Package.cpp \
 	../source/Timeline.cpp \
@@ -291,6 +299,9 @@ SOURCES += ../source/EventInputPointer.cpp \
 	../source/interface/IEventWidgetListener.cpp \
 	../source/interface/IVideo.cpp \
 	../source/interface/IPlayable.cpp \
+	../source/interface/IViewport.cpp \
+	../source/interface/ISceneObject.cpp \
+	../source/SceneNode.cpp \
 	../source/Keyframe.cpp \
 	../source/SpriteObject.cpp \
 	../source/ResourceLoader.cpp \
@@ -362,6 +373,9 @@ SOURCES += ../source/EventInputPointer.cpp \
 	../source/api/ogl/OglRenderer2D.cpp \
 	../source/api/ogl/OglRenderer.cpp \
 	../source/api/ogl/OglSprite.cpp \
+	../source/api/ogl/OglViewport.cpp \
 	../source/api/theora/Theora.cpp \
 	../source/interface/IUpdatable.cpp \
-	../source/TString.cpp
+	../source/TString.cpp \
+	../source/ViewManager.cpp \
+	../source/SceneManager.cpp

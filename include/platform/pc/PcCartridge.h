@@ -68,6 +68,9 @@ class SEED_CORE_API Cartridge : public ICartridge
 		virtual BOOL Read(u32 src, void *dest, u32 len);
 		virtual BOOL Write(u32 dest, const void *src, u32 len);
 
+		// IObject
+		virtual const char *GetObjectName() const;
+
 	private:
 		SEED_DISABLE_COPY(Cartridge);
 

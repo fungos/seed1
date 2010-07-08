@@ -7,6 +7,7 @@ OBJECTS = \
 ../source/api/ogl/OglRenderer.o \
 ../source/api/ogl/OglRenderer2D.o \
 ../source/api/ogl/OglSprite.o \
+../source/api/ogl/OglViewport.o \
 ../source/api/theora/Theora.o \
 ../source/Checksum.o \
 ../source/CollisionMask.o \
@@ -21,6 +22,7 @@ OBJECTS = \
 ../source/ParticleEmitter.o \
 ../source/ParticleEmitterObject.o \
 ../source/ParticleManager.o \
+../source/RendererManager.o \
 ../source/platform/iphone/IphCartridge.o \
 ../source/platform/iphone/IphFileSystem.o \
 ../source/platform/iphone/IphImage.o \
@@ -121,6 +123,9 @@ OBJECTS = \
 ../source/interface/IEventMovieListener.o \
 ../source/interface/IInputJoystick.o \
 ../source/interface/IPlayable.o \
+../source/interface/IViewport.o \
+../source/interface/ISceneObject.o \
+../source/SceneNode.o \
 ../source/Key.o \
 ../source/Keyframe.o \
 ../source/ModuleManager.o \
@@ -139,4 +144,6 @@ OBJECTS = \
 ../source/EventSystem.o \
 ../source/Particle.o \
 ../source/ResourceManager.o \
+../source/ViewManager.o \
+../source/SceneManager.o \
 ../source/LeakReport.o

@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -34,14 +34,12 @@
 	\brief Defines a widget event class
 */
 
-
+#include "Enum.h"
 #include "gui/EventWidget.h"
-
 
 namespace Seed {
 
-
-EventWidget::EventWidget(const IWidget *sender, const IWidget *receiver, eType t, u32 p, f32 x, f32 y, u32 pressed, u32 hold, u32 released)
+EventWidget::EventWidget(const IWidget *sender, const IWidget *receiver, eWidgetEventType t, u32 p, f32 x, f32 y, u32 pressed, u32 hold, u32 released)
 	: pSender(sender)
 	, pReceiver(receiver)
 	, iType(t)
@@ -58,7 +56,7 @@ EventWidget::~EventWidget()
 {
 	pSender = NULL;
 	pReceiver = NULL;
-	iType = NONE;
+	iType = WidgetEventNone;
 }
 
 INLINE const IWidget *EventWidget::GetSender() const
@@ -71,7 +69,7 @@ INLINE const IWidget *EventWidget::GetReceiver() const
 	return pReceiver;
 }
 
-INLINE EventWidget::eType EventWidget::GetEventType() const
+INLINE eWidgetEventType EventWidget::GetEventType() const
 {
 	return iType;
 }
@@ -106,11 +104,4 @@ INLINE u32 EventWidget::GetHold() const
 	return iHold;
 }
 
-INLINE const char *EventWidget::GetObjectName() const
-{
-	return "EventWidget";
-}
-
-
 } // namespace
-

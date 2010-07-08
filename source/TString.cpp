@@ -124,7 +124,7 @@ INLINE String &String::operator=(const String &string)
 
 INLINE String &String::Clear()
 {
-	if(pConstructedStr)
+	if (pConstructedStr)
 		MEMSET(pConstructedStr, '\0', this->Length() * sizeof(u16));
 
 	return *this;
@@ -392,7 +392,7 @@ INLINE void String::Append(const String *pString)
 	if (iSize >= iConstructedSize)
 		this->Realloc(iSize);
 
-	for(u32 i = 0; i < iAppendLen; i++)
+	for (u32 i = 0; i < iAppendLen; i++)
 		pConstructedStr[iLen + i] = pString->GetData()[i];
 
 	pConstructedStr[iSize-1] = NULL;

@@ -39,7 +39,6 @@
 
 #if defined(_IPHONE_)
 
-#include "Config.h"
 #include "interface/ISoundSystem.h"
 #include "interface/IResource.h"
 #include "File.h"

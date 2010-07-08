@@ -43,7 +43,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include;&quot;$(SEEDSDK)\dependency\common\include&quot;;&quot;$(SEEDSDK)\dependency\vc8\include&quot;"
-				PreprocessorDefinitions="WIN32;DEBUG;YMEM_DEBUG;_CONSOLE;_SDL_;_CRT_SECURE_NO_WARNINGS;YMEM_PARANOID_CHECK;SEED_BUILD"
+				PreprocessorDefinitions="WIN32;DEBUG;YMEM_DEBUG;_CONSOLE;_SDL_;_CRT_SECURE_NO_WARNINGS;YMEM_PARANOID_CHECK;SEED_BUILD;SEED_ENABLE_D3D8;SEED_ENABLE_PROFILER;D3D_DEBUG_INFO"
 				IgnoreStandardIncludePath="false"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -67,7 +67,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib sdl.lib sdlmain.lib openal32.lib sdl_image.lib liboggplay_static.lib"
+				AdditionalDependencies="d3d8.lib d3dx8.lib version.lib opengl32.lib glu32.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib sdl.lib sdlmain.lib openal32.lib sdl_image.lib liboggplay_static.lib"
 				AdditionalLibraryDirectories="&quot;$(SEEDSDK)\dependency\vc8\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd"
 				GenerateDebugInformation="true"
@@ -125,7 +125,7 @@
 				InlineFunctionExpansion="0"
 				FavorSizeOrSpeed="0"
 				AdditionalIncludeDirectories="..\include;&quot;$(SEEDSDK)\dependency\common\include&quot;;&quot;$(SEEDSDK)\dependency\vc8\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_SDL_;_CRT_SECURE_NO_WARNINGS;SEED_BUILD"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_SDL_;_CRT_SECURE_NO_WARNINGS;SEED_BUILD;SEED_ENABLE_D3D8"
 				ExceptionHandling="0"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -144,7 +144,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib sdl.lib sdlmain.lib openal32.lib sdl_image.lib liboggplay_static.lib"
+				AdditionalDependencies="d3d8.lib d3dx8.lib version.lib opengl32.lib glu32.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib sdl.lib sdlmain.lib openal32.lib sdl_image.lib liboggplay_static.lib"
 				AdditionalLibraryDirectories="&quot;$(SEEDSDK)\dependency\vc8\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd"
 			/>
@@ -197,18 +197,19 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include;&quot;$(SEEDSDK)\dependency\common\include&quot;;&quot;$(SEEDSDK)\dependency\vc8\include&quot;"
-				PreprocessorDefinitions="WIN32;DEBUG;YMEM_DEBUG;_CONSOLE;_SDL_;_CRT_SECURE_NO_WARNINGS;YMEM_PARANOID_CHECK;SEED_BUILD;SEED_USE_COMMERCIAL"
+				PreprocessorDefinitions="WIN32;DEBUG;YMEM_DEBUG;_CONSOLE;_SDL_;_CRT_SECURE_NO_WARNINGS;YMEM_PARANOID_CHECK;SEED_BUILD;SEED_ENABLE_D3D8;SEED_USE_COMMERCIAL;SEED_ENABLE_PROFILER;D3D_DEBUG_INFO"
 				IgnoreStandardIncludePath="false"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
 				ExceptionHandling="0"
-				BasicRuntimeChecks="0"
+				BasicRuntimeChecks="3"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="false"
 				UsePrecompiledHeader="0"
 				WarningLevel="4"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
+				ShowIncludes="false"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -265,8 +266,8 @@
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="0"
 				FavorSizeOrSpeed="0"
-				AdditionalIncludeDirectories="..\include;&quot;$(SEEDSDK)\dependency\common\include&quot;;&quot;$(SEEDSDK)\dependency\vc8\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_SDL_;_CRT_SECURE_NO_WARNINGS;SEED_BUILD;SEED_USE_COMMERCIAL"
+				AdditionalIncludeDirectories="..\include;&quot;$(SEEDSDK)\dependency\common\include&quot;;&quot;$(SEEDSDK)\dependency\vc8\include&quot;;C:\DXSDK\Include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_SDL_;_CRT_SECURE_NO_WARNINGS;SEED_BUILD;SEED_USE_COMMERCIAL;SEED_ENABLE_D3D8"
 				ExceptionHandling="0"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -366,6 +367,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\Image.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\Key.cpp"
 				>
 			</File>
@@ -418,6 +423,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\Renderer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\RendererManager.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\ResourceGroup.cpp"
 				>
 			</File>
@@ -431,6 +444,10 @@
 			</File>
 			<File
 				RelativePath="..\source\SaveSystem.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\SceneManager.cpp"
 				>
 			</File>
 			<File
@@ -465,6 +482,14 @@
 				RelativePath="..\source\Updater.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\source\ViewManager.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\source\Viewport.cpp"
+				>
+			</File>
 			<Filter
 				Name="platform"
 				>
@@ -477,10 +502,6 @@
 					</File>
 					<File
 						RelativePath="..\source\platform\iphone\IphFileSystem.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\iphone\IphImage.cpp"
 						>
 					</File>
 					<File
@@ -540,6 +561,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\source\platform\iphone\IphTexture.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\source\platform\iphone\IphThread.cpp"
 						>
 					</File>
@@ -551,10 +576,6 @@
 				<Filter
 					Name="sdl"
 					>
-					<File
-						RelativePath="..\source\platform\sdl\SdlImage.cpp"
-						>
-					</File>
 					<File
 						RelativePath="..\source\platform\sdl\SdlInput.cpp"
 						>
@@ -569,6 +590,10 @@
 					</File>
 					<File
 						RelativePath="..\source\platform\sdl\SdlSystem.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\source\platform\sdl\SdlTexture.cpp"
 						>
 					</File>
 					<File
@@ -604,6 +629,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\source\platform\pc\PcRendererDevice.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\source\platform\pc\posix.cpp"
 						>
 					</File>
@@ -615,10 +644,6 @@
 				<Filter
 					Name="qt"
 					>
-					<File
-						RelativePath="..\source\platform\qt\QtImage.cpp"
-						>
-					</File>
 					<File
 						RelativePath="..\source\platform\qt\QtInput.cpp"
 						>
@@ -641,6 +666,10 @@
 					</File>
 					<File
 						RelativePath="..\source\platform\qt\QtSystem.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\source\platform\qt\QtTexture.cpp"
 						>
 					</File>
 					<File
@@ -717,10 +746,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\source\interface\IImage.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\source\interface\IInput.cpp"
 					>
 				</File>
@@ -769,15 +794,19 @@
 					>
 				</File>
 				<File
-					RelativePath="..\source\interface\IRenderer.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\source\interface\IRenderer2D.cpp"
+					RelativePath="..\source\interface\IRendererDevice.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\source\interface\IResource.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\interface\ISceneNode.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\interface\ISceneObject.cpp"
 					>
 				</File>
 				<File
@@ -802,6 +831,10 @@
 				</File>
 				<File
 					RelativePath="..\source\interface\ISystem.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\interface\ITexture.cpp"
 					>
 				</File>
 				<File
@@ -892,15 +925,7 @@
 					Name="ogl"
 					>
 					<File
-						RelativePath="..\source\api\ogl\OglRenderer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\api\ogl\OglRenderer2D.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\api\ogl\OglSprite.cpp"
+						RelativePath="..\source\api\ogl\Ogl14RendererDevice.cpp"
 						>
 					</File>
 				</Filter>
@@ -933,6 +958,18 @@
 					>
 					<File
 						RelativePath="..\source\api\theora\Theora.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="directx"
+					>
+					<File
+						RelativePath="..\source\api\directx\D3D8RendererDevice.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\source\api\directx\DirectXVersion.cpp"
 						>
 					</File>
 				</Filter>
@@ -1130,11 +1167,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\include\Renderer2D.h"
+				RelativePath="..\include\RendererDevice.h"
 				>
 			</File>
 			<File
-				RelativePath="..\include\Renderer3D.h"
+				RelativePath="..\include\RendererManager.h"
 				>
 			</File>
 			<File
@@ -1151,6 +1188,14 @@
 			</File>
 			<File
 				RelativePath="..\include\SaveSystem.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\SceneManager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\SceneNode.h"
 				>
 			</File>
 			<File
@@ -1210,6 +1255,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\Texture.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\Thread.h"
 				>
 			</File>
@@ -1239,6 +1288,18 @@
 			</File>
 			<File
 				RelativePath="..\include\Vector3.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\Vertex.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\ViewManager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\Viewport.h"
 				>
 			</File>
 			<Filter
@@ -1369,10 +1430,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\include\interface\IImage.h"
-					>
-				</File>
-				<File
 					RelativePath="..\include\interface\IInput.h"
 					>
 				</File>
@@ -1421,15 +1478,19 @@
 					>
 				</File>
 				<File
-					RelativePath="..\include\interface\IRenderer.h"
-					>
-				</File>
-				<File
-					RelativePath="..\include\interface\IRenderer2D.h"
+					RelativePath="..\include\interface\IRendererDevice.h"
 					>
 				</File>
 				<File
 					RelativePath="..\include\interface\IResource.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\interface\ISceneNode.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\interface\ISceneObject.h"
 					>
 				</File>
 				<File
@@ -1454,6 +1515,10 @@
 				</File>
 				<File
 					RelativePath="..\include\interface\ISystem.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\interface\ITexture.h"
 					>
 				</File>
 				<File
@@ -1493,10 +1558,6 @@
 					</File>
 					<File
 						RelativePath="..\include\platform\iphone\IphFileSystem.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\iphone\IphImage.h"
 						>
 					</File>
 					<File
@@ -1556,6 +1617,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\include\platform\iphone\IphTexture.h"
+						>
+					</File>
+					<File
 						RelativePath="..\include\platform\iphone\IphThread.h"
 						>
 					</File>
@@ -1572,10 +1637,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\include\platform\sdl\SdlImage.h"
-						>
-					</File>
-					<File
 						RelativePath="..\include\platform\sdl\SdlInput.h"
 						>
 					</File>
@@ -1589,6 +1650,10 @@
 					</File>
 					<File
 						RelativePath="..\include\platform\sdl\SdlSystem.h"
+						>
+					</File>
+					<File
+						RelativePath="..\include\platform\sdl\SdlTexture.h"
 						>
 					</File>
 					<File
@@ -1620,6 +1685,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\include\platform\pc\PcRendererDevice.h"
+						>
+					</File>
+					<File
 						RelativePath="..\include\platform\pc\platform.h"
 						>
 					</File>
@@ -1641,10 +1710,6 @@
 					</File>
 					<File
 						RelativePath="..\include\platform\wii\WiiHomeButton.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\wii\WiiImage.h"
 						>
 					</File>
 					<File
@@ -1700,6 +1765,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\include\platform\wii\WiiTexture.h"
+						>
+					</File>
+					<File
 						RelativePath="..\include\platform\wii\WiiThread.h"
 						>
 					</File>
@@ -1717,10 +1786,6 @@
 					>
 					<File
 						RelativePath="..\include\platform\qt\QtDefines.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\qt\QtImage.h"
 						>
 					</File>
 					<File
@@ -1752,6 +1817,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\include\platform\qt\QtTexture.h"
+						>
+					</File>
+					<File
 						RelativePath="..\include\platform\qt\QtThread.h"
 						>
 					</File>
@@ -1768,15 +1837,7 @@
 					Name="ogl"
 					>
 					<File
-						RelativePath="..\include\api\ogl\OglRenderer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\api\ogl\OglRenderer2D.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\api\ogl\OglSprite.h"
+						RelativePath="..\include\api\ogl\Ogl14RendererDevice.h"
 						>
 					</File>
 				</Filter>
@@ -1809,6 +1870,18 @@
 					>
 					<File
 						RelativePath="..\include\api\theora\Theora.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="directx"
+					>
+					<File
+						RelativePath="..\include\api\directx\D3D8RendererDevice.h"
+						>
+					</File>
+					<File
+						RelativePath="..\include\api\directx\DirectXVersion.h"
 						>
 					</File>
 				</Filter>

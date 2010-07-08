@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -39,8 +39,9 @@
 namespace Seed {
 
 Movie::Movie()
-	: ITransformable2D()
+	: ISceneObject()
 	, bPlaying(TRUE)
+	, fElapsedTime(0.0f)
 	, arTimelines()
 {
 }
@@ -50,31 +51,48 @@ Movie::~Movie()
 	this->Reset();
 }
 
-INLINE void Movie::AddTimeline(Timeline *pTimeline)
+INLINE void Movie::AddTimeline(Timeline *timeline)
 {
-	arTimelines.Add(pTimeline);
-	pTimeline->SetParent(this);
-/*
-	pTimeline->SetLocalPosition(GetLocalX(), GetLocalY());
-	pTimeline->SetPosition(GetX(), GetY());
-	pTimeline->SetScale(GetScaleX(), GetScaleY());
-	pTimeline->SetRotation(GetRotation());
-*/
+	arTimelines.Add(timeline);
+	timeline->SetParent(this);
 }
 
 INLINE void Movie::Update(f32 delta)
 {
-	UNUSED(delta);
+	if (!bPlaying)
+		return;
+
+	fElapsedTime += delta;
+	f32 frame = 1 / 60.0f;
+	
+	if (fElapsedTime >= frame)
+	{
+		fElapsedTime -= frame;
+		for (u32 i = 0; i < arTimelines.Size(); i++)
+		{
+			if (bTransformationChanged)
+			{
+				arTimelines[i]->SetLocalPosition(this->GetLocalX(), this->GetLocalY());
+				arTimelines[i]->SetPosition(this->GetX(), this->GetY());
+				arTimelines[i]->SetScale(this->GetScaleX(), this->GetScaleY());
+				arTimelines[i]->SetRotation(this->GetRotation());
+			}
+
+			arTimelines[i]->Update();
+		}
+	}
 }
 
 INLINE void Movie::Play()
 {
-	this->bPlaying = TRUE;
+	fElapsedTime = 0.0f;
+	bPlaying = TRUE;
 }
 
 INLINE void Movie::Stop()
 {
-	this->bPlaying = FALSE;
+	fElapsedTime = 0.0f;
+	bPlaying = FALSE;
 }
 
 INLINE void Movie::Rewind()
@@ -93,25 +111,8 @@ INLINE void Movie::Reset()
 	arTimelines.Truncate();
 }
 
-INLINE void Movie::Render(f32 delta)
+INLINE void Movie::Render()
 {
-	if (!this->bPlaying)
-		return;
-
-	for (u32 i = 0; i < arTimelines.Size(); i++)
-	{
-		if (bTransformationChanged)
-		{
-			arTimelines[i]->SetLocalPosition(this->GetLocalX(), this->GetLocalY());
-			arTimelines[i]->SetPosition(this->GetX(), this->GetY());
-			arTimelines[i]->SetScale(this->GetScaleX(), this->GetScaleY());
-			arTimelines[i]->SetRotation(this->GetRotation());
-		}
-
-		arTimelines[i]->Render(delta);
-	}
-
-	UNUSED(delta);
 }
 
 INLINE const char *Movie::GetObjectName() const

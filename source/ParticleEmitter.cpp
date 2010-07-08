@@ -35,20 +35,15 @@
 */
 
 #include "ParticleEmitter.h"
-#include "Enum.h"
-#include "Defines.h"
 #include "Rand.h"
-#include "Sprite.h"
-#include "MathUtil.h"
 #include "Number.h"
+#include "Texture.h"
 
 namespace Seed {
-
 
 ParticleEmitter::ParticleEmitter()
 	: pEmitterObject(NULL)
 	, psInfo()
-	//, psInfo(NULL)
 	, pRes(NULL)
 	, pPool(NULL)
 	, pFilename(NULL)
@@ -59,11 +54,9 @@ ParticleEmitter::ParticleEmitter()
 	, fEmissionResidue(0.0f)
 	, fInterval(0.0f)
 	, ptPrevLocation(0.0f, 0.0f)
-	//, ptLocation(0.0f, 0.0f)
 	, fTx(0.0f)
 	, fTy(0.0f)
 	, fScale(1.0f)
-	//, iParticlesAlive(0)
 	, iAnimation(0)
 	, bPaused(FALSE)
 	, bEnabled(TRUE)
@@ -144,7 +137,7 @@ INLINE void ParticleEmitter::Reset()
 
 INLINE void ParticleEmitter::Update(f32 deltaTime)
 {
-	if (!(bEnabled && pSpriteFilename))
+	if (!(bEnabled && pSpriteFilename && !bPaused))
 		return;
 
 	//deltaTime = 0.017000001f;
@@ -221,8 +214,8 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 		par->SetColor(par->fColorR, par->fColorG, par->fColorB, par->fColorA);
 		//par->SetScale(par->fSize);
 		//par->AddPosition(par->ptVelocity * deltaTime);
-		par->fScaleX = par->fSize;
-		par->fScaleY = par->fSize;
+		par->ptScale.x = par->fSize;
+		par->ptScale.y = par->fSize;
 		par->fRotation += par->fSpin;
 		//if (par->fRotation >= 360.0f)
 		//	par->fRotation -= 360.0f;
@@ -318,12 +311,12 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 
 			par->SetColor(par->fColorR, par->fColorG, par->fColorB, par->fColorA);
 			if (psInfo.iBlendMode == 6)
-				par->SetBlending(Seed::BlendModulate);
+				par->SetBlending(BlendModulate);
 			else
-				par->SetBlending(Seed::BlendAdditive);
+				par->SetBlending(BlendAdditive);
 			//par->SetScale(par->fSize);
-			par->fScaleX = par->fSize;
-			par->fScaleY = par->fSize;
+			par->ptScale.x = par->fSize;
+			par->ptScale.y = par->fSize;
 			//par->SetPosition(pos);
 			par->ptPos = pos;
 			//par->fRotation = par->fSpin;
@@ -339,7 +332,7 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 		}
 	}
 
-	IImage *img = arParticles[0].GetTexture();
+	ITexture *img = arParticles[0].GetTexture();
 	if (img)
 	{
 		img->SetFilter(TextureFilterTypeMag, nMagFilter);
@@ -351,9 +344,17 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 
 	ptPrevLocation = location;
 	bTransformationChanged = FALSE;
+
+	for (u32 i = 0; i < SEED_PARTICLES_MAX; i++)
+	{
+		if (!arParticles[i].bActive)
+			continue;
+
+		arParticles[i].Update(deltaTime);
+	}
 }
 
-INLINE void ParticleEmitter::Render(f32 delta)
+INLINE void ParticleEmitter::Render()
 {
 	if (bEnabled)
 	{
@@ -362,7 +363,7 @@ INLINE void ParticleEmitter::Render(f32 delta)
 			if (!arParticles[i].bActive)
 				continue;
 
-			arParticles[i].Render(delta);
+			arParticles[i].Render();
 		}
 	}
 }

@@ -56,7 +56,7 @@ SEED_SINGLETON_DEFINE(System);
 
 System::System()
 	: iRetraceCount(0)
-	, iFrameRate(RATE_60FPS)
+	, iFrameRate(FrameRateLockAt60)
 	, bShutdown(FALSE)
 	, bSleeping(FALSE)
 	, bDefaultCursorEnabled(FALSE)
@@ -79,6 +79,8 @@ BOOL System::Initialize()
 {
 	Log(TAG "Initializing...");
 	print_system_info();
+
+	iFrameRate = pConfiguration->GetFrameRate();
 
 	if (!pConfiguration->GetCanHaveMultipleInstances() && !system_check_multiple_instance(pConfiguration->GetWarningMultipleInstances()))
 	{
@@ -157,7 +159,7 @@ INLINE BOOL System::IsResetting() const
 	return FALSE;
 }
 
-INLINE void System::WaitForRetrace(eFrameRate rate)
+INLINE void System::WaitForRetrace(eSystemFrameRate rate)
 {
 	++this->iRetraceCount;
 
@@ -195,16 +197,6 @@ INLINE void System::WaitForRetrace(eFrameRate rate)
 		this->iFpsTime -= 1000;
 		this->iRetraceCount = 0;
 	}
-}
-
-INLINE void System::SetFrameRate(eFrameRate rate)
-{
-	this->iFrameRate = rate;
-}
-
-INLINE ISystem::eFrameRate System::GetFrameRate()
-{
-	return this->iFrameRate;
 }
 
 INLINE const char *System::GetUsername() const

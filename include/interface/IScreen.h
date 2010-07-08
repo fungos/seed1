@@ -38,66 +38,31 @@
 #define __ISCREEN_H__
 
 #include "IModule.h"
-#include "IUpdatable.h"
+#include "Enum.h"
 
 namespace Seed {
-
-class IRenderer;
 
 /// Screen Interface
 /**
 Any Screen implementation must implement this interface.
 */
-class SEED_CORE_API IScreen : public IModule, public IUpdatable
+class SEED_CORE_API IScreen : public IModule
 {
 	public:
 		IScreen();
 		virtual ~IScreen();
 
-		/// Setup the screen
-		/**
-		\param mode Platform dependent video mode.
-
-		<b>Nintendo WII video modes:</b>
-
-		\li \c SCREEN_AUTODETECT Autodetects the supported TV mode.
-		\li \c SCREEN_PAL_NORMAL Normal PAL.
-		\li \c SCREEN_PAL_INTERLACED Interlaced PAL.
-		\li \c SCREEN_MPAL_NORMAL Normal M/PAL.
-		\li \c SCREEN_MPAL_INTERLACED Interlaced M/PAL.
-		\li \c SCREEN_NTSC_NORMAL Normal NTSC.
-		\li \c SCREEN_NTSC_INTERLACED Interlaced NTSC.
-
-
-		<b>Nintendo DS video modes:</b>
-
-		\li \c SCREEN_MODE_2D_BASIC_FB_NORMAL Main engine on top, Sub engine on bottom (3 text and 1 affine).
-		\li \c SCREEN_MODE_2D_BASIC_FB_INVERSE Sub engine on top, Main engine on bottom (3 text and 1 affine).
-		\li \c SCREEN_MODE_2D_LARGE_FB_NORMAL Main engine on top, Sub engine on bottom but with a vram allocated for large background (2 text and 2 affine).
-		\li \c SCREEN_MODE_2D_LARGE_FB_INVERSE Sub engine on top, Main engine on bottom but with a vram allocated for large background (2 text and 2 affine).
-
-
-		<b>Apple iPhone 2.1 video modes:</b>
-		\li \c NORMAL mode 320x480 up-down.
-		\li \c LANDSCAPE Default mode 480x320 landscape with home button to right thumb.
-		\li \c LANDSCAPE_GOOFY mode 480x320 landscape with home button to left thumb.
-		*/
-		virtual void Setup(u32 mode) = 0;
-
 		/// Gets the current video mode
-		virtual u32 GetMode() const;
+		virtual eVideoMode GetMode() const;
 
 		/// Change the current video mode
-		virtual void SetMode(u32 mode);
+		virtual void SetMode(eVideoMode mode);
 
 		/// Start fade out
-		virtual void FadeOut() = 0;
+		virtual void FadeOut();
 
 		/// Start fade in
-		virtual void FadeIn() = 0;
-
-		/// Cancel fade
-		virtual void CancelFade() = 0;
+		virtual void FadeIn();
 
 		/// Get the screen heigth
 		virtual u32 GetHeight() const;
@@ -120,8 +85,7 @@ class SEED_CORE_API IScreen : public IModule, public IUpdatable
 		/// Check if it is fullscreen
 		virtual BOOL IsFullscreen() const;
 
-		/// Sets the actual 2d renderer
-		virtual void SetRenderer(IRenderer *renderer); // FIXME: RenderManager
+		virtual void Update();
 
 		// IModule
 		virtual BOOL IsRequired() const;
@@ -131,8 +95,7 @@ class SEED_CORE_API IScreen : public IModule, public IUpdatable
 
 	protected:
 		BOOL		bFading;
-		u32			iMode;
-		IRenderer	*pRenderer;
+		eVideoMode	nMode;
 		f32			fAspectRatio;
 		u32			iHeight;
 		u32			iWidth;

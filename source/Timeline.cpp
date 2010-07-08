@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -38,9 +38,7 @@
 #include "EventMovie.h"
 #include "Movie.h"
 
-
 namespace Seed {
-
 
 Timeline::Timeline()
 	: pParent(NULL)
@@ -51,12 +49,6 @@ Timeline::Timeline()
 	, iCurrentFrame(0)
 	, iKeyframeFrom(0)
 	, iKeyframeTo(0)
-/*
-	, ptParentPosition(0.0f, 0.0f)
-	, ptParentLocalPosition(0.0f, 0.0f)
-	, ptParentScale(1.0f, 1.0f)
-	, fParentRotation(0.0f)
-*/
 	, arKeyframes()
 {
 	MEMSET(arKeyframes, '\0', sizeof(Keyframe *) * MAX_KEYFRAMES);
@@ -76,12 +68,6 @@ INLINE void Timeline::Reset()
 	iCurrentFrame 			= 0;
 	iKeyframeFrom 			= 0;
 	iKeyframeTo 			= 0;
-
-/*
-	ptParentPosition		= Point(0.0f, 0.0f);
-	ptParentScale			= Point(1.0f, 1.0f);
-	fParentRotation			= 0.0f;
-*/
 }
 
 INLINE void Timeline::Rewind()
@@ -113,7 +99,7 @@ void Timeline::GotoAndPlay(const char *strKeyframeName)
 	iCurrentFrame	= iKeyframeFrom;
 }
 
-void Timeline::Render(f32 dt)
+void Timeline::Update()
 {
 	if (!pObject)
 		return;
@@ -134,7 +120,7 @@ void Timeline::Render(f32 dt)
 
 			iKeyframeFrom = 0;
 			iCurrentFrame = 0;
-			this->Render(dt);
+			this->Update();
 			return;
 		}
 	}
@@ -257,20 +243,12 @@ void Timeline::Render(f32 dt)
 			fCurrB			= kfFrom->iColorB;
 			fCurrA			= kfFrom->iColorA;
 		}
-/*
-		fCurrPosX 			+= ptParentPosition.x;
-		fCurrPosY 			+= ptParentPosition.y;
-		fCurrLocalPosX		+= ptParentLocalPosition.x;
-		fCurrLocalPosY		+= ptParentLocalPosition.y;
-		fCurrScaleX 		*= ptParentScale.x;
-		fCurrScaleY			*= ptParentScale.y;
-		fCurrRot			+= fParentRotation;
-*/
+
 		pObject->SetPosition(fCurrPosX, fCurrPosY);
 		pObject->SetLocalPosition(fCurrLocalPosX, fCurrLocalPosY);
 		pObject->SetRotation(fCurrRot);
 		pObject->SetScale(fCurrScaleX, fCurrScaleY);
-		pObject->SetColor((u8)fCurrR, (u8)fCurrG, (u8)fCurrB, (u8)fCurrA);
+		pObject->SetColor((u32)fCurrR, (u32)fCurrG, (u32)fCurrB, (u32)fCurrA);
 	}
 
 	if ((fBegin / fDuration) >= 1.0f)
@@ -330,20 +308,21 @@ void Timeline::Render(f32 dt)
 	iCurrentFrame++;
 }
 
-INLINE void Timeline::SetObject(ITransformable2D *object)
+INLINE void Timeline::SetObject(ISceneObject *object)
 {
-	if (pObject)
+/*	if (pObject)
 		pObject->SetParent(NULL);
-
+*/
 	pObject = object;
-	
+/*
 	if (pObject)
 		pObject->SetParent(reinterpret_cast<ITransformable2D *>(pParent));
+*/
 }
 
-INLINE ITransformable2D *Timeline::GetObject() const
+INLINE ISceneObject *Timeline::GetObject() const
 {
-	return this->pObject;
+	return pObject;
 }
 
 INLINE f32 Timeline::GetWidth() const
@@ -366,25 +345,25 @@ INLINE f32 Timeline::GetHeight() const
 
 INLINE u32 Timeline::GetCurrentFrame() const
 {
-	return static_cast<u32>(this->iCurrentFrame);
+	return static_cast<u32>(iCurrentFrame);
 }
 
 INLINE void Timeline::SetLocalPosition(f32 posX, f32 posY)
 {
-	ptParentLocalPosition.x 	= posX;
-	ptParentLocalPosition.y 	= posY;
+	ptParentLocalPosition.x = posX;
+	ptParentLocalPosition.y = posY;
 }
 
 INLINE void Timeline::SetPosition(f32 posX, f32 posY)
 {
-	ptParentPosition.x 	= posX;
-	ptParentPosition.y 	= posY;
+	ptParentPosition.x = posX;
+	ptParentPosition.y = posY;
 }
 
 INLINE void Timeline::SetScale(f32 scaleX, f32 scaleY)
 {
-	ptParentScale.x		= scaleX;
-	ptParentScale.y		= scaleY;
+	ptParentScale.x = scaleX;
+	ptParentScale.y = scaleY;
 }
 
 INLINE void Timeline::SetRotation(f32 rotation)
@@ -472,8 +451,8 @@ INLINE f32 Timeline::EaseQuadPercent(f32 time, f32 begin, f32 change, f32 durati
 INLINE void Timeline::SetParent(Movie *parent)
 {
 	pParent = parent;
-	if (pObject)
-		pObject->SetParent(reinterpret_cast<ITransformable2D *>(parent));
+	//if (pObject)
+	//	pObject->SetParent(reinterpret_cast<ITransformable2D *>(parent));
 }
 
 INLINE Movie *Timeline::GetParent() const

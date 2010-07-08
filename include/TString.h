@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -43,12 +43,12 @@ class SEED_CORE_API String
 		explicit String(const WideString newStr);
 		explicit String(const String &str);
 		virtual ~String();
-		
+
 		String &Set(const WideString newStr);
 		String &Reset();
 		String &Clear();
 		String &Release();
-		
+
 		// Size modifiers
 		// All methods return this
 		String &Set();
@@ -60,10 +60,9 @@ class SEED_CORE_API String
 		String &Set(const u16 *paramName, const char paramVal);
 		String &Set(const u16 *paramName, const u16 paramVal);
 		String &Set(const u16 *paramName, String *paramVal);
-		
+
 		void SubString(u32 index, u32 size);
 		void Append(WideChar chr);
-		//void Append(const u16 *str);
 		void Append(const String *pString);
 
 		// Common string functions

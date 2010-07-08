@@ -29,11 +29,13 @@
  **
  *****************************************************************************/
 
-#if defined(DEBUG)
+#if defined(SEED_ENABLE_PROFILER)
 
 #include "Timer.h"
 #include "Profiler.h"
 #include "Log.h"
+
+#define TAG "[Profiler] "
 
 Profiler *Profiler::funcProfilerInstance = new Profiler("Function");
 Profiler *Profiler::regionProfilerInstance = new Profiler("Region");
@@ -49,10 +51,10 @@ Profiler::Profiler(const char *name)
 
 Profiler::~Profiler()
 {
-	Reset();
+	this->Reset();
 }
 
-void Profiler::AddSlice(const char *func, double time)
+void Profiler::AddSlice(const char *func, u64 time)
 {
 	FuncTimeMapIt it = mapSubjectSlice.find(func);
 	if (it != mapSubjectSlice.end())
@@ -75,7 +77,7 @@ void Profiler::AddSlice(const char *func, double time)
 	}
 }
 
-void Profiler::AddTotal(const char *func, double time)
+void Profiler::AddTotal(const char *func, u64 time)
 {
 	FuncTimeMapIt it = mapSubjectTotal.find(func);
 	if (it != mapSubjectTotal.end())
@@ -96,22 +98,28 @@ void Profiler::AddTotal(const char *func, double time)
 
 void Profiler::Dump()
 {
-	fprintf(stdout, "Dumping %s Totals: %d", pName, (int)mapSubjectTotal.size());
+	Log(TAG "Dumping %s Totals: %d", pName, (int)mapSubjectTotal.size());
 
 	FuncTimeMapIt it = mapSubjectTotal.begin();
 	FuncTimeMapIt end = mapSubjectTotal.end();
 	for (; it != end; ++it)
 	{
-		Log("%s: %s [%d (Max %d) called %d times]", pName, (*it).first, (*it).second->time, (*it).second->maxtime, (*it).second->calls);
+		ProfilerEntry *entry = (*it).second;
+		int calls = entry->calls;
+		float average = static_cast<float>((float)entry->time / (float)calls);
+		Log(TAG "%s: %s [average time %f, called %d times]", pName, (*it).first, average, calls);
 	}
 
-	fprintf(stdout, "\nDumping %s Slices: %d", pName, (int)mapSubjectSlice.size());
+	Log(TAG "Dumping %s Slices: %d", pName, (int)mapSubjectSlice.size());
 
 	it = mapSubjectSlice.begin();
 	end = mapSubjectSlice.end();
 	for (; it != end; ++it)
 	{
-		Log("%s: %s [%d (Max %d) interrupted %d times]", pName, (*it).first, (*it).second->time, (*it).second->maxtime, (*it).second->calls);
+		ProfilerEntry *entry = (*it).second;
+		int calls = entry->calls;
+		float average = static_cast<float>((float)entry->time / (float)calls);
+		Log(TAG "%s: %s [average time %f, interrupted %d times]", pName, (*it).first, average, calls);
 	}
 }
 
@@ -141,7 +149,7 @@ ProfileContext::ProfileContext(const char *f, Profiler *prof)
 	, bTerminated(false)
 	, pProf(prof)
 {
-	begTotal = clock();
+	begTotal = pTimer->GetMilliseconds(); //clock();
 	this->Push();
 	this->StartOrContinue();
 }
@@ -158,8 +166,8 @@ void ProfileContext::Terminate()
 
 	u64 end = pTimer->GetMilliseconds(); //clock();
 
-	double diff = 0;
-	diff = static_cast<double>(end - begTotal);// / CLOCKS_PER_SEC;
+	u64 diff = 0;
+	diff = static_cast<u64>(end - begTotal);// / CLOCKS_PER_SEC;
 
 	pProf->AddTotal(func, diff);
 
@@ -190,8 +198,8 @@ void ProfileContext::StopAndCommit()
 {
 	u64 end = pTimer->GetMilliseconds();
 
-	double diff = 0;
-	diff = static_cast<double>(end - beg);// / CLOCKS_PER_SEC;
+	u64 diff = 0;
+	diff = static_cast<u64>(end - beg);// / CLOCKS_PER_SEC;
 
 	pProf->AddSlice(func, diff);
 	beg = 0;
@@ -215,4 +223,4 @@ void ProfileContext::Pop()
 	this->RestorePrevious();
 }
 
-#endif // DEBUG
+#endif // SEED_ENABLE_PROFILER

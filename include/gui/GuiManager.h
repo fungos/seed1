@@ -73,7 +73,6 @@ class SEED_CORE_API GuiManager : public IModule, public IUpdatable, public IEven
 
 		// IObject
 		virtual const char *GetObjectName() const;
-		virtual int GetObjectType() const;
 
 	private:
 		SEED_DISABLE_COPY(GuiManager);
@@ -82,10 +81,6 @@ class SEED_CORE_API GuiManager : public IModule, public IUpdatable, public IEven
 		IWidget *pFocused;
 		WidgetContainer cContainer;
 };
-
-//extern "C" {
-//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(GuiManager);
-//}
 
 #define pGuiManager GuiManager::GetInstance()
 

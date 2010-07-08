@@ -37,8 +37,6 @@
 #ifndef __THREAD_H__
 #define __THREAD_H__
 
-#include "Config.h"
-
 #if defined(_WII_)
 	#include "platform/wii/WiiThread.h"
 	using namespace Seed::WII;

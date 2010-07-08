@@ -41,7 +41,7 @@
 #include "StringPool.h"
 #include "interface/IGameApp.h"
 #include "interface/IInput.h"
-#include "interface/IRenderer.h"
+#include "interface/IRendererDevice.h"
 #include "Timer.h"
 
 extern "C" {
@@ -69,15 +69,6 @@ namespace Seed {
 	\param argv A pointer to the command line arguments.
 	*/
 	SEED_CORE_API void SetGameApp(IGameApp *app, int argc, char **argv);
-
-	/// Set which IRenderer to use.
-	/**
-	You must instantiate a IRenderer to use inside your Setup method, and then pass a pointer to Seed. This will be deprecated
-	anytime soon.
-
-	\param renderer A pointer to the IRenderer that you instantiated.
-	*/
-	SEED_CORE_API void SetRenderer(IRenderer *renderer);
 
 	/// Displays a output message by using IGameApp::WriteOut implementation.
 	/**
@@ -109,9 +100,9 @@ namespace Seed {
 
 	/// Render
 	/**
-	Renders the game state and will be called once per frame.
-	*/
-	SEED_CORE_API void Render(f32 delta);
+ 	Renders the game state and will be called once per frame.
+ 	*/
+	SEED_CORE_API void Render();
 
 	/// Shutdown Seed
 	/**
@@ -130,9 +121,6 @@ namespace Seed {
 	{
 		/// A pointer to the IGameApp implementation.
 		SEED_CORE_API extern IGameApp	*pApplication;
-
-		/// A pointer to the user IRenderer so Seed can query for informations and do operations with it.
-		SEED_CORE_API extern IRenderer	*pRenderer;
 
 		/// Flag indicating that Seed is Initialized or not.
 		SEED_CORE_API extern BOOL		bInitialized;

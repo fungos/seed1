@@ -67,8 +67,11 @@ INLINE void Thread::Create(s32 priority)
 	UNUSED(priority);
 
 	bRunning = TRUE;
-	pThread = SDL_CreateThread(__seed_thread_loop_callback, this);
-	ASSERT_MSG(pThread != NULL, TAG "Failed to create thread.");
+	if (!pThread)
+	{
+		pThread = SDL_CreateThread(__seed_thread_loop_callback, this);
+		ASSERT_MSG(pThread != NULL, TAG "Failed to create thread.");
+	}
 }
 
 INLINE void Thread::Destroy()

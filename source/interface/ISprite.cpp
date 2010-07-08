@@ -41,6 +41,7 @@
 #include "Log.h"
 #include "Enum.h"
 #include "StringCache.h"
+#include "RendererDevice.h"
 
 #define TAG "[ISprite] "
 
@@ -74,6 +75,10 @@ ISprite::ISprite()
 	, pRes(NULL)
 	, pPool(NULL)
 	, pFilename(NULL)
+	, fTexS0(0.0f)
+	, fTexS1(0.0f)
+	, fTexT0(0.0f)
+	, fTexT1(0.0f)
 {
 	iNumVertices = 4;
 }
@@ -98,14 +103,18 @@ INLINE void ISprite::Reset()
 	bVisible 		= TRUE;
 	bPlaying 		= FALSE;
 
-	iCurrentFrame = 0;
+	iCurrentFrame	= 0;
 	iFrames 		= 0;
-	fCurrentFrameRate	= 1.0f / SPRITE_GLOBAL_FRAME_TIME;
-	fFrameTime	= 0.0f;
-	iWidth 		= 0;
+	fCurrentFrameRate = 1.0f / SPRITE_GLOBAL_FRAME_TIME;
+	fFrameTime		= 0.0f;
+	iWidth 			= 0;
 	iHeight 		= 0;
-	iHalfWidth 	= 0;
+	iHalfWidth 		= 0;
 	iHalfHeight 	= 0;
+	fTexS0			= 0;
+	fTexS1			= 0;
+	fTexT0			= 0;
+	fTexT1			= 0;
 
 	this->SetPriority(0);
 }
@@ -136,20 +145,20 @@ BOOL ISprite::Load(const char *filename, ResourceManager *res, IMemoryPool *pool
 
 	if (this->Unload())
 	{
-		this->pFilename = filename;
-		this->pPool = pool;
-		this->pRes = res;
+		pFilename = filename;
+		pPool = pool;
+		pRes = res;
 
-		this->pSprite = static_cast<SpriteObject *>(res->Get(filename, Seed::ObjectSprite, pool));
+		pSprite = static_cast<SpriteObject *>(res->Get(filename, Seed::ObjectSprite, pool));
 		this->SetRotation(0);
-		this->SetAnimation((u32)0);
+		this->SetAnimation(0u);
 
-		this->bChanged = TRUE;
-		this->bInitialized = TRUE;
+		bChanged = TRUE;
+		bInitialized = TRUE;
 
-		this->pAnimation = pSprite->GetAnimation(iCurrentAnimation);
-		this->pAnimationFrames = pSprite->GetFrames(pAnimation);
-		this->pFrame = &pAnimationFrames[iCurrentFrame]; //&pAnimation->pFrame[iCurrentFrame];
+		pAnimation = pSprite->GetAnimation(iCurrentAnimation);
+		pAnimationFrames = pSprite->GetFrames(pAnimation);
+		pFrame = &pAnimationFrames[iCurrentFrame];
 	}
 
 	return TRUE;
@@ -159,11 +168,6 @@ INLINE void ISprite::Initialize()
 {
 	this->ReconfigureAnimation();
 	bInitialized = TRUE;
-}
-
-INLINE const IImage *ISprite::GetImage() const
-{
-	return pFrameImage; //pFrame->pImage;
 }
 
 INLINE void ISprite::ReconfigureAnimation()
@@ -176,7 +180,7 @@ INLINE void ISprite::ReconfigureAnimation()
 	pFrame = &pAnimationFrames[iCurrentFrame];
 
 	sRelease(pFrameImage);
-	pFrameImage = static_cast<IImage *>(pRes->Get(_F(pFrame->iFileId), Seed::ObjectImage, pPool));
+	pFrameImage = static_cast<ITexture *>(pRes->Get(_F(pFrame->iFileId), Seed::ObjectTexture, pPool));
 
 	this->ReconfigureFrame();
 
@@ -190,72 +194,50 @@ INLINE void ISprite::ReconfigureFrame()
 {
 	ASSERT_NULL(pFrameImage);
 
-	this->fCurrentFrameRate = 1.0f / static_cast<f32>(pFrame->iTime); // FIXME: iTime default value must be 1 not 0. <- division by zero
-
-	//if (this->bAnimation)
-	//	this->Play();
+	fCurrentFrameRate = 1.0f / static_cast<f32>(pFrame->iTime); // FIXME: iTime default value must be 1 not 0. <- division by zero
 
 	if (pFrame->iWidth == 0)
-		this->iWidth = this->GetWidthInPixel();
+		iWidth = pFrameImage->GetWidthInPixel();
 	else
-		this->iWidth = static_cast<u16>(pFrame->iWidth);
+		iWidth = static_cast<u16>(pFrame->iWidth);
 
 	if (pFrame->iHeight == 0)
-		this->iHeight = this->GetHeightInPixel();
+		iHeight = pFrameImage->GetHeightInPixel();
 	else
-		this->iHeight = static_cast<u16>(pFrame->iHeight);
+		iHeight = static_cast<u16>(pFrame->iHeight);
 
-	#if defined(SEED_USE_REAL_COORDINATE_SYSTEM)
-		ITransformable2D::SetWidth((f32)this->iWidth);
-		ITransformable2D::SetHeight((f32)this->iHeight);
+	f32 aspectH = pScreen->GetAspectRatio();
 
-		u32 iX = pFrame->iX;
-		u32 iY = pFrame->iY;
+	f32 w = (iWidth / static_cast<f32>(pFrame->iResolutionWidth));
+	f32 h = (iHeight / static_cast<f32>(pFrame->iResolutionHeight));
 
-		// Normalized Pixel Half Width/Height for pixel based vertex rendering
-		this->iHalfWidth = static_cast<s32>(this->iWidth / 2);
-		this->iHalfHeight = static_cast<s32>(this->iHeight / 2);
+	ITransformable2D::SetWidth(w); // set normalized width
+	ITransformable2D::SetHeight(h); // set normalized height
 
-		f32 rInvWidth = 1.0F / this->GetWidthInPixel(); // full width from image, not only frame area
-		f32 rInvHeight = 1.0F / this->GetHeightInPixel(); // full height from image, not only frame area
+	fAspectWidth = w;
+	fAspectHeight = h * aspectH;
+	fAspectHalfWidth = this->fAspectWidth / 2.0f;
+	fAspectHalfHeight = this->fAspectHeight / 2.0f;
 
-		fTexS0 = static_cast<f32>((iX) * rInvWidth);
-		fTexS1 = static_cast<f32>((iX + iWidth) * rInvWidth);
-		fTexT0 = static_cast<f32>((iY) * rInvHeight);
-		fTexT1 = static_cast<f32>((iY + iHeight) * rInvHeight);
-	#else
-		f32 aspectH = pScreen->GetAspectRatio();
+	u32 iX = pFrame->iX;
+	u32 iY = pFrame->iY;
 
-		f32 w = (iWidth / static_cast<f32>(pFrame->iResolutionWidth));
-		f32 h = (iHeight / static_cast<f32>(pFrame->iResolutionHeight));
+	f32 rInvWidth = 1.0F / pFrameImage->GetAtlasWidthInPixel(); // full width from image, not only frame area
+	f32 rInvHeight = 1.0F / pFrameImage->GetAtlasHeightInPixel(); // full height from image, not only frame area
 
-		ITransformable2D::SetWidth(w); // set normalized width
-		ITransformable2D::SetHeight(h); // set normalized height
+	// Normalized Pixel Half Width/Height for pixel based vertex rendering
+	iHalfWidth = static_cast<s32>(pScreen->GetWidth() * (w / 2.0f));
+	iHalfHeight = static_cast<s32>(pScreen->GetHeight() *  (h / 2.0f));
 
-		this->fAspectWidth = w;
-		this->fAspectHeight = h * aspectH;
-		this->fAspectHalfWidth = this->fAspectWidth / 2.0f;
-		this->fAspectHalfHeight = this->fAspectHeight / 2.0f;
+	/*
+	FIXME: 0.1f from hell
+	*/
+	fTexS0 = static_cast<f32>((iX + 0.1f) * rInvWidth);
+	fTexS1 = static_cast<f32>((iX + 0.1f + iWidth) * rInvWidth);
+	fTexT0 = static_cast<f32>((iY + 0.1f) * rInvHeight);
+	fTexT1 = static_cast<f32>((iY + 0.1f + iHeight) * rInvHeight);
 
-		u32 iX = pFrame->iX;
-		u32 iY = pFrame->iY;
-
-		f32 rInvWidth = 1.0F / pFrameImage->GetAtlasWidthInPixel(); // full width from image, not only frame area
-		f32 rInvHeight = 1.0F / pFrameImage->GetAtlasHeightInPixel(); // full height from image, not only frame area
-
-		// Normalized Pixel Half Width/Height for pixel based vertex rendering
-		this->iHalfWidth = static_cast<s32>(pScreen->GetWidth() * (w / 2.0f));
-		this->iHalfHeight = static_cast<s32>(pScreen->GetHeight() *  (h / 2.0f));
-		//this->iHalfWidth = static_cast<u16>(iWidth >> 1);
-		//this->iHalfHeight = static_cast<u16>(iHeight >> 1);
-
-		fTexS0 = static_cast<f32>((iX) * rInvWidth);
-		fTexS1 = static_cast<f32>((iX + iWidth) * rInvWidth);
-		fTexT0 = static_cast<f32>((iY) * rInvHeight);
-		fTexT1 = static_cast<f32>((iY + iHeight) * rInvHeight);
-	#endif
-
-	this->bChanged = TRUE;
+	bChanged = TRUE;
 }
 
 INLINE BOOL ISprite::SetAnimation(u32 index)
@@ -481,14 +463,78 @@ void ISprite::Update(f32 delta)
 			else
 				iCurrentFrame++;
 
+			u32 oldId = pFrame->iFileId;
 			pFrame = &pAnimationFrames[iCurrentFrame];
 
-			sRelease(pFrameImage);
-			pFrameImage = static_cast<IImage *>(pRes->Get(_F(pFrame->iFileId), Seed::ObjectImage, pPool));
+			if (oldId != pFrame->iFileId)
+			{
+				sRelease(pFrameImage);
+				pFrameImage = static_cast<ITexture *>(pRes->Get(_F(pFrame->iFileId), Seed::ObjectTexture, pPool));
+			}
 
 			this->ReconfigureFrame();
 		}
 	}
+
+	if (!bChanged && !this->IsChanged())
+		return;
+
+	uPixel p = iColor;
+	p.rgba.r = iColor.argb.r;
+	p.rgba.g = iColor.argb.g;
+	p.rgba.b = iColor.argb.b;
+	p.rgba.a = iColor.argb.a;
+
+	if (!arCustomVertexData)
+	{
+		arCurrentVertexData = &vert[0];
+
+		vert[0].cVertex = Vector3f(-fAspectHalfWidth, -fAspectHalfHeight, (f32)iPriority);
+		vert[0].iColor = p;
+		vert[0].cCoords = Point2f(fTexS0, fTexT0);
+
+		vert[1].cVertex = Vector3f(+fAspectHalfWidth, -fAspectHalfHeight, (f32)iPriority);
+		vert[1].iColor = p;
+		vert[1].cCoords = Point2f(fTexS1, fTexT0);
+
+		vert[2].cVertex = Vector3f(-fAspectHalfWidth, +fAspectHalfHeight, (f32)iPriority);
+		vert[2].iColor = p;
+		vert[2].cCoords = Point2f(fTexS0, fTexT1);
+
+		vert[3].cVertex = Vector3f(+fAspectHalfWidth, +fAspectHalfHeight, (f32)iPriority);
+		vert[3].iColor = p;
+		vert[3].cCoords = Point2f(fTexS1, fTexT1);
+	}
+	else
+	{
+		arCurrentVertexData = arCustomVertexData;
+	}
+
+	f32 x, y, ratio;
+	ratio = pScreen->GetAspectRatio();
+	x = this->fAspectHalfWidth + ISprite::GetX();
+	y = this->fAspectHalfHeight + ISprite::GetY() * ratio;
+
+	f32 lx = ISprite::GetLocalX();
+	f32 ly = ISprite::GetLocalY() * ratio;
+
+	Matrix4x4f t1, t2, r, s;
+	t1 = TranslationMatrix(lx + x, ly + y, 0.0f);
+	r = RotationMatrix(AxisZ, DegToRad(ISprite::GetRotation()));
+	s = ScaleMatrix(ISprite::GetScaleX(), ISprite::GetScaleY(), 1.0f);
+	t2 = TranslationMatrix(-lx, -ly, 0.0f);
+	Matrix4x4f transform = ((t1 * r) * s) * t2;
+
+	if (bTransformationChanged || !arCustomVertexData)
+	{
+		for (u32 i = 0; i < iNumVertices; i++)
+		{
+			transform.Transform(arCurrentVertexData[i].cVertex);
+		}
+	}
+
+	bChanged = FALSE;
+	bTransformationChanged = FALSE;
 }
 
 u32 ISprite::GetWidthInPixel() const
@@ -525,9 +571,29 @@ INLINE const void *ISprite::GetData() const
 	return pFrameImage->GetData();
 }
 
-INLINE IImage *ISprite::GetTexture() const
+INLINE ITexture *ISprite::GetTexture() const
 {
 	return pFrameImage;
+}
+
+void ISprite::Render()
+{
+	if (!this->bInitialized)
+		return;
+
+	ASSERT(pFrameImage);
+
+	RendererPacket packet;
+	packet.iSize = iNumVertices;
+	packet.nMeshType = nMeshType;
+	packet.pVertexData = arCurrentVertexData;
+	packet.pTexture = pFrameImage;
+	packet.nBlendMode = this->eBlendOperation;
+	packet.iColor = this->iColor;
+	pRendererDevice->UploadData(&packet);
+
+	if (pConfiguration->bDebugSprite)
+		pRendererDevice->DrawRect(this->GetX(), this->GetY(), this->GetWidth(), this->GetHeight(), PIXEL_COLOR(255, 255, 255, 255));
 }
 
 INLINE const char *ISprite::GetObjectName() const

@@ -106,8 +106,8 @@ class Screen : public IScreen
 		void *GetSurface() const;
 		void ApplyFade();
 
-		// IUpdatable
-		virtual BOOL Update(f32 dt);
+		// IScreen
+		virtual void Update();
 
 		// IModule
 		virtual BOOL Initialize();

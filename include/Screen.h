@@ -37,8 +37,6 @@
 #ifndef __SCREEN_H__
 #define __SCREEN_H__
 
-#include "Config.h"
-
 #if defined(_WII_)
 	#include "platform/wii/WiiScreen.h"
 	using namespace Seed::WII;

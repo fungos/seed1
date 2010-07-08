@@ -37,8 +37,6 @@
 #ifndef __MUSIC_H__
 #define __MUSIC_H__
 
-#include "Config.h"
-
 #if defined(_WII_)
 	#include "platform/wii/WiiMusic.h"
 	using namespace Seed::WII;

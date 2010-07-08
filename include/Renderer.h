@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -31,27 +31,75 @@
 
 /*! \file Renderer.h
 	\author	Danny Angelo Carminati Grein
-	\brief Include selector
+	\brief Defines the Renderer class interface
 */
 
 #ifndef __RENDERER_H__
 #define __RENDERER_H__
 
-#include "Config.h"
+#include "Array.h"
+#include "interface/IUpdatable.h"
+#include "interface/IModule.h"
 
-#if defined(_WII_)
-	#include "platform/wii/WiiRenderer.h"
-	using namespace Seed::WII;
-#endif // _WII_
+#include <vector>
 
-#if defined(_SDL_) || defined(_QT_)
-	#include "api/ogl/OglRenderer.h"
-	using namespace Seed::OGL;
-#endif // _SDL_
+#define RENDERER_MAX_SCENES 32
 
-#if defined(_IPHONE_)
-	#include "platform/iphone/IphRenderer.h"
-	using namespace Seed::iPhone;
-#endif // _IPHONE_
+namespace Seed {
+
+class ISceneObject;
+class ISceneNode;
+class ITexture;
+
+/// Renderer Interface
+/**
+Rendering engine interface
+*/
+class SEED_CORE_API Renderer : public IUpdatable, public IModule
+{
+	typedef std::vector<ISceneNode *> NodeVector;
+	typedef NodeVector::iterator NodeVectorIterator;
+	typedef NodeVector::const_iterator ConstNodeVectorIterator;
+
+	typedef std::vector<ISceneObject *> RenderableVector;
+	typedef RenderableVector::iterator RenderableVectorIterator;
+	typedef RenderableVector::const_iterator ConstRenderableVectorIterator;
+
+	public:
+		Renderer();
+		virtual ~Renderer();
+
+		virtual void Render();
+		virtual void DrawRect(f32 x, f32 y, f32 w, f32 h, PIXEL color, BOOL fill = FALSE) const;
+
+		virtual void Begin() const;
+		virtual void End() const;
+
+		virtual void Sort(RenderableVector &vec);
+		virtual void Culler();
+
+		void Add(ISceneNode *node);
+		void Remove(ISceneNode *node);
+
+		// IUpdatable
+		//virtual BOOL Reset();
+		virtual BOOL Update(f32 delta);
+
+		// IObject
+		virtual const char *GetObjectName() const;
+
+	protected:
+		Array<ISceneNode *, RENDERER_MAX_SCENES> arScenes;
+		RenderableVector vRenderables;
+		RenderableVector vVisibleRenderables;
+
+	private:
+		void RenderObjects(const RenderableVector &vec) const;
+		void PushChildNodes(ISceneNode *, NodeVector &vec);
+
+		SEED_DISABLE_COPY(Renderer);
+};
+
+} // namespace
 
 #endif // __RENDERER_H__

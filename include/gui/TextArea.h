@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -61,14 +61,26 @@ class SEED_CORE_API TextArea : public IWidget
 		virtual void SetAlignment(eHorizontalAlignment align);
 		virtual void SetAlignment(eVerticalAlignment align);
 		virtual void SetAutoAdjust(BOOL b);
+		virtual void SetScaleX(f32 scaleX);
+		virtual void SetScaleY(f32 scaleY);
+		virtual void SetScale(f32 scale);
+		virtual void SetScale(f32 scaleX, f32 scaleY);
+		virtual void SetScale(const Point<f32> &scale);
+		virtual void AddScaleX(f32 scaleX);
+		virtual void AddScaleY(f32 scaleY);
+		virtual void AddScale(f32 scale);
+		virtual void AddScale(f32 scaleX, f32 scaleY);
+		virtual void AddScale(const Point<f32> &scale);
+		virtual void SetWidth(f32 w);
+		virtual void SetHeight(f32 h);
+
+		virtual f32 GetScaleX() const;
+		virtual f32 GetScaleY() const;
 
 		virtual u32 GetLineCount() const;
 
 		// IRenderable
-		virtual void Render(f32 delta);
-		virtual void SetColor(u8 r, u8 g, u8 b, u8 a);
-		virtual void SetColor(PIXEL px);
-		virtual PIXEL GetColor() const;
+		virtual void Render();
 
 		// IObject
 		virtual const char *GetObjectName() const;
@@ -99,10 +111,8 @@ class SEED_CORE_API TextArea : public IWidget
 		u32			iLines;
 
 		f32			fDiffX;
-		f32			fScaleX;
-		f32			fScaleY;
-
-		PIXEL		iColor;
+		f32			fTextScaleX;
+		f32			fTextScaleY;
 
 		eHorizontalAlignment	eHAlign;
 		eVerticalAlignment		eVAlign;

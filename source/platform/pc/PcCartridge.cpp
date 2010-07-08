@@ -59,7 +59,6 @@ Cartridge::Cartridge()
 
 Cartridge::~Cartridge()
 {
-	this->Reset();
 }
 
 INLINE BOOL Cartridge::Initialize()
@@ -354,6 +353,11 @@ BOOL Cartridge::CreateSaveFile()
 
 	this->eLastError = Seed::ErrorNone;
 	return TRUE;
+}
+
+INLINE const char *Cartridge::GetObjectName() const
+{
+	return "Cartridge";
 }
 
 }} // namespace

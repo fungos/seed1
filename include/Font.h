@@ -39,10 +39,8 @@
 
 #include "Defines.h"
 #include "interface/IResource.h"
-#include "interface/IMemoryManager.h"
-#include "interface/IRenderable.h"
 #include "Sprite.h"
-#include "Enum.h"
+#include "File.h"
 
 namespace Seed {
 
@@ -69,6 +67,7 @@ class SEED_CORE_API Font : public IResource
 		void SetTracking(f32 tracking);
 		f32 GetTracking();
 		void SetPosition(f32 x, f32 y);
+		void SetLocalPosition(f32 x, f32 y);
 
 		virtual void SetFilter(eTextureFilterType type, eTextureFilter filter);
 

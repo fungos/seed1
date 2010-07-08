@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -41,6 +41,9 @@
 #include "Point.h"
 #include "Keyframe.h"
 #include "interface/IEventMovieListener.h"
+#undef GetObject
+#undef GetObjectW
+#undef GetObjectA
 
 #define MAX_KEYFRAMES 8192
 
@@ -55,7 +58,7 @@ class SEED_CORE_API Timeline
 		~Timeline();
 
 		void Reset();
-		void Render(f32 dt);
+		void Update();
 		void Rewind();
 
 		void AddKeyframe(u32 frame, Keyframe *keyframe);
@@ -63,12 +66,12 @@ class SEED_CORE_API Timeline
 		void GotoAndPlay(u32 frame);
 		void GotoAndPlay(const char *strKeyframeName);
 
-		void SetObject(ITransformable2D *object);
-		ITransformable2D *GetObject() const;
+		void SetObject(ISceneObject *object);
+		ISceneObject *GetObject() const;
 		void SetPriority(u32 p);
 		f32 GetWidth() const;
 		f32 GetHeight() const;
-		
+
 		u32 GetCurrentFrame() const;
 		const Keyframe *GetCurrentKeyframe() const;
 
@@ -93,7 +96,7 @@ class SEED_CORE_API Timeline
 
 	private:
 		Movie				*pParent;
-		ITransformable2D	*pObject;
+		ISceneObject		*pObject;
 		IEventMovieListener *pListener;
 
 		f32			fElapsedTime;
@@ -102,9 +105,9 @@ class SEED_CORE_API Timeline
 		s32			iKeyframeFrom;
 		s32			iKeyframeTo;
 
-		Point<f32>	ptParentPosition;
-		Point<f32>	ptParentLocalPosition;
-		Point<f32>	ptParentScale;
+		Point2f		ptParentPosition;
+		Point2f		ptParentLocalPosition;
+		Point2f		ptParentScale;
 		f32			fParentRotation;
 
 		Keyframe *arKeyframes[MAX_KEYFRAMES];

@@ -38,6 +38,7 @@
 
 namespace Seed {
 
+Checksum *pChecksum = NULL;
 SEED_SINGLETON_DEFINE(Checksum);
 
 Checksum::Checksum()

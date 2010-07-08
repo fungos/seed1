@@ -36,16 +36,22 @@
 
 #if defined(_SDL_)
 
-#include "Defines.h"
 #include "Screen.h"
-#include "System.h"
 #include "Log.h"
-#include "MemoryManager.h"
-#include "Renderer.h"
 #include "SeedInit.h"
+#include "RendererDevice.h"
 
 #if defined(WIN32)
+#pragma push_macro("Delete")
+#pragma push_macro("BOOL")
+#pragma push_macro("SIZE_T")
+#undef Delete
+#undef BOOL
+#undef SIZE_T
 #include <SDL/SDL_syswm.h>
+#pragma pop_macro("SIZE_T")
+#pragma pop_macro("BOOL")
+#pragma pop_macro("Delete")
 #endif
 
 #define TAG "[Screen] "
@@ -53,8 +59,6 @@
 namespace Seed { namespace SDL {
 
 SEED_SINGLETON_DEFINE(Screen);
-
-SDL_Surface *Screen::pSurface = NULL;
 
 Screen::Screen()
 	: surfaceSize(0)
@@ -64,8 +68,8 @@ Screen::Screen()
 	, iBPP(32)
 	, iFlags(0)
 	, videoInfo(NULL)
+	, iHandle(0)
 {
-	iMode = SCREEN_AUTODETECTFS;
 }
 
 Screen::~Screen()
@@ -76,11 +80,6 @@ Screen::~Screen()
 BOOL Screen::Reset()
 {
 	return TRUE;
-}
-
-void Screen::Setup(u32 mode)
-{
-	this->iMode = mode;
 }
 
 void Screen::PrepareMode()
@@ -107,15 +106,10 @@ void Screen::PrepareMode()
 		Info(TAG "\tTotal video memory available.: %d", videoInfo->video_mem);
 	}
 
-	switch (this->iMode)
+	switch (nMode)
 	{
-		case SCREEN_AUTODETECTW:
+		case Video_AutoDetect:
 		{
-			//if (videoInfo->hw_available)
-				iFlags = SDL_DOUBLEBUF | SDL_OPENGL | SDL_HWSURFACE;
-			//else
-			//	iFlags = SDL_DOUBLEBUF | SDL_SWSURFACE;
-
 			if (videoInfo)
 			{
 				iWidth = videoInfo->current_w;
@@ -130,145 +124,66 @@ void Screen::PrepareMode()
 		}
 		break;
 
-		case SCREEN_AUTODETECTFS:
-		{
-			//if (videoInfo->hw_available)
-				iFlags = SDL_DOUBLEBUF | SDL_OPENGL | SDL_HWSURFACE | SDL_FULLSCREEN;
-			//else
-			//	iFlags = SDL_DOUBLEBUF | SDL_SWSURFACE | SDL_FULLSCREEN;
-
-			if (videoInfo)
-			{
-				iWidth = videoInfo->current_w;
-				iHeight = videoInfo->current_h;
-				iBPP = videoInfo->vfmt->BitsPerPixel;
-			}
-			else
-			{
-				Log(TAG "Error: Failed to auto detect video mode.");
-				return;
-			}
-		}
-		break;
-
-		case SCREEN_480x272x32W_OPENGL:
+		case Video_480x272:
 		{
 			iWidth = 480;
 			iHeight = 272;
-			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL;
 		}
 		break;
 
-		case SCREEN_IPHONE_PORTRAIT:
+		case Video_iPhonePortrait:
 		{
 			iWidth = 320;
 			iHeight = 480;
-			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL;
 		}
 		break;
 
-		case SCREEN_IPHONE:
-		case SCREEN_IPHONE_LANDSCAPE:
-		case SCREEN_480x320x32W_OPENGL:
+		case Video_iPhone:
+		case Video_iPhoneLandscape:
+		case Video_480x320:
 		{
 			iWidth = 480;
 			iHeight = 320;
-			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL;
 		}
 		break;
 
-		case SCREEN_WII:
-		case SCREEN_640X480X32W_OPENGL:
+		case Video_NintendoWii:
+		case Video_640x480:
 		{
-			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL;// | SDL_FULLSCREEN;
 			iWidth = 640;
 			iHeight = 480;
 		}
 		break;
 
-		case SCREEN_800X600X32W_OPENGL:
+		case Video_800x600:
 		{
 			iWidth = 800;
 			iHeight = 600;
-			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL;
 		}
 		break;
 
-		case SCREEN_1024X768X32W_OPENGL:
+		case Video_1024x768:
 		{
 			iWidth = 1024;
 			iHeight = 768;
-			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL;
-		}
-		break;
-
-		case SCREEN_2048X1024X32W_OPENGL:
-		{
-			iWidth = 2048;
-			iHeight = 1024;
-			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL;
-		}
-		break;
-
-		case SCREEN_480x272x32FS_OPENGL:
-		{
-			iWidth = 480;
-			iHeight = 272;
-			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL | SDL_FULLSCREEN;
-		}
-		break;
-
-		case SCREEN_480x320x32FS_OPENGL:
-		{
-			iWidth = 480;
-			iHeight = 320;
-			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL | SDL_FULLSCREEN;
-		}
-		break;
-
-		case SCREEN_640X480X32FS_OPENGL:
-		{
-			iWidth = 640;
-			iHeight = 480;
-			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL | SDL_FULLSCREEN;
-		}
-		break;
-
-		case SCREEN_800X600X32FS_OPENGL:
-		{
-			iWidth = 800;
-			iHeight = 600;
-			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL | SDL_FULLSCREEN;
-		}
-		break;
-
-		case SCREEN_1024X768X32FS_OPENGL:
-		{
-			iWidth = 1024;
-			iHeight = 768;
-			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL | SDL_FULLSCREEN;
-		}
-		break;
-
-		case SCREEN_2048X1024X32FS_OPENGL:
-		{
-			iWidth = 2048;
-			iHeight = 1024;
-			iFlags = SDL_HWSURFACE | SDL_DOUBLEBUF | SDL_OPENGL | SDL_FULLSCREEN;
 		}
 		break;
 
 		default:
-			Log(TAG "Invalid mode!");
+			Log(TAG "Invalid video mode!");
 		break;
 	}
+
+	iFlags = SDL_DOUBLEBUF | SDL_HWSURFACE;
 }
 
-BOOL Screen::Initialize()
+bool Screen::Initialize()
 {
 	Log(TAG "Initializing...");
-	this->bFading		= FALSE;
-	this->iFadeStatus 	= 16;
+
+	IScreen::SetMode(pConfiguration->GetVideoMode());
+	bFading = FALSE;
+	iFadeStatus = 16;
 
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
 	{
@@ -295,10 +210,6 @@ BOOL Screen::Initialize()
 	SDL_ShowCursor(0);
 #endif // DEBUG
 
-	bFullScreen = FALSE;
-	if (iFlags & SDL_FULLSCREEN)
-		bFullScreen = TRUE;
-
 	Log(TAG "Initialization completed.");
 	return TRUE;
 }
@@ -313,68 +224,88 @@ INLINE BOOL Screen::InitializeVideo()
 		pSurface = NULL;
 	}
 
-	if (iFlags & SDL_OPENGL)
+	eRendererDeviceType type = pConfiguration->GetRendererDeviceType();
+	if (type == Seed::RendererDeviceOpenGL14 || type == Seed::RendererDeviceOpenGL20 ||
+		type == Seed::RendererDeviceOpenGL30 || type == Seed::RendererDeviceOpenGL40)
 	{
 		this->SetupOpenGL();
 	}
 
 #if defined(WIN32)
-	BOOL icon = FALSE;
-
-	/*
-	If there is a icon.ico file in the SAME directory of the executable (can't be workdir) we will use it, otherwise we will look for
-	<workdir>/data/icon.bmp and use it instead.
-	*/
-	SDL_SysWMinfo info;
-	SDL_VERSION(&info.version);
-	if (SDL_GetWMInfo(&info) > 0)
+	int dpiX = 0, dpiY = 0;
+	HDC hdc = GetDC(NULL);
+	if (hdc)
 	{
-		HWND hWnd = info.window;
-
-		const HANDLE bigIcon = ::LoadImage(NULL, "icon.ico", IMAGE_ICON, ::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON), LR_LOADFROMFILE);
-		if (bigIcon)
-		{
-			icon = TRUE;
-			::SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM)bigIcon);
-		}
-
-		const HANDLE lilIcon = ::LoadImage(NULL, "icon.ico", IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), LR_LOADFROMFILE);
-		if (bigIcon)
-		{
-			icon = TRUE;
-			::SendMessage(hWnd, WM_SETICON, ICON_SMALL, (LPARAM)lilIcon);
-		}
+		dpiX = GetDeviceCaps(hdc, LOGPIXELSX);
+		dpiY = GetDeviceCaps(hdc, LOGPIXELSY);
+		ReleaseDC(NULL, hdc);
 	}
-	if (!icon)
+
+	int cxScreen = GetSystemMetrics(SM_CXSCREEN);
+	int cyScreen = GetSystemMetrics(SM_CYSCREEN);
+	int scaleX = MulDiv(cxScreen, USER_DEFAULT_SCREEN_DPI, dpiX);
+	int scaleY = MulDiv(cyScreen, USER_DEFAULT_SCREEN_DPI, dpiY);
+
+	Info(TAG "Desktop DPI: %dx%d", dpiX, dpiY);
+	Info(TAG "Desktop Resolution: %dx%d", cxScreen, cyScreen);
+	Info(TAG "Desktop DPI scaled resolution: %dx%d", scaleX, scaleY);
+
+	if (cxScreen <= 1024 && cyScreen <= 768 && iWidth > 800 && iHeight > 600)
+	{
+		iWidth = 800;
+		iHeight = 600;
+	}
 #endif
-	{
-		SDL_Surface *icon = SDL_LoadBMP("icon.bmp");
-		if (icon)
-		{
-			Uint32 colorkey = SDL_MapRGB(icon->format, 255, 0, 255);
-			SDL_SetColorKey(icon, SDL_SRCCOLORKEY, colorkey);
-			SDL_WM_SetIcon(icon, NULL);
-		}
-	}
 
-	SDL_WM_SetCaption(pSystem->GetApplicationTitle(), pSystem->GetApplicationTitle());//"Seed", "Seed");
+	SDL_WM_SetCaption(pConfiguration->GetApplicationTitle(), pConfiguration->GetApplicationTitle());
 	pSurface = SDL_SetVideoMode(iWidth, iHeight, iBPP, iFlags);
-
 	if (!pSurface)
 	{
 		Log(TAG "Could not set video mode: %s\n", SDL_GetError());
 		ret = FALSE;
 	}
-
-	int stencil = 0;
-	if (SDL_GL_GetAttribute(SDL_GL_STENCIL_SIZE, &stencil) == -1)
+	else
 	{
-		Log(TAG "Error: %s", SDL_GetError());
-	}
-	Log(TAG "Stencil buffer: %d", stencil);
+#if defined(WIN32)
+		BOOL icon = FALSE;
 
-	//int val = 0;
-	//SDL_GL_GetAttribute(SDL_GL_STENCIL_SIZE, &val);
+		/*
+		If there is a icon.ico file in the SAME directory of the executable (can't be workdir) we will use it, otherwise we will look for
+		<workdir>/data/icon.bmp and use it instead.
+		*/
+		SDL_SysWMinfo info;
+		SDL_VERSION(&info.version);
+		if (SDL_GetWMInfo(&info) > 0)
+		{
+			HWND hWnd = info.window;
+			iHandle = (u32)hWnd;
+
+			const HANDLE bigIcon = ::LoadImage(NULL, "icon.ico", IMAGE_ICON, ::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON), LR_LOADFROMFILE);
+			if (bigIcon)
+			{
+				icon = TRUE;
+				::SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM)bigIcon);
+			}
+
+			const HANDLE lilIcon = ::LoadImage(NULL, "icon.ico", IMAGE_ICON, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON), LR_LOADFROMFILE);
+			if (bigIcon)
+			{
+				icon = TRUE;
+				::SendMessage(hWnd, WM_SETICON, ICON_SMALL, (LPARAM)lilIcon);
+			}
+		}
+		if (!icon)
+#endif
+		{
+			SDL_Surface *icon = SDL_LoadBMP("icon.bmp");
+			if (icon)
+			{
+				Uint32 colorkey = SDL_MapRGB(icon->format, 255, 0, 255);
+				SDL_SetColorKey(icon, SDL_SRCCOLORKEY, colorkey);
+				SDL_WM_SetIcon(icon, NULL);
+			}
+		}
+	}
 
 	return ret;
 }
@@ -402,15 +333,10 @@ BOOL Screen::Shutdown()
 	return TRUE;
 }
 
-INLINE BOOL Screen::Update(f32 dt)
+INLINE void Screen::Update()
 {
-	UNUSED(dt);
-	//if (!IScreen::Update(dt))
-	//	return FALSE;
-
 	this->SwapSurfaces();
-
-	return TRUE;
+	pRendererDevice->Update();
 }
 
 INLINE void Screen::FadeOut()
@@ -441,14 +367,14 @@ INLINE void Screen::CancelFade()
 
 INLINE void Screen::SwapSurfaces()
 {
-	//SDL_UpdateRect(pSurface, 0, 0, iWidth, iHeight);
-	//SDL_Flip(pSurface);
-	//if (iFlags & SDL_OPENGL)
-	SDL_GL_SwapBuffers();
+	if (iFlags & SDL_OPENGL)
+		SDL_GL_SwapBuffers();
 }
 
 void Screen::SetupOpenGL()
 {
+	iFlags |= SDL_OPENGL;
+
 	// http://sdl.beuc.net/sdl.wiki/SDL_GLattr
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 5);
@@ -457,11 +383,11 @@ void Screen::SetupOpenGL()
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1); // Not in SDL 1.3 - 0 no vsync, 1 vsync
-	//SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+	SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
 
-	/*SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);*/
+	//SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+	//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+	//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 }
 
 INLINE void Screen::ToggleFullscreen()
@@ -471,34 +397,47 @@ INLINE void Screen::ToggleFullscreen()
 	// reconfigure opengl context
 	// reload textures
 #if defined(__linux__)
-	SDL_WM_ToggleFullScreen(this->pSurface);
+	SDL_WM_ToggleFullScreen(pSurface);
 #else
 	bFullScreen = !bFullScreen;
 	iFlags ^= SDL_FULLSCREEN;
-	pResourceManager->Unload(Seed::ObjectImage);
-	pRenderer->Shutdown();
+	
+	pResourceManager->Unload(Seed::ObjectTexture);
+	pRendererDevice->Shutdown();
 	this->InitializeVideo();
-	//this->Shutdown();
-	//this->Initialize();
-	pRenderer->Initialize();
-	pResourceManager->Reload(Seed::ObjectImage);
+	pRendererDevice->Initialize();
+	pResourceManager->Reload(Seed::ObjectTexture);
+
+#if defined(WIN32)
+	if (!bFullScreen)
+	{
+		RECT rcTmp,rectWindow;
+		GetClientRect(GetActiveWindow(), &rcTmp);
+		rectWindow.left = 0;
+		rectWindow.top = 0;
+		rectWindow.right = rcTmp.right;
+		rectWindow.bottom = rcTmp.bottom;
+
+		SetWindowPos(GetActiveWindow(), HWND_TOP, rectWindow.left, rectWindow.top, rectWindow.right, rectWindow.bottom, SWP_SHOWWINDOW);
+	}
+#endif
 #endif
 }
 
-INLINE void Screen::SetMode(u32 mode)
+INLINE void Screen::SetMode(eVideoMode mode)
 {
 #if defined(__linux__)
-	this->Setup(mode);
+	IScreen::SetMode(mode);
 	this->PrepareMode();
 	this->InitializeVideo();
 #else
-	pResourceManager->Unload(Seed::ObjectImage);
-	pRenderer->Shutdown();
+	pResourceManager->Unload(Seed::ObjectTexture);
+	pRendererDevice->Shutdown();
 	this->Shutdown();
 	IScreen::SetMode(mode);
 	this->Initialize();
-	pRenderer->Initialize();
-	pResourceManager->Reload(Seed::ObjectImage);
+	pRendererDevice->Initialize();
+	pResourceManager->Reload(Seed::ObjectTexture);
 #endif
 }
 
@@ -514,7 +453,7 @@ INLINE BOOL Screen::IsFullscreen() const
 
 void Screen::ApplyFade()
 {
-	if (this->bFading == FALSE)
+	if (bFading == FALSE)
 		return;
 
 	if (fadeType == FADE_IN)
@@ -538,36 +477,8 @@ void Screen::ApplyFade()
 		}
 	}
 
-	glPushAttrib(GL_TEXTURE_BIT | GL_ENABLE_BIT | GL_CURRENT_BIT | GL_COLOR_BUFFER_BIT);
-
 	u8 c = static_cast<u8>(iFadeStatus & 0xff);
-
-	const GLfloat vertices[] =
-	{
-		0.0f, 0.0f,
-		0.0f, 1.0f,
-		1.0f, 0.0f,
-		1.0f, 1.0f,
-	};
-
-	glVertexPointer(2, GL_FLOAT, 0, vertices);
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	glDisable(GL_TEXTURE_2D);
-
-	glEnable(GL_BLEND);
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	glColor4ub(0, 0, 0, c);
-
-	glPushMatrix();
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glPopMatrix();
-
-	//glEnable(GL_TEXTURE_2D);
-
-	glPopAttrib();
+	pRendererDevice->BackbufferFill(PIXEL_COLOR(0u, 0u, 0u, c));
 }
 
 }} // namespace

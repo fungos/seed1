@@ -35,15 +35,22 @@
 
 #include "Defines.h"
 #include "Log.h"
-#include "System.h"
+#include "SeedInit.h"
 
+#pragma push_macro("Delete")
+#pragma push_macro("BOOL")
+#pragma push_macro("SIZE_T")
+#undef Delete
+#undef BOOL
+#undef SIZE_T
 #include <io.h>
 #include <windows.h>
 #include <tchar.h>
-
+#pragma pop_macro("SIZE_T")
+#pragma pop_macro("BOOL")
+#pragma pop_macro("Delete")
 
 #define TAG	"[Platform] "
-
 
 #define SYSTEM_USERNAME_MAXLEN		1024
 #define SYSTEM_USERHOME_MAXLEN		1024
@@ -171,7 +178,7 @@ BOOL system_check_multiple_instance(bool warnUser)
 	DWORD error = 0;
 
 	HANDLE handleProcess;
-	LPCTSTR lpName = (LPCTSTR)pSystem->GetApplicationTitle();
+	LPCTSTR lpName = (LPCTSTR)Seed::pConfiguration->GetApplicationTitle();
 
 	handleProcess = CreateMutex(NULL, CREATE_MUTEX_INITIAL_OWNER, lpName);
 	error = GetLastError();
@@ -182,12 +189,12 @@ BOOL system_check_multiple_instance(bool warnUser)
 	}
 	else if (error == ERROR_ALREADY_EXISTS)
 	{
-		HWND hWnd = FindWindow(NULL, pSystem->GetApplicationTitle());
+		HWND hWnd = FindWindow(NULL, Seed::pConfiguration->GetApplicationTitle());
 		if (hWnd)
 		{
 			if (warnUser)
 			{
-				MessageBox(NULL, "There is already an instance of this application running!", pSystem->GetApplicationTitle(), MB_ICONWARNING);
+				MessageBox(NULL, "There is already an instance of this application running!", Seed::pConfiguration->GetApplicationTitle(), MB_ICONWARNING);
 			}
 			SwitchToThisWindow(hWnd, FALSE);
 			ShowWindow(hWnd, SW_RESTORE);

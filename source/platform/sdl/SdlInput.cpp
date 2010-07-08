@@ -47,9 +47,20 @@
 #include "EventInputPointer.h"
 #include "EventInputKeyboard.h"
 #include "EventSystem.h"
+#include "ViewManager.h"
+#include "Viewport.h"
 
 #if defined(WIN32)
+#pragma push_macro("Delete")
+#pragma push_macro("BOOL")
+#pragma push_macro("SIZE_T")
+#undef Delete
+#undef BOOL
+#undef SIZE_T
 #include <SDL/SDL_syswm.h>
+#pragma pop_macro("SIZE_T")
+#pragma pop_macro("BOOL")
+#pragma pop_macro("Delete")
 #endif
 
 #define TAG "[Input] "
@@ -199,45 +210,72 @@ FIXME: 2009-02-17 | BUG | Usar polling? Isso deve ferrar com o frame rate config
 
 			case SDL_MOUSEMOTION:
 			{
-				#if defined(SEED_USE_REAL_COORDINATE_SYSTEM)
-					this->fX = (f32)event.motion.x;
-					this->fY = (f32)event.motion.y;
-				#else
-					this->fX = (f32)event.motion.x / (f32)pScreen->GetWidth();
-					this->fY = (f32)event.motion.y / (f32)pScreen->GetHeight();
-				#endif
+				f32 x, y;
+				x = fX = (f32)event.motion.x / (f32)pScreen->GetWidth();
+				y = fY = (f32)event.motion.y / (f32)pScreen->GetHeight();
 
-				EventInputPointer ev(0, 0, 0, 0, this->fX, this->fY);
+				Viewport *viewport = static_cast<Viewport*>(pViewManager->GetViewportAt(fX, fY));
+				f32 fw = 1.0f;
+				f32 fh = 1.0f;
+				if (viewport)
+				{
+					fw = (viewport->GetWidth());// * viewport->GetWidth());
+					fh = (viewport->GetHeight());// * viewport->GetHeight());
+					//x = viewport->GetX() + viewport->GetWidth() * fX;
+					//y = viewport->GetY() + viewport->GetHeight() * fY;
+					x = (fX - viewport->GetX()) / fw;
+					y = (fY - viewport->GetY()) / fh;
+				}
+
+				EventInputPointer ev(0, 0, 0, 0, x, y);
 				this->SendEventPointerMove(&ev);
 			}
 			break;
 
 			case SDL_MOUSEBUTTONUP:
 			{
-				#if defined(SEED_USE_REAL_COORDINATE_SYSTEM)
-					this->fX = (f32)event.motion.x;
-					this->fY = (f32)event.motion.y;
-				#else
-					this->fX = (f32)event.motion.x / (f32)pScreen->GetWidth();
-					this->fY = (f32)event.motion.y / (f32)pScreen->GetHeight();
-				#endif
+				f32 x, y;
+				x = fX = (f32)event.motion.x / (f32)pScreen->GetWidth();
+				y = fY = (f32)event.motion.y / (f32)pScreen->GetHeight();
 
-				const EventInputPointer ev(0, 0, 0, this->ConvertButtonFlags(event.button.button), fX, fY);
+				Viewport *viewport = static_cast<Viewport*>(pViewManager->GetViewportAt(fX, fY));
+				f32 fw = 1.0f;
+				f32 fh = 1.0f;
+				if (viewport)
+				{
+					fw = (viewport->GetWidth());// * viewport->GetWidth());
+					fh = (viewport->GetHeight());// * viewport->GetHeight());
+					//x = viewport->GetX() + viewport->GetWidth() * fX;
+					//y = viewport->GetY() + viewport->GetHeight() * fY;
+					x = (fX - viewport->GetX()) / fw;
+					y = (fY - viewport->GetY()) / fh;
+				}
+
+				const EventInputPointer ev(0, 0, 0, this->ConvertButtonFlags(event.button.button), x, y);
 				this->SendEventPointerRelease(&ev);
 			}
 			break;
 
 			case SDL_MOUSEBUTTONDOWN:
 			{
-				#if defined(SEED_USE_REAL_COORDINATE_SYSTEM)
-					this->fX = (f32)event.motion.x;
-					this->fY = (f32)event.motion.y;
-				#else
-					this->fX = (f32)event.motion.x / (f32)pScreen->GetWidth();
-					this->fY = (f32)event.motion.y / (f32)pScreen->GetHeight();
-				#endif
+				f32 x, y;
+				x = fX = (f32)event.motion.x / (f32)pScreen->GetWidth();
+				y = fY = (f32)event.motion.y / (f32)pScreen->GetHeight();
 
-				const EventInputPointer ev(0, this->ConvertButtonFlags(event.button.button), 0, 0, fX, fY);
+				Viewport *viewport = static_cast<Viewport*>(pViewManager->GetViewportAt(fX, fY));
+				f32 fw = 1.0f;
+				f32 fh = 1.0f;
+				if (viewport)
+				{
+					fw = (viewport->GetWidth());// * viewport->GetWidth());
+					fh = (viewport->GetHeight());// * viewport->GetHeight());
+					//x = viewport->GetX() + viewport->GetWidth() * fX;
+					//y = viewport->GetY() + viewport->GetHeight() * fY;
+					x = (fX - viewport->GetX()) / fw;
+					y = (fY - viewport->GetY()) / fh;
+				}
+
+				const EventInputPointer ev(0, this->ConvertButtonFlags(event.button.button), 0, 0, x, y);
 				this->SendEventPointerPress(&ev);
 			}
 			break;

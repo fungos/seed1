@@ -86,7 +86,7 @@ INLINE void ParticleManager::Simulate(u32 iNumLoops)
 INLINE BOOL ParticleManager::Update(f32 dt)
 {
 	UNUSED(dt);
-	if (bEnabled && !(bPaused || bStopped))
+	/*if (bEnabled && !(bPaused || bStopped))
 	{
 		for (u32 i = 0; i < vEmitter.Size(); i++)
 		{
@@ -97,7 +97,7 @@ INLINE BOOL ParticleManager::Update(f32 dt)
 				p->Update(dt);
 		}
 	}
-
+	*/
 	return TRUE;
 }
 

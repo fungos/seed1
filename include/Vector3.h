@@ -359,4 +359,4 @@ static const Vector3d ZeroVectord(0.0, 0.0, 0.0);
 
 } // namespace
 
-#endif // __VECTOR_H__
+#endif // __VECTOR3_H__

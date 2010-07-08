@@ -117,37 +117,4 @@ INLINE void MemoryManager::Info()
 
 using namespace Seed::PC;
 
-/*
-FIXME: 2009-03-04 | BUG | PC | Something related to STL breaks when we use a memory pool here. | Danny Angelo Carminati Grein
-
-Algo faz com que a STL (incerto) quebre quando se utiliza memory pool aqui.
-Nao faz muita diferenca isso agora, mas seria importante ter isso aqui para poder ter um mapa melhor do consumo de memoria.
-Alem da STL, cada new / delete no codigo nao sera mapeado pelo memory manager tambem.
-Teremos uma visao aproximada do consumo de memoria mas nao exata. Isso pode afetar o desenvolvimento multiplataforma, exemplo: PC -> WII mas nao WII -> PC
-*/
-void *operator new(SIZE_T size) throw()
-{
-	//return pLargePool->Alloc(size, "Code", "Auto");
-	return malloc(size);
-}
-
-void *operator new[](SIZE_T size) throw()
-{
-	//return pLargePool->Alloc(size, "Code", "Auto");
-	return malloc(size);
-}
-
-//overwrites the delete operator
-void operator delete(void * p) throw()
-{
-	//pLargePool->Free(p);
-	return free(p);
-}
-
-void operator delete[](void * p) throw()
-{
-	//pLargePool->Free(p);
-	return free(p);
-}
-
 #endif // _PC_

@@ -42,6 +42,7 @@
 #if defined(_PC_)
 
 #include <stdlib.h>
+#include "LeakReport.h"
 #include "interface/IMemoryPool.h"
 #include "interface/IMemoryManager.h"
 #include "MemoryPool.h"

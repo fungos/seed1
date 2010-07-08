@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -36,6 +36,7 @@
 
 #include "interface/ITransformable2D.h"
 #include "Point.h"
+#include "Number.h"
 
 namespace Seed {
 
@@ -44,11 +45,11 @@ ITransformable2D::ITransformable2D()
 	, pParent(NULL)
 	, ptPos(0.0f, 0.0f)
 	, ptLocalPos(0.0f, 0.0f)
+	, ptScale(1.0f, 1.0f)
 	, fWidth(0.0f)
 	, fHeight(0.0f)
-	, fScaleX(1.0f)
-	, fScaleY(1.0f)
 	, fRotation(0.0f)
+	, iPriority(0)
 {
 }
 
@@ -59,57 +60,57 @@ ITransformable2D::~ITransformable2D()
 
 void ITransformable2D::Reset()
 {
-	this->ptPos.x		= 0.0f;
-	this->ptPos.y		= 0.0f;
-	this->ptLocalPos.x	= 0.0f;
-	this->ptLocalPos.y	= 0.0f;
-	this->fWidth 		= 0.0f;
-	this->fHeight 		= 0.0f;
-	this->fScaleX 		= 1.0f;
-	this->fScaleY 		= 1.0f;
-	this->fRotation 	= 0.0f;
+	ptPos.x			= 0.0f;
+	ptPos.y			= 0.0f;
+	ptLocalPos.x	= 0.0f;
+	ptLocalPos.y	= 0.0f;
+	ptScale.x		= 1.0f;
+	ptScale.y		= 1.0f;
+	fWidth			= 0.0f;
+	fHeight 		= 0.0f;
+	fRotation		= 0.0f;
 
-	this->pParent		= NULL;
+	pParent			= NULL;
 
-	this->bTransformationChanged = TRUE;
+	bTransformationChanged = TRUE;
 
-	IRenderable::Reset();
+	//IRenderable::Reset();
 }
 
 INLINE void ITransformable2D::SetWidth(f32 w)
 {
-	if (w == this->fWidth)
+	if (w == fWidth)
 		return;
 
-	this->fWidth = w;
-	this->bTransformationChanged = TRUE;
+	fWidth = w;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::SetHeight(f32 h)
 {
-	if (h == this->fHeight)
+	if (h == fHeight)
 		return;
 
-	this->fHeight = h;
-	this->bTransformationChanged = TRUE;
+	fHeight = h;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::SetX(f32 x)
 {
-	if (x == this->ptPos.x)
+	if (x == ptPos.x)
 		return;
 
-	this->ptPos.x = x;
-	this->bTransformationChanged = TRUE;
+	ptPos.x = x;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::SetY(f32 y)
 {
-	if (y == this->ptPos.y)
+	if (y == ptPos.y)
 		return;
 
-	this->ptPos.y = y;
-	this->bTransformationChanged = TRUE;
+	ptPos.y = y;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::AddX(f32 value)
@@ -117,8 +118,8 @@ INLINE void ITransformable2D::AddX(f32 value)
 	if (value == 0)
 		return;
 
-	this->ptPos.x += value;
-	this->bTransformationChanged = TRUE;
+	ptPos.x += value;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::AddY(f32 value)
@@ -126,27 +127,27 @@ INLINE void ITransformable2D::AddY(f32 value)
 	if (value == 0)
 		return;
 
-	this->ptPos.y += value;
-	this->bTransformationChanged = TRUE;
+	ptPos.y += value;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::SetPosition(f32 x, f32 y)
 {
-	if (this->ptPos.x == x && this->ptPos.y == y)
+	if (ptPos.x == x && ptPos.y == y)
 		return;
 
-	this->ptPos.x = x;
-	this->ptPos.y = y;
-	this->bTransformationChanged = TRUE;
+	ptPos.x = x;
+	ptPos.y = y;
+	bTransformationChanged = TRUE;
 }
 
-INLINE void ITransformable2D::SetPosition(const Point<f32> &pos)
+INLINE void ITransformable2D::SetPosition(const Point2f &pos)
 {
-	if (this->ptPos == pos)
+	if (ptPos == pos)
 		return;
 
-	this->ptPos = pos;
-	this->bTransformationChanged = TRUE;
+	ptPos = pos;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::AddPosition(f32 x, f32 y)
@@ -154,36 +155,36 @@ INLINE void ITransformable2D::AddPosition(f32 x, f32 y)
 	if (0.0f == x && 0.0f == y)
 		return;
 
-	this->ptPos.x += x;
-	this->ptPos.y += y;
-	this->bTransformationChanged = TRUE;
+	ptPos.x += x;
+	ptPos.y += y;
+	bTransformationChanged = TRUE;
 }
 
-INLINE void ITransformable2D::AddPosition(const Point<f32> &pos)
+INLINE void ITransformable2D::AddPosition(const Point2f &pos)
 {
 	if (0.0f == pos.x && 0.0f == pos.y)
 		return;
 
-	this->ptPos += pos;
-	this->bTransformationChanged = TRUE;
+	ptPos += pos;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::SetLocalX(f32 x)
 {
-	if (x == this->ptLocalPos.x)
+	if (x == ptLocalPos.x)
 		return;
 
-	this->ptLocalPos.x = x;
-	this->bTransformationChanged = TRUE;
+	ptLocalPos.x = x;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::SetLocalY(f32 y)
 {
-	if (y == this->ptLocalPos.y)
+	if (y == ptLocalPos.y)
 		return;
 
-	this->ptLocalPos.y = y;
-	this->bTransformationChanged = TRUE;
+	ptLocalPos.y = y;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::AddLocalX(f32 value)
@@ -191,8 +192,8 @@ INLINE void ITransformable2D::AddLocalX(f32 value)
 	if (value == 0)
 		return;
 
-	this->ptLocalPos.x += value;
-	this->bTransformationChanged = TRUE;
+	ptLocalPos.x += value;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::AddLocalY(f32 value)
@@ -200,27 +201,27 @@ INLINE void ITransformable2D::AddLocalY(f32 value)
 	if (value == 0)
 		return;
 
-	this->ptLocalPos.y += value;
-	this->bTransformationChanged = TRUE;
+	ptLocalPos.y += value;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::SetLocalPosition(f32 x, f32 y)
 {
-	if (this->ptLocalPos.x == x && this->ptLocalPos.y == y)
+	if (ptLocalPos.x == x && ptLocalPos.y == y)
 		return;
 
-	this->ptLocalPos.x = x;
-	this->ptLocalPos.y = y;
-	this->bTransformationChanged = TRUE;
+	ptLocalPos.x = x;
+	ptLocalPos.y = y;
+	bTransformationChanged = TRUE;
 }
 
-INLINE void ITransformable2D::SetLocalPosition(const Point<f32> &pos)
+INLINE void ITransformable2D::SetLocalPosition(const Point2f &pos)
 {
-	if (this->ptLocalPos == pos)
+	if (ptLocalPos == pos)
 		return;
 
-	this->ptLocalPos = pos;
-	this->bTransformationChanged = TRUE;
+	ptLocalPos = pos;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::AddLocalPosition(f32 x, f32 y)
@@ -228,31 +229,34 @@ INLINE void ITransformable2D::AddLocalPosition(f32 x, f32 y)
 	if (0.0f == x && 0.0f == y)
 		return;
 
-	this->ptLocalPos.x += x;
-	this->ptLocalPos.y += y;
-	this->bTransformationChanged = TRUE;
+	ptLocalPos.x += x;
+	ptLocalPos.y += y;
+	bTransformationChanged = TRUE;
 }
 
-INLINE void ITransformable2D::AddLocalPosition(const Point<f32> &pos)
+INLINE void ITransformable2D::AddLocalPosition(const Point2f &pos)
 {
 	if (0.0f == pos.x && 0.0f == pos.y)
 		return;
 
-	this->ptLocalPos += pos;
-	this->bTransformationChanged = TRUE;
+	ptLocalPos += pos;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::SetRotation(f32 rot)
 {
-	if (this->fRotation == rot)
+	if (fRotation == rot)
 		return;
 
-	this->fRotation = rot;
+	fRotation = rot;
 
-	if (this->fRotation >= 360) this->fRotation -= 360;
-	if (this->fRotation < 0) this->fRotation += 360;
+	if (fRotation >= 360)
+		fRotation -= 360;
 
-	this->bTransformationChanged = TRUE;
+	if (fRotation < 0)
+		fRotation += 360;
+
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::AddRotation(f32 rot)
@@ -260,60 +264,62 @@ INLINE void ITransformable2D::AddRotation(f32 rot)
 	if (rot == 0)
 		return;
 
-	this->fRotation += rot;
+	fRotation += rot;
 
-	if (this->fRotation >= 360) this->fRotation -= 360;
-	if (this->fRotation < 0) this->fRotation += 360;
+	if (fRotation >= 360)
+		fRotation -= 360;
 
-	this->bTransformationChanged = TRUE;
+	if (fRotation < 0)
+		fRotation += 360;
+
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::SetScaleX(f32 scaleX)
 {
-	if (this->fScaleX == scaleX)
+	if (ptScale.x == scaleX)
 		return;
 
-	this->fScaleX = scaleX;
-	this->bTransformationChanged = TRUE;
+	ptScale.x = scaleX;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::SetScaleY(f32 scaleY)
 {
-	if (this->fScaleY == scaleY)
+	if (ptScale.y == scaleY)
 		return;
 
-	this->fScaleY = scaleY;
-	this->bTransformationChanged = TRUE;
+	ptScale.y = scaleY;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::SetScale(f32 scale)
 {
-	if (this->fScaleX == scale && this->fScaleY == scale)
+	if (ptScale.x == scale && ptScale.y == scale)
 		return;
 
-	this->fScaleX = scale;
-	this->fScaleY = scale;
-	this->bTransformationChanged = TRUE;
+	ptScale.x = scale;
+	ptScale.y = scale;
+	bTransformationChanged = TRUE;
 }
 
-INLINE void ITransformable2D::SetScale(const Point<f32> &scale)
+INLINE void ITransformable2D::SetScale(const Point2f &scale)
 {
-	if (this->fScaleX == scale.x && this->fScaleY == scale.y)
+	if (ptScale == scale)
 		return;
 
-	this->fScaleX = scale.x;
-	this->fScaleY = scale.y;
-	this->bTransformationChanged = TRUE;
+	ptScale = scale;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::SetScale(f32 scaleX, f32 scaleY)
 {
-	if (this->fScaleX == scaleX && this->fScaleY == scaleY)
+	if (ptScale.x == scaleX && ptScale.y == scaleY)
 		return;
 
-	this->fScaleX = scaleX;
-	this->fScaleY = scaleY;
-	this->bTransformationChanged = TRUE;
+	ptScale.x = scaleX;
+	ptScale.y = scaleY;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::AddScaleX(f32 scaleX)
@@ -321,8 +327,8 @@ INLINE void ITransformable2D::AddScaleX(f32 scaleX)
 	if (0.0f == scaleX)
 		return;
 
-	this->fScaleX += scaleX;
-	this->bTransformationChanged = TRUE;
+	ptScale.x += scaleX;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::AddScaleY(f32 scaleY)
@@ -330,8 +336,8 @@ INLINE void ITransformable2D::AddScaleY(f32 scaleY)
 	if (0.0f == scaleY)
 		return;
 
-	this->fScaleY += scaleY;
-	this->bTransformationChanged = TRUE;
+	ptScale.y += scaleY;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::AddScale(f32 scaleX, f32 scaleY)
@@ -339,9 +345,9 @@ INLINE void ITransformable2D::AddScale(f32 scaleX, f32 scaleY)
 	if (0.0f == scaleX && 0.0f == scaleY)
 		return;
 
-	this->fScaleX += scaleX;
-	this->fScaleY += scaleY;
-	this->bTransformationChanged = TRUE;
+	ptScale.x += scaleX;
+	ptScale.y += scaleY;
+	bTransformationChanged = TRUE;
 }
 
 INLINE void ITransformable2D::AddScale(f32 scale)
@@ -349,19 +355,19 @@ INLINE void ITransformable2D::AddScale(f32 scale)
 	if (0.0f == scale)
 		return;
 
-	this->fScaleX += scale;
-	this->fScaleY += scale;
-	this->bTransformationChanged = TRUE;
+	ptScale.x += scale;
+	ptScale.y += scale;
+	bTransformationChanged = TRUE;
 }
 
-INLINE void ITransformable2D::AddScale(const Point<f32> &scale)
+INLINE void ITransformable2D::AddScale(const Point2f &scale)
 {
 	if (0.0f == scale.x && 0.0f == scale.y)
 		return;
 
-	this->fScaleX += scale.x;
-	this->fScaleY += scale.y;
-	this->bTransformationChanged = TRUE;
+	ptScale.x += scale.x;
+	ptScale.y += scale.y;
+	bTransformationChanged = TRUE;
 }
 
 INLINE f32 ITransformable2D::GetRotation() const
@@ -370,7 +376,7 @@ INLINE f32 ITransformable2D::GetRotation() const
 	if (pParent)
 		r = pParent->GetRotation();
 
-	return r + this->fRotation;
+	return r + fRotation;
 }
 
 INLINE f32 ITransformable2D::GetScaleX() const
@@ -379,7 +385,7 @@ INLINE f32 ITransformable2D::GetScaleX() const
 	if (pParent)
 		s = pParent->GetScaleX();
 
-	return s * this->fScaleX;
+	return s * ptScale.x;
 }
 
 INLINE f32 ITransformable2D::GetScaleY() const
@@ -388,17 +394,17 @@ INLINE f32 ITransformable2D::GetScaleY() const
 	if (pParent)
 		s = pParent->GetScaleY();
 
-	return s * this->fScaleY;
+	return s * ptScale.y;
 }
 
 INLINE f32 ITransformable2D::GetWidth() const
 {
-	return this->fWidth;
+	return fWidth * Number::Abs(this->GetScaleX());
 }
 
 INLINE f32 ITransformable2D::GetHeight() const
 {
-	return this->fHeight;
+	return fHeight * Number::Abs(this->GetScaleY());
 }
 
 INLINE f32 ITransformable2D::GetX() const
@@ -407,7 +413,7 @@ INLINE f32 ITransformable2D::GetX() const
 	if (pParent)
 		x = pParent->GetX();
 
-	return x + this->ptPos.x;
+	return x + ptPos.x;
 }
 
 INLINE f32 ITransformable2D::GetY() const
@@ -416,25 +422,16 @@ INLINE f32 ITransformable2D::GetY() const
 	if (pParent)
 		y = pParent->GetY();
 
-	return y + this->ptPos.y;
+	return y + ptPos.y;
 }
 
-INLINE Point<f32> ITransformable2D::GetPosition() const
+INLINE Point2f ITransformable2D::GetPosition() const
 {
-	Point<f32> p(0.0f, 0.0f);
+	Point2f p(0.0f, 0.0f);
 	if (pParent)
 		p = pParent->GetPosition();
 
-	return (this->ptPos + p);
-}
-
-INLINE u32 ITransformable2D::GetPriority() const
-{
-	u32 p = 0;
-	if (pParent)
-		p = pParent->GetPriority();
-
-	return p + this->iPriority;
+	return (ptPos + p);
 }
 
 INLINE f32 ITransformable2D::GetLocalX() const
@@ -443,7 +440,7 @@ INLINE f32 ITransformable2D::GetLocalX() const
 	if (pParent)
 		x = pParent->GetLocalX();
 
-	return x + this->ptLocalPos.x;
+	return x + ptLocalPos.x;
 }
 
 INLINE f32 ITransformable2D::GetLocalY() const
@@ -452,33 +449,33 @@ INLINE f32 ITransformable2D::GetLocalY() const
 	if (pParent)
 		y = pParent->GetLocalY();
 
-	return y + this->ptLocalPos.y;
+	return y + ptLocalPos.y;
 }
 
-INLINE Point<f32> ITransformable2D::GetLocal() const
+INLINE Point2f ITransformable2D::GetLocal() const
 {
-	Point<f32> p(0.0f, 0.0f);
+	Point2f p(0.0f, 0.0f);
 	if (pParent)
 		p = pParent->GetLocal();
 
-	return (this->ptLocalPos + p);
+	return (ptLocalPos + p);
 }
 
-INLINE BOOL ITransformable2D::ContainsPoint(f32 x, f32 y)
+INLINE BOOL ITransformable2D::ContainsPoint(f32 x, f32 y) const
 {
-	if (x > (GetX() + GetWidth()))
+	if (x > (this->GetX() + this->GetWidth()))
 	{
 		return FALSE;
 	}
-	else if	(x < GetX())
+	else if	(x < this->GetX())
 	{
 		return FALSE;
 	}
-	if (y > (GetY() + GetHeight()))
+	if (y > (this->GetY() + this->GetHeight()))
 	{
 		return FALSE;
 	}
-	else if	(y < GetY())
+	else if	(y < this->GetY())
 	{
 		return FALSE;
 	}
@@ -486,9 +483,24 @@ INLINE BOOL ITransformable2D::ContainsPoint(f32 x, f32 y)
 	return TRUE;
 }
 
-INLINE BOOL ITransformable2D::ContainsPoint(const Point<f32> &pos)
+INLINE BOOL ITransformable2D::ContainsPoint(const Point2f &pos) const
 {
 	return this->ContainsPoint(pos.x, pos.y);
+}
+
+INLINE void ITransformable2D::SetPriority(u32 prio)
+{
+	iPriority = prio;
+}
+
+INLINE u32 ITransformable2D::GetPriority() const
+{
+	u32 prio = iPriority;
+
+	if (pParent)
+		prio += pParent->GetPriority();
+
+	return prio;
 }
 
 INLINE void ITransformable2D::SetParent(ITransformable2D *parent)

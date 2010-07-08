@@ -244,14 +244,10 @@ BOOL Screen::Shutdown()
 	return r;
 }
 
-INLINE BOOL Screen::Update(f32 dt)
+INLINE void Screen::Update()
 {
-	if (!IScreen::Update(dt))
-		return FALSE;
-
+	//IScreen::Update(); // abstract
 	this->pScene->update();
-
-	return TRUE;
 }
 
 INLINE void Screen::FadeOut()

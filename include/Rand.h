@@ -59,10 +59,6 @@ class SEED_CORE_API Rand
 		u32 iSeed;
 };
 
-//extern "C" {
-//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Rand);
-//}
-
 #define pRand Rand::GetInstance()
 
 } // namespace

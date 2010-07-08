@@ -60,7 +60,6 @@ class Screen : public IScreen
 		virtual void FadeIn();
 		virtual u32 GetHeight() const;
 		virtual u32 GetWidth() const;
-		virtual void SetRenderer2D(IRenderer2D *renderer);
 		virtual void CancelFade();
 
 		// IModule

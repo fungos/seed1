@@ -268,11 +268,6 @@ void Screen::ApplyFade()
 	glEnable(GL_TEXTURE_2D);
 }
 
-void Screen::SetRenderer2D(IRenderer2D *renderer)
-{
-	this->pRenderer = renderer;
-}
-
 INLINE u32 Screen::GetHeight() const
 {
 	return static_cast<u32>(iModeHeight);

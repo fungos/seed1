@@ -29,30 +29,31 @@
  **
  *****************************************************************************/
 
-/*! \file IImage.h
+/*! \file ITexture.h
 	\author	Danny Angelo Carminati Grein
-	\brief Defines the Image class interface
+	\brief Defines the Texture class interface
 */
 
-#ifndef __IIMAGE_H__
-#define __IIMAGE_H__
+#ifndef __ITEXTURE_H__
+#define __ITEXTURE_H__
 
 #include "Defines.h"
-#include "IResource.h"
+#include "interface/IResource.h"
 #include "MemoryManager.h"
 #include "Enum.h"
+#include "File.h"
 
 namespace Seed {
 
 /// ITexture
 /**
-Base texture class. This IResource must not be instanciable. It has basic information about the texture image.
+Base texture class. This IResource must not be instanciable. It has basic information about the texture.
 */
-class SEED_CORE_API IImage : public IResource
+class SEED_CORE_API ITexture : public IResource
 {
 	public:
-		IImage();
-		virtual ~IImage();
+		ITexture();
+		virtual ~ITexture();
 
 		/// Returns the texture bits data.
 		virtual const void *GetData() const;
@@ -78,10 +79,10 @@ class SEED_CORE_API IImage : public IResource
 		/// Gets the full atlas height in pixels.
 		virtual u32 GetAtlasHeightInPixel() const;
 
-		/// Gets the texture image width normalized (0.0f - 1.0f).
+		/// Gets the texture width normalized (0.0f - 1.0f).
 		virtual f32 GetWidth() const;
 
-		/// Gets the texture image height normalized (0.0f - 1.0f).
+		/// Gets the texture height normalized (0.0f - 1.0f).
 		virtual f32 GetHeight() const;
 
 		/// Specify a filtering to be used with this texture.
@@ -94,6 +95,16 @@ class SEED_CORE_API IImage : public IResource
 		*/
 		virtual void SetFilter(eTextureFilterType type, eTextureFilter filter);
 
+		virtual eTextureFilter GetFilter(eTextureFilterType type) const;
+
+		virtual File *GetFile();
+		virtual u32 GetBytesPerPixel() const;
+		virtual void *GetTextureName() const;
+
+		/// Close/free RAM texture data without unloading VRAM texture.
+		virtual void Close();
+		virtual void Reset();
+
 		// IResource
 		virtual BOOL Unload();
 		virtual BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool);
@@ -101,29 +112,30 @@ class SEED_CORE_API IImage : public IResource
 		/// Create a texture using a pre-allocated buffer.
 		/**
 		Create a texture using a pre-allocated buffer provided by the user, the
-		Image class won't deallocate it uppon Unloading, so keep sure to clean your
+		Texture class won't deallocate it uppon Unloading, so keep sure to clean your
 		buffers when not needed anymore. And the same way, keep sure that the buffer
-		will exist while Image exists.
+		will exist while texture exists.
 
 		The buffer MUST BE 32bits aligned and each scanline must be 32bits aligned (stride, pitch)
 
-		\param width Width of the image
-		\param height Height of the image
-		\param buffer Buffer to image pixels
+		\param width Width of the texture
+		\param height Height of the texture
+		\param buffer Buffer to texture pixels
 		\param pool Pointer to IMemoryPool to use when allocating this object
 		*/
-		virtual BOOL Load(u32 width, u32 height, PIXEL *buffer, IMemoryPool *pool = pDefaultPool);
+		virtual BOOL Load(u32 width, u32 height, PIXEL *buffer, u32 atlasWidth = 0, u32 atlasHeight = 0, IMemoryPool *pool = pDefaultPool);
 
-		/// Update the internal state of a dynamic texture (texture created by the user)
+		/// Update the internal state of a dynamic texture with a new buffer (texture created by the user)
 		/**
 		This method should be called as the user finishes its texture manipulation.
 		This is a really expensive method that will keep the internal state of the texture usable by
 		the underlaying system.
-		In OpenGL it will re-upload the texture to vga and in Nintendo Wii it should swizzle the texture.
-		By using dynamic textures, the Seed will keep a internal buffer that it will use to process the user
-		(pointer) buffer, so be sure to keep your buffer alive until this texture is not needed.
+		In OpenGL/DX it will re-upload the texture to vga and in Nintendo Wii it should swizzle the texture.
+		By using dynamic textures, the Seed MAY keep a internal buffer or pointer to your buffer that will 
+		be used, so be sure to keep your buffer alive until this texture is not needed.
+		Keep the Width and Height unchanged, otherwise you must do a Load again.
 		*/
-		virtual void Update();
+		virtual void Update(PIXEL *buffer);
 
 		// IObject
 		virtual int GetObjectType() const;
@@ -132,6 +144,8 @@ class SEED_CORE_API IImage : public IResource
 		SEED_DISABLE_INSTANCING;
 
 	protected:
+		File	stFile;
+
 		eTextureFilter		nMinFilter;
 		eTextureFilter		nMagFilter;
 
@@ -142,9 +156,9 @@ class SEED_CORE_API IImage : public IResource
 		f32		fHeight;
 
 	private:
-		SEED_DISABLE_COPY(IImage);
+		SEED_DISABLE_COPY(ITexture);
 };
 
 } // namespace
 
-#endif // __IIMAGE_H__
+#endif // __ITEXTURE_H__

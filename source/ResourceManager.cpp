@@ -117,6 +117,7 @@ IResource *ResourceManager::Get(const char *filename, Seed::eObjectType resource
 	}
 	else
 	{
+		// TODO: check if we need to do a sAquire here... something is strange here.
 		res = mapResources[filename];
 	}
 

@@ -37,8 +37,6 @@
 #ifndef __MUTEX_H__
 #define __MUTEX_H__
 
-#include "Config.h"
-
 #if defined(_WII_)
 	#include "platform/wii/WiiMutex.h"
 	using namespace Seed::WII;

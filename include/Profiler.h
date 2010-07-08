@@ -32,6 +32,7 @@
 #ifndef __PROFILER_H__
 #define __PROFILER_H__
 
+#if defined(SEED_ENABLE_PROFILER)
 #include "Defines.h"
 #include <map>
 #include <stack>
@@ -40,14 +41,15 @@
 #define SEED_FUNCTION_PROFILER					ProfileContext _ctx_func(__FUNCTION__);
 #define SEED_BEGIN_REGION_PROFILER(name, str)	ProfileContext _c##name(str, Profiler::regionProfilerInstance);
 #define SEED_END_REGION_PROFILER(name)			_c##name.Terminate();
+#define ProfilerReportPrint		Profiler::funcProfilerInstance->Dump(); Profiler::regionProfilerInstance->Dump();
 
 class ProfileContext;
 
 struct SEED_CORE_API ProfilerEntry
 {
-	double time;
-	double maxtime;
-	int calls;
+	u64 time;
+	u64 maxtime;
+	u32 calls;
 
 	ProfilerEntry()
 		: time(0)
@@ -67,8 +69,8 @@ class SEED_CORE_API Profiler
 		Profiler(const char *name);
 		~Profiler();
 
-		void AddSlice(const char *func, double time);
-		void AddTotal(const char *func, double time);
+		void AddSlice(const char *func, u64 time);
+		void AddTotal(const char *func, u64 time);
 		void Dump();
 		void Reset();
 
@@ -111,5 +113,13 @@ class SEED_CORE_API ProfileContext
 
 		Profiler *pProf;
 };
+#else
 
-#endif
+#define SEED_FUNCTION_PROFILER
+#define SEED_BEGIN_REGION_PROFILER(name, str)
+#define SEED_END_REGION_PROFILER(name)
+#define ProfilerReportPrint
+
+#endif // SEED_ENABLE_PROFILER
+
+#endif //__PROFILER_H__

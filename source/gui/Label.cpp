@@ -40,24 +40,19 @@
 #include "Log.h"
 #include "Rect.h"
 #include "gui/Label.h"
-#include "Renderer2D.h"
+#include "ViewManager.h"
 #include "Screen.h"
+#include "RendererDevice.h"
 
 #define TAG		"[GUI::Label] "
 
-#if DEBUG_ENABLE_RECT_LABEL == 1
-#define DEBUG_LABEL_RECT DEBUG_RECT(this->GetX(), this->GetY(), this->GetWidth(), this->GetHeight(), DEBUG_RECT_COLOR_LABEL);
-#else
-#define DEBUG_LABEL_RECT
-#endif
-
 namespace Seed {
-
 
 Label::Label()
 	: iAlign(Seed::HorizontalAlignLeft)
-	, iColor(0)
-	, bAutoAdjust(FALSE)
+	, bAutoAdjust(TRUE)
+	, fTextScaleX(1.0f)
+	, fTextScaleY(1.0f)
 	, cText()
 	, pFont(NULL)
 {
@@ -74,36 +69,34 @@ Label::~Label()
 
 void Label::Reset()
 {
-	this->iId				= 0;
-	this->iColor			= 0;
-	this->eBlendOperation	= Seed::BlendNone;
+	iId = 0;
+	eBlendOperation	= BlendNone;
 
 	IWidget::Reset();
 
-	this->bVisible			= TRUE;
-	this->bChanged			= TRUE;
-	this->bTransformationChanged = TRUE;
-	this->bDisabled			= TRUE;
-	this->bAutoAdjust		= TRUE;
-	this->iAlign			= HorizontalAlignLeft;
+	bVisible = TRUE;
+	bChanged = TRUE;
+	bTransformationChanged = TRUE;
+	bDisabled = TRUE;
+	bAutoAdjust = TRUE;
+	iAlign = HorizontalAlignLeft;
 
-	this->cText.Reset();
+	cText.Reset();
 }
 
 void Label::ReleaseText()
 {
-	this->iId				= 0;
-	this->iColor			= 0;
-	this->eBlendOperation	= Seed::BlendNone;
+	iId = 0;
+	eBlendOperation = Seed::BlendNone;
 
-	this->bVisible			= TRUE;
-	this->bChanged			= TRUE;
-	this->bTransformationChanged = TRUE;
-	this->bDisabled			= TRUE;
-	this->bAutoAdjust		= TRUE;
-	this->iAlign			= HorizontalAlignLeft;
+	bVisible = TRUE;
+	bChanged = TRUE;
+	bTransformationChanged = TRUE;
+	bDisabled = TRUE;
+	bAutoAdjust = TRUE;
+	iAlign = HorizontalAlignLeft;
 
-	this->cText.Reset();
+	cText.Reset();
 }
 
 void Label::Update(f32 dt)
@@ -123,22 +116,17 @@ void Label::Update(f32 dt)
 	}
 }
 
-void Label::Render(f32 delta)
+void Label::Render()
 {
-	UNUSED(delta);
-
 	cText.SetBlending(eBlendOperation);
-	cText.SetColor(iColor);
+	cText.SetColor(iColor.pixel);
 	cText.SetScale(GetScaleX(), GetScaleY());
+	cText.SetScale(fTextScaleX, fTextScaleY);
+	cText.SetPosition(this->GetX(), this->GetY());
+	cText.SetLocalPosition(this->GetLocalX(), this->GetLocalY());
 
 	switch (iAlign)
 	{
-		case HorizontalAlignLeft:
-		{
-			cText.SetPosition(this->GetX(), this->GetY());
-		}
-		break;
-
 		case HorizontalAlignRight:
 		{
 			cText.SetPosition(this->GetX() + ((this->GetWidth() - cText.GetWidth())), this->GetY());
@@ -147,88 +135,163 @@ void Label::Render(f32 delta)
 
 		case HorizontalAlignCenter:
 		{
-			this->cText.SetPosition(this->GetX() + ((this->GetWidth() - cText.GetWidth()) / 2.0f), this->GetY());
+			cText.SetPosition(this->GetX() + ((this->GetWidth() - cText.GetWidth()) / 2.0f), this->GetY());
 		}
 		break;
 
 		case HorizontalAlignNone:
+		case HorizontalAlignLeft:
 		default:
 		break;
 	}
 
 	cText.Draw();
 
-	DEBUG_LABEL_RECT;
+	if (pConfiguration->bDebugText)
+		pRendererDevice->DrawRect(this->GetX(), this->GetY(), this->GetWidth(), this->GetHeight(), PIXEL_COLOR(0, 255, 0, 255));
+}
+
+void Label::SetScaleX(f32 scaleX)
+{
+	this->SetScale(scaleX, this->GetScaleY());
+}
+
+void Label::SetScaleY(f32 scaleY)
+{
+	this->SetScale(this->GetScaleX(), scaleY);
+}
+
+void Label::SetScale(f32 scale)
+{
+	this->SetScale(scale, scale);
+}
+
+void Label::SetScale(f32 scaleX, f32 scaleY)
+{
+	fTextScaleX = scaleX;
+	fTextScaleY = scaleY;
+
+	cText.SetScale(scaleX, scaleY);
+
+	if (bAutoAdjust)
+	{
+		if (this->GetWidth() != cText.GetWidth())
+			this->SetWidth(cText.GetWidth());
+	}
+
+	if (this->GetHeight() != cText.GetHeight())
+		this->SetHeight(cText.GetHeight());
+
+	bChanged = TRUE;
+}
+
+void Label::SetScale(const Point<f32> &scale)
+{
+	this->SetScale(scale.x, scale.y);
+}
+
+void Label::AddScaleX(f32 scaleX)
+{
+	this->SetScale(this->GetScaleX() + scaleX, this->GetScaleY());
+}
+
+void Label::AddScaleY(f32 scaleY)
+{
+	this->SetScale(this->GetScaleX(), this->GetScaleY() + scaleY);
+}
+
+void Label::AddScale(f32 scale)
+{
+	this->SetScale(this->GetScaleX() + scale, this->GetScaleY() + scale);
+}
+
+void Label::AddScale(f32 scaleX, f32 scaleY)
+{
+	this->SetScale(this->GetScaleX() + scaleX, this->GetScaleY() + scaleY);
+}
+
+void Label::AddScale(const Point<f32> &scale)
+{
+	this->SetScale(this->GetScaleX() + scale.x, this->GetScaleY() + scale.y);
+}
+
+INLINE f32 Label::GetScaleX() const
+{
+	return cText.GetScaleX();
+}
+
+INLINE f32 Label::GetScaleY() const
+{
+	return cText.GetScaleY();
 }
 
 INLINE void Label::SetAutoAdjust(BOOL b)
 {
-	this->bAutoAdjust = b;
-	this->bChanged = TRUE;
+	bAutoAdjust = b;
+	bChanged = TRUE;
 }
 
 INLINE BOOL Label::IsAutoAdjust() const
 {
-	return this->bAutoAdjust;
+	return bAutoAdjust;
 }
 
 INLINE void Label::SetWidth(f32 w)
 {
-	this->bAutoAdjust = FALSE;
+	bAutoAdjust = FALSE;
 	IWidget::SetWidth(w);
-	this->bChanged = TRUE;
+	bChanged = TRUE;
 }
 
 INLINE void Label::SetAlignment(eHorizontalAlignment align)
 {
-	this->iAlign = align;
-	this->bChanged = TRUE;
+	iAlign = align;
+	bAutoAdjust = FALSE;
+	bChanged = TRUE;
 }
 
 INLINE void Label::SetText(const WideString str)
 {
-	this->cText.SetText(str);
+	cText.SetText(str);
 
 	this->SetHeight(cText.GetHeight());
-	if (!this->GetWidth() || this->bAutoAdjust)
+	if (!this->GetWidth() || bAutoAdjust)
 		IWidget::SetWidth(cText.GetWidth());
 
-	this->bChanged = TRUE;
+	bChanged = TRUE;
 }
 
 INLINE void Label::SetText(const String &str)
 {
-	this->cText.SetText(str);
+	cText.SetText(str);
 
 	this->SetHeight(cText.GetHeight());
-	if (!this->GetWidth() || this->bAutoAdjust)
+	if (!this->GetWidth() || bAutoAdjust)
 		IWidget::SetWidth(cText.GetWidth());
 
-	this->bChanged = TRUE;
+	bChanged = TRUE;
 }
 
 INLINE void Label::SetFont(const Font *font)
 {
-	this->pFont = font;
-	this->cText.SetFont(const_cast<Font*>(pFont));
+	pFont = font;
+	cText.SetFont(const_cast<Font*>(pFont));
 
 	this->SetHeight(cText.GetHeight());
-	if (!this->GetWidth() || this->bAutoAdjust)
+	if (!this->GetWidth() || bAutoAdjust)
 		IWidget::SetWidth(cText.GetWidth());
 
-	this->bChanged = TRUE;
+	bChanged = TRUE;
 }
 
-INLINE void Label::SetColor(u8 r, u8 g, u8 b, u8 a)
+INLINE f32 Label::GetTextWidth()
 {
-	this->iColor = PIXEL_COLOR(r, g, b, a);
-	this->bChanged = TRUE;
-}
+	f32 width = 0.0f;
+	u32 idx = 0;
+	if (pFont && this->GetWidth())
+		cText.GetLengthNonBreakMaxWidth(&idx, 1.0f, &width);
 
-INLINE void Label::SetColor(PIXEL px)
-{
-	this->iColor = px;
-	this->bChanged = TRUE;
+	return width;
 }
 
 INLINE const char *Label::GetObjectName() const
@@ -240,16 +303,5 @@ INLINE int Label::GetObjectType() const
 {
 	return Seed::ObjectGuiLabel;
 }
-
-INLINE f32 Label::GetTextWidth()
-{
-	f32 width = 0.0f;
-	u32 idx = 0;
-	if (pFont && this->GetWidth())
-		this->cText.GetLengthNonBreakMaxWidth(&idx, 1.0f, &width);
-
-	return width;
-}
-
 
 } // namespace

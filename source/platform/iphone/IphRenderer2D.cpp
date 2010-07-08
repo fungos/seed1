@@ -42,7 +42,7 @@
 #include "Renderer.h"
 #include "Renderer2D.h"
 #include "Sprite.h"
-#include "Image.h"
+#include "Texture.h"
 #include "IphoneView.h"
 
 #include <math.h>

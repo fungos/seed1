@@ -42,7 +42,7 @@
 #include "Array.h"
 #include "Singleton.h"
 
-#define MAX_PARTICLE_EMITTERS	128
+#define MAX_PARTICLE_EMITTERS	256
 
 namespace Seed {
 

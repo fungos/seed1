@@ -67,6 +67,16 @@ class SEED_CORE_API Number
 
 			return intPart + 1;
 		}
+
+		static f32 Abs(f32 number)
+		{
+			return number >= 0.0f ? number : -number;
+		}
+
+		static int Abs(int number)
+		{
+			return number >= 0 ? number: -number;
+		}
 };
 
 } // namespace

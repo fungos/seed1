@@ -61,6 +61,8 @@ INLINE BOOL IGameApp::Shutdown()
 	pDictionary->Reset();
 	cResourceManager.Reset();
 
+	LeakReportPrint;
+
 	return TRUE;
 }
 

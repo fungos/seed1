@@ -73,10 +73,6 @@ class SEED_CORE_API FileSystem : public IFileSystem
 		u32 iLastLength;
 };
 
-//extern "C" {
-//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(FileSystem);
-//}
-
 #define pFileSystem FileSystem::GetInstance()
 
 }} // namespace

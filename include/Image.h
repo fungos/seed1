@@ -31,32 +31,68 @@
 
 /*! \file Image.h
 	\author	Danny Angelo Carminati Grein
-	\brief Include selector
+	\brief Image
 */
 
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
-#include "Config.h"
+#include "interface/ISceneObject.h"
+#include "SeedInit.h"
+#include "Vertex.h"
 
-#if defined(_WII_)
-	#include "platform/wii/WiiImage.h"
-	using namespace Seed::WII;
-#endif // _WII_
+namespace Seed {
 
-#if defined(_SDL_)
-	#include "platform/sdl/SdlImage.h"
-	using namespace Seed::SDL;
-#endif // _SDL_
+class ITexture;
 
-#if defined(_IPHONE_)
-	#include "platform/iphone/IphImage.h"
-	using namespace Seed::iPhone;
-#endif // _IPHONE_
+class SEED_CORE_API Image : public ISceneObject
+{
+	public:
+		Image();
+		virtual ~Image();
 
-#if defined(_QT_)
-	#include "platform/qt/QtImage.h"
-	using namespace Seed::QT;
-#endif // _QT_
+		virtual BOOL Load(const char *filename, IMemoryPool *pool);
+		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual BOOL Load(ITexture *texture);
+		virtual BOOL Unload();
+
+		// IRenderable
+		virtual void Update(f32 delta);
+		virtual void Render();
+
+		// IObject
+		virtual int GetObjectType() const;
+		virtual const char *GetObjectName() const;
+
+	protected:
+		SEED_DISABLE_COPY(Image);
+
+		ITexture		*pTexture;
+		ResourceManager *pRes;
+		IMemoryPool		*pPool;
+		const char		*pFilename;
+
+		f32 fAspectHalfWidth; // real half width
+		f32 fAspectHalfHeight; // real half height
+		f32 fAspectWidth; // real width
+		f32 fAspectHeight; // real height
+
+		// Frame related width and heigth used for rendering only
+		s32 iHalfWidth; // half width in pixel
+		s32 iHalfHeight; // half height in pixel
+		u32 iWidth; // width in pixel
+		u32 iHeight; // height in pixel
+
+		f32 fTexS0;
+		f32 fTexS1;
+		f32 fTexT0;
+		f32 fTexT1;
+
+		sVertex vert[4];
+
+		BOOL bDynamic;
+};
+
+} // namespace
 
 #endif // __IMAGE_H__

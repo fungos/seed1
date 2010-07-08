@@ -203,7 +203,7 @@ THIS IS A HACK for Wii To use tpl as a container of images
 	#endif // SEED_USE_MULTIPLE_IMAGES_PER_ANIMATION
 #endif // _WII_
 				// Force frame caching
-				IResource *obj = res->Get(_F(frame->iFileId), Seed::ObjectImage, pool);
+				IResource *obj = res->Get(_F(frame->iFileId), Seed::ObjectTexture, pool);
 				sRelease(obj); // any garbage collect after this will wipe this object from cache
 
 				READ_STRUCT(frame, ISprite::Frame, ptr);

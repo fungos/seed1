@@ -43,7 +43,9 @@
 
 #include "Thread.h"
 #include "Mutex.h"
-#include "interface/IRenderable.h"
+#include "Image.h"
+#include "Texture.h"
+#include "interface/ISceneObject.h"
 #include <oggplay/oggplay.h>
 
 /* FIXME: Somebody please create a Semaphore class! */
@@ -83,7 +85,16 @@
 */
 #endif // _SDL_
 #elif defined(WIN32)
-	#include <windows.h>
+#pragma push_macro("Delete")
+#pragma push_macro("BOOL")
+#pragma push_macro("SIZE_T")
+#undef Delete
+#undef BOOL
+#undef SIZE_T
+#include <windows.h>
+#pragma pop_macro("SIZE_T")
+#pragma pop_macro("BOOL")
+#pragma pop_macro("Delete")
 	#define SEM_CREATE(p,s) ((p = CreateSemaphore(NULL, (long)(s), (long)(s), NULL)) == 0)
 	#define SEM_SIGNAL(p)   (!ReleaseSemaphore(p, 1, NULL))
 	#define SEM_WAIT(p)     WaitForSingleObject(p, INFINITE)
@@ -115,7 +126,7 @@
 
 namespace Seed {
 
-class SEED_CORE_API Theora : /*public IVideo,*/ public IRenderable, public Thread
+class SEED_CORE_API Theora : public Thread, public Image /*, public IVideo*/
 {
 	public:
 		Theora();
@@ -123,7 +134,8 @@ class SEED_CORE_API Theora : /*public IVideo,*/ public IRenderable, public Threa
 
 		virtual void Rewind();
 
-		virtual BOOL Load(const char *filename);
+		virtual BOOL Load(const char *filename, IMemoryPool *pool);
+		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual void Reset();
 		virtual BOOL Unload();
 
@@ -146,8 +158,8 @@ class SEED_CORE_API Theora : /*public IVideo,*/ public IRenderable, public Threa
 		virtual void PlayToFrame(u32 frame);
 
 		// IRenderable
-		virtual void Render(f32 delta);
 		virtual void Update(f32 delta);
+		virtual void Render();
 
 		// Thread
 		virtual BOOL Run();
@@ -197,9 +209,8 @@ class SEED_CORE_API Theora : /*public IVideo,*/ public IRenderable, public Threa
 		BOOL		bTerminateThread;
 		semaphore	sem;
 
-		GLuint		iTextureId;
-		GLfloat		vertices[8];
-		GLfloat		coords[8];
+		Texture		cTexture;
+		//Image		cImage;
 };
 
 } // namespace

@@ -66,16 +66,6 @@ ISystem::~ISystem()
 {
 }
 
-INLINE void ISystem::SetApplicationTitle(const char *title)
-{
-	this->pStrAppName = title;
-}
-
-INLINE const char *ISystem::GetApplicationTitle() const
-{
-	return this->pStrAppName;
-}
-
 INLINE void ISystem::SetLanguage(Seed::eLanguage lang)
 {
 	if (this->nLanguage != lang)
@@ -129,16 +119,6 @@ INLINE void ISystem::EnableDefaultCursor(BOOL b)
 INLINE BOOL ISystem::IsDefaultCursorEnabled() const
 {
 	return bDefaultCursorEnabled;
-}
-
-INLINE void ISystem::SetApplicationDescription(const char *descr)
-{
-	this->pStrAppDescription = descr;
-}
-
-INLINE const char *ISystem::GetApplicationDescription() const
-{
-	return this->pStrAppDescription;
 }
 
 INLINE void ISystem::AddListener(IEventSystemListener *listener)

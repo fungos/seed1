@@ -36,7 +36,11 @@ namespace Seed {
 
 
 Configuration::Configuration()
-	: iVideoMode(0)
+	: bDebugSprite(FALSE)
+	, bDebugButton(FALSE)
+	, bDebugText(FALSE)
+	, bDebugContainer(FALSE)
+	, nVideoMode(Video_AutoDetect)
 	, iResolutionWidth(800)
 	, iResolutionHeight(600)
 	, pcWorkingDirectory(NULL)
@@ -47,6 +51,7 @@ Configuration::Configuration()
 	, pcDescription(NULL)
 	, iMemorySize(20 * 1024 * 1024)
 	, iPlatformSimulation(Seed::SimulateNothing)
+	, iRendererDeviceType(Seed::RendererDeviceOpenGL14)
 {
 }
 
@@ -54,70 +59,70 @@ Configuration::~Configuration()
 {
 }
 
-INLINE void Configuration::SetVideoMode(u32 videoMode)
+INLINE void Configuration::SetVideoMode(eVideoMode videoMode)
 {
-	this->iVideoMode = videoMode;
+	nVideoMode = videoMode;
 }
 
-INLINE u32 Configuration::GetVideoMode() const
+INLINE eVideoMode Configuration::GetVideoMode() const
 {
-	return this->iVideoMode;
+	return nVideoMode;
 }
-
+/*
 INLINE void Configuration::SetResolution(u32 width, u32 height)
 {
-	this->iResolutionWidth = width;
-	this->iResolutionHeight = height;
+	iResolutionWidth = width;
+	iResolutionHeight = height;
 }
-
+*/
 INLINE u32 Configuration::GetResolutionWidth() const
 {
-	return this->iResolutionWidth;
+	return iResolutionWidth;
 }
 
 INLINE u32 Configuration::GetResolutionHeight() const
 {
-	return this->iResolutionHeight;
+	return iResolutionHeight;
 }
 
 INLINE void Configuration::SetWorkingDirectory(const char *path)
 {
-	this->pcWorkingDirectory = path;
+	pcWorkingDirectory = path;
 }
 
 INLINE const char *Configuration::GetWorkingDirectory() const
 {
-	return this->pcWorkingDirectory;
+	return pcWorkingDirectory;
 }
 
 INLINE void Configuration::SetFrameRate(eSystemFrameRate frameRate)
 {
-	this->iFrameRate = frameRate;
+	iFrameRate = frameRate;
 }
 
 INLINE eSystemFrameRate Configuration::GetFrameRate() const
 {
-	return this->iFrameRate;
+	return iFrameRate;
 }
 
 INLINE void Configuration::SetApplicationTitle(const char *title)
 {
-	this->pcTitle = title;
+	pcTitle = title;
 }
 
 INLINE const char *Configuration::GetApplicationTitle() const
 {
-	return this->pcTitle;
+	return pcTitle;
 }
 
 INLINE void Configuration::SetApplicationDescription(const char *desc)
 {
-	this->pcDescription = desc;
+	pcDescription = desc;
 }
 
 INLINE const char *Configuration::GetApplicationDescription() const
 {
-	return this->pcDescription;
+	return pcDescription;
 }
 
 INLINE void Configuration::SetCanHaveMultipleInstances(BOOL enable)
@@ -142,12 +147,12 @@ INLINE BOOL Configuration::GetWarningMultipleInstances() const
 
 INLINE void Configuration::SetMemorySize(u32 memsize)
 {
-	this->iMemorySize = memsize;
+	iMemorySize = memsize;
 }
 
 INLINE u32 Configuration::GetMemorySize() const
 {
-	return this->iMemorySize;
+	return iMemorySize;
 }
 
 INLINE void Configuration::SetPlatformSimulation(ePlatformSimulation platform)
@@ -156,23 +161,23 @@ INLINE void Configuration::SetPlatformSimulation(ePlatformSimulation platform)
 	{
 		case SimulateWii:
 		{
-			this->iResolutionWidth = 480;
-			this->iResolutionHeight = 640;
-			this->iMemorySize = 20 * 1024 * 1024; // 22MB MEM1
+			iResolutionWidth = 480;
+			iResolutionHeight = 640;
+			iMemorySize = 20 * 1024 * 1024; // 22MB MEM1
 		}
 		break;
 
 		case SimulatePsp:
 		{
-			this->iResolutionWidth = 480;
-			this->iResolutionHeight = 272;
+			iResolutionWidth = 480;
+			iResolutionHeight = 272;
 		}
 		break;
 
 		case SimulateN900:
 		{
-			this->iResolutionWidth = 800;
-			this->iResolutionHeight = 480;
+			iResolutionWidth = 800;
+			iResolutionHeight = 480;
 		}
 
 		case SimulateNothing:
@@ -180,12 +185,22 @@ INLINE void Configuration::SetPlatformSimulation(ePlatformSimulation platform)
 		break;
 	}
 
-	this->iPlatformSimulation = platform;
+	iPlatformSimulation = platform;
 }
 
 INLINE ePlatformSimulation Configuration::GetPlatformSimulation() const
 {
-	return this->iPlatformSimulation;
+	return iPlatformSimulation;
+}
+
+INLINE void Configuration::SetRendererDeviceType(eRendererDeviceType deviceType)
+{
+	iRendererDeviceType = deviceType;
+}
+
+INLINE eRendererDeviceType Configuration::GetRendererDeviceType() const
+{
+	return iRendererDeviceType;
 }
 
 INLINE const char *Configuration::GetObjectName() const

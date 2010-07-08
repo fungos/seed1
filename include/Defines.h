@@ -47,7 +47,7 @@ http://www.unknownroad.com/rtfm/VisualStudio/warningC4251.html
 */
 #if defined(_MSC_VER)
 #pragma warning(disable:4127) // conditional expression is constant
-#pragma warning(disable:4201) // anonymous union
+#pragma warning(disable:4201) // nonstandard extension used : nameless struct/union
 #pragma warning(disable:4530)
 #pragma warning(disable:4996) // _CRT_SECURE_NO_WARNINGS
 #pragma warning(disable:4251) // stl + dll
@@ -132,6 +132,38 @@ http://www.unknownroad.com/rtfm/VisualStudio/warningC4251.html
 #define PIXEL_SET_G(px, g)		(((px) & (~LIB_PIXEL_G_MASK)) + (static_cast<u32>(g)<<PIXEL_G_SHIFT))
 #define PIXEL_SET_B(px, b)		(((px) & (~LIB_PIXEL_B_MASK)) + (static_cast<u32>(b)<<PIXEL_B_SHIFT))
 
+union uPixel
+{
+	PIXEL pixel;
+	struct vec
+	{
+		u8 c[4];
+	} pComponent;
+	struct _argb
+	{
+		u8 a;
+		u8 r;
+		u8 g;
+		u8 b;
+	} argb;
+	struct _rgba
+	{
+		u8 r;
+		u8 g;
+		u8 b;
+		u8 a;
+	} rgba;
+
+	uPixel(u8 R, u8 G, u8 B, u8 A)
+		: pixel(PIXEL_COLOR(R,G,B,A))
+	{
+	}
+
+	uPixel()
+		: pixel(0)
+	{
+	}
+};
 
 // Debugging
 #if defined(DEBUG)
@@ -260,11 +292,5 @@ typedef u16  WideChar;
 
 #define WideString 	u16*
 #define WideChar	u16
-
-#if defined(DEBUG)
-#define DEBUG_RECT(x, y, w, h, c) static_cast<Renderer2D *>(Seed::Private::pRenderer)->DrawRect(x, y, w, h, c);
-#else
-#define DEBUG_RECT(x, y, w, h, c)
-#endif
 
 #endif // __SEED_DEFINES_H__

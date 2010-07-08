@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -45,7 +45,9 @@
 namespace Seed {
 
 IWidget::IWidget()
-	: vListener()
+	: ISceneObject()
+	, IEventWidgetListener()
+	, vListener()
 	, iId(0)
 	, iStateStartTime(0)
 	, bDisabled(FALSE)
@@ -63,7 +65,8 @@ IWidget::IWidget()
 }
 
 IWidget::IWidget(u32 id, f32 w, f32 h, f32 x, f32 y)
-	: ITransformable2D()
+	: ISceneObject()
+	, IEventWidgetListener()
 	, vListener()
 	, iId(id)
 	, iStateStartTime(0)
@@ -203,7 +206,7 @@ void IWidget::AddListener(IEventWidgetListener *listener)
 
 INLINE void IWidget::SetVisible(BOOL b)
 {
-	ITransformable2D::SetVisible(b);
+	IRenderable::SetVisible(b);
 	if (!b)
 	{
 		this->iState = Seed::WidgetStateNone;
@@ -244,10 +247,11 @@ INLINE void IWidget::SendOnRollOver(const EventWidget *ev)
 	{
 		IEventWidgetListener *obj = (*it);
 		ASSERT_NULL(obj);
-
 		obj->OnWidgetRollOver(ev);
 		if (ev->IsConsumed())
+		{
 			break;
+		}
 	}
 }
 
@@ -262,7 +266,6 @@ INLINE void IWidget::SendOnRollOut(const EventWidget *ev)
 	{
 		IEventWidgetListener *obj = (*it);
 		ASSERT_NULL(obj);
-
 		obj->OnWidgetRollOut(ev);
 		if (ev->IsConsumed())
 			break;
@@ -280,7 +283,6 @@ INLINE void IWidget::SendOnPress(const EventWidget *ev)
 	{
 		IEventWidgetListener *obj = (*it);
 		ASSERT_NULL(obj);
-
 		obj->OnWidgetPress(ev);
 		if (ev->IsConsumed())
 			break;
@@ -298,7 +300,6 @@ INLINE void IWidget::SendOnDrag(const EventWidget *ev)
 	{
 		IEventWidgetListener *obj = (*it);
 		ASSERT_NULL(obj);
-
 		obj->OnWidgetDrag(ev);
 		if (ev->IsConsumed())
 			break;
@@ -319,7 +320,6 @@ INLINE void IWidget::SendOnDrop(const EventWidget *ev)
 
 		IEventWidgetListener *obj = (*it);
 		ASSERT_NULL(obj);
-
 		obj->OnWidgetDrop(ev);
 	}
 }
@@ -335,7 +335,6 @@ INLINE void IWidget::SendOnRelease(const EventWidget *ev)
 	{
 		IEventWidgetListener *obj = (*it);
 		ASSERT_NULL(obj);
-
 		obj->OnWidgetRelease(ev);
 		if (ev->IsConsumed())
 			break;
@@ -353,11 +352,20 @@ INLINE void IWidget::SendOnReleaseOut(const EventWidget *ev)
 	{
 		IEventWidgetListener *obj = (*it);
 		ASSERT_NULL(obj);
-
 		obj->OnWidgetReleaseOut(ev);
 		if (ev->IsConsumed())
 			break;
 	}
+}
+
+INLINE const char *IWidget::GetObjectName() const
+{
+	return "Widget";
+}
+
+INLINE int IWidget::GetObjectType() const
+{
+	return Seed::ObjectGuiWidget;
 }
 
 } // namespace

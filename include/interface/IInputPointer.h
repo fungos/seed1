@@ -60,6 +60,7 @@ class SEED_CORE_API IInputPointer
 		virtual BOOL IsReleased(u32 button, u16 joystick = 0) const;
 		virtual BOOL IsEnabled(u16 joystick = 0) const;
 
+		// GetX and GetY is based on screen coordinates. Do not use when using Viewports.
 		virtual f32 GetX(u16 joystick = 0) const = 0;
 		virtual f32 GetY(u16 joystick = 0) const = 0;
 

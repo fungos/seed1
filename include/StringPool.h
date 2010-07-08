@@ -130,7 +130,7 @@ Define buffers amount
 
 namespace Seed {
 
-template <int SIZE, int COUNT, typename T> struct SEED_CORE_API StringPool
+template <int SIZE, int COUNT, typename T> struct StringPool
 {
 	StringPool() {}
 	virtual ~StringPool() {}
@@ -161,7 +161,7 @@ template <int SIZE, int COUNT, typename T> struct SEED_CORE_API StringPool
 
 #define DEFINE_POOL(size)	StringPool<size, STRING_POOL_##size, T> _p##size; u32 iCurrentCount##size; u32 iTotalCount##size;
 
-template <typename T> class SEED_CORE_API StringPoolManager
+template <typename T> class StringPoolManager
 {
 	public:
 		StringPoolManager()

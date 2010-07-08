@@ -38,7 +38,6 @@
 #define __STATEMACHINE_H__
 
 #include "Defines.h"
-#include "Config.h"
 #include "Log.h"
 #include "interface/IEvent.h"
 #include <vector>

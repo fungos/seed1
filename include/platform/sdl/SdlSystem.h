@@ -52,12 +52,9 @@ class SEED_CORE_API System : public ISystem
 		virtual void GoToMenu();
 		virtual void Sleep();
 		virtual void OnHomeCalled();
-		virtual void WaitForRetrace(ISystem::eFrameRate rate);
-		virtual void SetFrameRate(ISystem::eFrameRate rate);
+		virtual void WaitForRetrace(eSystemFrameRate rate);
 		virtual void HangUp();
 		virtual void GoToDataManager();
-
-		virtual ISystem::eFrameRate GetFrameRate();
 
 		virtual BOOL IsShuttingDown() const;
 		virtual BOOL IsResetting() const;
@@ -89,7 +86,7 @@ class SEED_CORE_API System : public ISystem
 
 	private:
 		u32 		iRetraceCount;
-		eFrameRate 	iFrameRate;
+		eSystemFrameRate iFrameRate;
 		BOOL 		bShutdown;
 		BOOL		bSleeping;
 		BOOL		bDefaultCursorEnabled;

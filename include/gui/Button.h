@@ -73,7 +73,6 @@ class SEED_CORE_API Button : public IWidget, public IResource
 
 		virtual void Select();
 		virtual void Unselect();
-		virtual void Update(f32 delta);
 		virtual void SetDraggable(BOOL b);
 		virtual void SetDraggingPriority(u32 i);
 		virtual u32 GetDraggingPriority() const;
@@ -92,7 +91,8 @@ class SEED_CORE_API Button : public IWidget, public IResource
 		virtual eCollisionType GetCollisionType() const;
 
 		virtual void SetBlending(eBlendMode op);
-		virtual void SetColor(u8 r, u8 g, u8 b, u8 a);
+		virtual void SetColor(u32 r, u32 g, u32 b, u32 a);
+		virtual void SetColor(f32 r, f32 g, f32 b, f32 a);
 		virtual void SetColor(PIXEL color);
 
 		// IEventWidgetListener
@@ -140,6 +140,9 @@ class SEED_CORE_API Button : public IWidget, public IResource
 		virtual f32 GetLabelScaleX() const;
 		virtual f32 GetLabelScaleY() const;
 
+		virtual void SetLabelAutoUpdate(BOOL b);
+		virtual BOOL IsLabelAutoUpdate() const;
+
 		// Label
 		virtual void SetLabelHorizontalAlignment(eHorizontalAlignment align);
 		virtual void SetLabelVerticalAlignment(eVerticalAlignment align);
@@ -147,13 +150,13 @@ class SEED_CORE_API Button : public IWidget, public IResource
 		virtual void SetText(const WideString str);
 		virtual void SetText(const String &str);
 		virtual void SetLabelBlending(eBlendMode blending);
-		virtual void SetLabelColor(u8 r, u8 g, u8 b, u8 a);
+		virtual void SetLabelColor(u32 r, u32 g, u32 b, u32 a);
 		virtual void SetLabelColor(PIXEL px);
-		virtual void SetLabelPressColor(u8 r, u8 g, u8 b, u8 a);
+		virtual void SetLabelPressColor(u32 r, u32 g, u32 b, u32 a);
 		virtual void SetLabelPressColor(PIXEL px);
-		virtual void SetLabelHoverColor(u8 r, u8 g, u8 b, u8 a);
+		virtual void SetLabelHoverColor(u32 r, u32 g, u32 b, u32 a);
 		virtual void SetLabelHoverColor(PIXEL px);
-		virtual void SetLabelDisabledColor(u8 r, u8 g, u8 b, u8 a);
+		virtual void SetLabelDisabledColor(u32 r, u32 g, u32 b, u32 a);
 		virtual void SetLabelDisabledColor(PIXEL px);
 		virtual void SetLabelPressOffset(f32 x, f32 y);
 		virtual void SetLabelHoverOffset(f32 x, f32 y);
@@ -195,14 +198,14 @@ class SEED_CORE_API Button : public IWidget, public IResource
 		virtual f32 GetSpriteScaleY() const;
 
 		virtual const char *GetSpriteFilename() const;
-		virtual IImage *GetSpriteTexture() const;
+		virtual ITexture *GetSpriteTexture() const;
 
 		virtual void SetSpriteAutoUpdate(BOOL b);
 		virtual BOOL IsSpriteAutoUpdate() const;
 
 		// Sprite
 		virtual void SetSpriteBlending(eBlendMode op);
-		virtual void SetSpriteColor(u8 r, u8 g, u8 b, u8 a);
+		virtual void SetSpriteColor(u32 r, u32 g, u32 b, u32 a);
 		virtual void SetSpriteColor(PIXEL px);
 		virtual PIXEL GetSpriteColor();
 		virtual void SetSpritePressOffset(f32 x, f32 y);
@@ -212,8 +215,13 @@ class SEED_CORE_API Button : public IWidget, public IResource
 		// IWidget
 		virtual void SetDisabled(BOOL b);
 
+		// ITransformable2D
+		virtual BOOL ContainsPoint(f32 x, f32 y) const;
+		virtual BOOL ContainsPoint(const Point2f &pos) const;
+
 		// IRenderable
-		virtual void Render(f32 delta);
+		virtual void Update(f32 delta);
+		virtual void Render();
 
 		// IResource
 		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
@@ -222,8 +230,6 @@ class SEED_CORE_API Button : public IWidget, public IResource
 		// IObject
 		virtual const char *GetObjectName() const;
 		virtual int GetObjectType() const;
-
-		virtual BOOL ContainsPoint(f32 x, f32 y);
 
 		SEED_DISABLE_INSTANCING;
 
@@ -234,7 +240,7 @@ class SEED_CORE_API Button : public IWidget, public IResource
 	private:
 		SEED_DISABLE_COPY(Button);
 
-		BOOL CheckPixel(f32 x, f32 y);
+		BOOL CheckPixel(f32 x, f32 y) const;
 		void UpdateLabel();
 		void UpdateSprite();
 
@@ -248,6 +254,7 @@ class SEED_CORE_API Button : public IWidget, public IResource
 		BOOL		bLabelBased;
 		BOOL		bButtonChanged;
 		BOOL		bSpriteAutoUpdate;
+		BOOL		bLabelAutoUpdate;
 		BOOL		bCenterDrag;
 		BOOL		bOffsetPressed; // Has Offset Pressed added? - If button was disabled when pressed we need restore its position.
 		u32			iDraggingPriority;

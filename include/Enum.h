@@ -43,7 +43,8 @@ namespace Seed {
 enum eObjectType
 {
 	// Assets
-	ObjectImage = 0,
+	ObjectTexture = 0,
+	ObjectImage,
 	ObjectSprite,
 	ObjectText,
 	ObjectFont,
@@ -87,7 +88,8 @@ enum eLanguage
 	pt_BR,
 	es_ES,
 	de_DE,
-	ja_JA,
+	ja_JP,
+	fr_FR,
 	cn_CN,
 	MaximumLanguage
 };
@@ -115,6 +117,35 @@ enum ePlatformSimulation
 	SimulateWii,
 	SimulatePsp,
 	SimulateN900
+};
+
+enum eRendererDeviceType
+{
+	RendererDeviceWii,
+	RendererDeviceOpenGLES,
+	RendererDeviceOpenGL14,
+	RendererDeviceOpenGL20,
+	RendererDeviceOpenGL30,
+	RendererDeviceOpenGL40,
+	RendererDeviceDirectX8,
+	RendererDeviceDirectX9,
+	RendererDeviceDirectX10,
+	RendererDeviceDirectX11
+};
+
+enum eVideoMode
+{
+	Video_AutoDetect,
+	Video_320x240,
+	Video_480x272,
+	Video_480x320,
+	Video_iPhone,
+	Video_iPhoneLandscape,
+	Video_iPhonePortrait,
+	Video_640x480,
+	Video_NintendoWii,
+	Video_800x600,
+	Video_1024x768,
 };
 
 /// Widget Alignment
@@ -413,21 +444,6 @@ enum eMeshType
 	Triangles,
 	LineStrip,
 	Quads
-};
-
-enum eRendererPacketType
-{
-	RendererLastType,
-	RendererImmediate,
-	RendererDrawArray,
-	RendererDisplayList,
-
-	/*
-	VertexBuffer/VBO is better when using one large object/mesh.
-	It can be used with a lot of tiny objects, but they must have the same setings (eg. texture and blending).
-	Even thought vertex, texcoord and normal can differ.
-	*/
-	RendererVertexBuffer
 };
 
 /*

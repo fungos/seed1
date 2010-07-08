@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -46,28 +46,13 @@ class IWidget;
 class SEED_CORE_API EventWidget : public IEvent
 {
 	public:
-		enum eType
-		{
-			NONE,
-			FOCUS_LOST,
-			FOCUS_RECEIVED,
-			OVER,
-			OUT,
-			PRESSED_OUT,
-			RELEASED_OUT,
-			PRESSED,
-			RELEASED,
-			DRAG,
-			DROP
-		};
-
-	public:
 		virtual ~EventWidget();
-		EventWidget(const IWidget *sender, const IWidget *receiver, eType t, u32 p, f32 x, f32 y, u32 pressed, u32 hold, u32 released);
+		EventWidget(const IWidget *sender, const IWidget *receiver, eWidgetEventType t, u32 p, f32 x, f32 y, u32 pressed, u32 hold, u32 released);
 
 		const IWidget *GetSender() const;
 		const IWidget *GetReceiver() const;
-		EventWidget::eType GetEventType() const;
+		eWidgetEventType GetEventType() const;
+
 		f32 GetX() const;
 		f32 GetY() const;
 		u32 GetPlayer() const;
@@ -75,16 +60,13 @@ class SEED_CORE_API EventWidget : public IEvent
 		u32 GetReleased() const;
 		u32 GetHold() 	 const;
 
-		// IObject
-		virtual const char *GetObjectName() const;
-
 	private:
 		SEED_DISABLE_COPY(EventWidget);
 
 	private:
 		const IWidget *pSender;
 		const IWidget *pReceiver;
-		eType iType;
+		eWidgetEventType iType;
 		u32 iPlayer;
 		f32 fX;
 		f32 fY;

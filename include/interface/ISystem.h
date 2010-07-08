@@ -52,7 +52,6 @@
 namespace Seed {
 
 class EventSystem;
-class IRenderer;
 class IEventSystemListener;
 
 /// System Interface
@@ -65,19 +64,6 @@ class SEED_CORE_API ISystem : public IModule, public IUpdatable
 	typedef ListenerVector::iterator			  	ListenerIterator;
 
 	public:
-		//! Basic frame rate values.
-		/*!
-			Some platform may not support nativelly some frame rates values.
-		 */
-		enum eFrameRate
-		{
-			RATE_60FPS = 60, /*!< 60 Frames per second. */
-			RATE_30FPS = 30, /*!< 30 Frames per second. */
-			RATE_20FPS = 20, /*!< 20 Frames per second. */
-			RATE_15FPS = 15, /*!< 15 Frames per second. */
-			RATE_UNLIMITED = 10000 /*!< 100 or more frames per second. */
-		};
-
 		//! System event type
 		/*!
 			Events for horizontal blank interrupt and vertical blank interrupt.
@@ -185,21 +171,7 @@ class SEED_CORE_API ISystem : public IModule, public IUpdatable
 		/*!
 			\param frameRate Retrace rate.
 		 */
-		virtual void WaitForRetrace(eFrameRate frameRate) = 0;
-
-		//! Sets the desired frame rate.
-		/*!
-			Sets the desired frame rate for running the entire system.
-			\param frameRate Frame rate of the system
-		 */
-		virtual void SetFrameRate(ISystem::eFrameRate frameRate) = 0;
-
-		//! Gets the desired frame rate.
-		/*!
-			Returns the selected frame rate.
-			\returns a ISystem::eFrameRate enumeration;
-		 */
-		virtual ISystem::eFrameRate GetFrameRate() = 0;
+		virtual void WaitForRetrace(eSystemFrameRate frameRate) = 0;
 
 		//! Get current user name
 		/*!
@@ -241,34 +213,6 @@ class SEED_CORE_API ISystem : public IModule, public IUpdatable
 			Returns if home calls are enabled or not.
 		 */
 		virtual BOOL IsDefaultCursorEnabled() const;
-
-		//! Sets the application title.
-		/*!
-			Sets the application title, mainly used for savegame data.
-			\param title Title of the application;
-		 */
-		void SetApplicationTitle(const char *title);
-
-		//! Returns the application title.
-		/*!
-			Returns the application title.
-			\returns a const char * string;
-		 */
-		const char *GetApplicationTitle() const;
-
-		//! Sets the application description.
-		/*!
-			Sets the application description, mainly used for savegame data.
-			\param descr Description of the application ;
-		 */
-		void SetApplicationDescription(const char *descr);
-
-		//! Returns the application description.
-		/*!
-			Returns the application description.
-			\returns a const char * string;
-		 */
-		const char *GetApplicationDescription() const;
 
 		//! Set the system language.
 		/*!

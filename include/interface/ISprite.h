@@ -38,22 +38,16 @@
 #define __ISPRITE_H__
 
 #include "Defines.h"
-#include "interface/IObject.h"
-#include "interface/IRenderable.h"
 #include "interface/IBasicMesh.h"
-#include "ResourceManager.h"
 #include "MemoryManager.h"
-#include "Image.h"
 #include "SeedInit.h"
-#include "MathUtil.h"
 
 #define		SPRITE_GLOBAL_FRAME_TIME		60.0f
 
 namespace Seed {
 
-class ResourceManager;
 class SpriteObject;
-class IImage;
+class ITexture;
 
 class SEED_CORE_API ISprite : public IBasicMesh
 {
@@ -77,7 +71,7 @@ class SEED_CORE_API ISprite : public IBasicMesh
 			u32		iFileId;
 			//char	*pName;
 			//char	*pImageFile;
-			//IImage	*pImage;
+			//ITexture	*pImage;
 
 			//Frame() : iTime(0), iX(0), iY(0), iWidth(0), iHeight(0), iId(0), pName(NULL), pImageFile(NULL), pImage(NULL) {}
 		};
@@ -103,7 +97,7 @@ class SEED_CORE_API ISprite : public IBasicMesh
 		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual BOOL Unload();
 
-		virtual const IImage *GetImage() const;
+		virtual ITexture *GetTexture() const;
 		virtual const void *GetData() const;
 
 		//virtual void SetColor(u8 r, u8 g, u8 b, u8 a);
@@ -140,10 +134,9 @@ class SEED_CORE_API ISprite : public IBasicMesh
 		virtual void Reset();
 		virtual void Initialize();
 
-		virtual IImage *GetTexture() const;
-
-		// IRenderable
+		// ISceneObject
 		virtual void Update(f32 delta);
+		virtual void Render();
 
 		// IObject
 		virtual const char *GetObjectName() const;
@@ -160,7 +153,7 @@ class SEED_CORE_API ISprite : public IBasicMesh
 		const Animation	 *pAnimation;
 		const Frame		 *pAnimationFrames;
 		const Frame		 *pFrame;
-		IImage	 		 *pFrameImage;
+		ITexture		 *pFrameImage;
 
 		BOOL bInitialized;
 		BOOL bChanged;
@@ -187,20 +180,17 @@ class SEED_CORE_API ISprite : public IBasicMesh
 		s32 iHalfHeight; // half height in pixel
 		u32 iWidth; // width in pixel
 		u32 iHeight; // height in pixel
-/*
-		//Custom vertex and uv map
-		u32 iNumVertices;
-		Vector3f *arCustomVertexData;
-		Vector3f *arCurrentVertexData;
 
-		u32 iNumCustomCoords;
-		f32 *arCustomCoordsData;
+		f32 fTexS0;
+		f32 fTexS1;
+		f32 fTexT0;
+		f32 fTexT1;
 
-		eMeshType	nMeshType;
-*/
 		ResourceManager *pRes;
 		IMemoryPool		*pPool;
 		const char		*pFilename;
+
+		sVertex vert[4];
 
 	private:
 		SEED_DISABLE_COPY(ISprite);

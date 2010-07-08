@@ -37,8 +37,6 @@
 #ifndef __SOUND_SYSTEM_H__
 #define __SOUND_SYSTEM_H__
 
-#include "Config.h"
-
 #if defined(_WII_)
 	#include "platform/wii/WiiSoundSystem.h"
 	using namespace Seed::WII;

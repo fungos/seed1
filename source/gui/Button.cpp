@@ -14,17 +14,11 @@
 #include "Screen.h"
 #include "Formats.h"
 #include "CollisionMask.h"
-#include "Renderer2D.h"
+#include "RendererDevice.h"
 
 #include <math.h>
 
 #define ROUND(x) ((x - static_cast<u32>(x)) > 0.5 ? static_cast<u32>(x) + 1 : static_cast<u32>(x))
-
-#if DEBUG_ENABLE_RECT_BUTTON == 1
-#define DEBUG_BUTTON_RECT DEBUG_RECT(IWidget::GetX(), IWidget::GetY(), IWidget::GetWidth(), IWidget::GetHeight(), DEBUG_RECT_COLOR_BUTTON);
-#else
-#define DEBUG_BUTTON_RECT
-#endif
 
 namespace Seed {
 
@@ -43,12 +37,12 @@ Button::Button()
 	, pPreviousEnabledAnimation("idle")
 	, eButtonCollision(CollisionNone)
 	, bDisableHover(FALSE)
-	//, bSelected(FALSE)
 	, bFrameControl(TRUE)
 	, bSpriteBased(FALSE)
 	, bLabelBased(FALSE)
 	, bButtonChanged(TRUE)
 	, bSpriteAutoUpdate(FALSE)
+	, bLabelAutoUpdate(FALSE)
 	, bCenterDrag(TRUE)
 	, bOffsetPressed(FALSE)
 	, iDraggingPriority(0)
@@ -57,7 +51,7 @@ Button::Button()
 	, iLabelHoverColor(0)
 	, iLabelDisabledColor(0)
 	, iLabelColor(0)
-	, eLabelBlendOperation(Seed::BlendNone)
+	, eLabelBlendOperation(BlendNone)
 	, fLabelOffsetX(0.0f)
 	, fLabelOffsetY(0.0f)
 	, fLabelPressOffsetX(0.0f)
@@ -78,16 +72,16 @@ Button::Button()
 	, stFile()
 	, pMask(NULL)
 {
-	this->iId = 0;
+	iId = 0;
 
-	this->cSprite.SetParent(this);
-	this->cLabel.SetParent(this);
+	cSprite.SetParent(this);
+	cLabel.SetParent(this);
 }
 
 Button::~Button()
 {
 	this->Unload();
-	if(Private::bInitialized)
+	if (Private::bInitialized)
 		pGuiManager->Remove(this);
 }
 
@@ -95,15 +89,15 @@ BOOL Button::Unload()
 {
 	if (bSpriteBased)
 	{
-		this->cSprite.Unload();
-		this->bSpriteBased = FALSE;
-		this->pPreviousEnabledAnimation = "idle";
+		cSprite.Unload();
+		bSpriteBased = FALSE;
+		pPreviousEnabledAnimation = "idle";
 	}
 
 	if (bLabelBased)
 	{
-		this->cLabel.ReleaseText();
-		this->bLabelBased = FALSE;
+		cLabel.ReleaseText();
+		bLabelBased = FALSE;
 	}
 
 	if (pMask)
@@ -117,28 +111,28 @@ BOOL Button::Unload()
 
 void Button::Initialize(u32 id, eCollisionType type)
 {
-	this->iId				= id;
-	this->bDisableHover		= FALSE;
-	this->bFrameControl		= TRUE;
-	this->eButtonCollision	= type;
-	this->bOffsetPressed	= FALSE;
+	iId				= id;
+	bDisableHover	= FALSE;
+	bFrameControl	= TRUE;
+	eButtonCollision= type;
+	bOffsetPressed	= FALSE;
 
 	this->Update(0.0f);
 }
 
 void Button::Initialize(u32 id, f32 posX, f32 posY, f32 width, f32 height)
 {
-	this->iId				= id;
-	IWidget::SetWidth(width);
-	IWidget::SetHeight(height);
-	IWidget::SetX(posX);
-	IWidget::SetY(posY);
+	iId = id;
+	this->SetWidth(width);
+	this->SetHeight(height);
+	this->SetX(posX);
+	this->SetY(posY);
 
-	this->bDisableHover		= TRUE;
-	this->bFrameControl		= TRUE;
-	this->bSpriteBased 		= FALSE;
-	this->bLabelBased		= FALSE;
-	this->bOffsetPressed	= FALSE;
+	bDisableHover	= TRUE;
+	bFrameControl	= TRUE;
+	bSpriteBased 	= FALSE;
+	bLabelBased		= FALSE;
+	bOffsetPressed	= FALSE;
 }
 
 BOOL Button::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
@@ -149,9 +143,9 @@ BOOL Button::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 
 	if (this->Unload())
 	{
-		this->pRes = res;
-		this->pPool = pool;
-		this->pFilename = filename;
+		pRes = res;
+		pPool = pool;
+		pFilename = filename;
 
 		/* Isso deveria ser um objeto como SpriteObject -> ButtonObject, para que o .button seja reaproveitado. */
 		SECURITY_CHECK(pFileSystem->Open(filename, &stFile, pool), "Could not open button file.");
@@ -165,11 +159,11 @@ BOOL Button::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		We check if any property is already set so we WON'T change it. This will allow the user to do Set* things befora doing the Load.
 		If the user want that the object properties are loaded it will need call Reset before Load.
 		*/
-		if (!this->iId)
-			READ_U32(this->iId, ptr);
+		if (!iId)
+			READ_U32(iId, ptr);
 
-		if (!this->iPriority)
-			READ_U32(this->iPriority, ptr);
+		if (!iPriority)
+			READ_U32(iPriority, ptr);
 
 		f32 x = 0;
 		f32 y = 0;
@@ -204,17 +198,18 @@ BOOL Button::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 				this->SetMask(_F(mask), res, pool);
 		}
 
-		this->bLoaded = TRUE;
+		bLoaded = TRUE;
 	}
 
-	return this->bLoaded;
+	return bLoaded;
 }
 
 void Button::Update(f32 dt)
 {
 	UNUSED(dt);
-	//IWidget::Update();
 
+	// abstract
+	//IWidget::Update(dt);
 	if (bButtonChanged || bTransformationChanged)
 	{
 		if (bSpriteBased)
@@ -227,97 +222,96 @@ void Button::Update(f32 dt)
 			this->UpdateLabel();
 		}
 
-		this->bButtonChanged = FALSE;
+		bButtonChanged = FALSE;
 	}
 
 	bTransformationChanged = FALSE;
+	cSprite.Update(dt);
 }
 
 INLINE void Button::UpdateSprite()
 {
-	//this->cSprite.SetX(IWidget::GetX() + fSpriteOffsetX);
-	//this->cSprite.SetY(IWidget::GetY() + fSpriteOffsetY);
-	this->cSprite.SetX(fSpriteOffsetX);
-	this->cSprite.SetY(fSpriteOffsetY);
+	cSprite.SetX(fSpriteOffsetX);
+	cSprite.SetY(fSpriteOffsetY);
 
-	if (this->bSpriteAutoUpdate)
+	if (bSpriteAutoUpdate)
 	{
-		this->cSprite.SetRotation(IWidget::GetRotation());
-		this->cSprite.SetScaleX(IWidget::GetScaleX());
-		this->cSprite.SetScaleY(IWidget::GetScaleY());
-		this->cSprite.SetLocalX(IWidget::GetLocalX());
-		this->cSprite.SetLocalY(IWidget::GetLocalY());
+		cSprite.SetRotation(this->GetRotation());
+		cSprite.SetScaleX(this->GetScaleX());
+		cSprite.SetScaleY(this->GetScaleY());
+		cSprite.SetLocalX(this->GetLocalX());
+		cSprite.SetLocalY(this->GetLocalY());
 	}
 }
 
 INLINE void Button::UpdateLabel()
 {
+	if (bLabelAutoUpdate)
+	{
+		cLabel.SetRotation(GetRotation());
+		cLabel.SetScaleX(GetScaleX());
+		cLabel.SetScaleY(GetScaleY());
+		cLabel.SetLocalX(GetLocalX());
+		cLabel.SetLocalY(GetLocalY());
+	}
+
+	cLabel.SetY(0.0f);
 	switch (eLabelVAlignment)
 	{
 		case VerticalAlignTop:
 		{
-			//this->cLabel.SetY(IWidget::GetY());
-			this->cLabel.SetY(0.0f);
 		}
 		break;
 
 		case VerticalAlignCenter:
 		{
-			//this->cLabel.SetY(IWidget::GetY() + ((IWidget::GetHeight() - cLabel.GetHeight()) / 2.0f));
-			this->cLabel.SetY((IWidget::GetHeight() - cLabel.GetHeight()) / 2.0f);
+			cLabel.SetY((this->GetHeight() - cLabel.GetHeight()) / 2.0f);
 		}
 		break;
 
 		case VerticalAlignBottom:
 		{
-			//this->cLabel.SetY(IWidget::GetY() + IWidget::GetHeight() - cLabel.GetHeight());
-			this->cLabel.SetY(IWidget::GetHeight() - cLabel.GetHeight());
+			cLabel.SetY(this->GetHeight() - cLabel.GetHeight());
 		}
 		break;
 
 		default:
-			 //this->cLabel.SetY(IWidget::GetY() + fLabelOffsetY);
-			this->cLabel.SetY(fLabelOffsetY);
+			cLabel.SetY(fLabelOffsetY);
 		break;
 	}
 
+	cLabel.SetX(0.0f);
 	switch (eLabelHAlignment)
 	{
 		case HorizontalAlignLeft:
 		{
-			//this->cLabel.SetX(IWidget::GetX());
-			this->cLabel.SetX(0.0f);
 		}
 		break;
 
 		case HorizontalAlignCenter:
 		{
-			//this->cLabel.SetX(IWidget::GetX() + ((IWidget::GetWidth() - cLabel.GetWidth()) / 2.0f));
-			this->cLabel.SetX((IWidget::GetWidth() - cLabel.GetWidth()) / 2.0f);
+			cLabel.SetX((this->GetWidth() - cLabel.GetWidth()) / 2.0f);
 		}
 		break;
 
 		case HorizontalAlignRight:
 		{
-			//this->cLabel.SetX(IWidget::GetX() + IWidget::GetWidth() - cLabel.GetWidth());
-			this->cLabel.SetX(IWidget::GetWidth() - cLabel.GetWidth());
+			cLabel.SetX(this->GetWidth() - cLabel.GetWidth());
 		}
 		break;
 
 		default:
-			//this->cLabel.SetX(IWidget::GetX() + fLabelOffsetX);
-			this->cLabel.SetX(fLabelOffsetX);
+			cLabel.SetX(fLabelOffsetX);
 		break;
 	}
-
-	this->cLabel.SetRotation(IWidget::GetRotation());
-	this->cLabel.SetScaleX(IWidget::GetScaleX());
-	this->cLabel.SetScaleY(IWidget::GetScaleY());
-	this->cLabel.SetLocalX(IWidget::GetLocalX());
-	this->cLabel.SetLocalY(IWidget::GetLocalY());
 }
 
-INLINE BOOL Button::ContainsPoint(f32 x, f32 y)
+INLINE BOOL Button::ContainsPoint(const Point2f &pos) const
+{
+	return this->ContainsPoint(pos.x, pos.y);
+}
+
+INLINE BOOL Button::ContainsPoint(f32 x, f32 y) const
 {
 	BOOL ret = FALSE;
 
@@ -345,23 +339,32 @@ INLINE BOOL Button::ContainsPoint(f32 x, f32 y)
 
 void Button::SetBlending(eBlendMode op)
 {
-	this->cSprite.SetBlending(op);
-	this->cLabel.SetBlending(op);
+	cSprite.SetBlending(op);
+	cLabel.SetBlending(op);
 }
 
-void Button::SetColor(u8 r, u8 g, u8 b, u8 a)
+void Button::SetColor(u32 r, u32 g, u32 b, u32 a)
 {
-	this->cSprite.SetColor(r, g, b, a);
-	this->cLabel.SetColor(r, g, b, a);
+	IWidget::SetColor(r, g, b, a);
+	cSprite.SetColor(r, g, b, a);
+	cLabel.SetColor(r, g, b, a);
+}
+
+void Button::SetColor(f32 r, f32 g, f32 b, f32 a)
+{
+	IWidget::SetColor(r, g, b, a);
+	cSprite.SetColor(r, g, b, a);
+	cLabel.SetColor(r, g, b, a);
 }
 
 void Button::SetColor(PIXEL color)
 {
-	this->cSprite.SetColor(color);
-	this->cLabel.SetColor(color);
+	IWidget::SetColor(color);
+	cSprite.SetColor(color);
+	cLabel.SetColor(color);
 }
 
-INLINE BOOL Button::CheckPixel(f32 x, f32 y)
+INLINE BOOL Button::CheckPixel(f32 x, f32 y) const
 {
 	BOOL ret = FALSE;
 
@@ -385,7 +388,7 @@ INLINE BOOL Button::CheckPixel(f32 x, f32 y)
 	{
 		ret = (cSprite.GetPixelAlpha(iPxTargetX, iPxTargetY) != 0);
 	}
-	else if (this->pMask)
+	else if (pMask)
 	{
 		ret = pMask->CheckPixel(iPxTargetX, iPxTargetY);
 	}
@@ -393,40 +396,33 @@ INLINE BOOL Button::CheckPixel(f32 x, f32 y)
 	return ret;
 }
 
-INLINE void Button::OnWidgetRollOver(const EventWidget *ev)
+void Button::OnWidgetRollOver(const EventWidget *ev)
 {
 	UNUSED(ev);
 
-	if (!bDisableHover && !bSelected)
+	if (!bDisableHover && !bSelected && bFrameControl)
 	{
-		if (bFrameControl)
+		if (bSpriteBased)
 		{
-			if (bSpriteBased)
-			{
-				//cSprite.SetCurrentFrame(1);
-				cSprite.SetAnimation("rollover");
-				cSprite.AddPosition(fSpriteHoverOffsetX, fSpriteHoverOffsetY);
-			}
+			cSprite.SetAnimation("rollover");
+			cSprite.AddPosition(fSpriteHoverOffsetX, fSpriteHoverOffsetY);
+		}
 
-			if (bLabelBased)
+		if (bLabelBased)
+		{
+			cLabel.AddPosition(fLabelHoverOffsetX, fLabelHoverOffsetY);
+			if (iLabelHoverColor)
 			{
-				cLabel.AddPosition(fLabelHoverOffsetX, fLabelHoverOffsetY);
-				if (iLabelHoverColor)
-				{
-					cLabel.SetColor(iLabelHoverColor);
-					cLabel.SetBlending(eLabelBlendOperation);
-				}
+				cLabel.SetColor(iLabelHoverColor);
+				cLabel.SetBlending(eLabelBlendOperation);
 			}
 		}
 	}
 }
 
-INLINE void Button::OnWidgetRollOut(const EventWidget *ev)
+void Button::OnWidgetRollOut(const EventWidget *ev)
 {
 	UNUSED(ev);
-
-	/*if (bDisableHover || bSelected)
-		return IEvent::IGNORED;*/
 
 	if (!bDisableHover && !bSelected)
 	{
@@ -434,7 +430,6 @@ INLINE void Button::OnWidgetRollOut(const EventWidget *ev)
 		{
 			if (bSpriteBased)
 			{
-				//this->cSprite.SetCurrentFrame(static_cast<u32>((bSelected ? 1 : 0)));
 				if (!bSelected)
 					cSprite.SetAnimation("rollout");
 				else
@@ -448,10 +443,10 @@ INLINE void Button::OnWidgetRollOut(const EventWidget *ev)
 				cLabel.AddPosition(fLabelHoverOffsetX * -1.0f, fLabelHoverOffsetY * -1.0f);
 				if (iLabelHoverColor)
 				{
-					cLabel.SetBlending(Seed::BlendNone);
+					cLabel.SetBlending(BlendNone);
 					if (iLabelColor)
 					{
-						cLabel.SetColor(this->iLabelColor);
+						cLabel.SetColor(iLabelColor);
 						cLabel.SetBlending(eLabelBlendOperation);
 					}
 				}
@@ -460,7 +455,7 @@ INLINE void Button::OnWidgetRollOut(const EventWidget *ev)
 	}
 }
 
-INLINE void Button::OnWidgetPress(const EventWidget *ev)
+void Button::OnWidgetPress(const EventWidget *ev)
 {
 	UNUSED(ev);
 
@@ -477,14 +472,6 @@ INLINE void Button::OnWidgetPress(const EventWidget *ev)
 	{
 		if (bSpriteBased)
 		{
-			/*if (cSprite.GetNumFrames() < 3)
-			{
-				this->cSprite.SetCurrentFrame(1);
-			}
-			else
-			{
-				this->cSprite.SetCurrentFrame(2);
-			}*/
 			bOffsetPressed = TRUE;
 			cSprite.SetAnimation("press");
 			cSprite.AddPosition(fSpritePressOffsetX, fSpritePressOffsetY);
@@ -502,7 +489,7 @@ INLINE void Button::OnWidgetPress(const EventWidget *ev)
 	}
 }
 
-INLINE void Button::OnWidgetRelease(const EventWidget *ev)
+void Button::OnWidgetRelease(const EventWidget *ev)
 {
 	UNUSED(ev);
 
@@ -510,9 +497,6 @@ INLINE void Button::OnWidgetRelease(const EventWidget *ev)
 	{
 		fDragOffsetX = 0.0f;
 		fDragOffsetY = 0.0f;
-		/*this->SetPriority(iOldPriority);
-		cSprite.SetPriority(iOldPriority);
-		cLabel.SetPriority(iOldPriority + 1);*/
 		this->SetPriority(iOldPriority);
 	}
 
@@ -520,7 +504,6 @@ INLINE void Button::OnWidgetRelease(const EventWidget *ev)
 	{
 		if (bSpriteBased)
 		{
-			//cSprite.SetCurrentFrame(1);
 			cSprite.SetAnimation("release");
 			cSprite.AddPosition(fSpritePressOffsetX * -1.0f, fSpritePressOffsetY * -1.0f);
 		}
@@ -530,10 +513,10 @@ INLINE void Button::OnWidgetRelease(const EventWidget *ev)
 			cLabel.AddPosition(fLabelPressOffsetX * -1.0f, fLabelPressOffsetY * -1.0f);
 			if (iLabelPressColor)
 			{
-				cLabel.SetBlending(Seed::BlendNone);
+				cLabel.SetBlending(BlendNone);
 				if (iLabelColor)
 				{
-					cLabel.SetColor(this->iLabelColor);
+					cLabel.SetColor(iLabelColor);
 					cLabel.SetBlending(eLabelBlendOperation);
 				}
 			}
@@ -541,15 +524,12 @@ INLINE void Button::OnWidgetRelease(const EventWidget *ev)
 	}
 }
 
-INLINE void Button::OnWidgetReleaseOut(const EventWidget *ev)
+void Button::OnWidgetReleaseOut(const EventWidget *ev)
 {
 	UNUSED(ev);
 
 	if (bDraggable)
 	{
-		/*this->SetPriority(iOldPriority);
-		cSprite.SetPriority(iOldPriority);
-		cLabel.SetPriority(iOldPriority + 1);*/
 		fDragOffsetX = 0.0f;
 		fDragOffsetY = 0.0f;
 		this->SetPriority(iOldPriority);
@@ -559,7 +539,6 @@ INLINE void Button::OnWidgetReleaseOut(const EventWidget *ev)
 	{
 		if (bSpriteBased)
 		{
-			//this->cSprite.SetCurrentFrame(static_cast<u32>((bSelected ? 1 : 0)));
 			if (bSelected)
 				cSprite.SetAnimation("selected");
 			else
@@ -572,10 +551,10 @@ INLINE void Button::OnWidgetReleaseOut(const EventWidget *ev)
 			cLabel.AddPosition(fLabelPressOffsetX * -1.0f, fLabelPressOffsetY * -1.0f);
 			if (iLabelPressColor)
 			{
-				cLabel.SetBlending(Seed::BlendNone);
+				cLabel.SetBlending(BlendNone);
 				if (iLabelColor)
 				{
-					cLabel.SetColor(this->iLabelColor);
+					cLabel.SetColor(iLabelColor);
 					cLabel.SetBlending(eLabelBlendOperation);
 				}
 			}
@@ -645,7 +624,6 @@ INLINE void Button::Select()
 
 	if (bSpriteBased && bFrameControl && !bDisabled)
 	{
-		//this->cSprite.SetCurrentFrame(1);
 		cSprite.SetAnimation("selected");
 	}
 
@@ -654,12 +632,11 @@ INLINE void Button::Select()
 
 INLINE void Button::Unselect()
 {
-	this->bSelected = FALSE;
+	bSelected = FALSE;
 
 	if (bSpriteBased && bFrameControl && !bDisabled)
 	{
-		//this->cSprite.SetCurrentFrame(0);
-		this->cSprite.SetAnimation("idle");
+		cSprite.SetAnimation("idle");
 	}
 
 	// what to do with label?
@@ -674,7 +651,7 @@ INLINE void Button::SetDisabled(BOOL b)
 			if (b)
 			{
 				if (strcmp(cSprite.GetAnimationName(), pPreviousEnabledAnimation) && strcmp(cSprite.GetAnimationName(), "disabled"))
-					this->pPreviousEnabledAnimation = cSprite.GetAnimationName();
+					pPreviousEnabledAnimation = cSprite.GetAnimationName();
 
 				cSprite.SetAnimation("disabled");
 			}
@@ -686,7 +663,7 @@ INLINE void Button::SetDisabled(BOOL b)
 					bOffsetPressed = FALSE;
 				}
 
-				//this->cSprite.SetAnimation("idle");
+				//cSprite.SetAnimation("idle");
 				if (!strcmp(pPreviousEnabledAnimation, "selected"))
 				{
 					cSprite.SetAnimation("selected");
@@ -717,16 +694,16 @@ INLINE void Button::SetDisabled(BOOL b)
 		{
 			if (b)
 			{
-				this->cLabel.SetColor(iLabelDisabledColor);
-				this->cLabel.SetBlending(eLabelBlendOperation);
+				cLabel.SetColor(iLabelDisabledColor);
+				cLabel.SetBlending(eLabelBlendOperation);
 			}
 			else
 			{
-				this->cLabel.SetBlending(Seed::BlendNone);
+				cLabel.SetBlending(BlendNone);
 				if (iLabelColor)
 				{
-					this->cLabel.SetColor(iLabelColor);
-					this->cLabel.SetBlending(eLabelBlendOperation);
+					cLabel.SetColor(iLabelColor);
+					cLabel.SetBlending(eLabelBlendOperation);
 				}
 			}
 		}
@@ -735,21 +712,20 @@ INLINE void Button::SetDisabled(BOOL b)
 	IWidget::SetDisabled(b);
 }
 
-INLINE void Button::Render(f32 delta)
+INLINE void Button::Render()
 {
-	UNUSED(delta);
-
 	if (bSpriteBased)
 	{
-		this->cSprite.Render(delta);
+		cSprite.Render();
 	}
 
 	if (bLabelBased)
 	{
-		this->cLabel.Render(delta);
+		cLabel.Render();
 	}
 
-	//DEBUG_BUTTON_RECT;
+	if (pConfiguration->bDebugButton)
+		pRendererDevice->DrawRect(this->GetX(), this->GetY(), this->GetWidth(), this->GetHeight(), PIXEL_COLOR(0, 0, 255, 255));
 }
 
 void Button::SetSprite(const char *spriteName, ResourceManager *res, IMemoryPool *pool)
@@ -766,14 +742,25 @@ void Button::SetSprite(const char *spriteName, ResourceManager *res, IMemoryPool
 		cSprite.Load(spriteName, res, pool);
 	}
 
-	//this->cSprite.SetX(IWidget::GetX());
-	//this->cSprite.SetY(IWidget::GetY());
 	cSprite.SetPosition(0.0f, 0.0f);
 
-	if (cSprite.GetWidth() > this->GetWidth())
-		this->SetWidth(cSprite.GetWidth());
-	if (cSprite.GetHeight() > this->GetHeight())
-		this->SetHeight(cSprite.GetHeight());
+	f32 maxW, maxH;
+	maxW = maxH = 0.0f;
+ 
+	if (bLabelBased)
+	{
+		maxW = cLabel.GetWidth();
+		maxH = cLabel.GetHeight();
+	}
+
+	if (maxW < cSprite.GetWidth())
+		maxW = cSprite.GetWidth();
+
+	if (maxH < cSprite.GetHeight())
+		maxH = cSprite.GetHeight();
+
+	this->SetWidth(maxW);
+	this->SetHeight(maxH);
 
 	bSpriteBased = TRUE;
 	bButtonChanged = TRUE;
@@ -803,13 +790,13 @@ void Button::SetSprite(const char *spriteName, ResourceManager *res, IMemoryPool
 INLINE void Button::SetVisible(BOOL b)
 {
 	IWidget::SetVisible(b);
-	this->cSprite.SetVisible(b);
-	this->cLabel.SetVisible(b);
+	cSprite.SetVisible(b);
+	cLabel.SetVisible(b);
 }
 
 INLINE void Button::SetFrameControl(BOOL b)
 {
-	this->bFrameControl = b;
+	bFrameControl = b;
 }
 
 INLINE void Button::SetMask(const char *maskName, ResourceManager *res, IMemoryPool *pool)
@@ -821,8 +808,8 @@ INLINE void Button::SetMask(const char *maskName, ResourceManager *res, IMemoryP
 	if (!pRes)
 		pRes = res;
 
-	this->pMask = static_cast<CollisionMask *>(pRes->Get(maskName, Seed::ObjectCollisionMask, pool));
-	this->eButtonCollision = CollisionByMask;
+	pMask = static_cast<CollisionMask *>(pRes->Get(maskName, Seed::ObjectCollisionMask, pool));
+	eButtonCollision = CollisionByMask;
 }
 
 INLINE void Button::SetCollisionType(eCollisionType type)
@@ -832,210 +819,318 @@ INLINE void Button::SetCollisionType(eCollisionType type)
 		sRelease(pMask);
 	}
 
-	this->eButtonCollision = type;
+	eButtonCollision = type;
 }
 
 INLINE eCollisionType Button::GetCollisionType() const
 {
-	return this->eButtonCollision;
+	return eButtonCollision;
 }
 
 INLINE void Button::SetEnableHover(BOOL b)
 {
-	this->bDisableHover = b;
+	bDisableHover = b;
 }
 
 INLINE BOOL Button::IsHoverDisabled() const
 {
-	return this->bDisableHover;
+	return bDisableHover;
 }
 
 INLINE void Button::SetPriority(u32 p)
 {
 	IWidget::SetPriority(p);
-	if (this->iDraggingPriority < this->iPriority)
+	if (iDraggingPriority < iPriority)
 	{
-		this->iDraggingPriority = this->iPriority;
+		iDraggingPriority = iPriority;
 	}
-	this->cSprite.SetPriority(p);
-	this->cLabel.SetPriority(p + 1);
+	cSprite.SetPriority(p);
+	cLabel.SetPriority(p + 1);
 }
 
 INLINE void Button::SetDraggable(BOOL b)
 {
-	this->bDraggable = b;
+	bDraggable = b;
 }
 
 INLINE void Button::SetDraggingPriority(u32 i)
 {
-	this->iDraggingPriority = i;
+	iDraggingPriority = i;
 }
 
 INLINE u32 Button::GetDraggingPriority() const
 {
-	return this->iDraggingPriority;
+	return iDraggingPriority;
 }
 
 INLINE void Button::SetPressOffset(f32 x, f32 y)
 {
-	this->fLabelPressOffsetX = this->fSpritePressOffsetX = x;
-	this->fLabelPressOffsetY = this->fSpritePressOffsetY = y;
+	fLabelPressOffsetX = fSpritePressOffsetX = x;
+	fLabelPressOffsetY = fSpritePressOffsetY = y;
 }
 
 INLINE void Button::SetHoverOffset(f32 x, f32 y)
 {
-	this->fLabelHoverOffsetX = this->fSpriteHoverOffsetX = x;
-	this->fLabelHoverOffsetY = this->fSpriteHoverOffsetY = y;
+	fLabelHoverOffsetX = fSpriteHoverOffsetX = x;
+	fLabelHoverOffsetY = fSpriteHoverOffsetY = y;
 }
 
 INLINE void Button::SetLabelWidth(f32 w)
 {
-	this->cLabel.SetWidth(w);
+	cLabel.SetWidth(w);
 }
 
 INLINE void Button::SetLabelHeight(f32 h)
 {
-	this->cLabel.SetHeight(h);
+	cLabel.SetHeight(h);
 }
 
 INLINE void Button::SetLabelX(f32 x)
 {
-	//this->cLabel.SetX(IWidget::GetX() + x);
-	this->fLabelOffsetX = x;
-	this->eLabelHAlignment = HorizontalAlignNone;
+	//cLabel.SetX(IWidget::GetX() + x);
+	fLabelOffsetX = x;
+	eLabelHAlignment = HorizontalAlignNone;
 }
 
 INLINE void Button::SetLabelY(f32 y)
 {
-	//this->cLabel.SetY(IWidget::GetY() + y);
-	this->fLabelOffsetY = y;
-	this->eLabelVAlignment = VerticalAlignNone;
+	//cLabel.SetY(IWidget::GetY() + y);
+	fLabelOffsetY = y;
+	eLabelVAlignment = VerticalAlignNone;
 }
 
 INLINE void Button::AddLabelX(f32 value)
 {
-	//this->cLabel.SetX(IWidget::GetX() + cLabel.GetX() + value);
-	this->fLabelOffsetX += value;
-	this->eLabelHAlignment = HorizontalAlignNone;
+	//cLabel.SetX(IWidget::GetX() + cLabel.GetX() + value);
+	fLabelOffsetX += value;
+	eLabelHAlignment = HorizontalAlignNone;
 }
 
 INLINE void Button::AddLabelY(f32 value)
 {
-	//this->cLabel.SetY(IWidget::GetY() + cLabel.GetY() + value);
-	this->fLabelOffsetY += value;
-	this->eLabelVAlignment = VerticalAlignNone;
+	//cLabel.SetY(IWidget::GetY() + cLabel.GetY() + value);
+	fLabelOffsetY += value;
+	eLabelVAlignment = VerticalAlignNone;
 }
 
 INLINE void Button::SetLabelPosition(f32 x, f32 y)
 {
-	//this->cLabel.SetPosition(IWidget::GetX() + x, IWidget::GetY() + y);
-	this->fLabelOffsetX = x;
-	this->fLabelOffsetY = y;
-	this->eLabelHAlignment = HorizontalAlignNone;
-	this->eLabelVAlignment = VerticalAlignNone;
+	//cLabel.SetPosition(IWidget::GetX() + x, IWidget::GetY() + y);
+	fLabelOffsetX = x;
+	fLabelOffsetY = y;
+	eLabelHAlignment = HorizontalAlignNone;
+	eLabelVAlignment = VerticalAlignNone;
 }
 
 INLINE void Button::AddLabelPosition(f32 x, f32 y)
 {
-	//this->cLabel.SetPosition(IWidget::GetX() + cLabel.GetX() + x, IWidget::GetY() + cLabel.GetY() + y);
-	this->fLabelOffsetX += x;
-	this->fLabelOffsetY += y;
-	this->eLabelHAlignment = HorizontalAlignNone;
-	this->eLabelVAlignment = VerticalAlignNone;
+	//cLabel.SetPosition(IWidget::GetX() + cLabel.GetX() + x, IWidget::GetY() + cLabel.GetY() + y);
+	fLabelOffsetX += x;
+	fLabelOffsetY += y;
+	eLabelHAlignment = HorizontalAlignNone;
+	eLabelVAlignment = VerticalAlignNone;
 }
 
 INLINE void Button::SetLabelRotation(f32 rot)
 {
-	this->cLabel.SetRotation(rot);
+	cLabel.SetRotation(rot);
 }
 
 INLINE void Button::AddLabelRotation(f32 rot)
 {
-	this->cLabel.AddRotation(rot);
+	cLabel.AddRotation(rot);
 }
 
 
 INLINE void Button::SetLabelScaleX(f32 scaleX)
 {
-	this->cLabel.SetScaleX(scaleX);
+	cLabel.SetScaleX(scaleX);
+
+	f32 max = 0.0f;
+	if (bSpriteBased)
+		max = cSprite.GetWidth();
+
+	if (max < cLabel.GetWidth())
+		max = cLabel.GetWidth();
+
+	this->cLabel.SetLocalX(0.5f);
+
+	this->SetWidth(max);
 }
 
 INLINE void Button::SetLabelScaleY(f32 scaleY)
 {
-	this->cLabel.SetScaleY(scaleY);
+	cLabel.SetScaleY(scaleY);
+
+	f32 max = 0.0f;
+	if (bSpriteBased)
+		max = cSprite.GetHeight();
+
+	if (max < cLabel.GetHeight())
+		max = cLabel.GetHeight();
+
+	this->cLabel.SetLocalY(0.5f);
+
+	this->SetHeight(max);
 }
 
 INLINE void Button::SetLabelScale(f32 scale)
 {
-	this->cLabel.SetScale(scale);
+	cLabel.SetScale(scale);
+
+	f32 maxW, maxH;
+	maxW = maxH = 0.0f;
+	if (bSpriteBased)
+	{
+		maxW = cSprite.GetWidth();
+		maxH = cSprite.GetHeight();
+	}
+
+	if (maxW < cLabel.GetWidth())
+		maxW = cLabel.GetWidth();
+
+	if (maxH < cLabel.GetHeight())
+		maxH = cLabel.GetHeight();
+
+	this->SetWidth(maxW);
+	this->SetHeight(maxH);
 }
 
 INLINE void Button::SetLabelScale(f32 scaleX, f32 scaleY)
 {
-	this->cLabel.SetScale(scaleX, scaleY);
+	cLabel.SetScale(scaleX, scaleY);
+
+	f32 maxW, maxH;
+	maxW = maxH = 0.0f;
+	if (bSpriteBased)
+	{
+		maxW = cSprite.GetWidth();
+		maxH = cSprite.GetHeight();
+	}
+
+	if (maxW < cLabel.GetWidth())
+		maxW = cLabel.GetWidth();
+
+	if (maxH < cLabel.GetHeight())
+		maxH = cLabel.GetHeight();
+
+	this->SetWidth(maxW);
+	this->SetHeight(maxH);
 }
 
 INLINE void Button::AddLabelScaleX(f32 scaleX)
 {
-	this->cLabel.AddScaleX(scaleX);
+	cLabel.AddScaleX(scaleX);
+
+	f32 max = 0.0f;
+	if (bSpriteBased)
+		max = cSprite.GetWidth();
+
+	if (max < cLabel.GetWidth())
+		max = cLabel.GetWidth();
+
+	this->SetWidth(max);
 }
 
 INLINE void Button::AddLabelScaleY(f32 scaleY)
 {
-	this->cLabel.AddScaleY(scaleY);
+	cLabel.AddScaleY(scaleY);
+
+	f32 max = 0.0f;
+	if (bSpriteBased)
+		max = cSprite.GetHeight();
+
+	if (max < cLabel.GetHeight())
+		max = cLabel.GetHeight();
+
+	this->SetHeight(max);
 }
 
 INLINE void Button::AddLabelScale(f32 scale)
 {
-	this->cLabel.AddScale(scale);
+	cLabel.AddScale(scale);
+
+	f32 maxW, maxH;
+	maxW = maxH = 0.0f;
+	if (bSpriteBased)
+	{
+		maxW = cSprite.GetWidth();
+		maxH = cSprite.GetHeight();
+	}
+
+	if (maxW < cLabel.GetWidth())
+		maxW = cLabel.GetWidth();
+
+	if (maxH < cLabel.GetHeight())
+		maxH = cLabel.GetHeight();
+
+	this->SetWidth(maxW);
+	this->SetHeight(maxH);
 }
 
 INLINE void Button::AddLabelScale(f32 scaleX, f32 scaleY)
 {
-	this->cLabel.AddScale(scaleX, scaleY);
+	cLabel.AddScale(scaleX, scaleY);
+
+	f32 maxW, maxH;
+	maxW = maxH = 0.0f;
+	if (bSpriteBased)
+	{
+		maxW = cSprite.GetWidth();
+		maxH = cSprite.GetHeight();
+	}
+
+	if (maxW < cLabel.GetWidth())
+		maxW = cLabel.GetWidth();
+
+	if (maxH < cLabel.GetHeight())
+		maxH = cLabel.GetHeight();
+
+	this->SetWidth(maxW);
+	this->SetHeight(maxH);
 }
 
 INLINE f32 Button::GetLabelWidth() const
 {
-	return this->cLabel.GetWidth();
+	return cLabel.GetWidth();
 }
 
 INLINE f32 Button::GetLabelHeight() const
 {
-	return this->cLabel.GetHeight();
+	return cLabel.GetHeight();
 }
 
 INLINE f32 Button::GetLabelX() const
 {
-	//return this->cLabel.GetX() - IWidget::GetX();
+	//return cLabel.GetX() - IWidget::GetX();
 	return fLabelOffsetX;
 }
 
 
 INLINE f32 Button::GetLabelY() const
 {
-	//return this->cLabel.GetY() - IWidget::GetY();
+	//return cLabel.GetY() - IWidget::GetY();
 	return fLabelOffsetY;
 }
 
 INLINE f32 Button::GetLabelRotation() const
 {
-	return this->cLabel.GetRotation();
+	return cLabel.GetRotation();
 }
 
 INLINE f32 Button::GetLabelScaleX() const
 {
-	return this->cLabel.GetScaleX();
+	return cLabel.GetScaleX();
 }
 
 INLINE f32 Button::GetLabelScaleY() const
 {
-	return this->cLabel.GetScaleY();
+	return cLabel.GetScaleY();
 }
 
 INLINE void Button::SetFont(const Font *font)
 {
-	this->cLabel.SetFont(font);
+	cLabel.SetFont(font);
 
 	if (cLabel.GetWidth() > this->GetWidth())
 		this->SetWidth(cLabel.GetWidth());
@@ -1045,311 +1140,325 @@ INLINE void Button::SetFont(const Font *font)
 
 INLINE void Button::SetLabelHorizontalAlignment(eHorizontalAlignment align)
 {
-	this->eLabelHAlignment = align;
-
-	this->bButtonChanged = TRUE;
+	eLabelHAlignment = align;
+	bButtonChanged = TRUE;
 }
 
 INLINE void Button::SetLabelVerticalAlignment(eVerticalAlignment align)
 {
-	this->eLabelVAlignment = align;
-
-	this->bButtonChanged = TRUE;
+	eLabelVAlignment = align;
+	bButtonChanged = TRUE;
 }
 
 INLINE void Button::SetLabelPressOffset(f32 x, f32 y)
 {
-	this->fLabelPressOffsetX = x;
-	this->fLabelPressOffsetY = y;
+	fLabelPressOffsetX = x;
+	fLabelPressOffsetY = y;
 }
 
 INLINE void Button::SetLabelHoverOffset(f32 x, f32 y)
 {
-	this->fLabelHoverOffsetX = x;
-	this->fLabelHoverOffsetY = y;
+	fLabelHoverOffsetX = x;
+	fLabelHoverOffsetY = y;
 }
 
 INLINE void Button::SetLabelBlending(eBlendMode blending)
 {
-	//this->cLabel.SetBlending(blending);
-	this->eLabelBlendOperation = blending;
+	//cLabel.SetBlending(blending);
+	eLabelBlendOperation = blending;
 }
 
-INLINE void Button::SetLabelColor(u8 r, u8 g, u8 b, u8 a)
+INLINE void Button::SetLabelColor(u32 r, u32 g, u32 b, u32 a)
 {
-	this->cLabel.SetBlending(eLabelBlendOperation);
-	this->cLabel.SetColor(r, g, b, a);
+	cLabel.SetBlending(eLabelBlendOperation);
+	cLabel.SetColor(r, g, b, a);
 }
 
 INLINE void Button::SetLabelColor(PIXEL px)
 {
-	this->cLabel.SetBlending(eLabelBlendOperation);
-	this->cLabel.SetColor(px);
+	cLabel.SetBlending(eLabelBlendOperation);
+	cLabel.SetColor(px);
 }
 
-INLINE void Button::SetLabelPressColor(u8 r, u8 g, u8 b, u8 a)
+INLINE void Button::SetLabelPressColor(u32 r, u32 g, u32 b, u32 a)
 {
-	this->iLabelPressColor = PIXEL_COLOR(r, g, b, a);
+	iLabelPressColor = PIXEL_COLOR(r, g, b, a);
 }
 
 INLINE void Button::SetLabelPressColor(PIXEL px)
 {
-	this->iLabelPressColor = px;
+	iLabelPressColor = px;
 }
 
-INLINE void Button::SetLabelHoverColor(u8 r, u8 g, u8 b, u8 a)
+INLINE void Button::SetLabelHoverColor(u32 r, u32 g, u32 b, u32 a)
 {
-	this->iLabelHoverColor = PIXEL_COLOR(r, g, b, a);
+	iLabelHoverColor = PIXEL_COLOR(r, g, b, a);
 }
 
 INLINE void Button::SetLabelHoverColor(PIXEL px)
 {
-	this->iLabelHoverColor = px;
+	iLabelHoverColor = px;
 }
 
-INLINE void Button::SetLabelDisabledColor(u8 r, u8 g, u8 b, u8 a)
+INLINE void Button::SetLabelDisabledColor(u32 r, u32 g, u32 b, u32 a)
 {
-	this->iLabelDisabledColor = PIXEL_COLOR(r, g, b, a);
+	iLabelDisabledColor = PIXEL_COLOR(r, g, b, a);
 }
 
 INLINE void Button::SetLabelDisabledColor(PIXEL px)
 {
-	this->iLabelDisabledColor = px;
+	iLabelDisabledColor = px;
+}
+
+INLINE void Button::SetLabelAutoUpdate(BOOL b)
+{
+	bLabelAutoUpdate = b;
+	bChanged = TRUE;
+}
+
+INLINE BOOL Button::IsLabelAutoUpdate() const
+{
+	return bLabelAutoUpdate;
 }
 
 INLINE void Button::SetText(const WideString str)
 {
-	this->cLabel.SetText(str);
+	cLabel.SetText(str);
 
-	if (cLabel.GetWidth() > this->GetWidth())
-		this->SetWidth(cLabel.GetWidth());
-	if (cLabel.GetHeight() > this->GetHeight())
-		this->SetHeight(cLabel.GetHeight());
+	f32 maxW, maxH;
+	maxW = maxH = 0.0f;
+ 
+	if (bSpriteBased)
+	{
+		maxW = cSprite.GetWidth();
+		maxH = cSprite.GetHeight();
+	}
+
+	if (maxW < cLabel.GetWidth())
+		maxW = cLabel.GetWidth();
+
+	if (maxH < cLabel.GetHeight())
+		maxH = cLabel.GetHeight();
+
+	this->SetWidth(maxW);
+	this->SetHeight(maxH);
 
 	this->UpdateLabel();
 
-	this->bLabelBased = TRUE;
-	this->bButtonChanged = TRUE;
+	bLabelBased = TRUE;
+	bButtonChanged = TRUE;
 }
 
 INLINE void Button::SetText(const String &str)
 {
-	this->cLabel.SetText(str);
+	cLabel.SetText(str);
 
-	if (cLabel.GetWidth() > this->GetWidth())
-		this->SetWidth(cLabel.GetWidth());
-	if (cLabel.GetHeight() > this->GetHeight())
-		this->SetHeight(cLabel.GetHeight());
+	f32 maxW, maxH;
+	maxW = maxH = 0.0f;
 
-	this->UpdateLabel();
+	if (bSpriteBased)
+	{
+		maxW = cSprite.GetWidth();
+		maxH = cSprite.GetHeight();
+	}
 
-	this->bLabelBased = TRUE;
-	this->bButtonChanged = TRUE;
-}
+	if (maxW < cLabel.GetWidth())
+		maxW = cLabel.GetWidth();
 
-/*
-INLINE void Button::Print(WideString str, ...)
-{
-	va_list ap;
-	va_start(ap, str);
-	this->cLabel.Print(str, &ap);
-	va_end(ap);
+	if (maxH < cLabel.GetHeight())
+		maxH = cLabel.GetHeight();
 
-	if (cLabel.GetWidth() > this->GetWidth())
-		this->SetWidth(cLabel.GetWidth());
-	if (cLabel.GetHeight() > this->GetHeight())
-		this->SetHeight(cLabel.GetHeight());
+	this->SetWidth(maxW);
+	this->SetHeight(maxH);
 
 	this->UpdateLabel();
 
-	this->bLabelBased = TRUE;
-	this->bButtonChanged = TRUE;
+	bLabelBased = TRUE;
+	bButtonChanged = TRUE;
 }
-*/
 
 INLINE void Button::SetSpriteWidth(f32 w)
 {
-	this->cSprite.SetWidth(w);
+	cSprite.SetWidth(w);
 }
 
 INLINE void Button::SetSpriteHeight(f32 h)
 {
-	this->cSprite.SetHeight(h);
+	cSprite.SetHeight(h);
 }
 
 INLINE void Button::SetSpriteX(f32 x)
 {
-	this->fSpriteOffsetX = x;
+	fSpriteOffsetX = x;
 }
 
 INLINE void Button::SetSpriteY(f32 y)
 {
-	this->fSpriteOffsetY = y;
+	fSpriteOffsetY = y;
 }
 
 INLINE void Button::AddSpriteX(f32 value)
 {
-	this->fSpriteOffsetX += value;
+	fSpriteOffsetX += value;
 }
 
 INLINE void Button::AddSpriteY(f32 value)
 {
-	this->fSpriteOffsetY += value;
+	fSpriteOffsetY += value;
 }
 
 INLINE void Button::SetSpritePosition(f32 x, f32 y)
 {
-	this->fSpriteOffsetX = x;
-	this->fSpriteOffsetY = y;
+	fSpriteOffsetX = x;
+	fSpriteOffsetY = y;
 }
 
 INLINE void Button::AddSpritePosition(f32 x, f32 y)
 {
-	this->fSpriteOffsetX += x;
-	this->fSpriteOffsetY += y;
+	fSpriteOffsetX += x;
+	fSpriteOffsetY += y;
 }
 
 INLINE void Button::SetSpriteRotation(f32 rot)
 {
-	this->cSprite.SetRotation(rot);
+	cSprite.SetRotation(rot);
 }
 
 INLINE void Button::AddSpriteRotation(f32 rot)
 {
-	this->cSprite.AddRotation(rot);
+	cSprite.AddRotation(rot);
 }
 
 INLINE void Button::SetSpriteScaleX(f32 scaleX)
 {
-	this->cSprite.SetScaleX(scaleX);
+	cSprite.SetScaleX(scaleX);
 }
 
 INLINE void Button::SetSpriteScaleY(f32 scaleY)
 {
-	this->cSprite.SetScaleY(scaleY);
+	cSprite.SetScaleY(scaleY);
 }
 
 INLINE void Button::SetSpriteScale(f32 scale)
 {
-	this->cSprite.SetScale(scale);
+	cSprite.SetScale(scale);
 }
 
 INLINE void Button::SetSpriteScale(f32 scaleX, f32 scaleY)
 {
-	this->cSprite.SetScale(scaleX, scaleY);
+	cSprite.SetScale(scaleX, scaleY);
 }
 
 INLINE void Button::AddSpriteScaleX(f32 scaleX)
 {
-	this->cSprite.AddScaleX(scaleX);
+	cSprite.AddScaleX(scaleX);
 }
 
 INLINE void Button::AddSpriteScaleY(f32 scaleY)
 {
-	this->cSprite.AddScaleY(scaleY);
+	cSprite.AddScaleY(scaleY);
 }
 
 INLINE void Button::AddSpriteScale(f32 scale)
 {
-	this->cSprite.AddScale(scale);
+	cSprite.AddScale(scale);
 }
 
 INLINE void Button::AddSpriteScale(f32 scaleX, f32 scaleY)
 {
-	this->cSprite.AddScale(scaleX, scaleY);
+	cSprite.AddScale(scaleX, scaleY);
 }
 
 INLINE f32 Button::GetSpriteWidth() const
 {
-	return this->cSprite.GetWidth();
+	return cSprite.GetWidth();
 }
 
 INLINE f32 Button::GetSpriteHeight() const
 {
-	return this->cSprite.GetHeight();
+	return cSprite.GetHeight();
 }
 
 INLINE f32 Button::GetSpriteX() const
 {
-	return this->cSprite.GetX() - IWidget::GetX();
+	return cSprite.GetX() - IWidget::GetX();
 }
 
 INLINE f32 Button::GetSpriteY() const
 {
-	return this->cSprite.GetY() - IWidget::GetY();
+	return cSprite.GetY() - IWidget::GetY();
 }
 
 INLINE f32 Button::GetSpriteRotation() const
 {
-	return this->cSprite.GetRotation();
+	return cSprite.GetRotation();
 }
 
 INLINE f32 Button::GetSpriteScaleX() const
 {
-	return this->cSprite.GetScaleX();
+	return cSprite.GetScaleX();
 }
 
 INLINE f32 Button::GetSpriteScaleY() const
 {
-	return this->cSprite.GetScaleY();
+	return cSprite.GetScaleY();
 }
 
 INLINE const char* Button::GetSpriteFilename() const
 {
-	return this->pstrSpriteFilename;
+	return pstrSpriteFilename;
 }
 
-INLINE IImage *Button::GetSpriteTexture() const
+INLINE ITexture *Button::GetSpriteTexture() const
 {
-	return this->cSprite.GetTexture();
+	return cSprite.GetTexture();
 }
 
 INLINE void Button::SetSpriteBlending(eBlendMode op)
 {
-	this->cSprite.SetBlending(op);
+	cSprite.SetBlending(op);
 }
 
-INLINE void Button::SetSpriteColor(u8 r, u8 g, u8 b, u8 a)
+INLINE void Button::SetSpriteColor(u32 r, u32 g, u32 b, u32 a)
 {
-	this->cSprite.SetColor(r, g, b, a);
+	cSprite.SetColor(r, g, b, a);
 }
 
 INLINE void Button::SetSpriteColor(PIXEL px)
 {
-	this->cSprite.SetColor(px);
+	cSprite.SetColor(px);
 }
 
 INLINE PIXEL Button::GetSpriteColor()
 {
-	return this->cSprite.GetColor();
+	return cSprite.GetColor();
 }
-
 
 INLINE void Button::SetSpritePressOffset(f32 x, f32 y)
 {
-	this->fSpritePressOffsetX = x;
-	this->fSpritePressOffsetY = y;
+	fSpritePressOffsetX = x;
+	fSpritePressOffsetY = y;
 }
 
 INLINE void Button::SetSpriteHoverOffset(f32 x, f32 y)
 {
-	this->fSpriteHoverOffsetX = x;
-	this->fSpriteHoverOffsetY = y;
+	fSpriteHoverOffsetX = x;
+	fSpriteHoverOffsetY = y;
 }
 
 INLINE void Button::SetSpriteAutoUpdate(BOOL b)
 {
-	this->bSpriteAutoUpdate = b;
+	bSpriteAutoUpdate = b;
 }
 
 INLINE BOOL Button::IsSpriteAutoUpdate() const
 {
-	return this->bSpriteAutoUpdate;
+	return bSpriteAutoUpdate;
 }
 
 INLINE void Button::SetDragCentered(BOOL b)
 {
-	this->bCenterDrag = b;
+	bCenterDrag = b;
 }
 
 INLINE const char *Button::GetObjectName() const

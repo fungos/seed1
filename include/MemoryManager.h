@@ -37,9 +37,6 @@
 #ifndef __MEMORY_MANAGER_H__
 #define __MEMORY_MANAGER_H__
 
-#include "Config.h"
-#include "Defines.h"
-
 #if defined(_WII_)
 	#include "platform/wii/WiiMemoryManager.h"
 	using namespace Seed::WII;

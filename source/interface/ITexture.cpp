@@ -29,19 +29,21 @@
  **
  *****************************************************************************/
 
-/*! \file IImage.cpp
+/*! \file ITexture.cpp
 	\author	Danny Angelo Carminati Grein
-	\brief Defines the Image class interface
+	\brief Defines the Texture class interface
 */
 
-#include "interface/IImage.h"
+#include "interface/IFileSystem.h"
+#include "interface/ITexture.h"
 #include "Enum.h"
 #include "Log.h"
 
 namespace Seed {
 
-IImage::IImage()
-	: nMinFilter(Seed::TextureFilterLinear)
+ITexture::ITexture()
+	: stFile()
+	, nMinFilter(Seed::TextureFilterLinear)
 	, nMagFilter(Seed::TextureFilterNearest)
 	, iWidth(0)
 	, iHeight(0)
@@ -50,22 +52,37 @@ IImage::IImage()
 {
 }
 
-IImage::~IImage()
+ITexture::~ITexture()
 {
+	this->Reset();
+}
+
+INLINE void ITexture::Reset()
+{
+	stFile.Close();
+
 	iWidth = 0;
 	iHeight = 0;
 
 	fWidth = 0.0f;
 	fHeight = 0.0f;
+
+	nMinFilter = Seed::TextureFilterLinear;
+	nMagFilter = Seed::TextureFilterNearest;
 }
 
-INLINE const void *IImage::GetData() const
+INLINE File *ITexture::GetFile()
+{
+	return &stFile;
+}
+
+INLINE const void *ITexture::GetData() const
 {
 	SEED_ABSTRACT_METHOD;
 	return NULL;
 }
 
-INLINE void IImage::PutPixel(u32 x, u32 y, PIXEL px)
+INLINE void ITexture::PutPixel(u32 x, u32 y, PIXEL px)
 {
 	UNUSED(x)
 	UNUSED(y)
@@ -74,7 +91,7 @@ INLINE void IImage::PutPixel(u32 x, u32 y, PIXEL px)
 	SEED_ABSTRACT_METHOD;
 }
 
-INLINE PIXEL IImage::GetPixel(u32 x, u32 y) const
+INLINE PIXEL ITexture::GetPixel(u32 x, u32 y) const
 {
 	UNUSED(x)
 	UNUSED(y)
@@ -83,7 +100,7 @@ INLINE PIXEL IImage::GetPixel(u32 x, u32 y) const
 	return 0;
 }
 
-INLINE u8 IImage::GetPixelAlpha(u32 x, u32 y) const
+INLINE u8 ITexture::GetPixelAlpha(u32 x, u32 y) const
 {
 	UNUSED(x)
 	UNUSED(y)
@@ -92,64 +109,83 @@ INLINE u8 IImage::GetPixelAlpha(u32 x, u32 y) const
 	return 0;
 }
 
-INLINE u32 IImage::GetAtlasWidthInPixel() const
+INLINE u32 ITexture::GetAtlasWidthInPixel() const
 {
 	return iWidth;
 }
 
-INLINE u32 IImage::GetAtlasHeightInPixel() const
+INLINE u32 ITexture::GetAtlasHeightInPixel() const
 {
 	return iHeight;
 }
 
-INLINE u32 IImage::GetWidthInPixel() const
+INLINE u32 ITexture::GetWidthInPixel() const
 {
 	return iWidth;
 }
 
-INLINE u32 IImage::GetHeightInPixel() const
+INLINE u32 ITexture::GetHeightInPixel() const
 {
 	return iHeight;
 }
 
-INLINE f32 IImage::GetWidth() const
+INLINE f32 ITexture::GetWidth() const
 {
 	return fWidth;
 }
 
-INLINE f32 IImage::GetHeight() const
+INLINE f32 ITexture::GetHeight() const
 {
 	return fHeight;
 }
 
-INLINE BOOL IImage::Unload()
+INLINE void ITexture::Close()
 {
-	SEED_ABSTRACT_METHOD
+	stFile.Close();
+}
+
+INLINE BOOL ITexture::Unload()
+{
+	stFile.Close();
+
 	return TRUE;
 }
 
-INLINE BOOL IImage::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
+INLINE BOOL ITexture::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
-	UNUSED(filename)
-	UNUSED(res)
-	UNUSED(pool)
+	ASSERT_NULL(filename);
+	ASSERT_NULL(pool);
+	ASSERT_NULL(res);
 
-	SEED_ABSTRACT_METHOD
-	return TRUE;
+	BOOL ret = FALSE;
+	if (this->Unload())
+	{
+		pPool = pool;
+		pRes = res;
+		pFilename = filename;
+
+		pFileSystem->Open(filename, &stFile, pool);
+
+		ret = (stFile.GetData() != NULL);
+	}
+
+	return ret;
 }
 
-INLINE BOOL IImage::Load(u32 width, u32 height, PIXEL *buffer, IMemoryPool *pool)
+INLINE BOOL ITexture::Load(u32 width, u32 height, PIXEL *buffer, u32 atlasWidth, u32 atlasHeight, IMemoryPool *pool)
 {
 	UNUSED(width)
 	UNUSED(height)
 	UNUSED(buffer)
 	UNUSED(pool)
+	UNUSED(atlasWidth)
+	UNUSED(atlasHeight)
 
 	SEED_ABSTRACT_METHOD
 	return TRUE;
 }
 
-INLINE void IImage::SetFilter(eTextureFilterType type, eTextureFilter filter)
+INLINE void ITexture::SetFilter(eTextureFilterType type, eTextureFilter filter)
 {
 	if (type == Seed::TextureFilterTypeMin)
 		nMinFilter = filter;
@@ -157,21 +193,42 @@ INLINE void IImage::SetFilter(eTextureFilterType type, eTextureFilter filter)
 		nMagFilter = filter;
 }
 
-INLINE void IImage::Update()
+INLINE eTextureFilter ITexture::GetFilter(eTextureFilterType type) const
 {
-	SEED_ABSTRACT_METHOD
+	eTextureFilter filter = nMinFilter;
+
+	if (type == Seed::TextureFilterTypeMag)
+		filter = nMagFilter;
+
+	return filter;
 }
 
-INLINE int IImage::GetObjectType() const
+INLINE u32 ITexture::GetBytesPerPixel() const
 {
-	return Seed::ObjectImage;
+	return 0;
 }
 
-INLINE const char *IImage::GetObjectName() const
+INLINE void *ITexture::GetTextureName() const
 {
-	return "IImage";
+	return NULL;
 }
 
-SEED_DISABLE_INSTANCING_IMPL(IImage);
+INLINE void ITexture::Update(PIXEL *buffer)
+{
+	UNUSED(buffer);
+	SEED_ABSTRACT_METHOD;
+}
+
+INLINE int ITexture::GetObjectType() const
+{
+	return Seed::ObjectTexture;
+}
+
+INLINE const char *ITexture::GetObjectName() const
+{
+	return "ITexture";
+}
+
+SEED_DISABLE_INSTANCING_IMPL(ITexture);
 
 } // namespace
