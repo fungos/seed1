@@ -61,6 +61,7 @@ struct sVertex
 		cVertex = v.cVertex;
 		iColor = v.iColor;
 		cCoords = v.cCoords;
+		return *this;
 	}
 };
 

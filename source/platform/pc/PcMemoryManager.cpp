@@ -48,10 +48,13 @@ namespace Seed { namespace PC {
 SEED_SINGLETON_DEFINE(MemoryManager);
 
 DefaultMemoryPool MemoryManager::defaultPool(MB60);
-DefaultMemoryPool *const pDefaultPool = &MemoryManager::defaultPool;
-
 LargeMemoryPool MemoryManager::largePool(MB20);
+
+extern "C" 
+{
+DefaultMemoryPool *const pDefaultPool = &MemoryManager::defaultPool;
 LargeMemoryPool *const pLargePool = &MemoryManager::largePool;
+}
 
 MemoryManager::MemoryManager()
 {
@@ -90,7 +93,7 @@ BOOL MemoryManager::Shutdown()
 	return r;
 }
 
-INLINE u32 MemoryManager::GetFreeMemory()
+INLINE u32 MemoryManager::GetFreeMemory() const
 {
 	return defaultPool.GetFreeMemory() + largePool.GetFreeMemory();
 }

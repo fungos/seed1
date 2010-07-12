@@ -44,7 +44,7 @@
 
 namespace Seed {
 
-class IVideo : public ITransformable2D, public IPlayable
+class IVideo : public ITransformable2D//, public IPlayable
 {
 	public:
 		IVideo();

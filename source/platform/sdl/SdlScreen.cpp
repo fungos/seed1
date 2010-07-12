@@ -224,12 +224,16 @@ INLINE BOOL Screen::InitializeVideo()
 		pSurface = NULL;
 	}
 
+#if defined(__APPLE_CC__) || defined(_LINUX_)
+	this->SetupOpenGL();
+#else
 	eRendererDeviceType type = pConfiguration->GetRendererDeviceType();
 	if (type == Seed::RendererDeviceOpenGL14 || type == Seed::RendererDeviceOpenGL20 ||
 		type == Seed::RendererDeviceOpenGL30 || type == Seed::RendererDeviceOpenGL40)
 	{
 		this->SetupOpenGL();
 	}
+#endif
 
 #if defined(WIN32)
 	int dpiX = 0, dpiY = 0;

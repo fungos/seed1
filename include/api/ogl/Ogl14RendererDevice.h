@@ -45,7 +45,7 @@
 
 #include "interface/IRendererDevice.h"
 
-#if defined(_SDL_)
+#if defined(_SDL_) && defined(_MSC_VER)
 #pragma push_macro("Delete")
 #pragma push_macro("BOOL")
 #pragma push_macro("SIZE_T")
@@ -56,6 +56,8 @@
 #pragma pop_macro("SIZE_T")
 #pragma pop_macro("BOOL")
 #pragma pop_macro("Delete")
+#else
+#include <SDL/SDL_opengl.h>
 #endif
 
 #if defined(__APPLE_CC__)

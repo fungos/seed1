@@ -37,7 +37,7 @@
 #include "interface/IPlayable.h"
 
 namespace Seed {
-
+/*
 IPlayable::IPlayable()
 	: fFrameRate(30.0f)
 	, iTotalFrames(0)
@@ -90,5 +90,6 @@ INLINE void IPlayable::Seek(f32 pos)
 {
 	UNUSED(pos);
 }
+*/
 
 } // namespace
