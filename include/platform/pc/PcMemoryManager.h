@@ -58,7 +58,7 @@ class SEED_CORE_API MemoryManager : public IMemoryManager
 	SEED_SINGLETON_DECLARE(MemoryManager);
 
 	public:
-		virtual u32 GetFreeMemory();
+		virtual u32 GetFreeMemory() const;
 
 		virtual void *Alloc(SIZE_T len, IMemoryPool *pool = &defaultPool, const char *desc = "Unknown", const char *owner = "Nobody");
 		virtual void Free(void *ptr, IMemoryPool *pool = &defaultPool);
@@ -77,13 +77,6 @@ class SEED_CORE_API MemoryManager : public IMemoryManager
 		SEED_DISABLE_COPY(MemoryManager);
 };
 
-/*
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(MemoryManager);
-SEED_CORE_API extern DefaultMemoryPool *const pDefaultPool;
-SEED_CORE_API extern LargeMemoryPool *const pLargePool;
-}
-*/
 
 #define pMemoryManager MemoryManager::GetInstance()
 

@@ -41,7 +41,7 @@
 #include "Enum.h"
 
 namespace Seed {
-
+/*
 class IPlayable
 {
 	public:
@@ -81,7 +81,7 @@ class IPlayable
 		BOOL bFinished;
 		BOOL bLoop;
 };
-
+*/
 } // namespace
 
 #endif // __IPLAYABLE_H__

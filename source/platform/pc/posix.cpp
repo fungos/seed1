@@ -144,8 +144,8 @@ const char *get_user_home_folder()
 void get_current_directory(char *buff, int size)
 {
 #if defined(__APPLE_CC__)
+	Seed::Private::iArgc = 1;
 	int len = strlen(Seed::Private::pcArgv[0]);
-
 	memcpy(pcBundle, Seed::Private::pcArgv[0], len);
 	while (pcBundle[len] != '/') len--;
 	len -= strlen("MacOS");

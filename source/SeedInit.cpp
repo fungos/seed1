@@ -71,16 +71,18 @@
 #include "Checksum.h"
 #include "Profiler.h"
 
+extern "C" {
+
 namespace Seed {
 
 namespace Private
 {
-	IGameApp	*pApplication 	= NULL;
-	BOOL		bInitialized 	= FALSE;
-	int			iArgc			= 0;
-	char		**pcArgv		= NULL;
-	BOOL		bDisableSound	= FALSE;
-	f32			fCurrentTime	= 0.0f;
+	IGameApp	*pApplication;// 	= NULL;
+	BOOL		bInitialized;// 	= FALSE;
+	int			iArgc;//			= 0;
+	char		**pcArgv;//		= NULL;
+	BOOL		bDisableSound;//	= FALSE;
+	f32			fCurrentTime;//	= 0.0f;
 }
 
 ResourceManager *pResourceManager = NULL;
@@ -286,6 +288,8 @@ void Shutdown()
 
 	Private::bInitialized = FALSE;
 	Private::pApplication = NULL;
+}
+
 }
 
 } // namespace
