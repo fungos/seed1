@@ -36,7 +36,7 @@
 
 #if defined(_IPHONE_)
 
-#include "IphThread.h"
+#include "platform/iphone/IphThread.h"
 
 #define TAG 	"[Thread] "
 

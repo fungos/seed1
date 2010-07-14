@@ -43,6 +43,8 @@
 
 namespace Seed {
 
+class ITexture;
+
 struct sVertex
 {
 	Vector3f	cVertex;

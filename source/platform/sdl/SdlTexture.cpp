@@ -92,15 +92,10 @@ INLINE void Texture::Reset()
 	pData = NULL;
 	pPool = NULL;
 
-	iWidth = 0;
-	iHeight = 0;
 	iBytesPerPixel = 0;
 	iPitch = 0;
 	iAtlasWidth = 0;
 	iAtlasHeight = 0;
-
-	fWidth = 0.0f;
-	fHeight = 0.0f;
 }
 
 BOOL Texture::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
@@ -155,7 +150,7 @@ BOOL Texture::Load(const char *filename, ResourceManager *res, IMemoryPool *pool
 			height *= 2;
 
 		eRendererDeviceType type = pConfiguration->GetRendererDeviceType();
-		if (type >= Seed::RendererDeviceOpenGLES && type <= Seed::RendererDeviceOpenGL40)
+		if (type >= Seed::RendererDeviceOpenGLES1 && type <= Seed::RendererDeviceOpenGL40)
 		{
 			/*
 			HACK:
@@ -196,6 +191,7 @@ BOOL Texture::Load(const char *filename, ResourceManager *res, IMemoryPool *pool
 			}
 		}
 
+		// FIXME: Must divide by res_width , res_height - not by screen width/height
 		fWidth = (f32)iWidth / (f32)pScreen->GetWidth();
 		fHeight = (f32)iHeight / (f32)pScreen->GetHeight();
 		iAtlasWidth = pSurface->w;
@@ -258,7 +254,7 @@ BOOL Texture::Load(u32 width, u32 height, PIXEL *buffer, u32 atlasWidth, u32 atl
 	return bLoaded;
 }
 
-void Texture::Update(PIXEL *data)
+INLINE void Texture::Update(PIXEL *data)
 {
 	//this->UnloadTexture();
 	//pRendererDevice->TextureRequest(this, &pTextureId);
@@ -266,7 +262,7 @@ void Texture::Update(PIXEL *data)
 	pRendererDevice->TextureDataUpdate(this);
 }
 
-BOOL Texture::Unload()
+INLINE BOOL Texture::Unload()
 {
 	this->UnloadTexture();
 

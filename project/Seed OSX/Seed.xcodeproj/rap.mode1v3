@@ -324,7 +324,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>2D1873FA11EB5B9500A8EB9F</string>
+										<string>2D18740A11EB5E5500A8EB9F</string>
 										<key>history</key>
 										<array>
 											<string>2D3A755C1153FD430015F61E</string>
@@ -337,7 +337,6 @@
 											<string>2DCA0F1211581537002B77A0</string>
 											<string>2DCA10ED11590603002B77A0</string>
 											<string>2D18702011E7BFCB00A8EB9F</string>
-											<string>2D18702211E7BFCB00A8EB9F</string>
 											<string>2D18715011E7C8EF00A8EB9F</string>
 											<string>2D18715611E7C8EF00A8EB9F</string>
 											<string>2D18715711E7C8EF00A8EB9F</string>
@@ -354,7 +353,7 @@
 											<string>2D18720E11E7D40B00A8EB9F</string>
 											<string>2D1872BF11E7D6E600A8EB9F</string>
 											<string>2D1872C011E7D6E600A8EB9F</string>
-											<string>2D1872C111E7D6E600A8EB9F</string>
+											<string>2D1873FA11EB5B9500A8EB9F</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -372,57 +371,18 @@
 											<string>2DCA0F1311581537002B77A0</string>
 											<string>2DCA0F1511581537002B77A0</string>
 											<string>2D18702611E7BFCB00A8EB9F</string>
-											<string>2D18702811E7BFCB00A8EB9F</string>
-											<string>2D18702A11E7BFCB00A8EB9F</string>
-											<string>2D18702C11E7BFCB00A8EB9F</string>
 											<string>2D18715C11E7C8EF00A8EB9F</string>
 											<string>2D18715D11E7C8EF00A8EB9F</string>
 											<string>2D18715E11E7C8EF00A8EB9F</string>
 											<string>2D18715F11E7C8EF00A8EB9F</string>
 											<string>2D18716111E7C8EF00A8EB9F</string>
-											<string>2D18716311E7C8EF00A8EB9F</string>
-											<string>2D18716411E7C8EF00A8EB9F</string>
 											<string>2D18716511E7C8EF00A8EB9F</string>
 											<string>2D18716711E7C8EF00A8EB9F</string>
 											<string>2D18716811E7C8EF00A8EB9F</string>
 											<string>2D18721011E7D40B00A8EB9F</string>
-											<string>2D18721111E7D40B00A8EB9F</string>
-											<string>2D18721211E7D40B00A8EB9F</string>
-											<string>2D18721311E7D40B00A8EB9F</string>
-											<string>2D18721411E7D40B00A8EB9F</string>
-											<string>2D18721511E7D40B00A8EB9F</string>
-											<string>2D18721611E7D40B00A8EB9F</string>
-											<string>2D18721711E7D40B00A8EB9F</string>
-											<string>2D18721811E7D40B00A8EB9F</string>
-											<string>2D18721911E7D40B00A8EB9F</string>
 											<string>2D18721A11E7D40B00A8EB9F</string>
 											<string>2D18721B11E7D40B00A8EB9F</string>
-											<string>2D18721C11E7D40B00A8EB9F</string>
-											<string>2D18721D11E7D40B00A8EB9F</string>
-											<string>2D18721E11E7D40B00A8EB9F</string>
-											<string>2D18721F11E7D40B00A8EB9F</string>
-											<string>2D18722011E7D40B00A8EB9F</string>
-											<string>2D18722111E7D40B00A8EB9F</string>
-											<string>2D18722211E7D40B00A8EB9F</string>
-											<string>2D18722311E7D40B00A8EB9F</string>
-											<string>2D18722411E7D40B00A8EB9F</string>
-											<string>2D18722511E7D40B00A8EB9F</string>
-											<string>2D18722611E7D40B00A8EB9F</string>
-											<string>2D18722711E7D40B00A8EB9F</string>
-											<string>2D18722811E7D40B00A8EB9F</string>
-											<string>2D18722911E7D40B00A8EB9F</string>
-											<string>2D18722A11E7D40B00A8EB9F</string>
-											<string>2D18722B11E7D40B00A8EB9F</string>
-											<string>2D18722C11E7D40B00A8EB9F</string>
-											<string>2D18722D11E7D40B00A8EB9F</string>
-											<string>2D18722E11E7D40B00A8EB9F</string>
-											<string>2D18722F11E7D40B00A8EB9F</string>
-											<string>2D18723011E7D40B00A8EB9F</string>
 											<string>2D18723111E7D40B00A8EB9F</string>
-											<string>2D18723211E7D40B00A8EB9F</string>
-											<string>2D18723311E7D40B00A8EB9F</string>
-											<string>2D1872C211E7D6E600A8EB9F</string>
-											<string>2D1872C311E7D6E600A8EB9F</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -480,9 +440,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>2D18703011E7BFCB00A8EB9F</string>
+				<string>2D18740B11EB5E5500A8EB9F</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>2D18703111E7BFCB00A8EB9F</string>
+				<string>2D18740C11EB5E5500A8EB9F</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -616,8 +576,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C530D57069F1CE1000CFCEE</string>
-		<string>2D3A75061153FB790015F61E</string>
 		<string>/techfront/SDK/seed/project/Seed OSX/Seed.xcodeproj</string>
 	</array>
 	<key>WindowString</key>

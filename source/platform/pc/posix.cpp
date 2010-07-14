@@ -44,7 +44,10 @@
 
 #define TAG	"[Platform] "
 
-#if defined(__APPLE_CC__)
+#if defined(_IPHONE_)
+#undef WideChar
+#include "platform/iphone/IphoneView.h"
+#elif defined(__APPLE_CC__)
 #include "SeedInit.h"
 static char pcBundle[2048];
 #endif
@@ -143,7 +146,10 @@ const char *get_user_home_folder()
 
 void get_current_directory(char *buff, int size)
 {
-#if defined(__APPLE_CC__)
+#if defined(_IPHONE_)
+	memset(buff, '\0', size);
+	memcpy(buff, iphGetRootPath(), size);
+#elif defined(__APPLE_CC__)
 	Seed::Private::iArgc = 1;
 	int len = strlen(Seed::Private::pcArgv[0]);
 	memcpy(pcBundle, Seed::Private::pcArgv[0], len);

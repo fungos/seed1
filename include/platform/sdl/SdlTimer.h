@@ -64,10 +64,6 @@ class SEED_CORE_API Timer : public ITimer
 		SEED_DISABLE_COPY(Timer);
 };
 
-//extern "C" {
-//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Timer);
-//}
-
 #define pTimer Timer::GetInstance()
 
 }} // namespace

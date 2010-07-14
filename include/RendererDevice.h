@@ -42,6 +42,13 @@
 	using namespace Seed::WII;
 #endif // _WII_
 
+#if defined(_IPHONE_)
+	#include "platform/pc/PcRendererDevice.h"
+	#include "api/ogl/OglES1RendererDevice.h"
+	
+	using namespace Seed::PC;
+#endif
+
 #if defined(_SDL_)
 	#include "platform/pc/PcRendererDevice.h"
 	#include "api/ogl/Ogl14RendererDevice.h"
@@ -81,10 +88,5 @@
 	#include "platform/qt/QtRendererDevice.h"
 	using namespace Seed::QT;
 #endif
-
-#if defined(_IPHONE_)
-	#include "platform/iphone/IphRendererDevice.h"
-	using namespace Seed::iPhone;
-#endif // _IPHONE_
 
 #endif // __RENDERER_DEVICE_H__

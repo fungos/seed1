@@ -1,3 +1,5 @@
+#if defined(SEED_ENABLE_D3D8)
+
 //-----------------------------------------------------------------------------
 // File: GetDXVer.cpp
 //
@@ -633,3 +635,5 @@ int CompareLargeInts(ULARGE_INTEGER ullParam1, ULARGE_INTEGER ullParam2)
 
 	return 0;
 }
+
+#endif // SEED_ENABLE_D3Dx

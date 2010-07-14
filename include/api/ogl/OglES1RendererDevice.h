@@ -29,13 +29,13 @@
  **
  *****************************************************************************/
 
-/*! \file OGL14RendererDevice.h
+/*! \file OglES1RendererDevice.h
 	\author	Danny Angelo Carminati Grein
-	\brief OpenGL 1.4 renderer device implementation
+	\brief OpenGL ES1 renderer device implementation
 */
 
-#ifndef __OGL14_RENDERER_DEVICE_H__
-#define __OGL14_RENDERER_DEVICE_H__
+#ifndef __OGLES1_RENDERER_DEVICE_H__
+#define __OGLES1_RENDERER_DEVICE_H__
 
 #include "Defines.h"
 #include "Enum.h"
@@ -45,26 +45,8 @@
 
 #include "interface/IRendererDevice.h"
 
-#if defined(_SDL_) && defined(_MSC_VER)
-#pragma push_macro("Delete")
-#pragma push_macro("BOOL")
-#pragma push_macro("SIZE_T")
-#undef Delete
-#undef BOOL
-#undef SIZE_T
-#include <SDL/SDL_opengl.h>
-#pragma pop_macro("SIZE_T")
-#pragma pop_macro("BOOL")
-#pragma pop_macro("Delete")
-#elif defined(_SDL_)
-#include <SDL/SDL_opengl.h>
-#endif
-
-#if defined(__APPLE_CC__)
-#include <OpenGL/glext.h>
-#else
-#include <GL/glext.h>
-#endif
+// iOS
+#include <OpenGLES/ES1/gl.h>
 
 namespace Seed {
 
@@ -72,13 +54,13 @@ class ITexture;
 
 namespace OpenGL {
 
-class SEED_CORE_API OGL14RendererDevice : public IRendererDevice
+class SEED_CORE_API OGLES1RendererDevice : public IRendererDevice
 {
 	friend class IScreen;
 
 	public:
-		OGL14RendererDevice();
-		virtual ~OGL14RendererDevice();
+		OGLES1RendererDevice();
+		virtual ~OGLES1RendererDevice();
 
 		virtual void Begin() const;
 		virtual void End() const;
@@ -110,7 +92,7 @@ class SEED_CORE_API OGL14RendererDevice : public IRendererDevice
 		mutable Array<void **, 128> arTextureName;
 
 	private:
-		SEED_DISABLE_COPY(OGL14RendererDevice);
+		SEED_DISABLE_COPY(OGLES1RendererDevice);
 		BOOL CheckExtension(const char *extName);
 
 		int GetOpenGLMeshType(eMeshType type) const;
@@ -119,7 +101,7 @@ class SEED_CORE_API OGL14RendererDevice : public IRendererDevice
 }} // namespace
 
 #else // _OGL_
-	#error "Include 'RendererDevice.h' instead 'api/ogl/Ogl14RendererDevice.h' directly."
+	#error "Include 'RendererDevice.h' instead 'api/ogl/OglES1RendererDevice.h' directly."
 #endif // _OGL_
 
-#endif // __OGL14_RENDERER_DEVICE_H__
+#endif // __OGLES1_RENDERER_DEVICE_H__

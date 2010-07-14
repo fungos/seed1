@@ -46,6 +46,7 @@
 
 #include <vector>
 #include <OpenAL/al.h>
+#include <OpenAL/alc.h>
 
 #define IPHONE_MAX_VOICES		32
 #define IPHONE_MAX_FILES		64
@@ -53,105 +54,40 @@
 
 namespace Seed { namespace iPhone {
 
-IResource *AudioResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
-
-class SoundSystem : public ISoundSystem, public IResource
+class SoundSystem : public ISoundSystem
 {
-	friend IResource *AudioResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
-
 	SEED_SINGLETON_DECLARE(SoundSystem);
 	public:
 		// ISoundSystem
-		virtual BOOL Prepare(void *workBuffer, u32 bufferLength);
+		//virtual void PlayMusic(IMusic *mus, f32 ms = 0);
+		//virtual void StopMusic(f32 ms = 0, IMusic *mus = NULL);
+		//virtual void StopSounds();
+		virtual void Pause();
+		virtual void Resume();
 
-		//virtual BOOL LoadPackage(const char *filename);
-		virtual void Load(const char *filename, IMemoryPool *pool);
-
-		virtual void PlaySound(u32 soundId);
-		virtual void StopSound(u32 soundId, u16 fadeFrames);
-		virtual void StopSounds();
-		virtual void SetSoundVolume(f32 volume);
-
-		virtual void PlayMusic(u32 musicId);
-		virtual void StopMusic(u16 fadeFrames);
-		virtual void PauseMusic();
-		virtual void ResumeMusic();
-		virtual void SetMusicVolume(f32 volume);
-
-		virtual void Mute();
-		virtual void Unmute();
+		//virtual void Add(ISoundSource *src);
+		//virtual void Remove(ISoundSource *src);
 
 		// IUpdatable
-		virtual BOOL Update(f32 delta);
+		virtual BOOL Update(f32 dt);
 
 		// IModule
 		virtual BOOL Initialize();
 		virtual BOOL Reset();
 		virtual BOOL Shutdown();
 
-	public:
-		typedef std::vector<const char *> MusicList;
-
-		enum eSoundState
-		{
-			SOUND_STATE_STOPPED 	= 0,
-			SOUND_STATE_START   	= 1,
-			SOUND_STATE_STARTED 	= 2,
-			SOUND_STATE_PLAYING 	= 3,
-			SOUND_STATE_STOP		= 4,
-			SOUND_STATE_FADING_IN	= 5,
-			SOUND_STATE_FADING_OUT	= 6
-		};
-
-		struct sSoundFileInfo
-		{
-			ALsizei		iSize;
-			ALsizei		iFreq;
-			ALenum		eFormat;
-			const char	*pFilename;
-			void		*pData;
-			ALuint		iBuffer;
-		};
-
-		struct sSoundVoiceInfo
-		{
-			u32			iId;
-			ALuint		iSource;
-			ALfloat		fVolume;
-			eSoundState iState;
-		};
-
 	private:
 		SEED_DISABLE_COPY(SoundSystem);
 
-		void UpdateMusic();
-		void UpdateSounds();
-		void ReadData(sSoundFileInfo *obj, const char *file);
+		void UpdateMusic(f32 dt, IMusic *mus);
+		void UpdateSounds(f32 dt);
 
 	private:
-		File				stFile;
-		void				*pAVPlayer;
-		BOOL				bLoaded;
-
-		void				*pData;
-		const char			*pFilename;
-
-		sSoundFileInfo		sndFile[IPHONE_MAX_FILES];
-		sSoundVoiceInfo		sndVoice[IPHONE_MAX_VOICES];
-		char				*musFile[IPHONE_MAX_FILES];
-		//sSoundFileInfo		musFile[IPHONE_MAX_FILES];
-		//sSoundVoiceInfo		musVoice;
-
-		f32					fVolume;
-		f32					fOriginalVolume;
-		f32					fElapsedTime;
-		u32					iFadeFrames;
-		u32					iCurrentStream;
+		ALCdevice			*pDevice;
+		ALCcontext			*pContext;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(SoundSystem);
-}
+#define pSoundSystem SoundSystem::GetInstance()
 
 }} // namespace
 

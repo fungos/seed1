@@ -82,7 +82,7 @@ INLINE BOOL Timer::Shutdown()
 	return this->Reset();
 }
 
-INLINE const u64 Timer::GetMilliseconds() const
+INLINE u64 Timer::GetMilliseconds() const
 {
 	struct timeval tv;
 	gettimeofday(&tv, 0);

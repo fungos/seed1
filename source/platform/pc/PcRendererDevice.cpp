@@ -131,12 +131,17 @@ BOOL RendererDevice::Initialize()
 #endif
 
 		case RendererDeviceWii:
-		case RendererDeviceOpenGLES:
+		case RendererDeviceOpenGLES1:
 		case RendererDeviceOpenGL14:
 		default:
 		{
+#if defined(_IPHONE_)
+			Info(TAG "Creating renderer device OpenGL ES 1");
+			pApiDevice = New(Seed::OpenGL::OGLES1RendererDevice());
+#else
 			Info(TAG "Creating renderer device OpenGL 1.4");
 			pApiDevice = New(Seed::OpenGL::OGL14RendererDevice());
+#endif
 		}
 		break;
 	}

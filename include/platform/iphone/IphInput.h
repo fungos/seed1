@@ -53,7 +53,11 @@ class Input : public IInput, public IInputPointer
 		// IInput
 		virtual Seed::eInputButton GetButtonCode(u32 button) const;
 		virtual u32 ConvertButtonFlags(u32 flags);
-
+	
+		// IInputKeyboard dummy
+		virtual void AddKeyboardListener(void *) {};
+		virtual void RemoveKeyboardListener(void *) {};
+		
 		// IInputPointer
 		virtual BOOL IsEnabled(u16 joystick = 0) const;
 		virtual BOOL IsHold(u32 button, u16 joystick = 0) const;
@@ -99,9 +103,7 @@ class Input : public IInput, public IInputPointer
 		sState oldState[PLATFORM_MAX_INPUT];
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Input);
-}
+#define pInput Input::GetInstance()
 
 }} // namespace
 

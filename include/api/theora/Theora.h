@@ -39,13 +39,14 @@
 
 #include "Defines.h"
 
-#if SEED_USE_THEORA == 1
+#if SEED_USE_THEORA == 1 && !defined(_IPHONE_)
 
 #include "Thread.h"
 #include "Mutex.h"
 #include "Image.h"
 #include "Texture.h"
 #include "interface/ISceneObject.h"
+
 #include <oggplay/oggplay.h>
 
 /* FIXME: Somebody please create a Semaphore class! */

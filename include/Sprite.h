@@ -42,15 +42,11 @@
 	using namespace Seed::WII;
 #endif // _WII_
 
-#if defined(_SDL_) || defined(_QT_)
+#if defined(_SDL_) || defined(_QT_) || defined(_IPHONE_)
 	#include "interface/ISprite.h"
 	using namespace Seed;
-	typedef ISprite Sprite;
+	//typedef ISprite Sprite;
+	#define Sprite ISprite
 #endif // _SDL_
-
-#if defined(_IPHONE_)
-	#include "platform/iphone/IphSprite.h"
-	using namespace Seed::iPhone;
-#endif // _IPHONE_
 
 #endif // __SPRITE_H__

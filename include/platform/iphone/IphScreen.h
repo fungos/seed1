@@ -40,26 +40,22 @@
 #if defined(_IPHONE_)
 
 #include "interface/IScreen.h"
-#include "interface/IRenderer2D.h"
 #include "Singleton.h"
 
 #include <OpenGLES/ES1/gl.h>
 
 namespace Seed { namespace iPhone {
 
-class IRenderer2D;
-
 class Screen : public IScreen
 {
 	SEED_SINGLETON_DECLARE(Screen);
 	public:
-
+		void ApplyFade();
+		virtual void Update();
+		
 		// IScreen
-		virtual void Setup(u32 mode = LANDSCAPE);
 		virtual void FadeOut();
 		virtual void FadeIn();
-		virtual u32 GetHeight() const;
-		virtual u32 GetWidth() const;
 		virtual void CancelFade();
 
 		// IModule
@@ -67,21 +63,7 @@ class Screen : public IScreen
 		virtual BOOL Reset();
 		virtual BOOL Shutdown();
 
-		// IUpdatable
-		virtual BOOL Update(f32 delta);
-
 	public:
-		enum eScreenMode
-		{
-			NORMAL,
-			LANDSCAPE,
-			LANDSCAPE_GOOFY
-		};
-
-	protected:
-		friend class Renderer;
-		friend class Renderer2D;
-
 		/* OpenGL names for the renderbuffer and framebuffers used to render to this view */
 		GLuint		renderBuffer;
 		GLuint		frameBuffer;
@@ -93,7 +75,6 @@ class Screen : public IScreen
 		void CreateHardwareSurfaces();
 		void DestroyHardwareSurfaces();
 		void SwapSurfaces();
-		void ApplyFade();
 
 	private:
 		enum eFadeType
@@ -101,25 +82,22 @@ class Screen : public IScreen
 			FADE_IN = 1,
 			FADE_OUT
 		};
-
-	private:
+		
 		s32 		iFadeStatus;
 		eFadeType 	fadeType;
 		GLint		iHeight;
 		GLint		iWidth;
 		GLint		iModeHeight;
 		GLint		iModeWidth;
-
-		IRenderer2D *pRenderer;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Screen);
-}
+#define pScreen Screen::GetInstance()
 
 }} // namespace
 
 #else // _IPHONE_
+
 	#error "Include 'Screen.h' instead 'platform/iphone/IphScreen.h' directly."
+	
 #endif // _IPHONE_
 #endif // __IPH_SCREEN_H__

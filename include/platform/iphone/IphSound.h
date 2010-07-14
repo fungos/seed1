@@ -29,3 +29,66 @@
  **
  *****************************************************************************/
 
+/*! \file IphSound.h
+	\author	Danny Angelo Carminati Grein
+	\brief Sound Implementation for iPhone
+*/
+
+#ifndef __IPHONE_SOUND_H__
+#define __IPHONE_SOUND_H__
+
+#include "Defines.h"
+
+#if defined(_IPHONE_)
+
+#include "File.h"
+#include "SeedInit.h"
+#include "interface/IResource.h"
+#include "interface/ISound.h"
+
+#include <OpenAL/al.h>
+
+namespace Seed { namespace iPhone {
+
+IResource *SoundResourceLoader(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+
+class SEED_CORE_API Sound : public ISound
+{
+	friend IResource *SoundResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
+	friend class SoundSystem;
+	friend class SoundSource;
+
+	public:
+		Sound();
+		virtual ~Sound();
+
+		void Reset();
+
+		// IResource
+		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual BOOL Unload();
+		virtual u32 GetUsedMemory() const;
+
+	protected:
+		virtual const void *GetData() const;
+
+	private:
+		SEED_DISABLE_COPY(Sound);
+
+		void ReadData(const char *file);
+
+	private:
+		ALuint		iBuffer;
+		ALsizei		iSize;
+		ALsizei		iFreq;
+		ALenum		eFormat;
+		void		*pData;
+
+};
+
+}} // namespace
+
+#else // _IPHONE_
+	#error "Include 'Sound.h' instead 'platform/iphone/IphSound.h' directly."
+#endif // _IPHONE_
+#endif // __IPHONE_SOUND_H__

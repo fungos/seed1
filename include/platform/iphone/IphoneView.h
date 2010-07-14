@@ -2,14 +2,13 @@
 //  Created by Danny Grein on 10/13/08.
 //  Copyright TechFront Studios 2008. All rights reserved.
 
+#include "Defines.h"
+#include "interface/IGameApp.h"
+
 #import <UIKit/UIKit.h>
 #import <OpenGLES/EAGL.h>
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
-
-#include "Defines.h"
-#include "interface/IGameApp.h"
-#include "interface/IRenderer.h"
 
 /*
 This class wraps the CAEAGLLayer from CoreAnimation into a convenient UIView subclass.
