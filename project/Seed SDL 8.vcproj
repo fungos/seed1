@@ -497,27 +497,7 @@
 					Name="iphone"
 					>
 					<File
-						RelativePath="..\source\platform\iphone\IphCartridge.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\iphone\IphFileSystem.cpp"
-						>
-					</File>
-					<File
 						RelativePath="..\source\platform\iphone\IphInput.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\iphone\IphLog.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\iphone\IphMemoryManager.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\iphone\IphMemoryPool.cpp"
 						>
 					</File>
 					<File
@@ -533,14 +513,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\source\platform\iphone\IphRenderer.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\iphone\IphRenderer2D.cpp"
-						>
-					</File>
-					<File
 						RelativePath="..\source\platform\iphone\IphScreen.cpp"
 						>
 					</File>
@@ -550,10 +522,6 @@
 					</File>
 					<File
 						RelativePath="..\source\platform\iphone\IphSoundSystem.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\platform\iphone\IphSprite.cpp"
 						>
 					</File>
 					<File
@@ -1549,27 +1517,11 @@
 					Name="iphone"
 					>
 					<File
-						RelativePath="..\include\platform\iphone\IphCartridge.h"
-						>
-					</File>
-					<File
 						RelativePath="..\include\platform\iphone\IphDefines.h"
 						>
 					</File>
 					<File
-						RelativePath="..\include\platform\iphone\IphFileSystem.h"
-						>
-					</File>
-					<File
 						RelativePath="..\include\platform\iphone\IphInput.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\iphone\IphMemoryManager.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\iphone\IphMemoryPool.h"
 						>
 					</File>
 					<File
@@ -1589,14 +1541,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\include\platform\iphone\IphRenderer.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\iphone\IphRenderer2D.h"
-						>
-					</File>
-					<File
 						RelativePath="..\include\platform\iphone\IphScreen.h"
 						>
 					</File>
@@ -1606,10 +1550,6 @@
 					</File>
 					<File
 						RelativePath="..\include\platform\iphone\IphSoundSystem.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\platform\iphone\IphSprite.h"
 						>
 					</File>
 					<File
