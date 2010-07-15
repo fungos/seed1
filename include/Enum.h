@@ -122,7 +122,7 @@ enum ePlatformSimulation
 enum eRendererDeviceType
 {
 	RendererDeviceWii,
-	RendererDeviceOpenGLES,
+	RendererDeviceOpenGLES1,
 	RendererDeviceOpenGL14,
 	RendererDeviceOpenGL20,
 	RendererDeviceOpenGL30,
@@ -140,7 +140,8 @@ enum eVideoMode
 	Video_480x272,
 	Video_480x320,
 	Video_iPhone,
-	Video_iPhoneLandscape,
+	Video_iPhoneLandscape = Video_iPhone,
+	Video_iPhoneLandscapeGoofy,
 	Video_iPhonePortrait,
 	Video_640x480,
 	Video_NintendoWii,

@@ -44,10 +44,11 @@
 #include "Screen.h"
 #include "Formats.h"
 #include "File.h"
+#include "RendererDevice.h"
 
+#undef WideChar
+#include <Foundation/Foundation.h>
 #include <UIKit/UIKit.h>
-#include <OpenGLES/ES1/gl.h>
-#include <OpenGLES/ES1/glext.h>
 
 #include <math.h>
 
@@ -61,92 +62,139 @@ IResource *TextureResourceLoader(const char *filename, ResourceManager *res, IMe
 	UNUSED(res);
 
 	Texture *image = New(Texture());
-	image->Load(filename, pool);
+	image->Load(filename, res, pool);
 
 	return image;
 }
 
 Texture::Texture()
-	: pImage(NULL)
-	, stFile()
-	, fWidth(0.0f)
-	, fHeight(0.0f)
-	, iTextureId(0)
-	, iHalfWidth(0)
-	, iHalfHeight(0)
-	, iWidth(0)
-	, iHeight(0)
-	, bCompressed(FALSE)
+	: pData(NULL)
+	, pTextureId(NULL)
+	, iBytesPerPixel(4)
+	, iPitch(0)
+	, iAtlasWidth(0)
+	, iAtlasHeight(0)
+	//, bCompressed(FALSE)
 	, pixelFormat(kTexture2DPixelFormat_RGBA8888)
 {
 }
 
 Texture::~Texture()
 {
-	this->Unload();
-}
-
-INLINE void Texture::Load(const char *filename, IMemoryPool *pool)
-{
-	ASSERT_NULL(filename);
-	ASSERT_NULL(pool);
-	this->pPool = pool;
-
-#if !defined(ENABLE_NATIVE_PVRTC_FORMAT)
-	this->LoadPNG(filename); // Ja configura W e H
-#else
-	this->LoadPVRTC(filename);
-#endif // ENABLE_NATIVE_PVRTC_FORMAT
-}
-
-INLINE void Texture::Load(u16 width, u16 height, PIXEL *buffer, IMemoryPool *pool)
-{
-	ASSERT(width > 0);
-	ASSERT(height > 0);
-	ASSERT_NULL(buffer);
-	ASSERT_NULL(pool);
-
-	this->pPool = pool;
-	this->iWidth = width;
-	this->iHeight = height;
-	this->pixelFormat = kTexture2DPixelFormat_RGBA8888;
-	this->pImage = buffer;
-}
-
-INLINE void Texture::Unload()
-{
 	this->Reset();
 }
 
 INLINE void Texture::Reset()
 {
-	this->pImage = NULL;
-	this->pPool = NULL;
+	ITexture::Reset();
+	
+	this->UnloadTexture();
+	
+	pData = NULL;
+	pPool = NULL;
+	
+	iBytesPerPixel = 4;
+	iPitch = 0;
+	iAtlasWidth = 0;
+	iAtlasHeight = 0;
 
-	this->fWidth = 0;
-	this->fHeight = 0;
+	//bCompressed = FALSE;
+	pixelFormat = kTexture2DPixelFormat_RGBA8888;
+}
 
-	this->iWidth = 0;
-	this->iHeight = 0;
-	this->iHalfWidth = 0;
-	this->iHalfHeight = 0;
+INLINE BOOL Texture::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
+{
+	if (ITexture::Load(filename, res, pool))
+	{
+		//#if !defined(ENABLE_NATIVE_PVRTC_FORMAT)
+		this->LoadPNG(filename);
+		//#else
+		//this->LoadPVRTC(filename);
+		//#endif // ENABLE_NATIVE_PVRTC_FORMAT
+	}
+	else
+	{
+		Log(TAG "ERROR: Could not find/load texture %s.", filename);
+	}
+	
+	return bLoaded;
+}
 
-	this->bCompressed = FALSE;
+BOOL Texture::Load(u32 width, u32 height, PIXEL *buffer, u32 atlasWidth, u32 atlasHeight, IMemoryPool *pool)
+{
+	ASSERT_NULL(buffer);
+	//ASSERT_NULL(pool);
+
+	ASSERT_MSG(ALIGN_FLOOR(buffer, 32) == (u8 *)buffer, "ERROR: User texture buffer MUST BE 32bits aligned!");
+	ASSERT_MSG(ROUND_UP(width, 32) == width, "ERROR: User texture scanline MUST BE 32bits aligned - pitch/stride!");
+
+	if (this->Unload())
+	{
+		pPool = pool;
+		pFilename = "[dynamic texture]";
+		
+		fWidth = (f32)width / (f32)pScreen->GetWidth();
+		fHeight = (f32)height / (f32)pScreen->GetHeight();
+		iWidth = iAtlasWidth = width;
+		iHeight = iAtlasHeight = height;
+
+		if (atlasWidth)
+			iAtlasWidth = atlasWidth;
+
+		if (atlasHeight)
+			iAtlasHeight = atlasHeight;
+
+		iBytesPerPixel = 4; // FIXME: parametized?
+		iPitch = ROUND_UP(width, 32); // FIXME: parametized?
+		pData = buffer;
+		pixelFormat = kTexture2DPixelFormat_RGBA8888;
+
+		pRendererDevice->TextureRequest(this, &pTextureId);
+
+		bLoaded = TRUE;
+	}
+	
+	return bLoaded;
+}
+
+INLINE void Texture::Update(PIXEL *data)
+{
+	pData = data;
+	pRendererDevice->TextureDataUpdate(this);
+}
+
+INLINE BOOL Texture::Unload()
+{
+	this->UnloadTexture();
+
+	bLoaded = FALSE;
+
+	return TRUE;
 }
 
 INLINE const void *Texture::GetData() const
 {
-	return pImage;
+	return pData;
+}
+
+INLINE u32 Texture::GetAtlasWidthInPixel() const
+{
+	return iAtlasWidth;
+}
+
+INLINE u32 Texture::GetAtlasHeightInPixel() const
+{
+	return iAtlasHeight;
 }
 
 INLINE void Texture::PutPixel(u32 x, u32 y, PIXEL px)
 {
 #if !defined(ENABLE_NATIVE_PVRTC_FORMAT)
-	if (this->pImage || pixelFormat != kTexture2DPixelFormat_RGB565 || pixelFormat != kTexture2DPixelFormat_A8)
+	if (pData || pixelFormat != kTexture2DPixelFormat_RGB565 || pixelFormat != kTexture2DPixelFormat_A8)
 	{
-		const PIXEL *data1 = static_cast<const PIXEL *>(pImage);
+		const PIXEL *data1 = static_cast<const PIXEL *>(pData);
 		PIXEL *data = const_cast<PIXEL *>(data1);
-		data[(y * this->iWidth) + x] = px; // ja deve ser arrumado em relacao ao atlas
+		data[(y * iWidth) + x] = px; // ja deve ser arrumado em relacao ao atlas
 	}
 	else
 	{
@@ -160,7 +208,7 @@ INLINE void Texture::PutPixel(u32 x, u32 y, PIXEL px)
 INLINE PIXEL Texture::GetPixel(u32 x, u32 y) const
 {
 #if !defined(ENABLE_NATIVE_PVRTC_FORMAT)
-	if (!this->pImage)
+	if (!pData)
 		return 0;
 
 	if (pixelFormat == kTexture2DPixelFormat_RGB565 || pixelFormat == kTexture2DPixelFormat_A8)
@@ -169,8 +217,8 @@ INLINE PIXEL Texture::GetPixel(u32 x, u32 y) const
 		return 0;
 	}
 
-	const PIXEL *data = static_cast<const PIXEL *>(pImage);
-	PIXEL px = data[(y * this->iWidth) + x]; // ja deve ser arrumado em relacao ao atlas
+	const PIXEL *data = static_cast<const PIXEL *>(pData);
+	PIXEL px = data[(y * iWidth) + x]; // ja deve ser arrumado em relacao ao atlas
 
 	return px;
 #else
@@ -181,13 +229,24 @@ INLINE PIXEL Texture::GetPixel(u32 x, u32 y) const
 INLINE u8 Texture::GetPixelAlpha(u32 x, u32 y) const
 {
 #if !defined(ENABLE_NATIVE_PVRTC_FORMAT)
-	if (!this->pImage)
-		return 255;
+	if (!pData)
+		return 0;
 
 	if (pixelFormat == kTexture2DPixelFormat_RGB565 || pixelFormat == kTexture2DPixelFormat_A8)
 	{
 		Log(TAG "GetPixel unsuported for format 565 (yet).");
 		return 255;
+	}
+
+	if (x >= iWidth)
+	{
+		x = static_cast<u32>(iAtlasWidth) - 1;
+		return this->GetPixelAlpha(x, y);
+	}
+	else if (y >= iHeight)
+	{
+		y = static_cast<u32>(iAtlasHeight) - 1;
+		return this->GetPixelAlpha(x, y);
 	}
 
 	PIXEL px = this->GetPixel(x, y);
@@ -200,116 +259,63 @@ INLINE u8 Texture::GetPixelAlpha(u32 x, u32 y) const
 
 INLINE u32 Texture::GetUsedMemory() const
 {
-	u32 size = 4;
-
-	if (pixelFormat == kTexture2DPixelFormat_RGB565)
-		size = 2;
-
-	return size * iWidth * iHeight;
+	return IResource::GetUsedMemory() + sizeof(this) + (iHeight * iWidth * iBytesPerPixel);
 }
 
-INLINE f32 Texture::GetWidth() const
+INLINE u32 Texture::GetBytesPerPixel() const
 {
-	return fWidth;
+	return iBytesPerPixel;
 }
 
-INLINE f32 Texture::GetHeight() const
+INLINE void *Texture::GetTextureName() const
 {
-	return fHeight;
-}
-
-INLINE u32 Texture::GetWidthInPixel() const
-{
-	return this->iWidth;
-}
-
-INLINE u32 Texture::GetHeightInPixel() const
-{
-	return this->iHeight;
-}
-
-INLINE int Texture::LoadTexture()
-{
-	if (pImage && !iTextureId)
-	{
-		GLint saveName;
-
-		glGenTextures(1, &iTextureId);
-		glGetIntegerv(GL_TEXTURE_BINDING_2D, &saveName);
-		glBindTexture(GL_TEXTURE_2D, iTextureId);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-		if (bCompressed)
-		{
-			GLuint bpp = 2;
-			GLsizei size = this->iWidth * this->iHeight * bpp / 8;
-
-			if (size < 32)
-			{
-				size = 32;
-			}
-
-
-			glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, this->iWidth, this->iHeight, 0, size, this->pImage);
-		}
-		else
-		{
-			switch (pixelFormat)
-			{
-				case kTexture2DPixelFormat_RGBA8888:
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this->iWidth, this->iHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, this->pImage);
-				break;
-
-				case kTexture2DPixelFormat_RGB565:
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->iWidth, this->iHeight, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, this->pImage);
-				break;
-
-				case kTexture2DPixelFormat_A8:
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, this->iWidth, this->iHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, this->pImage);
-				break;
-
-				default:
-				break;
-			}
-		}
-		glBindTexture(GL_TEXTURE_2D, saveName);
-	}
-
-	return this->iTextureId;
-}
-
-INLINE int Texture::GetTexture()
-{
-	return this->iTextureId;
+	return pTextureId;
 }
 
 INLINE void Texture::UnloadTexture()
 {
-	if (iTextureId)
-		glDeleteTextures(1, &iTextureId);
+	if (pTextureId)
+	{
+		pRendererDevice->TextureUnload(this);
+	}
+	else
+	{
+		pRendererDevice->TextureRequestAbort(this, &pTextureId);
+	}
 
-	iTextureId = 0;
+	pTextureId = NULL;
+}
+
+INLINE void Texture::Close()
+{
+	stFile.Close();
+	
+	if (pData)
+		pMemoryManager->Free(pData);
+	pData = NULL;
 }
 
 // FIXME: 2009-02-15 | Use Width x Height from image. | Danny Angelo Carminati Grein
+/*
 void Texture::LoadPVRTC(const char *file)
 {
-	this->iHeight = 1024;
-	this->iWidth = 1024;
-	pFileSystem->Open(file, &stFile, this->pPool);
-	this->pImage = stFile.GetData();
-	this->bCompressed = TRUE;
+	iHeight = 1024;
+	iWidth = 1024;
+	pFileSystem->Open(file, &stFile, pPool);
+	pImage = stFile.GetData();
+	bCompressed = TRUE;
 
 //#if defined(ENABLE_PRELOAD_TEXTURE)
 	this->LoadTexture();
 //#endif // ENABLE_PRELOAD_TEXTURE
 
-	this->iWidth = 1024;
-	this->iHeight = 1024;
-	this->pixelFormat = kTexture2DPixelFormat_RGBA2;
-	this->fWidth = 1024 / pScreen->GetWidth();
-	this->fHeight = 1024 / pScreen->GetHeight();
+	iWidth = 1024;
+	iHeight = 1024;
+	pixelFormat = kTexture2DPixelFormat_RGBA2;
+	fWidth = 1024 / pScreen->GetWidth();
+	fHeight = 1024 / pScreen->GetHeight();
 }
+*/
 
 void Texture::LoadPNG(const char *file)
 {
@@ -337,7 +343,6 @@ void Texture::LoadPNG(const char *file)
 	if (NULL == uiImage)
 	{
 		Log("WARNING: Image file %s not found!!!!!!", file);
-		iTextureId = 0;
 		return;
 	}
 
@@ -352,17 +357,26 @@ void Texture::LoadPNG(const char *file)
 	if (CGImageGetColorSpace(image))
 	{
 		if (hasAlpha)
+		{
 			pixelFormat = kTexture2DPixelFormat_RGBA8888;
+		}
 		else
+		{
 			pixelFormat = kTexture2DPixelFormat_RGB565;
+		}
 	}
 	else  //NOTE: No colorspace means a mask image
+	{
 		pixelFormat = kTexture2DPixelFormat_A8;
-
+	}
+	
 	imageSize = CGSizeMake(CGImageGetWidth(image), CGImageGetHeight(image));
 	transform = CGAffineTransformIdentity;
+	
+	iWidth = imageSize.width;
+	iHeight = imageSize.height;
+	
 	width = imageSize.width;
-
 	if ((width != 1) && (width & (width - 1)))
 	{
 		i = 1;
@@ -371,7 +385,6 @@ void Texture::LoadPNG(const char *file)
 	}
 
 	height = imageSize.height;
-
 	if ((height != 1) && (height & (height - 1)))
 	{
 		i = 1;
@@ -388,24 +401,24 @@ void Texture::LoadPNG(const char *file)
 		imageSize.height *= static_cast<f32>(0.5);
 	}
 
+	iBytesPerPixel = CGImageGetBitsPerPixel(image) / 8;
+	data = pMemoryManager->Alloc(height * width * iBytesPerPixel, pPool);
+	
 	switch (pixelFormat)
 	{
 		case kTexture2DPixelFormat_RGBA8888:
 			colorSpace = CGColorSpaceCreateDeviceRGB();
-			data = pMemoryManager->Alloc(height * width * 4, this->pPool);
 			context = CGBitmapContextCreate(data, width, height, 8, 4 * width, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
 			CGColorSpaceRelease(colorSpace);
 		break;
 
 		case kTexture2DPixelFormat_RGB565:
 			colorSpace = CGColorSpaceCreateDeviceRGB();
-			data = pMemoryManager->Alloc(height * width * 4, this->pPool);
 			context = CGBitmapContextCreate(data, width, height, 8, 4 * width, colorSpace, kCGImageAlphaNoneSkipLast | kCGBitmapByteOrder32Big);
 			CGColorSpaceRelease(colorSpace);
 		break;
 
 		case kTexture2DPixelFormat_A8:
-			data = pMemoryManager->Alloc(height * width, this->pPool);
 			context = CGBitmapContextCreate(data, width, height, 8, width, NULL, kCGImageAlphaOnly);
 		break;
 
@@ -433,27 +446,25 @@ void Texture::LoadPNG(const char *file)
 		data = tempData;
 	}
 
-	this->pImage = data;
-	this->bCompressed = FALSE;
-	this->iWidth = width;
-	this->iHeight = height;
-	//this->iWidth = imageSize.width;
-	//this->iHeight = imageSize.height;
-	this->pixelFormat = pixelFormat;
-	this->fWidth = imageSize.width / pScreen->GetWidth();
-	this->fHeight = imageSize.height / pScreen->GetHeight();
+	pData = data;
+	//bCompressed = FALSE;
+	pixelFormat = pixelFormat;
+	
+	// FIXME: Must divide by res_width , res_height - not by screen width/height
+	fWidth = (f32)iWidth / (f32)pScreen->GetWidth();
+	fHeight = (f32)iHeight / (f32)pScreen->GetHeight();
 
-	//this->LoadTexture();
+	iAtlasWidth = width;
+	iAtlasHeight = height;
+	iWidth = imageSize.width;
+	iHeight = imageSize.height;
+	iPitch = CGImageGetBytesPerRow(image);
+
+	pRendererDevice->TextureRequest(this, &pTextureId);
 
 	CGContextRelease(context);
 
 	//Log(">>>>>>>>>>>> MEM: %s == %d == Texture ID: %d", file, (width * height * 4), iTextureId);
-
-	//pImage = data;
-//#if SEED_ENABLE_KEEP_IMAGE_DATA == 0 // Release texture memory?
-//	pMemoryManager->Free(const_cast<void *>(pImage), pPool);
-//	pImage = NULL;
-//#endif // SEED_ENABLE_KEEP_IMAGE_DATA
 }
 
 }} // namespace

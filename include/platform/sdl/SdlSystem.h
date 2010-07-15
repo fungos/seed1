@@ -95,10 +95,6 @@ class SEED_CORE_API System : public ISystem
 		u64 		iFpsTime;
 };
 
-//extern "C" {
-//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(System);
-//}
-
 #define pSystem System::GetInstance()
 
 }} // namespace

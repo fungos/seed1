@@ -29,49 +29,36 @@
  **
  *****************************************************************************/
 
-/*! \file OGL14RendererDevice.cpp
+/*! \file OglES1RendererDevice.cpp
 	\author	Danny Angelo Carminati Grein
-	\brief OpenGL 1.4 renderer device implementation
+	\brief OpenGL ES1 renderer device implementation
 */
 
 #include "RendererDevice.h"
 
-#if defined(_OGL_) && !defined(_IPHONE_)
+#if defined(_OGL_)
 
 #include "Log.h"
 #include "MemoryManager.h"
 #include "Screen.h"
 #include "Texture.h"
 
-#if defined(_SDL_)
-#include <SDL/SDL_opengl.h>
+#if defined(_IPHONE_)
+#undef WideChar
+#include "platform/iphone/IphoneView.h"
+#include <OpenGLES/ES1/gl.h>
 #endif
 
-#if defined(__APPLE_CC__)
-#include <OpenGL/gl.h>
-#include <OpenGL/glext.h>
-#else
-#include <GL/gl.h>
-#include <GL/glext.h>
-#endif
-
-#if defined(_SDL_)
-#include "platform/sdl/SdlDefines.h"
-#endif
-
-#define TAG "[OGL14RendererDevice] "
+#define TAG "[OGLES1RendererDevice] "
 
 namespace Seed { namespace OpenGL {
 
-OGL14RendererDevice::OGL14RendererDevice()
+OGLES1RendererDevice::OGLES1RendererDevice()
 {
 	Log(TAG "Initializing...");
 
 	char *version = (char *)glGetString(GL_VERSION);
 	Info(TAG "OpenGL Version: %s", version);
-
-	if (this->CheckExtension("GL_EXT_bgra"))
-		Info(TAG "\tGL_EXT_bgra");
 
 	GLint maxSize;
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxSize);
@@ -82,19 +69,24 @@ OGL14RendererDevice::OGL14RendererDevice()
 	Log(TAG "Initialization completed.");
 }
 
-OGL14RendererDevice::~OGL14RendererDevice()
+OGLES1RendererDevice::~OGLES1RendererDevice()
 {
 	this->Reset();
 }
 
-INLINE BOOL OGL14RendererDevice::Initialize()
+INLINE BOOL OGLES1RendererDevice::Initialize()
 {
 	BOOL ret = IRendererDevice::Initialize();
 
-#if !defined(_QT_)
 	u32 w = pScreen->GetWidth();
 	u32 h = pScreen->GetHeight();
-
+	
+	if (pScreen->GetMode() == Seed::Video_iPhoneLandscape || pScreen->GetMode() == Seed::Video_iPhoneLandscapeGoofy)
+	{
+		w = h;
+		h = pScreen->GetWidth();
+	}
+	
 	glScissor(0, 0, w, h);
 	glViewport(0, 0, w, h);
 
@@ -108,14 +100,13 @@ INLINE BOOL OGL14RendererDevice::Initialize()
 
 	glClearStencil(0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-#endif
 
 	this->Enable2D();
 
 	return ret;
 }
 
-INLINE BOOL OGL14RendererDevice::Reset()
+INLINE BOOL OGLES1RendererDevice::Reset()
 {
 	arTexture.Truncate();
 	arTextureName.Truncate();
@@ -123,12 +114,12 @@ INLINE BOOL OGL14RendererDevice::Reset()
 	return TRUE; // abstract IRenderer::Reset();
 }
 
-INLINE BOOL OGL14RendererDevice::Shutdown()
+INLINE BOOL OGLES1RendererDevice::Shutdown()
 {
 	return IRendererDevice::Shutdown();
 }
 
-INLINE void OGL14RendererDevice::BackbufferClear(const PIXEL color)
+INLINE void OGLES1RendererDevice::BackbufferClear(const PIXEL color)
 {
 	if (color)
 	{
@@ -140,21 +131,44 @@ INLINE void OGL14RendererDevice::BackbufferClear(const PIXEL color)
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
-INLINE void OGL14RendererDevice::Begin() const
+INLINE void OGLES1RendererDevice::Begin() const
 {
-	this->TextureRequestProcess();
+#if defined(_IPHONE_)
+	iphSetContext();
+#endif
 
+	this->TextureRequestProcess();
+	
+	glBindFramebufferOES(GL_FRAMEBUFFER_OES, pScreen->frameBuffer);
+	glBindRenderbufferOES(GL_RENDERBUFFER_OES, pScreen->renderBuffer);
+
+	//glClearColor(255.0f, 0.0f, 255.0f, 255.0f);
+	//glClear(GL_COLOR_BUFFER_BIT);
+	
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+	
 	glPushMatrix();
 	glLoadIdentity();
 }
 
-INLINE void OGL14RendererDevice::End() const
+INLINE void OGLES1RendererDevice::End() const
 {
 	glPopMatrix();
+	
 	pScreen->ApplyFade();
+	
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	
+#if defined(_IPHONE_)
+	iphContextPresentRenderBuffer();
+#endif
 }
 
-BOOL OGL14RendererDevice::CheckExtension(const char *extName)
+BOOL OGLES1RendererDevice::CheckExtension(const char *extName)
 {
 	/*
 	 ** Search for extName in the extensions string.  Use of strstr()
@@ -183,7 +197,7 @@ BOOL OGL14RendererDevice::CheckExtension(const char *extName)
 	return FALSE;
 }
 
-INLINE void OGL14RendererDevice::SetBlendingOperation(eBlendMode mode, PIXEL color) const
+INLINE void OGLES1RendererDevice::SetBlendingOperation(eBlendMode mode, PIXEL color) const
 {
 	switch (mode)
 	{
@@ -318,19 +332,19 @@ INLINE void OGL14RendererDevice::SetBlendingOperation(eBlendMode mode, PIXEL col
 	}
 }
 
-INLINE void OGL14RendererDevice::TextureRequestAbort(ITexture *texture, void **texName)
+INLINE void OGLES1RendererDevice::TextureRequestAbort(ITexture *texture, void **texName)
 {
 	arTexture.Remove(texture);
 	arTextureName.Remove(texName);
 }
 
-INLINE void OGL14RendererDevice::TextureRequest(ITexture *texture, void **texName)
+INLINE void OGLES1RendererDevice::TextureRequest(ITexture *texture, void **texName)
 {
 	arTexture.Add(texture);
 	arTextureName.Add(texName);
 }
 
-INLINE void OGL14RendererDevice::TextureRequestProcess() const
+INLINE void OGLES1RendererDevice::TextureRequestProcess() const
 {
 	for (u32 i = 0; i < arTexture.Size(); i++)
 	{
@@ -358,34 +372,50 @@ INLINE void OGL14RendererDevice::TextureRequestProcess() const
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-			GLuint w = texture->GetAtlasWidthInPixel();
-			GLuint h = texture->GetAtlasHeightInPixel();
 			const void *data = texture->GetData();
 
 			// if data == NULL then this can be a dynamic texture. we need just the texture id.
 			if (data)
 			{
-				switch (texture->GetBytesPerPixel())
+				GLuint w = texture->GetAtlasWidthInPixel();
+				GLuint h = texture->GetAtlasHeightInPixel();
+				//BOOL compressed = texture->IsCompressed();
+				u32 bpp = texture->GetBytesPerPixel();
+				
+				/*if (compressed)
 				{
-					case 4:
-						// OpenGL 1.2+ only GL_EXT_bgra
-						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
-					break;
+					GLuint bpp = 2;
+					GLsizei size = w * h * bpp / 8;
 
-					case 3:
-						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-					break;
+					if (size < 32)
+					{
+						size = 32;
+					}
+					glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, w, h, 0, size, data);
+				}
+				else*/
+				{
+					switch (bpp)
+					{
+						case 4:
+							glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+						break;
 
-					case 2:
-						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, data);
-					break;
+						case 3:
+							glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+						break;
 
-					case 1:
-						glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, w, h, 0, GL_ALPHA, GL_UNSIGNED_BYTE, data);
-					break;
+						case 2:
+							glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, data);
+						break;
 
-					default:
-					break;
+						case 1:
+							glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, w, h, 0, GL_ALPHA, GL_UNSIGNED_BYTE, data);
+						break;
+
+						default:
+						break;
+					}
 				}
 			}
 			//glBindTexture(GL_TEXTURE_2D, 0);
@@ -399,7 +429,7 @@ INLINE void OGL14RendererDevice::TextureRequestProcess() const
 	arTextureName.Truncate();
 }
 
-INLINE void OGL14RendererDevice::TextureUnload(ITexture *texture)
+INLINE void OGLES1RendererDevice::TextureUnload(ITexture *texture)
 {
 	void *texId = texture->GetTextureName();
 	if (texId)
@@ -410,7 +440,7 @@ INLINE void OGL14RendererDevice::TextureUnload(ITexture *texture)
 	}
 }
 
-INLINE void OGL14RendererDevice::TextureDataUpdate(ITexture *texture)
+INLINE void OGLES1RendererDevice::TextureDataUpdate(ITexture *texture)
 {
 	void *texId = texture->GetTextureName();
 	if (texId)
@@ -428,7 +458,7 @@ INLINE void OGL14RendererDevice::TextureDataUpdate(ITexture *texture)
 		{
 			case 4:
 				// OpenGL 1.2+ only GL_EXT_bgra
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 			break;
 
 			case 3:
@@ -449,7 +479,7 @@ INLINE void OGL14RendererDevice::TextureDataUpdate(ITexture *texture)
 	}
 }
 
-INLINE void OGL14RendererDevice::UploadData(void *userData)
+INLINE void OGLES1RendererDevice::UploadData(void *userData)
 {
 	RendererPacket *packet = static_cast<RendererPacket *>(userData);
 
@@ -459,18 +489,17 @@ INLINE void OGL14RendererDevice::UploadData(void *userData)
 
 	sVertex *data = static_cast<sVertex *>(packet->pVertexData);
 
-	glPushMatrix();
-	glLoadIdentity();
-
 	this->SetBlendingOperation(packet->nBlendMode, packet->iColor.pixel);
+
+	sVertex v1 = data[0];
+	sVertex v2 = data[1];
+	sVertex v3 = data[2];
+	sVertex v4 = data[3];
 
 	glBindTexture(GL_TEXTURE_2D, tex);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-/*
 	eTextureFilter min = texture->GetFilter(Seed::TextureFilterTypeMin);
 	eTextureFilter mag = texture->GetFilter(Seed::TextureFilterTypeMag);
 
@@ -483,30 +512,21 @@ INLINE void OGL14RendererDevice::UploadData(void *userData)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	else if (mag == Seed::TextureFilterNearest)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-*/
 
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glBegin(this->GetOpenGLMeshType(packet->nMeshType));
-	for (u32 i = 0; i < packet->iSize; i++)
-	{
-		glTexCoord2f(data[i].cCoords.x, data[i].cCoords.y);
-		glVertex3f(data[i].cVertex.x, data[i].cVertex.y, data[i].cVertex.z);
-	}
-	glEnd();
-
-	glPopMatrix();
+	glVertexPointer(3, GL_FLOAT, sizeof(sVertex), &data[0].cVertex);
+	glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(sVertex), &data[0].iColor);
+	glTexCoordPointer(2, GL_FLOAT, sizeof(sVertex), &data[0].cCoords);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, packet->iSize);
 }
 
-int OGL14RendererDevice::GetOpenGLMeshType(eMeshType type) const
+int OGLES1RendererDevice::GetOpenGLMeshType(eMeshType type) const
 {
 	UNUSED(type);
 	return GL_TRIANGLE_STRIP;
 }
 
-void OGL14RendererDevice::BackbufferFill(PIXEL color)
+void OGLES1RendererDevice::BackbufferFill(PIXEL color)
 {
-	glPushAttrib(GL_TEXTURE_BIT | GL_ENABLE_BIT | GL_CURRENT_BIT | GL_COLOR_BUFFER_BIT);
-
 	const GLfloat vertices[] =
 	{
 		0.0f, 0.0f,
@@ -515,44 +535,49 @@ void OGL14RendererDevice::BackbufferFill(PIXEL color)
 		1.0f, 1.0f,
 	};
 
-	glVertexPointer(2, GL_FLOAT, 0, vertices);
-	glEnableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
 
-	glDisable(GL_TEXTURE_2D);
-
-	glEnable(GL_BLEND);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glColor4ub(PIXEL_GET_R(color), PIXEL_GET_G(color), PIXEL_GET_B(color), PIXEL_GET_A(color));
-
-	glPushMatrix();
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glPopMatrix();
-
-	//glEnable(GL_TEXTURE_2D);
-
-	glPopAttrib();
+	glVertexPointer(2, GL_FLOAT, 0, vertices);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
 }
 
-void OGL14RendererDevice::SetViewport(const Rect<f32> &area) const
+void OGLES1RendererDevice::SetViewport(const Rect<f32> &area) const
 {
 	GLint x, y;
 	GLsizei width, height;
+	GLint w, h;
+	
+	w = pScreen->GetWidth();
+	h = pScreen->GetHeight();
+	
+	if (pScreen->GetMode() == Seed::Video_iPhoneLandscape || pScreen->GetMode() == Seed::Video_iPhoneLandscapeGoofy)
+	{
+		w = h;
+		h = pScreen->GetWidth();
+	}
+	
+	x = static_cast<GLint>(area.x * w);
+	y = static_cast<GLint>(area.y * h);
+	width = static_cast<GLsizei>(area.width * w);
+	height = static_cast<GLsizei>(area.height * h);
 
-	x = static_cast<GLint>(area.x * pScreen->GetWidth());
-	y = static_cast<GLint>(area.y * pScreen->GetHeight());
-	width = static_cast<GLsizei>(area.width * pScreen->GetWidth());
-	height = static_cast<GLsizei>(area.height * pScreen->GetHeight());
-
-	glViewport(x, pScreen->GetHeight() - y - height, width, height);
+	GLint ny = h - y - height;
+	glViewport(x, ny, width, height);
 }
 
-INLINE void OGL14RendererDevice::DrawRect(f32 x, f32 y, f32 w, f32 h, PIXEL color, BOOL fill) const
+INLINE void OGLES1RendererDevice::DrawRect(f32 x, f32 y, f32 w, f32 h, PIXEL color, BOOL fill) const
 {
 	GLfloat vertices[8];
 
-	f32 ratio = ((f32)pScreen->GetHeight() / (f32)pScreen->GetWidth());
+	f32 ratio = pScreen->GetAspectRatio();
 	f32 fAspectHalfWidth = w / 2.0f;
 	f32 fAspectHalfHeight = (h * ratio) / 2.0f;
 
@@ -608,40 +633,60 @@ INLINE void OGL14RendererDevice::DrawRect(f32 x, f32 y, f32 w, f32 h, PIXEL colo
 }
 
 // FIXME: Viewport aspect ratio...
-INLINE void OGL14RendererDevice::Enable2D() const
+INLINE void OGLES1RendererDevice::Enable2D() const
 {
-#if !defined(_QT_)
-	f32 viewW = static_cast<f32>(pScreen->GetWidth());
-	f32 viewH = static_cast<f32>(pScreen->GetHeight());
+	if (glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES) != GL_FRAMEBUFFER_COMPLETE_OES)
+	{
+		Info(TAG "ERROR: Failed to make complete framebuffer object %x", glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES));
+	}
 
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
 
-	f32 aspectH = viewH / viewW;
-	glOrtho(0.0f, 1.0f, aspectH, 0.0f, -SEED_MAX_PRIORITY, 0);
-
+	f32 aspect = pScreen->GetAspectRatio();
+	
+	// portrait
+	if (pScreen->GetMode() == Seed::Video_iPhonePortrait)
+	{
+		glOrthof(0.0f, 1.0f, aspect - 0.001f, 0.0f, -SEED_MAX_PRIORITY, 0);
+	}
+	// landscape goofy
+	else if (pScreen->GetMode() == Seed::Video_iPhoneLandscapeGoofy)
+	{
+		glOrthof(0.0f, aspect, 1.0f, 0.0f, -SEED_MAX_PRIORITY, 0);
+		glTranslatef(0.0f, 1.0f, 0.0f);
+		glRotatef(-90.0f, 0.0f, 0.0f, 1.0f);
+	}
+	// landscape
+	else if (pScreen->GetMode() == Seed::Video_iPhoneLandscape)
+	{
+		glOrthof(1.0f-aspect, 1.0f, 1.0f, 0.0f, -SEED_MAX_PRIORITY, 0);
+		glTranslatef(1.0f, 0.0f, 0.0f);
+		glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
+	}
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
 	glScalef(1.0f, 1.0f, -1.0f);
 
 	// Save previous Renderer state
-	glPushAttrib(GL_DEPTH_BUFFER_BIT);
+	//glPushAttrib(GL_DEPTH_BUFFER_BIT);
 	glDisable(GL_DEPTH_TEST);
 	glAlphaFunc(GL_GREATER, 0.1f);
 	glEnable(GL_ALPHA_TEST);
 
+	glFrontFace(GL_CW);
+	glDisable(GL_CULL_FACE);
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
-#endif
 }
 
-INLINE void OGL14RendererDevice::Disable2D() const
+INLINE void OGLES1RendererDevice::Disable2D() const
 {
 #if !defined(_QT_)
 	// Restore previous Renderer state
-	glPopAttrib();
+	//glPopAttrib();
 
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();

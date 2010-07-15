@@ -52,7 +52,6 @@ class SEED_CORE_API ITimer : public IModule
 		virtual ~ITimer();
 
 		virtual u64 GetMilliseconds() const;
-
 		virtual void Sleep(u32 ms) const;
 
 		// IModule

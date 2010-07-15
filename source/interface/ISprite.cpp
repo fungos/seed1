@@ -206,8 +206,6 @@ INLINE void ISprite::ReconfigureFrame()
 	else
 		iHeight = static_cast<u16>(pFrame->iHeight);
 
-	f32 aspectH = pScreen->GetAspectRatio();
-
 	f32 w = (iWidth / static_cast<f32>(pFrame->iResolutionWidth));
 	f32 h = (iHeight / static_cast<f32>(pFrame->iResolutionHeight));
 
@@ -215,9 +213,9 @@ INLINE void ISprite::ReconfigureFrame()
 	ITransformable2D::SetHeight(h); // set normalized height
 
 	fAspectWidth = w;
-	fAspectHeight = h * aspectH;
-	fAspectHalfWidth = this->fAspectWidth / 2.0f;
-	fAspectHalfHeight = this->fAspectHeight / 2.0f;
+	fAspectHeight = h * pScreen->GetAspectRatio();
+	fAspectHalfWidth = fAspectWidth / 2.0f;
+	fAspectHalfHeight = fAspectHeight / 2.0f;
 
 	u32 iX = pFrame->iX;
 	u32 iY = pFrame->iY;
@@ -510,10 +508,9 @@ void ISprite::Update(f32 delta)
 		arCurrentVertexData = arCustomVertexData;
 	}
 
-	f32 x, y, ratio;
-	ratio = pScreen->GetAspectRatio();
-	x = this->fAspectHalfWidth + ISprite::GetX();
-	y = this->fAspectHalfHeight + ISprite::GetY() * ratio;
+	f32 ratio = pScreen->GetAspectRatio();
+	f32 x = fAspectHalfWidth + ISprite::GetX();
+	f32 y = fAspectHalfHeight + ISprite::GetY() * ratio;
 
 	f32 lx = ISprite::GetLocalX();
 	f32 ly = ISprite::GetLocalY() * ratio;
@@ -539,12 +536,12 @@ void ISprite::Update(f32 delta)
 
 u32 ISprite::GetWidthInPixel() const
 {
-	return this->iWidth;
+	return iWidth;
 }
 
 u32 ISprite::GetHeightInPixel() const
 {
-	return this->iHeight;
+	return iHeight;
 }
 
 INLINE PIXEL ISprite::GetPixel(u32 x, u32 y) const

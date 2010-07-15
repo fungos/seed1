@@ -44,380 +44,255 @@
 #include "SoundSystem.h"
 #include "System.h"
 #include "Formats.h"
-#include "IphoneView.h"
 #include "SeedInit.h"
+#include "Music.h"
+#include "SoundSource.h"
 
 #include <stdio.h>
 #include <algorithm>
 
-#include <Foundation/Foundation.h>
+#undef WideChar
+#include "platform/iphone/IphoneView.h"
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
-#include <AudioToolbox/AudioToolbox.h>
-#include <AVFoundation/AVFoundation.h>
-#include <Foundation/NSURL.h>
-#include <Foundation/NSBundle.h>
 
 #define TAG "[SoundSystem] "
-
-#define AUDIO_FRAME_TIME 3
-#define AUDIO_DATA_PATH		"/" FILESYSTEM_DEFAULT_PATH
-#define AUDIO_DATA_EXT		".caf"
-
-
-typedef ALvoid AL_APIENTRY (*alBufferDataStaticProcPtr) (const ALint bid, ALenum format, ALvoid *data, ALsizei size, ALsizei freq);
-ALvoid  alBufferDataStaticProc(const ALint bid, ALenum format, ALvoid *data, ALsizei size, ALsizei freq)
-{
-	static alBufferDataStaticProcPtr proc = NULL;
-
-	if (proc == NULL)
-	{
-		proc = (alBufferDataStaticProcPtr)alcGetProcAddress(NULL, (const ALCchar *)"alBufferDataStatic");
-	}
-
-	if (proc)
-		proc(bid, format, data, size, freq);
-}
 
 namespace Seed { namespace iPhone {
 
 SEED_SINGLETON_DEFINE(SoundSystem);
 
-IResource *AudioResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool)
-{
-	UNUSED(res);
-	pSoundSystem->Load(filename, pool);
-	return pSoundSystem;
-}
-
 SoundSystem::SoundSystem()
-	: pAVPlayer(NULL)
-	, bLoaded(FALSE)
-	, pData(NULL)
-	, pFilename(NULL)
-	//, musVoice()
-	, fVolume(IPHONE_MASTER_VOLUME)
-	, fOriginalVolume(IPHONE_MASTER_VOLUME)
-	, fElapsedTime(0.0f)
-	, iFadeFrames(0)
+	: pDevice(NULL)
+	, pContext(NULL)
 {
-	MEMSET(sndVoice, '\0', sizeof(sndVoice));
-	MEMSET(sndFile, '\0', sizeof(sndFile));
-	MEMSET(musFile, '\0', sizeof(musFile));
-
-	this->pData = NULL;
-
 	this->Reset();
 }
 
 SoundSystem::~SoundSystem()
 {
-	this->Reset();
 }
 
-BOOL SoundSystem::Initialize()
+INLINE BOOL SoundSystem::Initialize()
 {
 	Log(TAG "Initializing...");
-
-	this->bLoaded = FALSE;
-
-	ALenum error = alGetError();
-	ALCdevice *device = alcOpenDevice(NULL);
-	error = alGetError();
-	ALCcontext *context = alcCreateContext(device, NULL);
-	error = alGetError();
-	alcMakeContextCurrent(context);
-	error = alGetError();
-
-	alListener3f(AL_POSITION, 0.0f, 0.0f, 1.0f);
-	error = alGetError(); // ??????
-
 	BOOL r = this->Reset();
 
-	Log(TAG "Initialization completed. Free Memory: %d.", pMemoryManager->GetFreeMemory());
+	pDevice = alcOpenDevice(NULL);
+	if (!pDevice)
+	{
+		Info(TAG "WARNING: Could not open OpenAL device - running wihtout sound!");
+		//ASSERT_NULL(pDevice);
+		r = FALSE;
+	}
+	else
+	{
+		pContext = alcCreateContext(pDevice, NULL);
+		if (!pContext)
+		{
+			Info(TAG "WARNING: Could not create OpenAL context - running without sound!");
+			//ASSERT_NULL(pContext);
+			r = FALSE;
+		}
+		else
+		{
+			IModule::Initialize();
+			alcMakeContextCurrent(pContext);
 
+			ALCint v1 = 0;
+			ALCint v2 = 0;
+
+			alcGetIntegerv(pDevice, ALC_MAJOR_VERSION, 1, &v1);
+			alcGetIntegerv(pDevice, ALC_MINOR_VERSION, 1, &v2);
+
+			Info(TAG "OpenAL Version %d.%d", v1, v2);
+			Info(TAG "Device: %s.", alcGetString(pDevice, ALC_DEFAULT_DEVICE_SPECIFIER));
+			Info(TAG "Extensions: %s.", alcGetString(pDevice, ALC_EXTENSIONS));
+		}
+	}
 	return r;
 }
 
 BOOL SoundSystem::Reset()
 {
-	if (this->bLoaded)
+	if (bInitialized)
 	{
-		pMemoryManager->Free(this->pData);
-		this->pFilename			= NULL;
-		this->fOriginalVolume	= IPHONE_MASTER_VOLUME;
-		this->fVolume			= IPHONE_MASTER_VOLUME;
-		this->bLoaded			= FALSE;
-		this->fElapsedTime		= 0.0f;
+		this->fMusicStartFadeTime = 0.0f;
+		this->fMusicFadeTime = 0.0f;
 
-		// Free sounds
-		for (u32 i = 0; i < IPHONE_MAX_VOICES; i++)
+		for (u32 i = arSource.Size(); i > 0; i--)
 		{
-			if (alIsSource(sndVoice[i].iSource))
-			{
-				alSourceStop(sndVoice[i].iSource);
-				alDeleteSources(1, &sndVoice[i].iSource);
-			}
-
-			sndVoice[i].iState = SOUND_STATE_STOPPED;
-			sndVoice[i].iSource = 0;
-			sndVoice[i].fVolume = 0;
+			arSource[i-1]->Stop();
+			arSource[i-1]->Unload();
 		}
 
-		for (u32 i = 0; i < IPHONE_MAX_FILES; i++)
-		{
-			if (sndFile[i].pData)
-			{
-				pMemoryManager->Free(sndFile[i].pData);
-				sndFile[i].pData = NULL;
-				sndFile[i].iBuffer = 0;
-			}
+		this->StopMusic();
+		pCurrentMusic = NULL;
+		pNewMusic = NULL;
 
-			sndFile[i].iSize = 0;
-			sndFile[i].eFormat = 0;
-			sndFile[i].iFreq = 0;
-		}
-
-		/*
-		// Free musics
-		if (alIsSource(musVoice.iSource))
-		{
-			alSourceStop(musVoice.iSource);
-			alDeleteSources(1, &musVoice.iSource);
-		}
-		musVoice.iState = SOUND_STATE_STOPPED;
-		musVoice.iSource = 0;
-		musVoice.fVolume = 0;
-
-		for (u32 i = 0; i < IPHONE_MAX_FILES; i++)
-		{
-			if (musFile[i].pData)
-			{
-				pMemoryManager->Free(musFile[i].pData);
-				musFile[i].pData = NULL;
-				musFile[i].iBuffer = 0;
-			}
-
-			musFile[i].iSize = 0;
-			musFile[i].eFormat = 0;
-			musFile[i].iFreq = 0;
-		}
-		*/
+		arSource.Truncate();
+		// abstract IModule::Reset();
 	}
-
-	MEMSET(sndVoice, '\0', sizeof(sndVoice));
-	MEMSET(sndFile, '\0', sizeof(sndFile));
-	//MEMSET(musFile, '\0', sizeof(musFile));
-
 	return TRUE;
 }
 
-BOOL SoundSystem::Shutdown()
+INLINE BOOL SoundSystem::Shutdown()
 {
-	Log(TAG "Terminating...");
+	BOOL r = TRUE;
+	if (bInitialized)
+	{
+		Log(TAG "Terminating...");
+		r = this->Reset();
 
-	BOOL r = this->Reset();
+		alcDestroyContext(pContext);
+		alcCloseDevice(pDevice);
 
-	ALCcontext *context = NULL;
-	ALCdevice  *device = NULL;
-
-	context = alcGetCurrentContext();
-	device = alcGetContextsDevice(context);
-
-	alcDestroyContext(context);
-	alcCloseDevice(device);
-
-	Log(TAG "Terminated.");
-
+		IModule::Shutdown();
+		Log(TAG "Terminated.");
+	}
 	return r;
 }
 
-BOOL SoundSystem::Update(f32 delta)
+INLINE BOOL SoundSystem::Update(f32 dt)
 {
-	UNUSED(delta);
+	if (bInitialized && !bPaused)
+	{
+		this->UpdateSounds(dt);
 
-	this->UpdateSounds();
-	this->UpdateMusic();
+		if (pNewMusic)
+			this->UpdateMusic(dt, pNewMusic);
+
+		if (pCurrentMusic)
+			this->UpdateMusic(dt, pCurrentMusic);
+	}
 
 	return TRUE;
 }
 
-BOOL SoundSystem::Prepare(void *workBuffer, u32 bufferLength)
+void SoundSystem::UpdateSounds(f32 dt)
 {
-	UNUSED(workBuffer)
-	UNUSED(bufferLength)
+	UNUSED(dt);
 
-	return TRUE;
-}
-
-/*
-BOOL SoundSystem::LoadPackage(const char *filename)
-{
-	glResourceManager.Get(filename, IObject::AUDIO, pLargePool);
-
-	return TRUE;
-}
-*/
-
-void SoundSystem::Load(const char *filename, IMemoryPool *pool)
-{
-	//return FALSE;
-	ASSERT_NULL(filename);
-
-	if (pFileSystem->Open(filename, &stFile, pLargePool))
+	if (bChanged)
 	{
-		this->pFilename = filename;
-		u8 *ptr = static_cast<u8 *>(pData);
-
-		ObjectHeader *oh;
-		READ_STRUCT(oh, ObjectHeader, ptr);
-		if (oh->magic != AUDIO_OBJECT_MAGIC)
+		for (u32 i = 0; i < arSource.Size(); i++)
 		{
-			Log(TAG "Invalid audio file %s.", filename);
-			pMemoryManager->Free(this->pData);
-			this->pData = NULL;
-			this->pFilename = NULL;
-			this->bLoaded = FALSE;
-
-			ASSERT(0);
-		}
-		else if (oh->version != AUDIO_OBJECT_VERSION)
-		{
-			Log(TAG "Audio %s version %x required.", filename, AUDIO_OBJECT_VERSION);
-			pMemoryManager->Free(this->pData);
-
-			this->pData = NULL;
-			this->pFilename = NULL;
-			this->bLoaded = FALSE;
-
-			ASSERT(0);
-		}
-		else if (oh->platform != PLATFORM_CODE)
-		{
-			Log(TAG "%s invalid platform code.", filename);
-
-			pMemoryManager->Free(this->pData);
-			this->pData = NULL;
-			this->pFilename = NULL;
-			this->bLoaded = FALSE;
-
-			ASSERT(0);
-		}
-		else
-		{
-			AudioObjectHeader *aoh;
-			READ_STRUCT(aoh, AudioObjectHeader, ptr);
-
-			char *str;
-
-			for (u32 i = 0; i < aoh->music_count; i++)
-			{
-				READ_STR(str, ptr);
-				Log(TAG "File: %s", str);
-				musFile[i] = str;
-				//this->ReadData(&musFile[i], str);
-			}
-
-			for (u32 i = 0; i < aoh->sound_count; i++)
-			{
-				READ_STR(str, ptr);
-				this->ReadData(&sndFile[i], str);
-			}
-
-			this->bLoaded = TRUE;
+			arSource[i]->UpdateVolume();
 		}
 	}
-}
 
-void SoundSystem::PlaySound(u32 soundId)
-{
-	if (!bLoaded)
-		return;
-
-	for (u32 i=0; i<IPHONE_MAX_VOICES; i++)
+	for (u32 i = 0; i < arSource.Size(); i++)
 	{
-		if (sndVoice[i].iState == SOUND_STATE_STOPPED)
-		{
-			alGenSources(1, &sndVoice[i].iSource);
+		SoundSource *src = static_cast<SoundSource *>(arSource[i]);
 
-			ALenum err = alGetError();
-			if (err != AL_NO_ERROR)
-			{
-				Info(TAG "alGenSources error %d.", err);
-				break;
-			}
-
-			alSource3f(sndVoice[i].iSource, AL_POSITION, 0.0f, 0.0f, 0.0f);
-			alSourcei(sndVoice[i].iSource, AL_LOOPING, 0);
-			alSourcei(sndVoice[i].iSource, AL_BUFFER, sndFile[soundId].iBuffer);
-
-			sndVoice[i].iState 	= SOUND_STATE_START;
-			sndVoice[i].iId		= soundId;
-
-			break;
-		}
-	}
-}
-
-void SoundSystem::StopSound(u32 soundId, u16 fadeFrames)
-{
-	UNUSED(fadeFrames)
-
-	if (!bLoaded)
-		return;
-
-	for (u32 i = 0; i < IPHONE_MAX_VOICES; i++)
-	{
-		if (sndVoice[i].iId == soundId)
-		{
-			sndVoice[i].iState = SOUND_STATE_STOP;
-		}
-	}
-}
-
-void SoundSystem::StopSounds()
-{
-	for (u32 i = 0; i < IPHONE_MAX_FILES; i++)
-		this->StopSound(i, 0);
-}
-
-void SoundSystem::SetSoundVolume(f32 volume)
-{
-}
-
-void SoundSystem::UpdateSounds()
-{
-	if (!bLoaded)
-		return;
-
-	for (u32 i = 0; i < IPHONE_MAX_VOICES; i++)
-	{
-		if (sndVoice[i].iState == SOUND_STATE_STOPPED)
+		eSoundSourceState state = src->GetState();
+		if (state == SourceNone)
 			continue;
 
-		switch (sndVoice[i].iState)
+		switch (state)
 		{
-			case SOUND_STATE_START:
-				sndVoice[i].iState = SOUND_STATE_STARTED;
+			case Seed::SourcePlay:
+			{
+				src->eState = Seed::SourcePlayStarted;
+			}
 			break;
 
-			case SOUND_STATE_STARTED:
-				alSourcePlay(sndVoice[i].iSource);
-				sndVoice[i].iState = SOUND_STATE_PLAYING;
+			case Seed::SourcePlayStarted:
+			{
+				src->eState = Seed::SourcePlaying;
+			}
 			break;
 
-			case SOUND_STATE_PLAYING:
-				ALint state;
-				alGetSourcei(sndVoice[i].iSource, AL_SOURCE_STATE, &state);
-
+			case Seed::SourcePlaying:
+			{
+				ALint state = 0;
+				alGetSourcei(src->iSource, AL_SOURCE_STATE, &state); // Quando volta do fadein essa porra ta ficando STOPPED!
 				if (state == AL_STOPPED)
-					sndVoice[i].iState = SOUND_STATE_STOPPED;
+				{
+					if (src->bLoop)
+					{
+						Log(TAG "Sound buffer underrun!");
+						alSourcePlay(src->iSource);
+					}
+					else
+					{
+						Log(TAG "Source stopped...");
+						src->eState = Seed::SourceStopped;
+					}
+				}
+			}
 			break;
 
-			case SOUND_STATE_STOP:
-				alSourceStop(sndVoice[i].iSource);
-				alDeleteSources(1, &sndVoice[i].iSource);
-				sndVoice[i].iState = SOUND_STATE_STOPPED;
+			case Seed::SourceStop:
+			{
+				alSourceStop(src->iSource);
+				src->eState = Seed::SourceStopped;
+			}
+			break;
+
+			case Seed::SourceStopped:
+			{
+				src->eState = Seed::SourceNone;
+			}
+			break;
+
+			case Seed::SourcePause:
+			{
+				src->eState = Seed::SourcePaused;
+			}
+			break;
+
+			case Seed::SourcePaused:
+			{
+			}
+			break;
+
+			case Seed::SourceFadeIn:
+			{
+				src->eState = Seed::SourceFadingIn;
+				alSourcePlay(src->iSource);
+				alSourcef(src->iSource, AL_GAIN, 0.1f);
+			}
+			break;
+
+			case Seed::SourceFadingIn:
+			{
+				f32 elapsed = static_cast<f32>(pTimer->GetMilliseconds() - src->fStartFadeTime);
+				f32 volume = ((elapsed * src->fVolume) / src->fFadeTime);
+				//Log(TAG "Elapsed: %f Volume: %f", elapsed, volume);
+
+				if (elapsed >= src->fFadeTime)
+				{
+					src->eState = Seed::SourcePlaying;
+					alSourcef(src->iSource, AL_GAIN, src->fVolume * pSoundSystem->GetSfxVolume());
+				}
+				else
+					alSourcef(src->iSource, AL_GAIN, volume * pSoundSystem->GetSfxVolume());
+			}
+			break;
+
+			case Seed::SourceFadeOut:
+			{
+				src->eState = Seed::SourceFadingOut;
+			}
+			break;
+
+			case Seed::SourceFadingOut:
+			{
+				f32 elapsed = src->fFadeTime - static_cast<f32>(pTimer->GetMilliseconds() - src->fStartFadeTime);
+				f32 volume = ((elapsed * src->fVolume) / src->fFadeTime);
+				//Log(TAG "Elapsed: %f Volume: %f", elapsed, volume);
+
+				if (elapsed <= 0.0f)
+				{
+					alSourcef(src->iSource, AL_GAIN, 0.0f);
+					src->eState = Seed::SourceStopped;
+					alSourceStop(src->iSource);
+					alSourcef(src->iSource, AL_GAIN, src->fVolume * pSoundSystem->GetSfxVolume());
+				}
+				else
+					alSourcef(src->iSource, AL_GAIN, volume * pSoundSystem->GetSfxVolume());
+			}
 			break;
 
 			default:
@@ -426,205 +301,159 @@ void SoundSystem::UpdateSounds()
 	}
 }
 
-void SoundSystem::PlayMusic(u32 streamId)
+INLINE void SoundSystem::UpdateMusic(f32 dt, IMusic *m)
 {
-	if (!bLoaded)
-		return;
+	Music *mus = static_cast<Music *>(m);
+	if (bChanged)
+		mus->UpdateVolume();
 
-	if (this->iCurrentStream == streamId)
-		return;
-
-	AVAudioPlayer *p = (AVAudioPlayer *)pAVPlayer;
-
-	this->StopMusic(0);
-
-	this->iCurrentStream = streamId;
-
-	NSString *root = [NSString stringWithCString: iphGetRootPath() encoding: [NSString defaultCStringEncoding]];
-	NSString *musicName = [NSString stringWithCString: musFile[streamId] encoding: [NSString defaultCStringEncoding]];
-	NSString *extensionName = [NSString stringWithCString: ".mp3" encoding: [NSString defaultCStringEncoding]];
-	NSString *dataPath = [@"/data/" stringByAppendingString: [musicName stringByAppendingString: extensionName]];
-	NSString *path = [root stringByAppendingString: dataPath];
-	NSError *err = NULL;
-	p = [[[ AVAudioPlayer alloc ] initWithContentsOfURL: [ NSURL fileURLWithPath: path ] error: &err ] retain ];
-	pAVPlayer = (void *)p;
-
-	if (!err)
+	mus->Update(dt);
+	
+	switch (mus->eState)
 	{
-		p.numberOfLoops = -1; // inf
-		p.volume = this->fVolume;
-		[p prepareToPlay];
-		[p play];
-	}
-	else
-	{
-		Log(TAG "Error happened when trying to play music %d [%s]", streamId, musFile[streamId]);
-	}
-}
-
-void SoundSystem::StopMusic(u16 fadeFrames)
-{
-	UNUSED(fadeFrames);
-
-	if (!bLoaded)
-		return;
-
-	AVAudioPlayer *p = (AVAudioPlayer *)pAVPlayer;
-	if (p)
-	{
-		[p stop];
-		[p release];
-		pAVPlayer = NULL;
-		this->iCurrentStream = 999;
-	}
-}
-
-void SoundSystem::PauseMusic()
-{
-	if (!bLoaded)
-		return;
-
-	AVAudioPlayer *p = (AVAudioPlayer *)pAVPlayer;
-	if (p)
-		[p pause];
-}
-
-void SoundSystem::ResumeMusic()
-{
-	if (!bLoaded)
-		return;
-
-	AVAudioPlayer *p = (AVAudioPlayer *)pAVPlayer;
-	if (p)
-	{
-		p.volume = this->fVolume;
-		[p play];
-	}
-}
-
-void SoundSystem::UpdateMusic()
-{
-}
-
-void SoundSystem::Mute()
-{
-}
-
-void SoundSystem::Unmute()
-{
-}
-
-void SoundSystem::SetMusicVolume(f32 volume)
-{
-	ASSERT_MSG((volume >= 0 || volume <= 1.0f), "Music volume must be between 0 and 1");
-
-	AVAudioPlayer *p = (AVAudioPlayer *)pAVPlayer;
-
-	this->fVolume = volume;
-	p.volume = volume;
-}
-
-void SoundSystem::ReadData(sSoundFileInfo *obj, const char *file)
-{
-	OSStatus					err = noErr;
-	UInt64                      fileDataSize = 0;
-	AudioStreamBasicDescription theFileFormat;
-	UInt32                      thePropertySize = sizeof(theFileFormat);
-	AudioFileID                 afid = 0;
-	void						*theData = NULL;
-
-	NSString *root = [NSString stringWithCString: iphGetRootPath() encoding: [NSString defaultCStringEncoding]];
-	NSString *fname = [NSString stringWithCString: file encoding: [NSString defaultCStringEncoding]];
-	NSString *ext = [NSString stringWithCString: AUDIO_DATA_EXT encoding: [NSString defaultCStringEncoding]];
-
-	NSString *path = [fname stringByAppendingString: ext];
-	path = [@AUDIO_DATA_PATH stringByAppendingString: path];
-	path = [root stringByAppendingString: path];
-
-	CFURLRef fileURL = CFURLCreateWithFileSystemPath(NULL, (CFStringRef)path, kCFURLPOSIXPathStyle, FALSE);
-	err = AudioFileOpenURL(fileURL, kAudioFileReadPermission, 0, &afid);
-	if (err)
-		{ Log(TAG "ReadAudioData: file %s%s%s not found, Error = %ld.", AUDIO_DATA_PATH, file, AUDIO_DATA_EXT, err); goto Exit; }
-
-	err = AudioFileGetProperty(afid, kAudioFilePropertyDataFormat, &thePropertySize, &theFileFormat);
-	if (err)
-		{ Log(TAG "ReadAudioData: AudioFileGetProperty(kAudioFileProperty_DataFormat) FAILED, Error = %ld, File: %s%s%s.", err, AUDIO_DATA_PATH, file, AUDIO_DATA_EXT); goto Exit; }
-
-	if (theFileFormat.mChannelsPerFrame > 2)
-	{
-		Log(TAG "ReadAudioData - Unsupported Format, channel count is greater than stereo, File: %s%s%s.", AUDIO_DATA_PATH, file, AUDIO_DATA_EXT);
-		goto Exit;
-	}
-
-	if ((theFileFormat.mFormatID != kAudioFormatLinearPCM) || (!TestAudioFormatNativeEndian(theFileFormat)))
-	{
-		Log(TAG "ReadAudioData - Unsupported Format, must be little-endian PCM, File: %s%s%s.", AUDIO_DATA_PATH, file, AUDIO_DATA_EXT);
-		goto Exit;
-	}
-
-	if ((theFileFormat.mBitsPerChannel != 8) && (theFileFormat.mBitsPerChannel != 16))
-	{
-		Log(TAG "ReadAudioData - Unsupported Format, must be 8 or 16 bit PCM, File: %s%s%s.", AUDIO_DATA_PATH, file, AUDIO_DATA_EXT);
-		goto Exit;
-	}
-
-	thePropertySize = sizeof(fileDataSize);
-	err = AudioFileGetProperty(afid, kAudioFilePropertyAudioDataByteCount, &thePropertySize, &fileDataSize);
-
-	if (err)
-		{ Log(TAG "ReadAudioData: AudioFileGetProperty(kAudioFilePropertyAudioDataByteCount) FAILED, Error = %ld, File: %s%s%s.", err, AUDIO_DATA_PATH, file, AUDIO_DATA_EXT); goto Exit; }
-
-	UInt32 dataSize = static_cast<UInt32>(fileDataSize);
-	theData = pMemoryManager->Alloc(dataSize);
-	if (theData)
-	{
-		AudioFileReadBytes(afid, false, 0, &dataSize, theData);
-
-		if (err == noErr)
+		case Seed::MusicPlay:
 		{
-			obj->iSize = (ALsizei)dataSize;
+			mus->eState = Seed::MusicPlayStarted;
+		}
+		break;
 
-			if (theFileFormat.mBitsPerChannel == 8)
-				obj->eFormat = (theFileFormat.mChannelsPerFrame > 1) ? AL_FORMAT_STEREO8 : AL_FORMAT_MONO8;
-			else
-				obj->eFormat = (theFileFormat.mChannelsPerFrame > 1) ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16;
+		case Seed::MusicPlayStarted:
+		{
+			mus->eState = Seed::MusicPlaying;
+		}
+		break;
 
-			obj->iFreq = (ALsizei)theFileFormat.mSampleRate;
-			obj->pData = theData;
+		case Seed::MusicPlaying:
+		{
+		}
+		break;
 
-			obj->pFilename = file;
+		case Seed::MusicStop:
+		{
+			mus->eState = Seed::MusicStopped;
+		}
+		break;
 
-			ALenum error = alGetError();
-
-			alGenBuffers(1, &obj->iBuffer);
-
-			error = alGetError();
-
-			alBufferDataStaticProc(obj->iBuffer, obj->eFormat, theData, obj->iSize, obj->iFreq);
-
-			error = alGetError();
-
-			if (error != AL_NO_ERROR)
+		case Seed::MusicStopped:
+		{
+			mus->eState = Seed::MusicNone;
+			if (mus == pCurrentMusic)
 			{
-				Log(TAG "alBufferDataStaticProc buffer %d : error %d, File: %s%s%s.", obj->iBuffer, error, AUDIO_DATA_PATH, file, AUDIO_DATA_EXT);
+				pCurrentMusic = pNewMusic;
+				pNewMusic = NULL;
+			}
 
-				pMemoryManager->Free(theData);
-				theData = NULL;
+			if (mus->bAutoUnload)
+			{
+				mus->Unload();
+			}
+			else
+			{
+				mus->Reset();
 			}
 		}
-		else
+		break;
+
+		case Seed::MusicPause:
 		{
-			pMemoryManager->Free(theData);
-			theData = NULL;
-
-			Log(TAG "ReadAudioData: ExtAudioFileRead FAILED, Error = %ld, File: %s%s%s.", err, AUDIO_DATA_PATH, file, AUDIO_DATA_EXT);
+			mus->eState = Seed::MusicPaused;
 		}
+		break;
 
+		case Seed::MusicPaused:
+		{
+		}
+		break;
+
+		case Seed::MusicFadeIn:
+		{
+			mus->eState = Seed::MusicFadingIn;
+		}
+		break;
+
+		case Seed::MusicFadingIn:
+		{
+			f32 elapsed = static_cast<f32>(pTimer->GetMilliseconds() - this->fMusicStartFadeTime);
+			f32 volume = ((elapsed * mus->fVolume) / this->fMusicFadeTime);
+			//Log(TAG "Elapsed: %f Volume: %f", elapsed, volume);
+
+			if (elapsed >= this->fMusicFadeTime)
+			{
+				mus->eState = Seed::MusicPlaying;
+				// mus->fVolume * pSoundSystem->GetMusicVolume()
+			}
+			else
+			{
+				// volume * pSoundSystem->GetMusicVolume()
+			}
+			mus->Update(dt);
+		}
+		break;
+
+		case Seed::MusicFadeOut:
+		{
+			mus->eState = Seed::MusicFadingOut;
+		}
+		break;
+
+		/* FIXME: 2009-15-06 | BUG | SDL | Fadeout / Fadein nao estao funcionando (alSourcef AL_GAIN) */
+		case Seed::MusicFadingOut:
+		{
+			f32 elapsed = this->fMusicFadeTime - static_cast<f32>(pTimer->GetMilliseconds() - this->fMusicStartFadeTime);
+			f32 volume = ((elapsed * mus->fVolume) / this->fMusicFadeTime);
+			//Log(TAG "Elapsed: %f Volume: %f", elapsed, volume);
+
+			if (elapsed <= 0.0f)
+			{
+				// 0.0f
+				mus->eState = Seed::MusicStopped;
+			}
+			else
+			{
+				// volume * pSoundSystem->GetMusicVolume();
+			}
+		}
+		break;
+
+		case Seed::MusicNone:
+		default:
+		break;
+	}
+}
+
+
+INLINE void SoundSystem::Pause()
+{
+	ISoundSystem::Pause();
+
+	for (u32 i = 0; i < arSource.Size(); i++)
+	{
+		SoundSource *src = static_cast<SoundSource *>(arSource[i]);
+		src->Pause();
+		alSourcePause(src->iSource);
 	}
 
-Exit:
-	if (afid)
-		AudioFileClose(afid);
+	if (pCurrentMusic)
+		static_cast<Music *>(pCurrentMusic)->eState = Seed::MusicPaused;
+
+	if (pNewMusic)
+		static_cast<Music *>(pNewMusic)->eState = Seed::MusicPaused;
+}
+
+INLINE void SoundSystem::Resume()
+{
+	for (u32 i = 0; i < arSource.Size(); i++)
+	{
+		arSource[i]->Resume();
+	}
+
+	if (pCurrentMusic)
+		static_cast<Music *>(pCurrentMusic)->eState = Seed::MusicPlay;
+
+	if (pNewMusic)
+		static_cast<Music *>(pNewMusic)->eState = Seed::MusicPlay;
+
+	ISoundSystem::Resume();
 }
 
 }} // namespace

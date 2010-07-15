@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
-
+ 
  ** This file is part of the Seed Framework.
-
+ 
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
-
+ 
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -29,57 +29,60 @@
  **
  *****************************************************************************/
 
-/*! \file IphMemoryManager.h
+/*! \file IphSoundSource.h
 	\author	Danny Angelo Carminati Grein
-	\brief MemoryManager Iphone Implementation
+	\brief Sound source implementation using OpenAL API
 */
 
-#ifndef __IPH_MEMORY_MANAGER_H__
-#define __IPH_MEMORY_MANAGER_H__
+#ifndef __IPHONE_SOUND_SOURCE_H__
+#define __IPHONE_SOUND_SOURCE_H__
+
+#include "Defines.h"
 
 #if defined(_IPHONE_)
 
-#include <stdlib.h>
-#include "interface/IMemoryManager.h"
-#include "platform/iphone/IphMemoryPool.h"
-#include "Singleton.h"
+#include "Sound.h"
+#include "interface/ISoundSource.h"
+#include "interface/ISound.h"
+#include "File.h"
+
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
 
 namespace Seed { namespace iPhone {
 
-class MemoryManager : public IMemoryManager
+class SEED_CORE_API SoundSource : public ISoundSource
 {
-	SEED_SINGLETON_DECLARE(MemoryManager);
-	public:
-		virtual u32 GetFreeMemory() const;
-
-		virtual void *Alloc(SIZE_T len, IMemoryPool *pool = &defaultPool, const char *desc = "Unknown", const char *owner = "Nobody");
-		virtual void Free(void *ptr, IMemoryPool *pool = &defaultPool);
-		virtual void Info();
-
-		//virtual u32 GetFreeMemory() const;
-
-		// IModule
-		virtual BOOL Initialize();
-		virtual BOOL Reset();
-		virtual BOOL Shutdown();
+	friend class SoundSystem;
 
 	public:
-		static IphoneMemoryPool defaultPool;
+		SoundSource();
+		virtual ~SoundSource();
+
+		// ISoundSource
+		virtual void Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual void Unload();
+
+		virtual void SetLoop(BOOL b);
+		virtual void Play();
+		virtual void Stop(f32 ms = 0.0f);
+		virtual void Resume();
+
+		virtual void SetVolume(f32 vol);
+		virtual void UpdateVolume();
 
 	private:
-		SEED_DISABLE_COPY(MemoryManager);
+		SEED_DISABLE_COPY(SoundSource);
+
+	private:
+		ALuint			iSource;
+		Sound			*pSound;
+		File			stFile;
 };
-
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(MemoryManager);
-SEED_CORE_API extern IphoneMemoryPool *const pDefaultPool = &MemoryManager::defaultPool;
-}
-
-#define pLargePool pDefaultPool
 
 }} // namespace
 
 #else // _IPHONE_
-	#error "Include 'MemoryManager.h' instead 'platform/iphone/IphMemoryManager.h' directly."
+	#error "Include 'SoundSource.h' instead 'platform/api/IphSoundSource.h' directly."
 #endif // _IPHONE_
-#endif // __MEMORY_MANAGER__
+#endif // __IPHONE_SOUND_SOURCE_H__

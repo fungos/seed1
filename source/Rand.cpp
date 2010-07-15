@@ -35,6 +35,7 @@
 */
 
 #include "Rand.h"
+#include <stdlib.h>
 #include <math.h>
 
 namespace Seed {

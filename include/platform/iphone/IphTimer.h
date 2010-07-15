@@ -51,7 +51,7 @@ class Timer : public ITimer
 	SEED_SINGLETON_DECLARE(Timer);
 	public:
 		// ITimer
-		virtual const u64 GetMilliseconds() const;
+		virtual u64 GetMilliseconds() const;
 		virtual void Sleep(u32 ms) const;
 
 		// IModule
@@ -66,9 +66,7 @@ class Timer : public ITimer
 		SEED_DISABLE_COPY(Timer);
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Timer);
-}
+#define pTimer Timer::GetInstance()
 
 }} // namespace
 

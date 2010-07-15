@@ -43,11 +43,12 @@
 #include "SeedInit.h"
 #include "File.h"
 #include "interface/ITexture.h"
+
 #include <OpenGLES/ES1/gl.h>
 
 namespace Seed { namespace iPhone {
 
-IResource *TextureResourceLoader(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+IResource *TextureResourceLoader(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 
 class Texture : public ITexture
 {
@@ -59,34 +60,35 @@ class Texture : public ITexture
 		virtual ~Texture();
 
 		// ITexture
-		virtual void Load(const char *filename, IMemoryPool *pool = pDefaultPool);
-		virtual void Load(u16 width, u16 height, PIXEL *buffer, IMemoryPool *pool = pDefaultPool);
-		virtual void Unload();
-
 		virtual const void *GetData() const;
 		virtual void PutPixel(u32 x, u32 y, PIXEL px);
 		virtual PIXEL GetPixel(u32 x, u32 y) const;
 		virtual u8 GetPixelAlpha(u32 x, u32 y) const;
 
-		virtual f32 GetWidth() const;
-		virtual f32 GetHeight() const;
-		virtual u32 GetWidthInPixel() const;
-		virtual u32 GetHeightInPixel() const;
+		virtual u32 GetBytesPerPixel() const;
+		virtual void *GetTextureName() const;
 
+		virtual void Update(PIXEL *buffer);
 		virtual void Reset();
+		virtual BOOL Load(u32 width, u32 height, PIXEL *buffer, u32 atlasWidth = 0, u32 atlasHeight = 0, IMemoryPool *pool = pDefaultPool); // O que acontece no Reload?
+
+		virtual u32 GetAtlasWidthInPixel() const;
+		virtual u32 GetAtlasHeightInPixel() const;
+		
+		virtual void Close();
 
 		// IResource
+		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual BOOL Unload();
 		virtual u32 GetUsedMemory() const;
 
 	protected:
-		int LoadTexture();
-		int GetTexture();
 		void UnloadTexture();
 
 	private:
 		SEED_DISABLE_COPY(Texture);
 
-		void LoadPVRTC(const char *file);
+		//void LoadPVRTC(const char *file);
 		void LoadPNG(const char *file);
 
 	private:
@@ -100,22 +102,16 @@ class Texture : public ITexture
 		};
 
 	private:
-		const void	*pImage;
-		File		stFile;
+		void	*pData;
+		void	*pTextureId;
 
-		GLuint iTextureId;
+		u32 iBytesPerPixel;
+		u32 iPitch;
+		
+		u32 iAtlasWidth;
+		u32 iAtlasHeight;
 
-		f32 fWidth;
-		f32 fHeight;
-
-		s32 iHalfWidth;
-		s32 iHalfHeight;
-
-		u16 iWidth;
-		u16 iHeight;
-
-		BOOL bCompressed;
-
+		//BOOL bCompressed;
 		eTextureFormat pixelFormat;
 };
 

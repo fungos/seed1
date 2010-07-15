@@ -52,18 +52,16 @@ class System : public ISystem
 		virtual void GoToMenu();
 		virtual void Sleep();
 		virtual void OnHomeCalled();
-		virtual void WaitForRetrace(ISystem::eFrameRate rate);
-		virtual void SetFrameRate(ISystem::eFrameRate rate);
+		virtual void WaitForRetrace(eSystemFrameRate rate);
 		virtual void HangUp();
 		virtual void GoToDataManager();
-		virtual void DisableHome();
-		virtual void EnableHome();
-
-		virtual ISystem::eFrameRate GetFrameRate();
-
+		
 		virtual BOOL IsShuttingDown() const;
 		virtual BOOL IsResetting() const;
 		virtual BOOL IsSleeping() const;
+		
+		virtual void DisableHome();
+		virtual void EnableHome();
 		virtual BOOL IsHomeEnabled() const;
 		virtual BOOL IsHomeRunning() const;
 		virtual BOOL InitializeHome();
@@ -81,12 +79,10 @@ class System : public ISystem
 
 	private:
 		u32 iRetraceCount;
-		eFrameRate iFrameRate;
+		eSystemFrameRate iFrameRate;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(System);
-}
+#define pSystem System::GetInstance()
 
 }} // namespace
 

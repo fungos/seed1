@@ -40,6 +40,7 @@
 #include <Defines.h>
 #include <MemoryManager.h>
 #include <Enum.h>
+
 #include <Vector.h>
 #include <Log.h>
 #include <Profiler.h>
@@ -134,7 +135,9 @@
 #include <api/theora/Theora.h>
 #endif
 
-#if defined(_WII_)
+#if defined(_IPHONE_)
+	
+#elif defined(_WII_)
 	#if defined(USE_AILIVE)
 		#include <platform/wii/WiiAiLive.h>
 	#endif // USE_AILIVE

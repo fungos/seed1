@@ -40,7 +40,10 @@
 #include "System.h"
 #include "Log.h"
 #include "MemoryManager.h"
-#include "IphoneView.h"
+#include "FileSystem.h"
+
+#undef WideChar
+#include "platform/iphone/IphoneView.h"
 
 #define TAG "[System] "
 
@@ -50,7 +53,7 @@ SEED_SINGLETON_DEFINE(System);
 
 System::System()
 	: iRetraceCount(0)
-	, iFrameRate(RATE_60FPS)
+	, iFrameRate(Seed::FrameRateLockAt60)
 {
 }
 
@@ -67,6 +70,8 @@ BOOL System::Initialize()
 {
 	Log(TAG "Initializing...");
 	Log(TAG "Initialization completed.");
+
+	pFileSystem->SetWriteableDirectory(iphGetHomePath());
 
 	return TRUE;
 }
@@ -108,26 +113,11 @@ INLINE BOOL System::IsResetting() const
 	return FALSE;
 }
 
-INLINE void System::WaitForRetrace(eFrameRate rate)
+INLINE void System::WaitForRetrace(eSystemFrameRate rate)
 {
 	UNUSED(rate);
 	// This platform is synced by NSTimer at AppView
 	this->iRetraceCount = 0;
-}
-
-INLINE void System::SetFrameRate(eFrameRate rate)
-{
-	double v = static_cast<double> (rate);
-	v = 1.0 / v;
-
-	iphSetUpdateRate(v);
-
-	this->iFrameRate = rate;
-}
-
-INLINE ISystem::eFrameRate System::GetFrameRate()
-{
-	return this->iFrameRate;
 }
 
 INLINE void System::GoToMenu()

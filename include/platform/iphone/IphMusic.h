@@ -29,3 +29,60 @@
  **
  *****************************************************************************/
 
+/*! \file IphMusic.h
+	\author	Danny Angelo Carminati Grein
+	\brief Music Implementation for iPhone
+*/
+
+#ifndef __IPHONE_MUSIC_H__
+#define __IPHONE_MUSIC_H__
+
+#include "Defines.h"
+
+#if defined(_IPHONE_)
+
+#include "File.h"
+#include "interface/IMusic.h"
+#include "SeedInit.h"
+
+namespace Seed { namespace iPhone {
+
+IResource *MusicResourceLoader(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+
+class SEED_CORE_API Music : public IMusic
+{
+	friend IResource *MusicResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
+	friend class SoundSystem;
+
+	public:
+		Music();
+		virtual ~Music();
+
+		// IMusic
+		virtual void Reset();
+		virtual BOOL Update(f32 dt);
+		virtual const void *GetData() const;
+
+		virtual void SetVolume(f32 vol);
+		virtual void UpdateVolume();
+
+		// IResouce
+		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual BOOL Unload();
+
+	private:
+		SEED_DISABLE_COPY(Music);
+
+	private:
+		u32				eFormat;
+		BOOL			bLoop;
+		File			stFile;
+		void			*pAVPlayer;
+};
+
+}} // namespace
+
+#else // _IPHONE_
+	#error "Include 'Music.h' instead 'platform/iphone/IphMusic.h' directly."
+#endif // _IPHONE_
+#endif // __IPHONE_MUSIC_H__

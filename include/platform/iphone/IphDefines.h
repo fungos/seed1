@@ -49,6 +49,9 @@
 	#define __DEBUGGING__
 #endif // RELEASE
 
+#define _OGL_ 1
+#define _PC_ 1
+
 #define PLATFORM_MAX_SCREEN_WIDTH		480
 #define PLATFORM_MAX_SCREEN_HEIGHT		320
 #define PLATFORM_CODE					2
@@ -87,6 +90,7 @@ typedef int 					PIXEL;
 #define LIB_STRLCAT					strlcat
 #define LIB_STRCASECMP				strcasecmp
 #define LIB_STRDUP					strdup
+#define LIB_RAND					rand()
 
 // Math
 #define LIB_FAST_DIV(a, b)			(a/b)

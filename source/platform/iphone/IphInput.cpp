@@ -37,11 +37,12 @@
 #if defined(_IPHONE_)
 
 #include "Defines.h"
+#undef WideChar
 #include "Input.h"
 #include "Log.h"
 #include "MemoryManager.h"
 #include "Screen.h"
-#include "IphoneView.h"
+#include "platform/iphone/IphoneView.h"
 #include "EventInputPointer.h"
 
 #define TAG "[Input] "
@@ -276,11 +277,11 @@ INLINE f32 Input::GetX(u16 joystick) const
 	f32 w = pScreen->GetWidth();
 	f32 x = 0;
 
-	if (pScreen->GetMode() == Screen::LANDSCAPE)
+	if (pScreen->GetMode() == Seed::Video_iPhoneLandscape)
 	{
 		x = curState[joystick].touch.fPosY;
 	}
-	else if (pScreen->GetMode() == Screen::LANDSCAPE_GOOFY)
+	else if (pScreen->GetMode() == Seed::Video_iPhoneLandscapeGoofy)
 	{
 		x = w - curState[joystick].touch.fPosY;
 	}
@@ -297,11 +298,11 @@ INLINE f32 Input::GetY(u16 joystick) const
 	f32 h = pScreen->GetHeight();
 	f32 y = 0;
 
-	if (pScreen->GetMode() == Screen::LANDSCAPE)
+	if (pScreen->GetMode() == Seed::Video_iPhoneLandscape)
 	{
 		y = h - curState[joystick].touch.fPosX;
 	}
-	else if (pScreen->GetMode() == Screen::LANDSCAPE_GOOFY)
+	else if (pScreen->GetMode() == Seed::Video_iPhoneLandscapeGoofy)
 	{
 		y = curState[joystick].touch.fPosX;
 	}
@@ -319,12 +320,12 @@ INLINE f32 Input::GetRelativeX(u16 joystick) const
 	f32 nX = 0;
 	f32 oX = 0;
 
-	if (pScreen->GetMode() == Screen::LANDSCAPE)
+	if (pScreen->GetMode() == Seed::Video_iPhoneLandscape)
 	{
 		nX = w - curState[joystick].touch.fPosY;
 		oX = w - oldState[joystick].touch.fPosY;
 	}
-	else if (pScreen->GetMode() == Screen::LANDSCAPE_GOOFY)
+	else if (pScreen->GetMode() == Seed::Video_iPhoneLandscapeGoofy)
 	{
 		nX = curState[joystick].touch.fPosY;
 		oX = oldState[joystick].touch.fPosY;
@@ -344,12 +345,12 @@ INLINE f32 Input::GetRelativeY(u16 joystick) const
 	f32 nY = 0;
 	f32 oY = 0;
 
-	if (pScreen->GetMode() == Screen::LANDSCAPE)
+	if (pScreen->GetMode() == Seed::Video_iPhoneLandscape)
 	{
 		nY = h - curState[joystick].touch.fPosX;
 		oY = h - oldState[joystick].touch.fPosX;
 	}
-	else if (pScreen->GetMode() == Screen::LANDSCAPE_GOOFY)
+	else if (pScreen->GetMode() == Seed::Video_iPhoneLandscapeGoofy)
 	{
 		nY = curState[joystick].touch.fPosX;
 		oY = oldState[joystick].touch.fPosX;
@@ -386,17 +387,17 @@ INLINE void Input::SendEvents()
 
 		if (curState[i].iTrig)
 		{
-			this->SendEventPress(&ev);
+			this->SendEventPointerPress(&ev);
 		}
 
 		if (curState[i].iRelease)
 		{
-			this->SendEventRelease(&ev);
+			this->SendEventPointerRelease(&ev);
 		}
 
 		if (curState[i].touch.fPosX != oldState[i].touch.fPosX || curState[i].touch.fPosY != oldState[i].touch.fPosY)
 		{
-			this->SendEventMove(&ev);
+			this->SendEventPointerMove(&ev);
 		}
 
 		curState[i].iRelease = 0;

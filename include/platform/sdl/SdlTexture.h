@@ -78,7 +78,6 @@ class SEED_CORE_API Texture : public ITexture
 		virtual u32 GetUsedMemory() const;
 
 	protected:
-		int LoadTexture();
 		void UnloadTexture();
 
 	private:

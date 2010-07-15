@@ -36,7 +36,7 @@
 
 #if defined(_IPHONE_)
 
-#include "IphMutex.h"
+#include "platform/iphone/IphMutex.h"
 
 namespace Seed { namespace iPhone {
 
