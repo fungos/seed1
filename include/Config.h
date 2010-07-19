@@ -27,10 +27,10 @@
 #define RAPTOR	"Rafael Eduardo Gonchor"
 
 #define SEED_TAG					"[Seed] "
-#define SEED_VERSION_MINOR			4			// Developer version (features, fixes)
-#define SEED_VERSION_MIDDLE			0			// Client version
+#define SEED_VERSION_MINOR			1			// Developer version (features, fixes)
+#define SEED_VERSION_MIDDLE			1			// Client version
 #define SEED_VERSION_MAJOR			0			// Release version (final trunk)
-#define SEED_VERSION_STRING			"%d.%d.%d"	//"0.0.3"
+#define SEED_VERSION_STRING			"%d.%d.%d"	//"0.1.1"
 #define SEED_NAME					"Seed SDK"
 #define SEED_COPYRIGHT				"Copyright (c) 2008-2009 Danny Angelo Carminati Grein\nCopyright (c) 2009 TechFront Studios"
 #define SEED_AUTHORS				"Authors:\n\t" DANNY "\n\t" PATUTI "\n\t" RAPTOR
