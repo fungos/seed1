@@ -156,9 +156,9 @@ void Sound::ReadData(const char *file)
 
 	NSString *root = [NSString stringWithCString: iphGetRootPath() encoding: [NSString defaultCStringEncoding]];
 	NSString *fname = [NSString stringWithCString: file encoding: [NSString defaultCStringEncoding]];
-	NSString *ext = [NSString stringWithCString: AUDIO_DATA_EXT encoding: [NSString defaultCStringEncoding]];
+	//NSString *ext = [NSString stringWithCString: AUDIO_DATA_EXT encoding: [NSString defaultCStringEncoding]];
 
-	NSString *path = [fname stringByAppendingString: ext];
+	NSString *path = fname; //[fname stringByAppendingString: ext];
 	path = [@AUDIO_DATA_PATH stringByAppendingString: path];
 	path = [root stringByAppendingString: path];
 

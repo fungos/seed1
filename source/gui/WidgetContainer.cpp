@@ -537,12 +537,21 @@ BOOL WidgetContainer::DoRelease(const EventInputPointer *ev, IWidget *widget)
 	{
 		//LOG("- RELEASE OVER SetState OVER");
 		LOG("\tEstado WIDGET");
+#if defined(_IPHONE_)
 		widget->SetState(Seed::WidgetStateOver);
+#else
+		widget->SetState(Seed::WidgetStateNone);
+#endif
 		widget->OnWidgetRelease(&newEvent);
 	}
 
 	LOG("\tEstado PLAYER");
+
+#if defined(_IPHONE_)
 	widget->SetPlayerState(Seed::WidgetStateOver, j);
+#else
+	widget->SetPlayerState(Seed::WidgetStateNone, j);
+#endif
 
 	widget->SendOnRelease(&newEvent);
 	LOG("\tEvento");

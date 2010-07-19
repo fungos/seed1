@@ -65,8 +65,7 @@ IResource *MusicResourceLoader(const char *filename, ResourceManager *res, IMemo
 }
 
 Music::Music()
-	: eFormat(AL_FORMAT_MONO16)
-	, bLoop(TRUE)
+	: bLoop(TRUE)
 	, stFile()
 {
 }
@@ -109,13 +108,15 @@ BOOL Music::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		{
 			NSString *root = [NSString stringWithCString: iphGetRootPath() encoding: [NSString defaultCStringEncoding]];
 			NSString *musicName = [NSString stringWithCString: fname encoding: [NSString defaultCStringEncoding]];
-			NSString *extensionName = [NSString stringWithCString: ".mp3" encoding: [NSString defaultCStringEncoding]];
-			NSString *dataPath = [@"/data/" stringByAppendingString: [musicName stringByAppendingString: extensionName]];
+			//NSString *extensionName = [NSString stringWithCString: ".mp3" encoding: [NSString defaultCStringEncoding]];
+			NSString *dataPath = [@"/data/" stringByAppendingString: musicName]; //[musicName stringByAppendingString: extensionName]];
 			NSString *path = [root stringByAppendingString: dataPath];
 			NSError *err = NULL;
+			Log(TAG "Music: %s", [path cStringUsingEncoding: NSASCIIStringEncoding]);
 			AVAudioPlayer *p =	[[[ AVAudioPlayer alloc ] initWithContentsOfURL: [ NSURL fileURLWithPath: path ] error: &err ] retain ];
 			pAVPlayer = (void *)p;
 
+			Log(TAG "Error: %s", [[err localizedDescription] cStringUsingEncoding: NSASCIIStringEncoding]);
 			if (!err)
 			{
 				p.numberOfLoops = -1; // inf
@@ -138,11 +139,10 @@ BOOL Music::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 
 BOOL Music::Unload()
 {
-	if (!this->bLoaded)
+	if (!bLoaded)
 		return TRUE;
 
 	eState = Seed::MusicStopped;
-	eFormat = AL_FORMAT_MONO16;
 	fVolume = 1.0f;
 
 	pSoundSystem->StopMusic(0, this);
@@ -163,7 +163,7 @@ BOOL Music::Unload()
 
 void Music::Reset()
 {
-	this->SetVolume(this->fVolume);
+	this->SetVolume(fVolume);
 }
 
 BOOL Music::Update(f32 dt)
@@ -171,7 +171,7 @@ BOOL Music::Update(f32 dt)
 	UNUSED(dt);
 	
 	AVAudioPlayer *p = (AVAudioPlayer *)pAVPlayer;
-	if (eState == Seed::MusicPlay)
+	if (eState == Seed::MusicPlay || eState == Seed::MusicFadeIn)
 	{
 		[p play];
 	}
@@ -199,6 +199,12 @@ INLINE void Music::UpdateVolume()
 {
 	AVAudioPlayer *p = (AVAudioPlayer *)pAVPlayer;
 	p.volume = fVolume * pSoundSystem->GetMusicVolume();
+}
+
+INLINE void Music::FadeVolume(f32 vol)
+{
+	AVAudioPlayer *p = (AVAudioPlayer *)pAVPlayer;
+	p.volume = vol * pSoundSystem->GetMusicVolume();
 }
 
 INLINE const void *Music::GetData() const

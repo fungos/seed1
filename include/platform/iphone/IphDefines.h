@@ -103,12 +103,13 @@ typedef int 					PIXEL;
 #define LIB_ABS(a)			    	fabs(a)
 
 // Display Object
-#define LIB_PIXEL_R_MASK			0xff000000
-#define LIB_PIXEL_R_SHIFT			24
+// iPhone - BGRA
+#define LIB_PIXEL_B_MASK			0xff000000
+#define LIB_PIXEL_B_SHIFT			24
 #define LIB_PIXEL_G_MASK			0x00ff0000
 #define LIB_PIXEL_G_SHIFT			16
-#define LIB_PIXEL_B_MASK			0x0000ff00
-#define LIB_PIXEL_B_SHIFT			8
+#define LIB_PIXEL_R_MASK			0x0000ff00
+#define LIB_PIXEL_R_SHIFT			8
 #define LIB_PIXEL_A_MASK			0x000000ff
 #define LIB_PIXEL_A_SHIFT			0
 #define LIB_PIXEL_DEFAULT_KEYCOLOR 	0xff00ffff

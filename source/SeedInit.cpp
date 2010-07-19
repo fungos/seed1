@@ -235,7 +235,8 @@ void Update()
 	if (!Private::bInitialized)
 		return;
 
-	f32 newTime				= pTimer->GetMilliseconds() / 1000.0f;
+	f32 ms = pTimer->GetMilliseconds();
+	f32 newTime				= ms / 1000.0f;
 	f32 dt					= newTime - Private::fCurrentTime;
 	Private::fCurrentTime	= newTime;
 

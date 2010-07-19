@@ -73,34 +73,34 @@ INLINE void ISoundSystem::Remove(ISoundSource *src)
 INLINE void ISoundSystem::SetMusicVolume(f32 volume)
 {
 	ASSERT_MSG((volume >= 0 || volume <= 1.0f), "Music volume must be between 0 and 1");
-	this->fMusicVolume = volume;
-	this->bChanged = TRUE;
+	fMusicVolume = volume;
+	bChanged = TRUE;
 }
 
 INLINE f32 ISoundSystem::GetMusicVolume() const
 {
-	return this->fMusicVolume;
+	return fMusicVolume;
 }
 
 INLINE void ISoundSystem::SetSfxVolume(f32 volume)
 {
 	ASSERT_MSG((volume >= 0 || volume <= 1.0f), "Sfx volume must be between 0 and 1");
-	this->fSfxVolume = volume;
-	this->bChanged = TRUE;
+	fSfxVolume = volume;
+	bChanged = TRUE;
 }
 
 INLINE f32 ISoundSystem::GetSfxVolume() const
 {
-	return this->fSfxVolume;
+	return fSfxVolume;
 }
 
 INLINE void ISoundSystem::Mute()
 {
-	if (!this->bMuted)
+	if (!bMuted)
 	{
-		this->fMusicVolumeOrig = this->fMusicVolume;
-		this->fSfxVolumeOrig = this->fSfxVolume;
-		this->bMuted = TRUE;
+		fMusicVolumeOrig = fMusicVolume;
+		fSfxVolumeOrig = fSfxVolume;
+		bMuted = TRUE;
 		this->SetMusicVolume(0.0f);
 		this->SetSfxVolume(0.0f);
 	}
@@ -108,11 +108,11 @@ INLINE void ISoundSystem::Mute()
 
 INLINE void ISoundSystem::Unmute()
 {
-	if (this->bMuted)
+	if (bMuted)
 	{
-		this->bMuted = FALSE;
-		this->SetMusicVolume(this->fMusicVolumeOrig);
-		this->SetSfxVolume(this->fSfxVolumeOrig);
+		bMuted = FALSE;
+		this->SetMusicVolume(fMusicVolumeOrig);
+		this->SetSfxVolume(fSfxVolumeOrig);
 	}
 }
 
@@ -168,7 +168,7 @@ INLINE void ISoundSystem::StopMusic(f32 ms, IMusic *mus)
 	}
 	else if (pCurrentMusic)
 	{
-		this->fMusicFadeTime = ms;
+		fMusicFadeTime = ms;
 		if (ms)
 		{
 			fMusicStartFadeTime = static_cast<f32>(pTimer->GetMilliseconds());
@@ -191,12 +191,12 @@ INLINE void ISoundSystem::StopSounds()
 
 INLINE void ISoundSystem::Pause()
 {
-	this->bPaused = TRUE;
+	bPaused = TRUE;
 }
 
 INLINE void ISoundSystem::Resume()
 {
-	this->bPaused = FALSE;
+	bPaused = FALSE;
 }
 
 INLINE const char *ISoundSystem::GetObjectName() const

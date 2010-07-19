@@ -74,9 +74,9 @@ BOOL Sound::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
 	if (this->Unload())
 	{
-		this->pFilename = filename;
-		this->pRes = res;
-		this->pPool = pool;
+		pFilename = filename;
+		pRes = res;
+		pPool = pool;
 
 		OggVorbis_File	oggStream;
 		ov_callbacks	vorbisCb;
@@ -140,17 +140,17 @@ BOOL Sound::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		stFile.Close();
 	#endif
 
-		this->bLoaded = TRUE;
+		bLoaded = TRUE;
 	}
 
-	return this->bLoaded;
+	return bLoaded;
 }
 
 INLINE BOOL Sound::Unload()
 {
 	alDeleteBuffers(1, &iBuffer);
 	stFile.Close();
-	this->bLoaded = FALSE;
+	bLoaded = FALSE;
 
 	return TRUE;
 }

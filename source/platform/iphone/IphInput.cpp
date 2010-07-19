@@ -275,20 +275,7 @@ INLINE BOOL Input::IsEnabled(u16 joystick) const
 INLINE f32 Input::GetX(u16 joystick) const
 {
 	f32 w = pScreen->GetWidth();
-	f32 x = 0;
-
-	if (pScreen->GetMode() == Seed::Video_iPhoneLandscape)
-	{
-		x = curState[joystick].touch.fPosY;
-	}
-	else if (pScreen->GetMode() == Seed::Video_iPhoneLandscapeGoofy)
-	{
-		x = w - curState[joystick].touch.fPosY;
-	}
-	else
-	{
-		x = curState[joystick].touch.fPosX;
-	}
+	f32 x = curState[joystick].touch.fPosX;
 
 	return x / w;
 }
@@ -296,20 +283,7 @@ INLINE f32 Input::GetX(u16 joystick) const
 INLINE f32 Input::GetY(u16 joystick) const
 {
 	f32 h = pScreen->GetHeight();
-	f32 y = 0;
-
-	if (pScreen->GetMode() == Seed::Video_iPhoneLandscape)
-	{
-		y = h - curState[joystick].touch.fPosX;
-	}
-	else if (pScreen->GetMode() == Seed::Video_iPhoneLandscapeGoofy)
-	{
-		y = curState[joystick].touch.fPosX;
-	}
-	else
-	{
-		y = curState[joystick].touch.fPosY;
-	}
+	f32 y = curState[joystick].touch.fPosY;
 
 	return y / h;
 }
@@ -317,51 +291,23 @@ INLINE f32 Input::GetY(u16 joystick) const
 INLINE f32 Input::GetRelativeX(u16 joystick) const
 {
 	f32 w = pScreen->GetWidth();
-	f32 nX = 0;
-	f32 oX = 0;
 
-	if (pScreen->GetMode() == Seed::Video_iPhoneLandscape)
-	{
-		nX = w - curState[joystick].touch.fPosY;
-		oX = w - oldState[joystick].touch.fPosY;
-	}
-	else if (pScreen->GetMode() == Seed::Video_iPhoneLandscapeGoofy)
-	{
-		nX = curState[joystick].touch.fPosY;
-		oX = oldState[joystick].touch.fPosY;
-	}
-	else
-	{
-		nX = curState[joystick].touch.fPosX;
-		oX = oldState[joystick].touch.fPosX;
-	}
-
-	return (nX - oX) / w;
+	//f32 nX = curState[joystick].touch.fPosX;
+	//f32 oX = oldState[joystick].touch.fPosX;
+	//return (nX - oX) / w;
+	
+	return curState[joystick].touch.fRelX / w;
 }
 
 INLINE f32 Input::GetRelativeY(u16 joystick) const
 {
 	f32 h = pScreen->GetHeight();
-	f32 nY = 0;
-	f32 oY = 0;
-
-	if (pScreen->GetMode() == Seed::Video_iPhoneLandscape)
-	{
-		nY = h - curState[joystick].touch.fPosX;
-		oY = h - oldState[joystick].touch.fPosX;
-	}
-	else if (pScreen->GetMode() == Seed::Video_iPhoneLandscapeGoofy)
-	{
-		nY = curState[joystick].touch.fPosX;
-		oY = oldState[joystick].touch.fPosX;
-	}
-	else
-	{
-		nY = curState[joystick].touch.fPosY;
-		oY = oldState[joystick].touch.fPosY;
-	}
-
-	return (nY - oY) / h;
+	
+	//f32 nY = curState[joystick].touch.fPosY;
+	//f32 oY = oldState[joystick].touch.fPosY;
+	//return (nY - oY) / h;
+	
+	return curState[joystick].touch.fRelY / h;
 }
 
 INLINE f32 Input::GetOrientation(u16 joystick) const

@@ -80,11 +80,11 @@ void SoundSource::Load(const char *filename, ResourceManager *res, IMemoryPool *
 
 		u32 volume = 0;
 		READ_U32(volume, ptr);
-		this->fVolume  = volume / 100.0f;
+		fVolume  = volume / 100.0f;
 
 		u32 flags = 0;
 		READ_U32(flags, ptr);
-		this->bLoop = ((flags & 0x01) == 0x01); // FIXME
+		bLoop = ((flags & 0x01) == 0x01); // FIXME
 
 		const char *fname = NULL;
 		READ_STR(fname, ptr);
@@ -107,9 +107,9 @@ void SoundSource::Load(const char *filename, ResourceManager *res, IMemoryPool *
 		alSourcef(iSource, AL_PITCH, 1.0f);
 		alSource3f(iSource, AL_POSITION, cPosition.x, cPosition.y, cPosition.z);
 		alSource3f(iSource, AL_VELOCITY, cVelocity.x, cVelocity.y, cVelocity.z);
-		alSourcei(iSource, AL_LOOPING, this->bLoop);
+		alSourcei(iSource, AL_LOOPING, bLoop);
 		alSourcei(iSource, AL_BUFFER, *buffer);
-		this->SetVolume(this->fVolume);
+		this->SetVolume(fVolume);
 	}
 }
 
@@ -129,12 +129,12 @@ INLINE void SoundSource::Unload()
 INLINE void SoundSource::SetVolume(f32 vol)
 {
 	ISoundSource::SetVolume(vol);
-	alSourcef(iSource, AL_GAIN, this->fVolume * pSoundSystem->GetSfxVolume());
+	alSourcef(iSource, AL_GAIN, fVolume * pSoundSystem->GetSfxVolume());
 }
 
 INLINE void SoundSource::UpdateVolume()
 {
-	alSourcef(iSource, AL_GAIN, this->fVolume * pSoundSystem->GetSfxVolume());
+	alSourcef(iSource, AL_GAIN, fVolume * pSoundSystem->GetSfxVolume());
 }
 
 INLINE void SoundSource::SetLoop(BOOL b)
@@ -147,14 +147,14 @@ INLINE void SoundSource::Stop(f32 ms)
 {
 	UNUSED(ms)
 
-	alSourceStop(this->iSource);
-	eState = Seed::SourceStop;
+	alSourceStop(iSource);
+	eState = Seed::SourceStopped;
 }
 
 INLINE void SoundSource::Play()
 {
-	alSourceStop(this->iSource);
-	alSourcePlay(this->iSource);
+	alSourceStop(iSource);
+	alSourcePlay(iSource);
 	eState = Seed::SourcePlaying;
 }
 
@@ -162,7 +162,7 @@ INLINE void SoundSource::Resume()
 {
 	if (eState == SourcePause || eState == SourcePaused)
 	{
-		alSourcePlay(this->iSource);
+		alSourcePlay(iSource);
 		eState = SourcePlay;
 	}
 }

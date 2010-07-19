@@ -42,6 +42,8 @@
 
 #include <time.h>
 #include <sys/time.h>
+//#undef WideChar
+//#include <Foundation/Foundation.h>
 
 #define TAG "[Timer] "
 
@@ -71,8 +73,9 @@ INLINE BOOL Timer::Reset()
 {
 	struct timeval tv;
 	gettimeofday(&tv, 0);
-	//fStart = tv.tv_sec * 1000 * 1000 + tv.tv_usec;
-	fStart = (tv.tv_sec * 1000ULL) + (tv.tv_usec / 1000000ULL);
+	fStart = (tv.tv_sec * 1000ULL) + (tv.tv_usec / 1000ULL);
+
+	//fStart = CFAbsoluteTimeGetCurrent();
 
 	return TRUE;
 }
@@ -86,10 +89,12 @@ INLINE u64 Timer::GetMilliseconds() const
 {
 	struct timeval tv;
 	gettimeofday(&tv, 0);
-	//u64 ret = tv.tv_sec * 1000 * 1000 + tv.tv_usec;
-	//return (ret - fStart) / 1000;
-	u64 ret = (tv.tv_sec * 1000ULL) + (tv.tv_usec / 1000000ULL);
-	return (ret - fStart);
+	u64 ms = (tv.tv_usec / 1000ULL);
+	u64 x =  (tv.tv_sec * 1000ULL);
+	u64 ret = x + ms - fStart;
+	return ret;
+
+	//return CFAbsoluteTimeGetCurrent() - fStart;
 }
 
 INLINE void Timer::Sleep(u32 ms) const
