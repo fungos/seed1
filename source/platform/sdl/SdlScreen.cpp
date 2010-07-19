@@ -138,8 +138,8 @@ void Screen::PrepareMode()
 		}
 		break;
 
-		case Video_iPhone:
 		case Video_iPhoneLandscape:
+		case Video_iPhoneLandscapeGoofy:
 		case Video_480x320:
 		{
 			iWidth = 480;

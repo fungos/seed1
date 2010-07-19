@@ -88,10 +88,10 @@ template <int NODES> class SceneNode : public ISceneNode
 
 		virtual void Render()
 		{
-			for (u32 i = 0; i < arNodes.Size(); i++)
+			/*for (u32 i = 0; i < arNodes.Size(); i++)
 			{
 				arNodes[i]->Render();
-			}
+			}*/
 		}
 
 		virtual void Reset()
