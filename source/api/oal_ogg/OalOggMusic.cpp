@@ -98,7 +98,7 @@ BOOL Music::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 
 		u32 volume = 0;
 		READ_U32(volume, ptr);
-		this->fVolume = (volume / 100.0f);
+		fVolume = (volume / 100.0f);
 
 		const char *fname = NULL;
 		READ_STR(fname, ptr);
@@ -111,8 +111,8 @@ BOOL Music::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		if (err != AL_NO_ERROR)
 		{
 			Info(TAG "Could not create OpenAL music source (0x%04x).", err);
-			this->bLoaded = FALSE;
-			return this->bLoaded;
+			bLoaded = FALSE;
+			return bLoaded;
 		}
 
 		alGenBuffers(OPENAL_MUSIC_BUFFERS, iBuffers);
@@ -121,7 +121,7 @@ BOOL Music::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		{
 			alDeleteSources(1, &iSource);
 			memset(iBuffers, '\0', sizeof(iBuffers));
-			this->bLoaded = FALSE;
+			bLoaded = FALSE;
 
 			Info(TAG "Could not generate OpenAL music buffers (0x%04x).", err);//alGetError());
 		}
@@ -131,10 +131,10 @@ BOOL Music::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 			alDeleteSources(1, &iSource);
 			alDeleteBuffers(OPENAL_MUSIC_BUFFERS, iBuffers);
 			memset(iBuffers, '\0', sizeof(iBuffers));
-			this->bLoaded = FALSE;
+			bLoaded = FALSE;
 
 			Info(TAG "Could not open '%s' ogg stream (file does not exist or is not a valid ogg file).", fname);
-			return this->bLoaded;
+			return bLoaded;
 		}
 
 		vorbisInfo = ov_info(&oggStream, -1);
@@ -151,25 +151,25 @@ BOOL Music::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 
 		this->Reset();
 
-		this->bLoaded = TRUE;
+		bLoaded = TRUE;
 	}
 
-	return this->bLoaded;
+	return bLoaded;
 }
 
 BOOL Music::Unload()
 {
-	if (!this->bLoaded)
+	if (!bLoaded)
 		return TRUE;
 
-	this->eState = Seed::MusicStopped;
-	this->eFormat = AL_FORMAT_MONO16;
-	this->fVolume = 1.0f;
+	eState = Seed::MusicStopped;
+	eFormat = AL_FORMAT_MONO16;
+	fVolume = 1.0f;
 
 	pSoundSystem->StopMusic(0, this);
 	ALenum err = AL_NO_ERROR;
 
-	if (this->iSource)
+	if (iSource)
 	{
 		int queued = 0;
 		alGetSourcei(iSource, AL_BUFFERS_QUEUED, &queued);
@@ -178,13 +178,13 @@ BOOL Music::Unload()
 		while (queued--)
 		{
 			ALuint buffer;
-			alSourceUnqueueBuffers(this->iSource, 1, &buffer);
+			alSourceUnqueueBuffers(iSource, 1, &buffer);
 			err = alGetError();
 		}
 
 		alDeleteSources(1, &iSource);
 		err = alGetError();
-		this->iSource = 0;
+		iSource = 0;
 	}
 
 	alDeleteBuffers(OPENAL_MUSIC_BUFFERS, iBuffers);
@@ -194,7 +194,7 @@ BOOL Music::Unload()
 	ov_clear(&oggStream);
 	stFile.Close();
 
-	this->bLoaded = FALSE;
+	bLoaded = FALSE;
 
 	return TRUE;
 }
@@ -210,7 +210,7 @@ void Music::Reset()
 		alSourceUnqueueBuffers(iSource, 1, &buffer);
 	}
 
-	this->SetVolume(this->fVolume);
+	this->SetVolume(fVolume);
 
 	ov_raw_seek(&oggStream, 0);
 	for (u32 i = 0; i < OPENAL_MUSIC_BUFFERS; i++)
@@ -246,23 +246,23 @@ BOOL Music::Update(f32 dt)
 
 INLINE BOOL Music::DoStream(ALuint buffer)
 {
-	return ogg_update_stream(&oggStream, vorbisInfo->rate, eFormat, buffer, this->bLoop);
+	return ogg_update_stream(&oggStream, vorbisInfo->rate, eFormat, buffer, bLoop);
 }
 
 INLINE void Music::SetVolume(f32 vol)
 {
 	IMusic::SetVolume(vol);
-	alSourcef(iSource, AL_GAIN, this->fVolume * pSoundSystem->GetMusicVolume());
+	alSourcef(iSource, AL_GAIN, fVolume * pSoundSystem->GetMusicVolume());
 }
 
 INLINE void Music::UpdateVolume()
 {
-	alSourcef(iSource, AL_GAIN, this->fVolume * pSoundSystem->GetMusicVolume());
+	alSourcef(iSource, AL_GAIN, fVolume * pSoundSystem->GetMusicVolume());
 }
 
 INLINE const void *Music::GetData() const
 {
-	return this->iBuffers;
+	return iBuffers;
 }
 
 }} // namespace

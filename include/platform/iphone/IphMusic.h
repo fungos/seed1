@@ -70,14 +70,16 @@ class SEED_CORE_API Music : public IMusic
 		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual BOOL Unload();
 
+	protected:
+		void FadeVolume(f32 vol);
+
 	private:
 		SEED_DISABLE_COPY(Music);
 
 	private:
-		u32				eFormat;
-		BOOL			bLoop;
-		File			stFile;
-		void			*pAVPlayer;
+		BOOL	bLoop;
+		File	stFile;
+		void	*pAVPlayer;
 };
 
 }} // namespace

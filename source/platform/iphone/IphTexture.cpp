@@ -230,7 +230,7 @@ INLINE u8 Texture::GetPixelAlpha(u32 x, u32 y) const
 {
 #if !defined(ENABLE_NATIVE_PVRTC_FORMAT)
 	if (!pData)
-		return 0;
+		return 255;
 
 	if (pixelFormat == kTexture2DPixelFormat_RGB565 || pixelFormat == kTexture2DPixelFormat_A8)
 	{
@@ -323,6 +323,7 @@ void Texture::LoadPNG(const char *file)
 	CGContextRef context = nil;
 	void *data = nil;;
 	CGColorSpaceRef colorSpace;
+	CGColorSpaceRef srcColorSpace;
 	void *tempData;
 	unsigned int *inPixel32;
 	unsigned short *outPixel16;
@@ -354,7 +355,12 @@ void Texture::LoadPNG(const char *file)
 	info = CGImageGetAlphaInfo(image);
 	hasAlpha = ((info == kCGImageAlphaPremultipliedLast) || (info == kCGImageAlphaPremultipliedFirst) || (info == kCGImageAlphaLast) || (info == kCGImageAlphaFirst) ? YES : NO);
 
-	if (CGImageGetColorSpace(image))
+	srcColorSpace = CGImageGetColorSpace(image);
+	
+	// FIXME: Enable support to grayscale pngs.
+	ASSERT_MSG(srcColorSpace != CGColorSpaceCreateDeviceGray(), "WARNING: Grayscale PNG are not supported.\n");
+	
+	if (srcColorSpace)
 	{
 		if (hasAlpha)
 		{
@@ -401,25 +407,27 @@ void Texture::LoadPNG(const char *file)
 		imageSize.height *= static_cast<f32>(0.5);
 	}
 
-	iBytesPerPixel = CGImageGetBitsPerPixel(image) / 8;
+	u32 bpc = CGImageGetBitsPerComponent(image);
+	u32 bpp = CGImageGetBitsPerPixel(image);
+	iBytesPerPixel = bpp / 8;
 	data = pMemoryManager->Alloc(height * width * iBytesPerPixel, pPool);
 	
 	switch (pixelFormat)
 	{
 		case kTexture2DPixelFormat_RGBA8888:
 			colorSpace = CGColorSpaceCreateDeviceRGB();
-			context = CGBitmapContextCreate(data, width, height, 8, 4 * width, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+			context = CGBitmapContextCreate(data, width, height, bpc, iBytesPerPixel * width, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
 			CGColorSpaceRelease(colorSpace);
 		break;
 
 		case kTexture2DPixelFormat_RGB565:
 			colorSpace = CGColorSpaceCreateDeviceRGB();
-			context = CGBitmapContextCreate(data, width, height, 8, 4 * width, colorSpace, kCGImageAlphaNoneSkipLast | kCGBitmapByteOrder32Big);
+			context = CGBitmapContextCreate(data, width, height, bpc, iBytesPerPixel * width, colorSpace, kCGImageAlphaNoneSkipLast | kCGBitmapByteOrder32Big);
 			CGColorSpaceRelease(colorSpace);
 		break;
 
 		case kTexture2DPixelFormat_A8:
-			context = CGBitmapContextCreate(data, width, height, 8, width, NULL, kCGImageAlphaOnly);
+			context = CGBitmapContextCreate(data, width, height, bpc, iBytesPerPixel * width, NULL, kCGImageAlphaOnly);
 		break;
 
 		default:

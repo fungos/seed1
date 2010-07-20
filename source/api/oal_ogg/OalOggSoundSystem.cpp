@@ -130,8 +130,8 @@ BOOL SoundSystem::Reset()
 {
 	if (bInitialized)
 	{
-		this->fMusicStartFadeTime = 0.0f;
-		this->fMusicFadeTime = 0.0f;
+		fMusicStartFadeTime = 0.0f;
+		fMusicFadeTime = 0.0f;
 
 		for (u32 i = arSource.Size(); i > 0; i--)
 		{
@@ -177,6 +177,8 @@ INLINE BOOL SoundSystem::Update(f32 dt)
 
 		if (pCurrentMusic)
 			this->UpdateMusic(dt, pCurrentMusic);
+			
+		bChanged = FALSE;
 	}
 
 	return TRUE;
@@ -186,7 +188,7 @@ void SoundSystem::UpdateSounds(f32 dt)
 {
 	UNUSED(dt);
 
-	if (this->bChanged)
+	if (bChanged)
 	{
 		for (u32 i = 0; i < arSource.Size(); i++)
 		{
@@ -317,7 +319,7 @@ void SoundSystem::UpdateSounds(f32 dt)
 INLINE void SoundSystem::UpdateMusic(f32 dt, IMusic *m)
 {
 	Music *mus = static_cast<Music *>(m);
-	if (this->bChanged)
+	if (bChanged)
 		mus->UpdateVolume();
 
 	switch (mus->eState)
@@ -410,11 +412,11 @@ INLINE void SoundSystem::UpdateMusic(f32 dt, IMusic *m)
 
 		case Seed::MusicFadingIn:
 		{
-			f32 elapsed = static_cast<f32>(pTimer->GetMilliseconds() - this->fMusicStartFadeTime);
-			f32 volume = ((elapsed * mus->fVolume) / this->fMusicFadeTime);
+			f32 elapsed = static_cast<f32>(pTimer->GetMilliseconds() - fMusicStartFadeTime);
+			f32 volume = ((elapsed * mus->fVolume) / fMusicFadeTime);
 			//Log(TAG "Elapsed: %f Volume: %f", elapsed, volume);
 
-			if (elapsed >= this->fMusicFadeTime)
+			if (elapsed >= fMusicFadeTime)
 			{
 				mus->eState = Seed::MusicPlaying;
 				alSourcef(mus->iSource, AL_GAIN, mus->fVolume * pSoundSystem->GetMusicVolume());
@@ -436,8 +438,8 @@ INLINE void SoundSystem::UpdateMusic(f32 dt, IMusic *m)
 		/* FIXME: 2009-15-06 | BUG | SDL | Fadeout / Fadein nao estao funcionando (alSourcef AL_GAIN) */
 		case Seed::MusicFadingOut:
 		{
-			f32 elapsed = this->fMusicFadeTime - static_cast<f32>(pTimer->GetMilliseconds() - this->fMusicStartFadeTime);
-			f32 volume = ((elapsed * mus->fVolume) / this->fMusicFadeTime);
+			f32 elapsed = fMusicFadeTime - static_cast<f32>(pTimer->GetMilliseconds() - fMusicStartFadeTime);
+			f32 volume = ((elapsed * mus->fVolume) / fMusicFadeTime);
 			//Log(TAG "Elapsed: %f Volume: %f", elapsed, volume);
 
 			if (elapsed <= 0.0f)

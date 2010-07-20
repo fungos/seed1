@@ -109,6 +109,7 @@
 #include <Screen.h>
 #include <Sound.h>
 #include <SoundSystem.h>
+#include <SoundSource.h>
 #include <StateMachine.h>
 #include <Sprite.h>
 #include <StringPool.h>
