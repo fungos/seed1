@@ -244,11 +244,14 @@ void Timeline::Update()
 			fCurrA			= kfFrom->iColorA;
 		}
 
-		pObject->SetPosition(fCurrPosX, fCurrPosY);
-		pObject->SetLocalPosition(fCurrLocalPosX, fCurrLocalPosY);
-		pObject->SetRotation(fCurrRot);
-		pObject->SetScale(fCurrScaleX, fCurrScaleY);
-		pObject->SetColor((u32)fCurrR, (u32)fCurrG, (u32)fCurrB, (u32)fCurrA);
+		if(pObject)
+		{
+			pObject->SetPosition(fCurrPosX, fCurrPosY);
+			pObject->SetLocalPosition(fCurrLocalPosX, fCurrLocalPosY);
+			pObject->SetRotation(fCurrRot);
+			pObject->SetScale(fCurrScaleX, fCurrScaleY);
+			pObject->SetColor((u32)fCurrR, (u32)fCurrG, (u32)fCurrB, (u32)fCurrA);
+		}
 	}
 
 	if ((fBegin / fDuration) >= 1.0f)
