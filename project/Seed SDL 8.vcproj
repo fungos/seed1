@@ -896,6 +896,10 @@
 						RelativePath="..\source\api\ogl\Ogl14RendererDevice.cpp"
 						>
 					</File>
+					<File
+						RelativePath="..\source\api\ogl\OglES1RendererDevice.cpp"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="oal_ogg"
@@ -1778,6 +1782,10 @@
 					>
 					<File
 						RelativePath="..\include\api\ogl\Ogl14RendererDevice.h"
+						>
+					</File>
+					<File
+						RelativePath="..\include\api\ogl\OglES1RendererDevice.h"
 						>
 					</File>
 				</Filter>

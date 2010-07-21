@@ -444,6 +444,7 @@ INLINE void D3D8RendererDevice::TextureDataUpdate(ITexture *texture)
 INLINE void D3D8RendererDevice::UploadData(void *userData)
 {
 	RendererPacket *packet = static_cast<RendererPacket *>(userData);
+	ASSERT_MSG(packet->pVertexData != NULL, "VERTEX DATA CANNOT BE NULL!");
 
 //	this->SetBlendingOperation(packet->nBlendMode, packet->iColor.pixel);
 

@@ -36,7 +36,7 @@
 
 #include "RendererDevice.h"
 
-#if defined(_OGL_)
+#if defined(_OGL_) && defined(SEED_ENABLE_OGLES1)
 
 #include "Log.h"
 #include "MemoryManager.h"

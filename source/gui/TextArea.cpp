@@ -184,9 +184,9 @@ void TextArea::Rebuild()
 	}
 	MEMSET(pLines, '\0', sizeBuff);
 
-	u32 usedLines = RebuildPosX();
+	u32 usedLines = this->RebuildPosX();
 
-	RebuildPosY(usedLines);
+	this->RebuildPosY(usedLines);
 }
 
 u32 TextArea::RebuildPosX()

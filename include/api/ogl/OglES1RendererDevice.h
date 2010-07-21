@@ -41,7 +41,7 @@
 #include "Enum.h"
 #include "Vertex.h"
 
-#if defined(_OGL_)
+#if defined(_OGL_) && defined(SEED_ENABLE_OGLES1)
 
 #include "interface/IRendererDevice.h"
 

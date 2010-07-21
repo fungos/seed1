@@ -470,7 +470,6 @@ INLINE void OGL14RendererDevice::UploadData(void *userData)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-/*
 	eTextureFilter min = texture->GetFilter(Seed::TextureFilterTypeMin);
 	eTextureFilter mag = texture->GetFilter(Seed::TextureFilterTypeMag);
 
@@ -483,7 +482,6 @@ INLINE void OGL14RendererDevice::UploadData(void *userData)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	else if (mag == Seed::TextureFilterNearest)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-*/
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glBegin(this->GetOpenGLMeshType(packet->nMeshType));
