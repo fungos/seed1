@@ -311,18 +311,6 @@ void Timeline::Update()
 	iCurrentFrame++;
 }
 
-INLINE void Timeline::SetObject(ISceneObject *object)
-{
-/*	if (pObject)
-		pObject->SetParent(NULL);
-*/
-	pObject = object;
-/*
-	if (pObject)
-		pObject->SetParent(reinterpret_cast<ITransformable2D *>(pParent));
-*/
-}
-
 INLINE ISceneObject *Timeline::GetObject() const
 {
 	return pObject;
@@ -451,11 +439,18 @@ INLINE f32 Timeline::EaseQuadPercent(f32 time, f32 begin, f32 change, f32 durati
 	return change * time * ((2.0f - time) * easing + (1.0f - easing)) + begin;
 }
 
+INLINE void Timeline::SetObject(ISceneObject *object)
+{
+	pObject = object;
+	if (pParent && object)
+		pParent->Add(pObject);
+}
+
 INLINE void Timeline::SetParent(Movie *parent)
 {
 	pParent = parent;
-	//if (pObject)
-	//	pObject->SetParent(reinterpret_cast<ITransformable2D *>(parent));
+	if (pObject)
+		parent->Add(pObject);
 }
 
 INLINE Movie *Timeline::GetParent() const

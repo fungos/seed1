@@ -39,8 +39,7 @@
 namespace Seed {
 
 Movie::Movie()
-	: ISceneObject()
-	, bPlaying(TRUE)
+	: bPlaying(TRUE)
 	, fElapsedTime(0.0f)
 	, arTimelines()
 {
@@ -55,6 +54,7 @@ INLINE void Movie::AddTimeline(Timeline *timeline)
 {
 	arTimelines.Add(timeline);
 	timeline->SetParent(this);
+	this->Add(timeline->GetObject());
 }
 
 INLINE void Movie::Update(f32 delta)
@@ -81,6 +81,8 @@ INLINE void Movie::Update(f32 delta)
 			arTimelines[i]->Update();
 		}
 	}
+
+	SceneNode<SEED_MOVIE_TIMELINES>::Update(delta);
 }
 
 INLINE void Movie::Play()
@@ -109,10 +111,6 @@ INLINE void Movie::Reset()
 		arTimelines[i]->Reset();
 
 	arTimelines.Truncate();
-}
-
-INLINE void Movie::Render()
-{
 }
 
 INLINE const char *Movie::GetObjectName() const

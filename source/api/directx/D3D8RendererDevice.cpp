@@ -538,7 +538,7 @@ INLINE void D3D8RendererDevice::DrawRect(f32 x, f32 y, f32 w, f32 h, PIXEL color
 	rgba.rgba.b = argb.argb.b;
 	rgba.rgba.a = argb.argb.a;
 
-	f32 ratio = ((f32)pScreen->GetHeight() / (f32)pScreen->GetWidth());
+	f32 ratio = pScreen->GetAspectRatio();
 
 	sVertex quad[5];
 

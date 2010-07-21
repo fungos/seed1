@@ -64,10 +64,8 @@ void Updater::Remove(IUpdatable *obj)
 	arUpdatable.Remove(obj);
 }
 
-void Updater::Run(f32 dt, f32 resolution)
+void Updater::Run(f32 dt)
 {
-	UNUSED(resolution)
-
 	SEED_FUNCTION_PROFILER;
 	u32 len = arUpdatable.Size();
 	for (u32 i = 0; i < len; i++)

@@ -243,8 +243,7 @@ void Update()
 	if (dt > MAX_FRAME_DELTA)
 		dt = MAX_FRAME_DELTA;
 
-	pUpdater->Run(dt, 1.0f / 60.0f);
-	// maybe this? pUpdater->Run(dt, 1.0f / (f32)pConfiguration->GetFrameRate());
+	pUpdater->Run(dt);
 
 	Seed::Render();
 }

@@ -50,7 +50,7 @@ class SEED_CORE_API Updater
 {
 	SEED_SINGLETON_DECLARE(Updater);
 	public:
-		void Run(f32 dt, f32 resolution);
+		void Run(f32 dt);
 		void Add(IUpdatable *obj);
 		void Remove(IUpdatable *obj);
 

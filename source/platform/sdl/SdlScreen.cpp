@@ -174,6 +174,7 @@ void Screen::PrepareMode()
 		break;
 	}
 
+	fAspectRatio = (f32)iHeight / (f32)iWidth;
 	iFlags = SDL_DOUBLEBUF | SDL_HWSURFACE;
 }
 

@@ -39,12 +39,13 @@
 
 #include "Timeline.h"
 #include "Array.h"
+#include "SceneNode.h"
 
 namespace Seed {
 
-#define MAX_TIMELINES 36
+#define SEED_MOVIE_TIMELINES 36
 
-class SEED_CORE_API Movie : public ISceneObject
+class SEED_CORE_API Movie : public SceneNode<SEED_MOVIE_TIMELINES>
 {
 	public:
 		Movie();
@@ -58,7 +59,6 @@ class SEED_CORE_API Movie : public ISceneObject
 
 		// IRenderable
 		virtual void Update(f32 delta);
-		virtual void Render();
 
 		// IObject
 		virtual const char *GetObjectName() const;
@@ -70,7 +70,7 @@ class SEED_CORE_API Movie : public ISceneObject
 	private:
 		BOOL	bPlaying;
 		f32		fElapsedTime;
-		Array<Timeline *, MAX_TIMELINES> arTimelines;
+		Array<Timeline *, SEED_MOVIE_TIMELINES> arTimelines;
 };
 
 } // namespace
