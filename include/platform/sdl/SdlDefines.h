@@ -175,6 +175,7 @@ typedef u32 					PIXEL;
 	#undef BOOL
 	#undef OUT
 	#define ATTRIBUTE_ALIGN(x)
+	#define LIB_FOPEN(a, b)					_wfopen((wchar_t *)a, L##b)
 	#define PLATFORM_PATH_SEPARATOR			'\\'
 	#if defined(_MSC_VER)
 		#include <direct.h>
@@ -188,6 +189,7 @@ typedef u32 					PIXEL;
 		#define vswprintf _vsnwprintf
 	#endif // _MSC_VER
 #else
+	#define LIB_FOPEN(a, b)					fopen(a, b)
 	#define PLATFORM_PATH_SEPARATOR			'/'
 #endif // WIN32
 

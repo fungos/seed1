@@ -109,6 +109,9 @@ http://www.unknownroad.com/rtfm/VisualStudio/warningC4251.html
 #define FAST_MOD						LIB_FAST_MOD
 #define FAST_SQRT						LIB_FAST_SQRT
 
+// Filesystem
+#define FOPEN(a, b)						LIB_FOPEN(a, b)
+
 // Display Object
 #define PIXEL_A_MASK					LIB_PIXEL_A_MASK
 #define PIXEL_A_SHIFT					LIB_PIXEL_A_SHIFT

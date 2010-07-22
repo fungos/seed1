@@ -94,13 +94,13 @@ INLINE BOOL Cartridge::Prepare(eCartridgeSize size)
 	iType = size;
 	iSize = this->GetCardType(size);
 
-	const char *p = pFileSystem->GetWriteableDirectory();
+	const wchar_t *p = pFileSystem->GetWriteableDirectory();
 	ASSERT_MSG(p!=NULL, "You must set a WriteableDirectory!");
 
 	MEMSET(strPath, '\0', PC_MAX_PATH);
-	STRLCPY(strPath, p, PC_MAX_PATH);
-	STRLCAT(strPath, "/", PC_MAX_PATH - 1);
-	STRLCAT(strPath, CARTRIDGE_FILENAME, PC_MAX_PATH - strlen(strPath) - 1);
+	wcsncpy(strPath, p, PC_MAX_PATH);
+	wcsncat(strPath, L"/", PC_MAX_PATH - 1);
+	wcsncat(strPath, CARTRIDGE_FILENAME, PC_MAX_PATH - wcslen(strPath) - 1);
 
 	this->pData = static_cast<u8 *>(pMemoryManager->Alloc(iSize));
 	memset(this->pData, 0, iSize);
@@ -138,7 +138,7 @@ BOOL Cartridge::Read(u32 src, void *dest, u32 len)
 	}
 
 	s32 iResult = 0;
-	FILE *pFp = fopen(strPath, "rb");
+	FILE *pFp = FOPEN(strPath, "rb");
 	if (!pFp)
 	{
 		Info(TAG "fopen %s failed", strPath);
@@ -211,7 +211,7 @@ BOOL Cartridge::Write(u32 dest, const void *src, u32 len)
 	u8 *ptr = &this->pData[dest];
 	memcpy(ptr, src, len);
 
-	FILE *pFp = fopen(strPath, "wb+");
+	FILE *pFp = FOPEN(strPath, "wb+");
 	if (!pFp)
 	{
 		Info(TAG "fopen: Could not open '%s' for writing", strPath);
@@ -278,7 +278,7 @@ u32 Cartridge::GetCardType(eCartridgeSize size)
 	return i;
 }
 
-BOOL Cartridge::Verify(const char *filename, u32 filesize)
+BOOL Cartridge::Verify(const wchar_t *filename, u32 filesize)
 {
 	u32 len = 0;
 	BOOL ret = FALSE;
@@ -294,9 +294,9 @@ BOOL Cartridge::Verify(const char *filename, u32 filesize)
 	return ret;
 }
 
-BOOL Cartridge::GetFileSize(const char *filename, u32 *length)
+BOOL Cartridge::GetFileSize(const wchar_t *filename, u32 *length)
 {
-	FILE *fp = fopen(filename, "rb");
+	FILE *fp = FOPEN(filename, "rb");
 	if (!fp)
 	{
 		this->eLastError = Seed::ErrorAccessDenied;
@@ -327,7 +327,7 @@ BOOL Cartridge::CreateSaveFile()
 {
 	Log(TAG "Creating save data...");
 
-	FILE *fp = fopen(strPath, "wb+");
+	FILE *fp = FOPEN(strPath, "wb+");
 	if (fp)
 	{
 		void *pBlankData = pMemoryManager->Alloc(iSize);

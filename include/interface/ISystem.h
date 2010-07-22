@@ -178,28 +178,28 @@ class SEED_CORE_API ISystem : public IModule, public IUpdatable
 			Get current user name.
 			\returns a string containing the user name.
 		*/
-		virtual const char *GetUsername() const;
+		virtual const wchar_t *GetUsername() const;
 
 		//! Get user home folder
 		/*!
 			Get current user home folder.
 			\returns a string containing the user home folder.
 		*/
-		virtual const char *GetHomeFolder() const;
+		virtual const wchar_t *GetHomeFolder() const;
 
 		//! Get user application data folder
 		/*!
 			Where the user application data must be written
 			\returns a string containing the user appdata folder.
 		*/
-		virtual const char *GetApplicationDataFolder() const;
+		virtual const wchar_t *GetApplicationDataFolder() const;
 
 		//! Get save game folder
 		/*!
 			Where the save game must be written
 			\returns a string containing the save game path.
 		*/
-		virtual const char *GetSaveGameFolder() const;
+		virtual const wchar_t *GetSaveGameFolder() const;
 
 		//! Enable/Disable default system cursor.
 		/*!

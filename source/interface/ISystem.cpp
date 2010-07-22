@@ -87,25 +87,25 @@ INLINE const char *ISystem::GetLanguageString() const
 	return pcLanguageTable[this->nLanguage];
 }
 
-INLINE const char *ISystem::GetUsername() const
+INLINE const wchar_t *ISystem::GetUsername() const
 {
 	SEED_ABSTRACT_METHOD;
 	return NULL;
 }
 
-INLINE const char *ISystem::GetHomeFolder() const
+INLINE const wchar_t *ISystem::GetHomeFolder() const
 {
 	SEED_ABSTRACT_METHOD;
 	return NULL;
 }
 
-INLINE const char *ISystem::GetApplicationDataFolder() const
+INLINE const wchar_t *ISystem::GetApplicationDataFolder() const
 {
 	SEED_ABSTRACT_METHOD;
 	return NULL;
 }
 
-INLINE const char *ISystem::GetSaveGameFolder() const
+INLINE const wchar_t *ISystem::GetSaveGameFolder() const
 {
 	SEED_ABSTRACT_METHOD;
 	return NULL;

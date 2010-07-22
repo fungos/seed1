@@ -45,7 +45,7 @@
 #include "interface/IFileSystem.h"
 #include "Singleton.h"
 
-#define FILESYSTEM_DEFAULT_PATH	"data/"
+#define FILESYSTEM_DEFAULT_PATH	L"data"
 
 namespace Seed { namespace PC {
 
@@ -55,14 +55,14 @@ class SEED_CORE_API FileSystem : public IFileSystem
 	public:
 		virtual BOOL Open(const char *pFname, File *file, IMemoryPool *pool = pDefaultPool);
 		virtual u32 GetLength() const;
-		virtual void MakeDirectory(const char *dir) const;
+		virtual void MakeDirectory(const wchar_t *dir) const;
 
 		// IModule
 		virtual BOOL Initialize();
 		virtual BOOL Reset();
 		virtual BOOL Shutdown();
 
-		virtual void SetWorkDirectory(const char *dir);
+		virtual void SetWorkDirectory(const wchar_t *dir);
 
 	private:
 		SEED_DISABLE_COPY(FileSystem);

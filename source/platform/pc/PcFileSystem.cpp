@@ -71,16 +71,25 @@ BOOL FileSystem::Initialize()
 
 	if (!this->pWorkDir)
 	{
-		char dir[1024];
-		char dir2[1024];
+		char outdir[1024];
+		wchar_t dir[1024];
+		wchar_t dir2[1024];
 		memset(dir2, '\0', 1024);
 		memset(dir, '\0', 1024);
 		get_current_directory(dir, 1024);
 
-		snprintf(dir2, 1024, "%s/%s", dir, FILESYSTEM_DEFAULT_PATH);
-		Info(TAG "Working dir is: %s", dir2);
+#if defined(WIN32)
+		_snwprintf(dir2, 1024, L"%s\\%s\\", dir, FILESYSTEM_DEFAULT_PATH);
+#else
+		snprintf(dir2, 1024, "%S/%S/", dir, FILESYSTEM_DEFAULT_PATH);
+#endif
 
-		if (change_directory(dir2))
+		for (u32 i = 0; i < 1024; i++)
+			outdir[i] = (char)dir[i];
+
+		Info(TAG "Working dir is: %s", outdir);
+
+		if (!change_directory(dir2))
 		{
 			Log(TAG "Could not change current directory.");
 		}
@@ -124,6 +133,12 @@ void *FileSystem::Read(const char *fname, IMemoryPool *pool, u32 *length)
 {
 	void *ret = NULL;
 	FILE *fp = fopen(fname, "rb");
+
+#if defined(WIN32)
+	if (!fp)
+		fp = _wfopen((wchar_t *)fname, L"rb");
+#endif
+
 	if (fp)
 	{
 		fseek(fp, 0L, SEEK_END);
@@ -158,7 +173,7 @@ INLINE u32 FileSystem::GetLength() const
 	return iLastLength;
 }
 
-INLINE void FileSystem::SetWorkDirectory(const char *dir)
+INLINE void FileSystem::SetWorkDirectory(const wchar_t *dir)
 {
 	IFileSystem::SetWorkDirectory(dir);
 	if (change_directory(dir))
@@ -171,7 +186,7 @@ INLINE void FileSystem::SetWorkDirectory(const char *dir)
 	}
 }
 
-INLINE void FileSystem::MakeDirectory(const char *dir) const
+INLINE void FileSystem::MakeDirectory(const wchar_t *dir) const
 {
 	create_directory(dir);
 }

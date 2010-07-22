@@ -126,6 +126,7 @@ BOOL Music::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 			Info(TAG "Could not generate OpenAL music buffers (0x%04x).", err);//alGetError());
 		}
 
+		// FIXME: FileSystem manipulation must be centralized, rewrite to use File/FileSystem
 		if (ov_fopen(const_cast<char *>(fname), &oggStream) < 0)
 		{
 			alDeleteSources(1, &iSource);

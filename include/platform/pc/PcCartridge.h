@@ -48,7 +48,7 @@
 #include <stdlib.h>
 
 #define CARTRIDGE_SECTOR_ROUND(n, a)     (((u32) (n) + (a) - 1) & ~((a) - 1))
-#define CARTRIDGE_FILENAME	"savedata"
+#define CARTRIDGE_FILENAME	L"savedata"
 
 #define PC_MAX_PATH		2048
 
@@ -76,11 +76,11 @@ class SEED_CORE_API Cartridge : public ICartridge
 
 		u32 GetCardType(eCartridgeSize size);
 		BOOL CreateSaveFile();
-		BOOL Verify(const char *filename, u32 filesize);
-		BOOL GetFileSize(const char *filename, u32 *length);
+		BOOL Verify(const wchar_t *filename, u32 filesize);
+		BOOL GetFileSize(const wchar_t *filename, u32 *length);
 
 	private:
-		char strPath[PC_MAX_PATH];
+		wchar_t strPath[PC_MAX_PATH];
 		u32 iType;
 		s32 iCurrentSlot;
 		u8 *pData;
