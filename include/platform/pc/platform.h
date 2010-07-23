@@ -34,7 +34,6 @@
 
 #include "Defines.h"
 
-#if defined(WIN32)
 BOOL create_directory(const wchar_t *path);
 const wchar_t *get_user_name();
 const wchar_t *get_user_appdata_folder();
@@ -44,16 +43,5 @@ void get_current_directory(wchar_t *buff, int size);
 BOOL change_directory(const wchar_t *to);
 void print_system_info();
 BOOL system_check_multiple_instance(bool warn);
-#else
-BOOL create_directory(const char *path);
-const char *get_user_name();
-const char *get_user_appdata_folder();
-const char *get_user_savegame_folder();
-const char *get_user_home_folder();
-void get_current_directory(char *buff, int size);
-BOOL change_directory(const char *to);
-void print_system_info();
-BOOL system_check_multiple_instance(bool warn);
-#endif
 
 #endif // __PC_PLATFORM_H__

@@ -70,7 +70,8 @@ class SEED_CORE_API Sound : public ISound
 		void Reset();
 
 		// IResource
-		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+		using IResource::Load;
+		virtual BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool);
 		virtual BOOL Unload();
 		virtual u32 GetUsedMemory() const;
 

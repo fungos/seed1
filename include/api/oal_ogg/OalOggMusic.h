@@ -79,7 +79,8 @@ class SEED_CORE_API Music : public IMusic
 		virtual void UpdateVolume();
 
 		// IResouce
-		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+		using IResource::Load;
+		virtual BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool);
 		virtual BOOL Unload();
 
 	protected:

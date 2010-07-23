@@ -45,7 +45,8 @@
 #include "interface/IFileSystem.h"
 #include "Singleton.h"
 
-#define FILESYSTEM_DEFAULT_PATH	L"data"
+#define FILESYSTEM_DEFAULT_PATH_WIDE	L"data"
+#define FILESYSTEM_DEFAULT_PATH			"data"
 
 namespace Seed { namespace PC {
 

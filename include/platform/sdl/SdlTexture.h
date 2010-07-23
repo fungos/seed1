@@ -73,7 +73,8 @@ class SEED_CORE_API Texture : public ITexture
 		virtual u32 GetAtlasHeightInPixel() const;
 
 		// IResource
-		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+		using IResource::Load;
+		virtual BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool);
 		virtual BOOL Unload();
 		virtual u32 GetUsedMemory() const;
 

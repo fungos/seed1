@@ -142,22 +142,13 @@
 		2D3A73261153FB310015F61E /* ParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72941153FB310015F61E /* ParticleEmitter.cpp */; };
 		2D3A73271153FB310015F61E /* ParticleEmitterObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72951153FB310015F61E /* ParticleEmitterObject.cpp */; };
 		2D3A73281153FB310015F61E /* ParticleManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72961153FB310015F61E /* ParticleManager.cpp */; };
-		2D3A73291153FB310015F61E /* IphCartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72991153FB310015F61E /* IphCartridge.cpp */; };
-		2D3A732A1153FB310015F61E /* IphFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A729A1153FB310015F61E /* IphFileSystem.cpp */; };
-		2D3A732B1153FB310015F61E /* IphImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A729B1153FB310015F61E /* IphImage.cpp */; };
 		2D3A732C1153FB310015F61E /* IphInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A729C1153FB310015F61E /* IphInput.cpp */; };
-		2D3A732D1153FB310015F61E /* IphLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A729D1153FB310015F61E /* IphLog.cpp */; };
-		2D3A732E1153FB310015F61E /* IphMemoryManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A729E1153FB310015F61E /* IphMemoryManager.cpp */; };
-		2D3A732F1153FB310015F61E /* IphMemoryPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A729F1153FB310015F61E /* IphMemoryPool.cpp */; };
 		2D3A73301153FB310015F61E /* IphMusic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A01153FB310015F61E /* IphMusic.cpp */; };
 		2D3A73311153FB310015F61E /* IphMutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A11153FB310015F61E /* IphMutex.cpp */; };
 		2D3A73321153FB310015F61E /* IphoneView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A21153FB310015F61E /* IphoneView.mm */; };
-		2D3A73331153FB310015F61E /* IphRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A31153FB310015F61E /* IphRenderer.cpp */; };
-		2D3A73341153FB310015F61E /* IphRenderer2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A41153FB310015F61E /* IphRenderer2D.cpp */; };
 		2D3A73351153FB310015F61E /* IphScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A51153FB310015F61E /* IphScreen.cpp */; };
 		2D3A73361153FB310015F61E /* IphSound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A61153FB310015F61E /* IphSound.cpp */; };
 		2D3A73371153FB310015F61E /* IphSoundSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A71153FB310015F61E /* IphSoundSystem.cpp */; };
-		2D3A73381153FB310015F61E /* IphSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A81153FB310015F61E /* IphSprite.cpp */; };
 		2D3A73391153FB310015F61E /* IphSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A91153FB310015F61E /* IphSystem.cpp */; };
 		2D3A733A1153FB310015F61E /* IphThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72AA1153FB310015F61E /* IphThread.cpp */; };
 		2D3A733B1153FB310015F61E /* IphTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72AB1153FB310015F61E /* IphTimer.cpp */; };
@@ -204,6 +195,10 @@
 		2D3A751D1153FBCD0015F61E /* SDL_image.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D3A75161153FBCD0015F61E /* SDL_image.framework */; };
 		2D3A751E1153FBCD0015F61E /* Theora.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D3A75171153FBCD0015F61E /* Theora.framework */; };
 		2D3A751F1153FBCD0015F61E /* Vorbis.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D3A75181153FBCD0015F61E /* Vorbis.framework */; };
+		2D56524411FA31E60058B701 /* IphSoundSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D56524211FA31E60058B701 /* IphSoundSource.cpp */; };
+		2D56524511FA31E60058B701 /* IphTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D56524311FA31E60058B701 /* IphTexture.cpp */; };
+		2D56524611FA31E60058B701 /* IphSoundSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D56524211FA31E60058B701 /* IphSoundSource.cpp */; };
+		2D56524711FA31E60058B701 /* IphTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D56524311FA31E60058B701 /* IphTexture.cpp */; };
 		2D7306D3115A52E300F2D2F9 /* Button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A725C1153FB310015F61E /* Button.cpp */; };
 		2D7306D4115A52E300F2D2F9 /* Checksum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72461153FB310015F61E /* Checksum.cpp */; };
 		2D7306D5115A52E300F2D2F9 /* CollisionMask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72471153FB310015F61E /* CollisionMask.cpp */; };
@@ -245,22 +240,13 @@
 		2D7306FA115A52E300F2D2F9 /* IMusic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A727A1153FB310015F61E /* IMusic.cpp */; };
 		2D7306FB115A52E300F2D2F9 /* IMutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A727B1153FB310015F61E /* IMutex.cpp */; };
 		2D7306FC115A52E300F2D2F9 /* IObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A727C1153FB310015F61E /* IObject.cpp */; };
-		2D7306FD115A52E300F2D2F9 /* IphCartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72991153FB310015F61E /* IphCartridge.cpp */; };
-		2D7306FE115A52E300F2D2F9 /* IphFileSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A729A1153FB310015F61E /* IphFileSystem.cpp */; };
-		2D7306FF115A52E300F2D2F9 /* IphImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A729B1153FB310015F61E /* IphImage.cpp */; };
 		2D730700115A52E300F2D2F9 /* IphInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A729C1153FB310015F61E /* IphInput.cpp */; };
-		2D730701115A52E300F2D2F9 /* IphLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A729D1153FB310015F61E /* IphLog.cpp */; };
-		2D730702115A52E300F2D2F9 /* IphMemoryManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A729E1153FB310015F61E /* IphMemoryManager.cpp */; };
-		2D730703115A52E300F2D2F9 /* IphMemoryPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A729F1153FB310015F61E /* IphMemoryPool.cpp */; };
 		2D730704115A52E300F2D2F9 /* IphMusic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A01153FB310015F61E /* IphMusic.cpp */; };
 		2D730705115A52E300F2D2F9 /* IphMutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A11153FB310015F61E /* IphMutex.cpp */; };
 		2D730706115A52E300F2D2F9 /* IphoneView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A21153FB310015F61E /* IphoneView.mm */; };
-		2D730707115A52E300F2D2F9 /* IphRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A31153FB310015F61E /* IphRenderer.cpp */; };
-		2D730708115A52E300F2D2F9 /* IphRenderer2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A41153FB310015F61E /* IphRenderer2D.cpp */; };
 		2D730709115A52E300F2D2F9 /* IphScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A51153FB310015F61E /* IphScreen.cpp */; };
 		2D73070A115A52E300F2D2F9 /* IphSound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A61153FB310015F61E /* IphSound.cpp */; };
 		2D73070B115A52E300F2D2F9 /* IphSoundSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A71153FB310015F61E /* IphSoundSystem.cpp */; };
-		2D73070C115A52E300F2D2F9 /* IphSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A81153FB310015F61E /* IphSprite.cpp */; };
 		2D73070D115A52E300F2D2F9 /* IphSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72A91153FB310015F61E /* IphSystem.cpp */; };
 		2D73070E115A52E300F2D2F9 /* IphThread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72AA1153FB310015F61E /* IphThread.cpp */; };
 		2D73070F115A52E300F2D2F9 /* IphTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D3A72AB1153FB310015F61E /* IphTimer.cpp */; };
@@ -540,22 +526,13 @@
 		2D3A72941153FB310015F61E /* ParticleEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticleEmitter.cpp; path = ../../source/ParticleEmitter.cpp; sourceTree = SOURCE_ROOT; };
 		2D3A72951153FB310015F61E /* ParticleEmitterObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticleEmitterObject.cpp; path = ../../source/ParticleEmitterObject.cpp; sourceTree = SOURCE_ROOT; };
 		2D3A72961153FB310015F61E /* ParticleManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ParticleManager.cpp; path = ../../source/ParticleManager.cpp; sourceTree = SOURCE_ROOT; };
-		2D3A72991153FB310015F61E /* IphCartridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphCartridge.cpp; path = ../../source/platform/iphone/IphCartridge.cpp; sourceTree = SOURCE_ROOT; };
-		2D3A729A1153FB310015F61E /* IphFileSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphFileSystem.cpp; path = ../../source/platform/iphone/IphFileSystem.cpp; sourceTree = SOURCE_ROOT; };
-		2D3A729B1153FB310015F61E /* IphImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphImage.cpp; path = ../../source/platform/iphone/IphImage.cpp; sourceTree = SOURCE_ROOT; };
 		2D3A729C1153FB310015F61E /* IphInput.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphInput.cpp; path = ../../source/platform/iphone/IphInput.cpp; sourceTree = SOURCE_ROOT; };
-		2D3A729D1153FB310015F61E /* IphLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphLog.cpp; path = ../../source/platform/iphone/IphLog.cpp; sourceTree = SOURCE_ROOT; };
-		2D3A729E1153FB310015F61E /* IphMemoryManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphMemoryManager.cpp; path = ../../source/platform/iphone/IphMemoryManager.cpp; sourceTree = SOURCE_ROOT; };
-		2D3A729F1153FB310015F61E /* IphMemoryPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphMemoryPool.cpp; path = ../../source/platform/iphone/IphMemoryPool.cpp; sourceTree = SOURCE_ROOT; };
 		2D3A72A01153FB310015F61E /* IphMusic.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphMusic.cpp; path = ../../source/platform/iphone/IphMusic.cpp; sourceTree = SOURCE_ROOT; };
 		2D3A72A11153FB310015F61E /* IphMutex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphMutex.cpp; path = ../../source/platform/iphone/IphMutex.cpp; sourceTree = SOURCE_ROOT; };
 		2D3A72A21153FB310015F61E /* IphoneView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = IphoneView.mm; path = ../../source/platform/iphone/IphoneView.mm; sourceTree = SOURCE_ROOT; };
-		2D3A72A31153FB310015F61E /* IphRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphRenderer.cpp; path = ../../source/platform/iphone/IphRenderer.cpp; sourceTree = SOURCE_ROOT; };
-		2D3A72A41153FB310015F61E /* IphRenderer2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphRenderer2D.cpp; path = ../../source/platform/iphone/IphRenderer2D.cpp; sourceTree = SOURCE_ROOT; };
 		2D3A72A51153FB310015F61E /* IphScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphScreen.cpp; path = ../../source/platform/iphone/IphScreen.cpp; sourceTree = SOURCE_ROOT; };
 		2D3A72A61153FB310015F61E /* IphSound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphSound.cpp; path = ../../source/platform/iphone/IphSound.cpp; sourceTree = SOURCE_ROOT; };
 		2D3A72A71153FB310015F61E /* IphSoundSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphSoundSystem.cpp; path = ../../source/platform/iphone/IphSoundSystem.cpp; sourceTree = SOURCE_ROOT; };
-		2D3A72A81153FB310015F61E /* IphSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphSprite.cpp; path = ../../source/platform/iphone/IphSprite.cpp; sourceTree = SOURCE_ROOT; };
 		2D3A72A91153FB310015F61E /* IphSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphSystem.cpp; path = ../../source/platform/iphone/IphSystem.cpp; sourceTree = SOURCE_ROOT; };
 		2D3A72AA1153FB310015F61E /* IphThread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphThread.cpp; path = ../../source/platform/iphone/IphThread.cpp; sourceTree = SOURCE_ROOT; };
 		2D3A72AB1153FB310015F61E /* IphTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IphTimer.cpp; path = ../../source/platform/iphone/IphTimer.cpp; sourceTree = SOURCE_ROOT; };
@@ -602,6 +579,8 @@
 		2D3A75161153FBCD0015F61E /* SDL_image.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_image.framework; path = ../../../dependency/macosx/10.4/debug/SDL_image.framework; sourceTree = SOURCE_ROOT; };
 		2D3A75171153FBCD0015F61E /* Theora.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Theora.framework; path = ../../../dependency/macosx/10.4/debug/Theora.framework; sourceTree = SOURCE_ROOT; };
 		2D3A75181153FBCD0015F61E /* Vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vorbis.framework; path = ../../../dependency/macosx/10.4/debug/Vorbis.framework; sourceTree = SOURCE_ROOT; };
+		2D56524211FA31E60058B701 /* IphSoundSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IphSoundSource.cpp; sourceTree = "<group>"; };
+		2D56524311FA31E60058B701 /* IphTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IphTexture.cpp; sourceTree = "<group>"; };
 		2D7306B6115A4F3500F2D2F9 /* libSeed.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSeed.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2DCA0C2F1157B716002B77A0 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = ../../../../../System/Library/Frameworks/CoreFoundation.framework; sourceTree = SOURCE_ROOT; };
 		2DCFA44C1154000800E94EE6 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = ../../../../../System/Library/Frameworks/OpenAL.framework; sourceTree = SOURCE_ROOT; };
@@ -994,22 +973,15 @@
 		2D3A72981153FB310015F61E /* iphone */ = {
 			isa = PBXGroup;
 			children = (
-				2D3A72991153FB310015F61E /* IphCartridge.cpp */,
-				2D3A729A1153FB310015F61E /* IphFileSystem.cpp */,
-				2D3A729B1153FB310015F61E /* IphImage.cpp */,
+				2D56524211FA31E60058B701 /* IphSoundSource.cpp */,
+				2D56524311FA31E60058B701 /* IphTexture.cpp */,
 				2D3A729C1153FB310015F61E /* IphInput.cpp */,
-				2D3A729D1153FB310015F61E /* IphLog.cpp */,
-				2D3A729E1153FB310015F61E /* IphMemoryManager.cpp */,
-				2D3A729F1153FB310015F61E /* IphMemoryPool.cpp */,
 				2D3A72A01153FB310015F61E /* IphMusic.cpp */,
 				2D3A72A11153FB310015F61E /* IphMutex.cpp */,
 				2D3A72A21153FB310015F61E /* IphoneView.mm */,
-				2D3A72A31153FB310015F61E /* IphRenderer.cpp */,
-				2D3A72A41153FB310015F61E /* IphRenderer2D.cpp */,
 				2D3A72A51153FB310015F61E /* IphScreen.cpp */,
 				2D3A72A61153FB310015F61E /* IphSound.cpp */,
 				2D3A72A71153FB310015F61E /* IphSoundSystem.cpp */,
-				2D3A72A81153FB310015F61E /* IphSprite.cpp */,
 				2D3A72A91153FB310015F61E /* IphSystem.cpp */,
 				2D3A72AA1153FB310015F61E /* IphThread.cpp */,
 				2D3A72AB1153FB310015F61E /* IphTimer.cpp */,
@@ -1400,22 +1372,13 @@
 				2D7306FA115A52E300F2D2F9 /* IMusic.cpp in Sources */,
 				2D7306FB115A52E300F2D2F9 /* IMutex.cpp in Sources */,
 				2D7306FC115A52E300F2D2F9 /* IObject.cpp in Sources */,
-				2D7306FD115A52E300F2D2F9 /* IphCartridge.cpp in Sources */,
-				2D7306FE115A52E300F2D2F9 /* IphFileSystem.cpp in Sources */,
-				2D7306FF115A52E300F2D2F9 /* IphImage.cpp in Sources */,
 				2D730700115A52E300F2D2F9 /* IphInput.cpp in Sources */,
-				2D730701115A52E300F2D2F9 /* IphLog.cpp in Sources */,
-				2D730702115A52E300F2D2F9 /* IphMemoryManager.cpp in Sources */,
-				2D730703115A52E300F2D2F9 /* IphMemoryPool.cpp in Sources */,
 				2D730704115A52E300F2D2F9 /* IphMusic.cpp in Sources */,
 				2D730705115A52E300F2D2F9 /* IphMutex.cpp in Sources */,
 				2D730706115A52E300F2D2F9 /* IphoneView.mm in Sources */,
-				2D730707115A52E300F2D2F9 /* IphRenderer.cpp in Sources */,
-				2D730708115A52E300F2D2F9 /* IphRenderer2D.cpp in Sources */,
 				2D730709115A52E300F2D2F9 /* IphScreen.cpp in Sources */,
 				2D73070A115A52E300F2D2F9 /* IphSound.cpp in Sources */,
 				2D73070B115A52E300F2D2F9 /* IphSoundSystem.cpp in Sources */,
-				2D73070C115A52E300F2D2F9 /* IphSprite.cpp in Sources */,
 				2D73070D115A52E300F2D2F9 /* IphSystem.cpp in Sources */,
 				2D73070E115A52E300F2D2F9 /* IphThread.cpp in Sources */,
 				2D73070F115A52E300F2D2F9 /* IphTimer.cpp in Sources */,
@@ -1511,6 +1474,8 @@
 				2D18705011E7C03F00A8EB9F /* ViewManager.cpp in Sources */,
 				2D18705111E7C03F00A8EB9F /* Viewport.cpp in Sources */,
 				2D18717611E7C99800A8EB9F /* PcRendererDevice.cpp in Sources */,
+				2D56524611FA31E60058B701 /* IphSoundSource.cpp in Sources */,
+				2D56524711FA31E60058B701 /* IphTexture.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1597,22 +1562,13 @@
 				2D3A73261153FB310015F61E /* ParticleEmitter.cpp in Sources */,
 				2D3A73271153FB310015F61E /* ParticleEmitterObject.cpp in Sources */,
 				2D3A73281153FB310015F61E /* ParticleManager.cpp in Sources */,
-				2D3A73291153FB310015F61E /* IphCartridge.cpp in Sources */,
-				2D3A732A1153FB310015F61E /* IphFileSystem.cpp in Sources */,
-				2D3A732B1153FB310015F61E /* IphImage.cpp in Sources */,
 				2D3A732C1153FB310015F61E /* IphInput.cpp in Sources */,
-				2D3A732D1153FB310015F61E /* IphLog.cpp in Sources */,
-				2D3A732E1153FB310015F61E /* IphMemoryManager.cpp in Sources */,
-				2D3A732F1153FB310015F61E /* IphMemoryPool.cpp in Sources */,
 				2D3A73301153FB310015F61E /* IphMusic.cpp in Sources */,
 				2D3A73311153FB310015F61E /* IphMutex.cpp in Sources */,
 				2D3A73321153FB310015F61E /* IphoneView.mm in Sources */,
-				2D3A73331153FB310015F61E /* IphRenderer.cpp in Sources */,
-				2D3A73341153FB310015F61E /* IphRenderer2D.cpp in Sources */,
 				2D3A73351153FB310015F61E /* IphScreen.cpp in Sources */,
 				2D3A73361153FB310015F61E /* IphSound.cpp in Sources */,
 				2D3A73371153FB310015F61E /* IphSoundSystem.cpp in Sources */,
-				2D3A73381153FB310015F61E /* IphSprite.cpp in Sources */,
 				2D3A73391153FB310015F61E /* IphSystem.cpp in Sources */,
 				2D3A733A1153FB310015F61E /* IphThread.cpp in Sources */,
 				2D3A733B1153FB310015F61E /* IphTimer.cpp in Sources */,
@@ -1670,6 +1626,8 @@
 				2D18704711E7C03F00A8EB9F /* ViewManager.cpp in Sources */,
 				2D18704811E7C03F00A8EB9F /* Viewport.cpp in Sources */,
 				2D18717511E7C99800A8EB9F /* PcRendererDevice.cpp in Sources */,
+				2D56524411FA31E60058B701 /* IphSoundSource.cpp in Sources */,
+				2D56524511FA31E60058B701 /* IphTexture.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

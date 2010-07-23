@@ -135,6 +135,7 @@ class SEED_CORE_API Theora : public Thread, public Image /*, public IVideo*/
 
 		virtual void Rewind();
 
+		using Image::Load;
 		virtual BOOL Load(const char *filename, IMemoryPool *pool);
 		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual void Reset();

@@ -41,8 +41,6 @@
 #include "Sprite.h"
 #include "Label.h"
 #include "GuiManager.h"
-#include "ResourceManager.h"
-#include "MemoryManager.h"
 
 namespace Seed {
 
@@ -224,7 +222,8 @@ class SEED_CORE_API Button : public IWidget, public IResource
 		virtual void Render();
 
 		// IResource
-		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+		using IResource::Load;
+		virtual BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool);
 		virtual BOOL Unload();
 
 		// IObject

@@ -189,7 +189,7 @@ typedef u32 					PIXEL;
 		#define vswprintf _vsnwprintf
 	#endif // _MSC_VER
 #else
-	#define LIB_FOPEN(a, b)					fopen(a, b)
+	#define LIB_FOPEN(a, b)					fopen((const char *)a, b)
 	#define PLATFORM_PATH_SEPARATOR			'/'
 #endif // WIN32
 

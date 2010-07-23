@@ -52,10 +52,10 @@
 static char pcBundle[2048];
 #endif
 
-BOOL create_directory(const char *path)
+BOOL create_directory(const wchar_t *path)
 {
 	BOOL ret = FALSE;
-	int err = mkdir(path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+	int err = mkdir((const char *)path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
 	if (err == -1)
 	{
@@ -118,33 +118,33 @@ BOOL create_directory(const char *path)
 	return ret;
 }
 
-const char *get_user_name()
+const wchar_t *get_user_name()
 {
-	const char *name = getenv("LOGNAME");
+	const wchar_t *name = (wchar_t *)getenv("LOGNAME");
 	if (!name)
-		name = "Noname";
+		name = (const wchar_t *)"Noname";
 	return name;
 }
 
-const char *get_user_savegame_folder()
+const wchar_t *get_user_savegame_folder()
 {
 	return get_user_home_folder();
 }
 
-const char *get_user_appdata_folder()
+const wchar_t *get_user_appdata_folder()
 {
 	return get_user_home_folder();
 }
 
-const char *get_user_home_folder()
+const wchar_t *get_user_home_folder()
 {
-	const char *home = getenv("HOME");
+	const wchar_t *home = (wchar_t *)getenv("HOME");
 	if (!home)
-		home = "./";
+		home = (const wchar_t *)"./";
 	return home;
 }
 
-void get_current_directory(char *buff, int size)
+void get_current_directory(wchar_t *buff, int size)
 {
 #if defined(_IPHONE_)
 	memset(buff, '\0', size);
@@ -164,9 +164,72 @@ void get_current_directory(char *buff, int size)
 #endif
 }
 
-BOOL change_directory(const char *to)
+BOOL change_directory(const wchar_t *to)
 {
-	return chdir(to);
+	BOOL ret = FALSE;
+	const char *path = (const char *)to;
+	int err = chdir(path);
+	
+	if (err == -1)
+	{
+		switch (errno)
+		{
+			case EACCES:
+			{
+				Info(TAG "Permission denied to create '%s'.", path);
+			}
+			break;
+
+			case EEXIST:
+			{
+				Info(TAG "Path '%s' already exists.", path);
+			}
+			break;
+
+			case ENAMETOOLONG:
+			{
+				Info(TAG "Path name too long: '%s'", path);
+			}
+			break;
+
+			case ENOENT:
+			{
+				Info(TAG "Path '%s' does not name an existin entry.", path);
+			}
+			break;
+
+			case ENOSPC:
+			{
+				Info(TAG "Not enought space to create '%s'.", path);
+			}
+			break;
+
+			case ENOTDIR:
+			{
+				Info(TAG "A component of the path '%s' is not a directory.", path);
+			}
+			break;
+
+			case EROFS:
+			{
+				Info(TAG "Read-only filesystem, could not create '%s'.", path);
+			}
+			break;
+
+			default:
+			{
+				Info(TAG "An error '%d' ocurred trying to create '%s'.", err, path);
+			}
+			break;
+		}
+	}
+	else
+	{
+		ret = TRUE;
+	}
+
+	return ret;
+
 }
 
 void print_system_info()

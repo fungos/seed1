@@ -72,7 +72,8 @@ class SEED_CORE_API Font : public IResource
 		virtual void SetFilter(eTextureFilterType type, eTextureFilter filter);
 
 		// IResource
-		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+		using IResource::Load;
+		virtual BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool);
 		virtual BOOL Unload();
 		virtual u32 GetUsedMemory() const;
 

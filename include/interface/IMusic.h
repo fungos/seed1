@@ -78,6 +78,7 @@ class SEED_CORE_API IMusic : public IResource
 		virtual BOOL IsPlaying() const;
 
 		// IResource
+		using IResource::Load;
 		virtual BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool);
 		virtual BOOL Unload();
 

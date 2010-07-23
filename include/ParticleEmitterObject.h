@@ -122,8 +122,9 @@ class SEED_CORE_API ParticleEmitterObject : public IResource
 
 	protected:
 		// IResource
+		using IResource::Load;
 		virtual BOOL Unload();
-		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool);
 
 		SEED_DISABLE_INSTANCING;
 

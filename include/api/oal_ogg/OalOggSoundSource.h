@@ -65,6 +65,7 @@ class SEED_CORE_API SoundSource : public ISoundSource
 		virtual ~SoundSource();
 
 		// ISoundSource
+		using ISoundSource::Load;
 		virtual void Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual void Unload();
 

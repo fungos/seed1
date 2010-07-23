@@ -73,7 +73,8 @@ class SEED_CORE_API Package : public IResource
 		void LockUnload();
 
 		// IResource
-		virtual BOOL Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+		using IResource::Load;
+		virtual BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool);
 		virtual BOOL Load(const void *data, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 		virtual BOOL Unload();
 

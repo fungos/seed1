@@ -53,6 +53,7 @@ class SEED_CORE_API ISound : public IResource
 		virtual const void *GetData() const = 0;
 
 		// IResource
+		using IResource::Load;
 		virtual BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool) = 0;
 		virtual BOOL Unload() = 0;
 

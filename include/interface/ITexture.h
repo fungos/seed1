@@ -106,6 +106,7 @@ class SEED_CORE_API ITexture : public IResource
 		virtual void Reset();
 
 		// IResource
+		using IResource::Load;
 		virtual BOOL Unload();
 		virtual BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool);
 
