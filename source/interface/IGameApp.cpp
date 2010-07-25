@@ -70,7 +70,7 @@ INLINE void IGameApp::Setup(int argc, char **argv)
 {
 	UNUSED(argc);
 	UNUSED(argv);
-	SEED_ABSTRACT_METHOD;
+	SEED_DEPRECATED_METHOD;
 }
 
 INLINE void IGameApp::WriteOut(const char *msg)

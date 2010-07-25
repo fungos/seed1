@@ -193,6 +193,7 @@ union uPixel
 	#endif
 
 	#define SEED_ABSTRACT_METHOD		Dbg(SEED_TAG "WARNING: Calling an 'abstract' method: [%s] (%s:%d).", __FUNC__, __FILE__, __LINE__);
+	#define SEED_DEPRECATED_METHOD		Dbg(SEED_TAG "WARNING: Calling a deprected method, please fix it: [%s] (%s:%d)", __FUNC__, __FILE__, __LINE__);
 
 	#define SEED_DISABLE_INSTANCING		public: \
 											friend class LeakReport; \

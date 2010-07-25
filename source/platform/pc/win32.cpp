@@ -156,14 +156,7 @@ void get_current_directory(wchar_t *buff, int size)
 
 BOOL change_directory(const wchar_t *to)
 {
-	int ret = _wchdir(to);
-
-	if (ret < 0)
-	{
-		int a = errno;
-	}
-
-	return (ret == 0);
+	return (_wchdir(to) == 0);
 }
 
 void print_system_info()

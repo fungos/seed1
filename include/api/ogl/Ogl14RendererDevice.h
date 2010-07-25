@@ -37,6 +37,11 @@
 #ifndef __OGL14_RENDERER_DEVICE_H__
 #define __OGL14_RENDERER_DEVICE_H__
 
+#if defined(_MSC_VER)
+#pragma comment(lib, "opengl32.lib")
+#pragma comment(lib, "glu32.lib")
+#endif
+
 #include "Defines.h"
 #include "Enum.h"
 #include "Vertex.h"

@@ -43,7 +43,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\include;&quot;$(SEEDSDK)\dependency\common\include&quot;;&quot;$(SEEDSDK)\dependency\vc8\include&quot;"
-				PreprocessorDefinitions="WIN32;DEBUG;YMEM_DEBUG;_CONSOLE;_SDL_;_CRT_SECURE_NO_WARNINGS;YMEM_PARANOID_CHECK;SEED_BUILD;SEED_ENABLE_D3D8;SEED_ENABLE_PROFILER;D3D_DEBUG_INFO"
+				PreprocessorDefinitions="WIN32;DEBUG;YMEM_DEBUG;_CONSOLE;_SDL_;_CRT_SECURE_NO_WARNINGS;YMEM_PARANOID_CHECK;SEED_BUILD;SEED_ENABLE_PROFILER;SEED_ENABLE_D3D8;D3D_DEBUG_INFO"
 				IgnoreStandardIncludePath="false"
 				GeneratePreprocessedFile="0"
 				MinimalRebuild="true"
@@ -67,7 +67,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d8.lib d3dx8.lib version.lib opengl32.lib glu32.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib sdl.lib sdlmain.lib openal32.lib sdl_image.lib liboggplay_static.lib"
+				AdditionalDependencies="ogg_static.lib vorbis_static.lib vorbisfile_static.lib sdl.lib sdlmain.lib openal32.lib sdl_image.lib liboggplay_static.lib"
 				AdditionalLibraryDirectories="&quot;$(SEEDSDK)\dependency\vc8\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd"
 				GenerateDebugInformation="true"
@@ -144,7 +144,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="d3d8.lib d3dx8.lib version.lib opengl32.lib glu32.lib ogg_static.lib vorbis_static.lib vorbisfile_static.lib sdl.lib sdlmain.lib openal32.lib sdl_image.lib liboggplay_static.lib"
+				AdditionalDependencies="ogg_static.lib vorbis_static.lib vorbisfile_static.lib sdl.lib sdlmain.lib openal32.lib sdl_image.lib liboggplay_static.lib"
 				AdditionalLibraryDirectories="&quot;$(SEEDSDK)\dependency\vc8\lib&quot;"
 				IgnoreDefaultLibraryNames="libcmt;libcmtd"
 			/>

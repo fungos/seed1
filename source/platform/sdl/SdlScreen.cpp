@@ -234,6 +234,12 @@ INLINE BOOL Screen::InitializeVideo()
 	{
 		this->SetupOpenGL();
 	}
+	else
+	{
+#if !defined(SEED_ENABLE_D3D8) && !defined(SEED_ENABLE_D3D9) && !defined(SEED_ENABLE_D3D10) && !defined(SEED_ENABLE_D3D11)
+		this->SetupOpenGL();
+#endif
+	}
 #endif
 
 #if defined(WIN32)

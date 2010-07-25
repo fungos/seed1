@@ -37,6 +37,12 @@
 #ifndef __D3D8_RENDERER_DEVICE_H__
 #define __D3D8_RENDERER_DEVICE_H__
 
+#if defined(_MSC_VER)
+#pragma comment(lib, "d3d8.lib")
+#pragma comment(lib, "d3dx8.lib")
+#pragma comment(lib, "version.lib")
+#endif
+
 #include "Defines.h"
 #include "Enum.h"
 #include "Vertex.h"
