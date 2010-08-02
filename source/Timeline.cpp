@@ -441,15 +441,23 @@ INLINE f32 Timeline::EaseQuadPercent(f32 time, f32 begin, f32 change, f32 durati
 
 INLINE void Timeline::SetObject(ISceneObject *object)
 {
+	if (pParent)
+		pParent->Remove(pObject);
+
 	pObject = object;
+
 	if (pParent && object)
 		pParent->Add(pObject);
 }
 
 INLINE void Timeline::SetParent(Movie *parent)
 {
+	if (pParent)
+		pParent->Remove(pObject);
+
 	pParent = parent;
-	if (pObject)
+
+	if (parent && pObject)
 		parent->Add(pObject);
 }
 
