@@ -17,6 +17,6 @@ class YMemoryManager;
 YMemoryManager *ycreate(unsigned long size);
 void ydestroy(YMemoryManager *mm);
 void yfree(YMemoryManager *mm, void *ptr);
-void *yalloc(YMemoryManager *mm, unsigned long size, const char *desc = NULL, const char *owner = NULL);
+void *yalloc(YMemoryManager *mm, unsigned long size, const char *desc = NULL, const char *owner = NULL, int reserve = 0);
 
 #endif // __YALLOCWRAP_H__

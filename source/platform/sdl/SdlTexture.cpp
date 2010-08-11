@@ -209,6 +209,15 @@ BOOL Texture::Load(const char *filename, ResourceManager *res, IMemoryPool *pool
 		pRendererDevice->TextureRequest(this, &pTextureId);
 
 		bLoaded = TRUE;
+
+#if defined(DEBUG)
+		ePlatformSimulation plat = pConfiguration->GetPlatformSimulation();
+		if (plat == SimulateWii)
+		{
+			iReserveLen = width * height * 4;
+			pPool->Reserve(iReserveLen);
+		}
+#endif
 	}
 	else
 	{
@@ -267,7 +276,17 @@ INLINE BOOL Texture::Unload()
 	this->UnloadTexture();
 
 	if (pSurface)
+	{
+#if defined(DEBUG)
+		if (iReserveLen)
+		{
+			pPool->Unreserve(iReserveLen);
+			iReserveLen = 0;
+		}
+#endif
+
 		SDL_FreeSurface(pSurface);
+	}
 
 	pSurface = NULL;
 	bLoaded = FALSE;

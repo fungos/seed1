@@ -53,11 +53,14 @@ class SEED_CORE_API IMemoryPool
 
 		virtual void *Alloc(SIZE_T len, const char *desc, const char *owner) = 0;
 		virtual void Free(void *ptr) = 0;
+		virtual void Reserve(SIZE_T len);
+		virtual void Unreserve(SIZE_T len);
 		virtual u32 GetFreeMemory() const;
 		virtual void Print() const;
 
 		u32 iAllocations;
 		u32 iTotalAllocations;
+		u32 iReserved;
 
 	protected:
 		virtual ~IMemoryPool();

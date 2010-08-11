@@ -17,7 +17,7 @@ class SEED_CORE_API YMemoryManager
 {
 	friend YMemoryManager *ycreate(unsigned long size);
 	friend void ydestroy(YMemoryManager *mm);
-	friend void *yalloc(YMemoryManager *mm, unsigned long size, const char *desc, const char *owner);
+	friend void *yalloc(YMemoryManager *mm, unsigned long size, const char *desc, const char *owner, int reserve);
 	friend void yfree(YMemoryManager *mm, void *ptr);
 
 	public:
@@ -36,7 +36,7 @@ class SEED_CORE_API YMemoryManager
 		YMemoryManager(u32 nbytes);
 		~YMemoryManager();
 
-		void *Alloc(u32 nbytes, const char *desc = NULL, const char *owner = NULL);
+		void *Alloc(u32 nbytes, const char *desc = NULL, const char *owner = NULL, int reserve = 0);
 		void Free(void *addr);
 
 	private:

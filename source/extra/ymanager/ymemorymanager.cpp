@@ -30,9 +30,9 @@ struct block
 */
 
 #if defined(YMEM_DEBUG)
-#define KEEP(i)			(*((u32 *)(&this->pPool[i - 28])))
-#define OWNR(i)			(*((u32 *)(&this->pPool[i - 24])))
-#define DESC(i)			(*((u32 *)(&this->pPool[i - 20])))
+#define KEEP(i)			(*((u32 *)(&pPool[i - 28])))
+#define OWNR(i)			(*((u32 *)(&pPool[i - 24])))
+#define DESC(i)			(*((u32 *)(&pPool[i - 20])))
 #define SIZE_HEADER		32
 #else
 #define KEEP(i)
@@ -49,10 +49,10 @@ struct block
 
 #define START		SIZE_HEADER		/*address of first payload*/
 
-#define PREV(i)		(*((u32 *)(&this->pPool[i - 16])))
-#define NEXT(i)		(*((u32 *)(&this->pPool[i - 12])))
-#define USED(i)		(*((u32 *)(&this->pPool[i -  8])))
-#define SIZE(i)		(*((u32 *)(&this->pPool[i -  4])))
+#define PREV(i)		(*((u32 *)(&pPool[i - 16])))
+#define NEXT(i)		(*((u32 *)(&pPool[i - 12])))
+#define USED(i)		(*((u32 *)(&pPool[i -  8])))
+#define SIZE(i)		(*((u32 *)(&pPool[i -  4])))
 
 #define GUARD		0xdeadbeef
 
@@ -63,10 +63,10 @@ YMemoryManager::YMemoryManager(u32 nbytes)
 	, iSize(nbytes)
 	, iFreeMemory(0)
 {
-	this->pPool = (unsigned char *)malloc(nbytes);
-	//this->iSize = nbytes;
+	pPool = (unsigned char *)malloc(nbytes);
+	//iSize = nbytes;
 
-	if (this->iSize <= SIZE_HEADER)
+	if (iSize <= SIZE_HEADER)
 	{
 		LOG0(TAG "Not enough memory to initialize memory manager.\n");
 		exit(1);
@@ -77,44 +77,54 @@ YMemoryManager::YMemoryManager(u32 nbytes)
 		KEEP(START) = GUARD;
 		OWNR(START) = (PTRSIZE)NO_OWNR;
 		DESC(START) = (PTRSIZE)NO_DESC;
-		this->iOverrunCount = 0;
-		this->iAllocationCount = 0;
-		this->iFreeCount = 0;
-		this->iAllocationTotalBytes = 0;
+		iOverrunCount = 0;
+		iAllocationCount = 0;
+		iFreeCount = 0;
+		iAllocationTotalBytes = 0;
 	)
 	PREV(START) = 0;
 	NEXT(START) = 0;
 	USED(START) = FALSE;
-	SIZE(START) = this->iSize - SIZE_HEADER;
-	this->iFreeMemory = SIZE(START);
+	SIZE(START) = iSize - SIZE_HEADER;
+	iFreeMemory = SIZE(START);
 
 }
 
 YMemoryManager::~YMemoryManager()
 {
-	free(this->pPool);
+	free(pPool);
 
-	this->iSize = 0;
-	this->iFreeMemory = 0;
-	this->pPool = NULL;
+	iSize = 0;
+	iFreeMemory = 0;
+	pPool = NULL;
 
 	_YDEBUG
 	(
-		this->iOverrunCount = 0;
-		this->iAllocationCount = 0;
-		this->iFreeCount = 0;
-		this->iAllocationTotalBytes = 0;
+		iOverrunCount = 0;
+		iAllocationCount = 0;
+		iFreeCount = 0;
+		iAllocationTotalBytes = 0;
 	)
-
 }
 
-
-void *YMemoryManager::Alloc(u32 len, const char *desc, const char *owner)
+void *YMemoryManager::Alloc(u32 len, const char *desc, const char *owner, int reserve)
 {
 	LOG1(TAG "Alloc(%d)\n", len);
 
 	if (len == 0)
 		return NULL;
+
+	if (len > iFreeMemory)
+	{
+		LOG2(TAG "Trying to alloc %d - more than available: %d.", len, iFreeMemory);
+		return NULL;
+	}
+
+	if (s32(len) > s32(iFreeMemory - reserve))
+	{
+		LOG3(TAG "Trying to alloc %d - more than available: %d reserved: %d.", len, iFreeMemory, reserve);
+		return NULL;
+	}
 
 	// find a empty block
 	u32 current = START;
@@ -125,10 +135,10 @@ void *YMemoryManager::Alloc(u32 len, const char *desc, const char *owner)
 			this->Split(current, len, desc, owner);
 			_YDEBUG
 			(
-				this->iAllocationCount++;
-				this->iAllocationTotalBytes += len;
+				iAllocationCount++;
+				iAllocationTotalBytes += len;
 			)
-			return ((void *)&this->pPool[current]);
+			return ((void *)&pPool[current]);
 		}
 		current = NEXT(current);
 	}
@@ -139,10 +149,10 @@ void *YMemoryManager::Alloc(u32 len, const char *desc, const char *owner)
 		this->Split(current, len, desc, owner);
 		_YDEBUG
 		(
-			this->iAllocationCount++;
-			this->iAllocationTotalBytes += len;
+			iAllocationCount++;
+			iAllocationTotalBytes += len;
 		)
-		return ((void *)&this->pPool[current]);
+		return ((void *)&pPool[current]);
 	}
 
 	return NULL;
@@ -160,14 +170,14 @@ void YMemoryManager::Free(void *addr)
 
 	LOG1(TAG "Free(0x%x).\n", (int)addr);
 
-	if ((addr >= (void *)&this->pPool[this->iSize]) || (addr < (void *)&this->pPool[0]))
+	if ((addr >= (void *)&pPool[iSize]) || (addr < (void *)&pPool[0]))
 	{
 		LOG0(TAG "Address not in manager pool.\n");
 		return;
 	}
 #endif // YMEM_PARANOID_CHECK
 
-	u32 free = (u32)(((u8 *)addr) - this->pPool);
+	u32 free = (u32)(((u8 *)addr) - pPool);
 	LOG1(TAG "Amount to be freed: %d.\n", SIZE(free));
 
 #if defined(YMEM_PARANOID_CHECK)
@@ -181,15 +191,15 @@ void YMemoryManager::Free(void *addr)
 		{
 			//u32 prev = PREV(free);
 			LOG2(TAG "WARNING: this block was invaded by %s (%s).\n", (const char *)DESC(PREV(free)), (const char *)OWNR(prev));
-			this->iOverrunCount++;
+			iOverrunCount++;
 		}
 	)
 
-	if ((USED(free) != TRUE)			||	// region is already free
-		(PREV(free) >= free)			||	// previous element is not previous
-		(NEXT(free) >= this->iSize)		||	// next is outside of our pool
-		(SIZE(free) >= this->iSize)		||	// size region greater than our pool
-		(SIZE(free) == 0))					// invalid size
+	if ((USED(free) != TRUE)		||	// region is already free
+		(PREV(free) >= free)		||	// previous element is not previous
+		(NEXT(free) >= iSize)		||	// next is outside of our pool
+		(SIZE(free) >= iSize)		||	// size region greater than our pool
+		(SIZE(free) == 0))				// invalid size
 	{
 		LOG0(TAG "Referencing invalid address.\n");
 		return;
@@ -200,7 +210,7 @@ void YMemoryManager::Free(void *addr)
 	(
 		DESC(free) = (PTRSIZE)NO_DESC;
 		OWNR(free) = (PTRSIZE)NO_OWNR;
-		this->iFreeCount++;
+		iFreeCount++;
 	)
 	this->Merge(PREV(free), free, NEXT(free));
 }
@@ -222,7 +232,7 @@ void YMemoryManager::Split(u32 addr, u32 len, const char *desc, const char *owne
 
 	if (SIZE(addr) >= len + SIZE_HEADER + SIZE_HEADER)
 	{
-		this->iFreeMemory -= len + SIZE_HEADER;
+		iFreeMemory -= len + SIZE_HEADER;
 
 		u32 oldnext = NEXT(addr);
 		u32 oldprev = PREV(addr);
@@ -253,7 +263,7 @@ void YMemoryManager::Split(u32 addr, u32 len, const char *desc, const char *owne
 	}
 	else
 	{
-		this->iFreeMemory -= SIZE(addr);
+		iFreeMemory -= SIZE(addr);
 		USED(addr) = TRUE;
 		_YDEBUG
 		(
@@ -284,19 +294,19 @@ void YMemoryManager::Merge(u32 prev, u32 current, u32 next)
 		if (!next)
 		{
 			USED(current) = FALSE;
-			this->iFreeMemory += SIZE(current);
+			iFreeMemory += SIZE(current);
 		}
 		else if (USED(next) == TRUE)
 		{
 			USED(current) = FALSE;
-			this->iFreeMemory += SIZE(current);
+			iFreeMemory += SIZE(current);
 		}
 		else if (USED(next) == FALSE)
 		{
 			u32 temp;
 
 			LOG0(TAG "Merging current block with next block.\n");
-			this->iFreeMemory += SIZE(current) + SIZE_HEADER;
+			iFreeMemory += SIZE(current) + SIZE_HEADER;
 			USED(current) = FALSE;
 			SIZE(current) = SIZE(current) + SIZE(next) + SIZE_HEADER;
 			NEXT(current) = NEXT(next);
@@ -310,12 +320,12 @@ void YMemoryManager::Merge(u32 prev, u32 current, u32 next)
 		if (USED(prev) == TRUE)
 		{
 			USED(current) = FALSE;
-			this->iFreeMemory += SIZE(current);
+			iFreeMemory += SIZE(current);
 		}
 		else if (USED(prev) == FALSE)
 		{
 			LOG0(TAG "Merging current block with previous block.\n");
-			this->iFreeMemory += SIZE(current) + SIZE_HEADER;
+			iFreeMemory += SIZE(current) + SIZE_HEADER;
 			SIZE(prev) = SIZE(prev) + SIZE(current) + SIZE_HEADER;
 			NEXT(prev) = NEXT(current);
 		}
@@ -325,14 +335,14 @@ void YMemoryManager::Merge(u32 prev, u32 current, u32 next)
 	else if ((USED(prev) == TRUE) && (USED(next) == TRUE))
 	{
 		USED(current) = FALSE;
-		this->iFreeMemory += SIZE(current);
+		iFreeMemory += SIZE(current);
 	}
 	else if ((USED(prev) == TRUE) && (USED(next) == FALSE))
 	{
 		u32 temp;
 
 		LOG0(TAG "Merging current block with next block.\n");
-		this->iFreeMemory += SIZE(current) + SIZE_HEADER;
+		iFreeMemory += SIZE(current) + SIZE_HEADER;
 		USED(current) = FALSE;
 		SIZE(current) = SIZE(current) + SIZE(next) + SIZE_HEADER;
 		NEXT(current) = NEXT(next);
@@ -346,7 +356,7 @@ void YMemoryManager::Merge(u32 prev, u32 current, u32 next)
 	else if ((USED(prev) == FALSE) && (USED(next) == TRUE))
 	{
 		LOG0(TAG "Merging current block with previous block.\n");
-		this->iFreeMemory += SIZE(current) + SIZE_HEADER;
+		iFreeMemory += SIZE(current) + SIZE_HEADER;
 		SIZE(prev) = SIZE(prev) + SIZE(current) + SIZE_HEADER;
 		NEXT(prev) = NEXT(current);
 		PREV(next) = prev;
@@ -356,7 +366,7 @@ void YMemoryManager::Merge(u32 prev, u32 current, u32 next)
 		u32 temp;
 
 		LOG0(TAG "Merging current block with previous and next blocks.\n");
-		this->iFreeMemory += SIZE(current) + SIZE_HEADER + SIZE_HEADER;
+		iFreeMemory += SIZE(current) + SIZE_HEADER + SIZE_HEADER;
 		SIZE(prev) = SIZE(prev) +
 					SIZE(current) + SIZE_HEADER +
 					SIZE(next) + SIZE_HEADER;
@@ -372,7 +382,7 @@ void YMemoryManager::Merge(u32 prev, u32 current, u32 next)
 
 u32 YMemoryManager::GetFreeMemory()
 {
-	return this->iFreeMemory;
+	return iFreeMemory;
 }
 
 #if defined(YMEM_DEBUG)
@@ -395,31 +405,31 @@ void YMemoryManager::PrintSnapshot()
 
 	printf("\tBLOCK %d: [Addr=%8d][Size=%8d][%s]", i, current, SIZE(current), USED(current) ? "Busy" : "Free");
 	printf("[%s][%s]\n", (const char *)OWNR(current), (const char *)DESC(current));
-	printf(TAG "Free Memory: %d\n", this->iFreeMemory);
-	printf(TAG "Allocations: %d\n", this->iAllocationCount);
-	printf(TAG "Free'd     : %d\n", this->iFreeCount);
-	printf(TAG "Overruns   : %d\n", this->iOverrunCount);
-	printf(TAG "Average len: %.2f\n", this->iAllocationTotalBytes / (double)this->iAllocationCount);
+	printf(TAG "Free Memory: %d\n", iFreeMemory);
+	printf(TAG "Allocations: %d\n", iAllocationCount);
+	printf(TAG "Free'd     : %d\n", iFreeCount);
+	printf(TAG "Overruns   : %d\n", iOverrunCount);
+	printf(TAG "Average len: %.2f\n", iAllocationTotalBytes / (double)iAllocationCount);
 }
 
 u32 YMemoryManager::GetOverrunCount()
 {
-	return this->iOverrunCount;
+	return iOverrunCount;
 }
 
 u32 YMemoryManager::GetAllocationCount()
 {
-	return this->iAllocationCount;
+	return iAllocationCount;
 }
 
 u32 YMemoryManager::GetFreeCount()
 {
-	return this->iFreeCount;
+	return iFreeCount;
 }
 
 u32 YMemoryManager::GetAllocationTotalBytes()
 {
-	return this->iAllocationTotalBytes;
+	return iAllocationTotalBytes;
 }
 
 #endif // YMEM_DEBUG

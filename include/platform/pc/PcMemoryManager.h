@@ -63,6 +63,8 @@ class SEED_CORE_API MemoryManager : public IMemoryManager
 		virtual void *Alloc(SIZE_T len, IMemoryPool *pool = &defaultPool, const char *desc = "Unknown", const char *owner = "Nobody");
 		virtual void Free(void *ptr, IMemoryPool *pool = &defaultPool);
 		virtual void Info();
+		virtual void Reserve(SIZE_T len, IMemoryPool *pool);
+		virtual void Unreserve(SIZE_T len, IMemoryPool *pool);
 
 		// IModule
 		virtual BOOL Initialize();

@@ -31,13 +31,13 @@ void ydestroy(YMemoryManager *mm)
 }
 
 
-void *yalloc(YMemoryManager *mm, unsigned long size, const char *desc, const char *owner)
+void *yalloc(YMemoryManager *mm, unsigned long size, const char *desc, const char *owner, int reserve)
 {
 	if (!mm)
 		return NULL;
 
 #if defined(YMEM_DEBUG)
-	void *ptr = mm->Alloc(size, desc, owner);
+	void *ptr = mm->Alloc(size, desc, owner, reserve);
 	//mm->PrintSnapshot();
 #else
 	UNUSED(desc);

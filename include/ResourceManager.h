@@ -66,6 +66,7 @@ class SEED_CORE_API ResourceManager
 		void GarbageCollect();
 
 		u32 GetTotalUsedMemory();
+		void PrintUsedMemoryByResource();
 
 		static void Register(Seed::eObjectType resourceType, pResourceLoaderFunc pfunc);
 		static void Unregister(Seed::eObjectType resourceType);
