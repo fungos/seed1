@@ -72,7 +72,7 @@ INLINE BOOL Cartridge::Initialize()
 
 INLINE BOOL Cartridge::Reset()
 {
-	pMemoryManager->Free(this->pData);
+	pMemoryManager->Free(this->pData, pDefaultPool);
 
 	iType = 0;
 	iSize = 0;
@@ -108,7 +108,7 @@ INLINE BOOL Cartridge::Prepare(eCartridgeSize size)
 	strncat(strPath, CARTRIDGE_FILENAME_A, PC_MAX_PATH - strlen(strPath) - 1);
 #endif
 
-	this->pData = static_cast<u8 *>(pMemoryManager->Alloc(iSize));
+	this->pData = static_cast<u8 *>(pMemoryManager->Alloc(iSize, pDefaultPool, "Cartridge Data", "Cartridge"));
 	memset(this->pData, 0, iSize);
 
 	if (!this->Verify(strPath, iSize))
@@ -336,10 +336,10 @@ BOOL Cartridge::CreateSaveFile()
 	FILE *fp = FOPEN(strPath, "wb+");
 	if (fp)
 	{
-		void *pBlankData = pMemoryManager->Alloc(iSize);
+		void *pBlankData = pMemoryManager->Alloc(iSize, pDefaultPool, "Blank Data", "Cartridge");
 		memset(pBlankData, 0, iSize);
 		BOOL result = this->Write(0, pBlankData, iSize);
-		pMemoryManager->Free(pBlankData);
+		pMemoryManager->Free(pBlankData, pDefaultPool);
 
 		if (!result)
 		{

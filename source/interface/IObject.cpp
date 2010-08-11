@@ -49,7 +49,7 @@ IObject::~IObject()
 
 void *IObject::operator new(size_t len)
 {
-	return pDefaultPool->Alloc(len, "Class New", "Code");
+	return pDefaultPool->Alloc(len, "operator new", "IObject");
 }
 
 void IObject::operator delete(void *p)

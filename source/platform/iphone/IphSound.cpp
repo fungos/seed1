@@ -110,10 +110,10 @@ BOOL Sound::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		
 		this->ReadData(filename);
 		
-		this->bLoaded = TRUE;
+		bLoaded = TRUE;
 	}
 
-	return this->bLoaded;
+	return bLoaded;
 }
 
 INLINE BOOL Sound::Unload()
@@ -122,7 +122,7 @@ INLINE BOOL Sound::Unload()
 		alDeleteBuffers(1, &iBuffer);
 	
 	if (pData)
-		pMemoryManager->Free(pData);
+		pMemoryManager->Free(pData, pPool);
 		
 	pData = NULL;
 	eFormat = 0;
@@ -196,7 +196,7 @@ void Sound::ReadData(const char *file)
 		{ Log(TAG "ReadAudioData: AudioFileGetProperty(kAudioFilePropertyAudioDataByteCount) FAILED, Error = %ld, File: %s%s%s.", err, AUDIO_DATA_PATH, file, AUDIO_DATA_EXT); goto Exit; }
 
 	UInt32 dataSize = static_cast<UInt32>(fileDataSize);
-	theData = pMemoryManager->Alloc(dataSize);
+	theData = pMemoryManager->Alloc(dataSize, pPool, "Sound Data", "Sound");
 	if (theData)
 	{
 		AudioFileReadBytes(afid, false, 0, &dataSize, theData);
@@ -227,13 +227,13 @@ void Sound::ReadData(const char *file)
 			{
 				Log(TAG "alBufferDataStaticProc buffer %d : error %d, File: %s%s%s.", iBuffer, error, AUDIO_DATA_PATH, file, AUDIO_DATA_EXT);
 
-				pMemoryManager->Free(theData);
+				pMemoryManager->Free(theData, pPool);
 				theData = NULL;
 			}
 		}
 		else
 		{
-			pMemoryManager->Free(theData);
+			pMemoryManager->Free(theData, pPool);
 			theData = NULL;
 
 			Log(TAG "ReadAudioData: ExtAudioFileRead FAILED, Error = %ld, File: %s%s%s.", err, AUDIO_DATA_PATH, file, AUDIO_DATA_EXT);

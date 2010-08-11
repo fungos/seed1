@@ -145,7 +145,7 @@ eCartridgeError SaveSystem::Prepare(u32 myId, void *slotBlankData, u32 slotDataS
 	// Check all shared data state
 	if (sharedBlankData != NULL && iSharedDataSize > 0)
 	{
-		void *sharedTestMemory = pMemoryManager->Alloc(iSharedDataSize, pDefaultPool);
+		void *sharedTestMemory = pMemoryManager->Alloc(iSharedDataSize, pDefaultPool, "Shared Test Memory", "SaveSystem");
 
 		error = this->ReadSharedData(sharedTestMemory);
 		if (error != Seed::ErrorNone)
@@ -160,13 +160,13 @@ eCartridgeError SaveSystem::Prepare(u32 myId, void *slotBlankData, u32 slotDataS
 			}
 		}
 
-		pMemoryManager->Free(sharedTestMemory);
+		pMemoryManager->Free(sharedTestMemory, pDefaultPool);
 	}
 
 	if (error == Seed::ErrorNone)
 	{
 		// Check all slots state
-		void *slotTestMemory = pMemoryManager->Alloc(iSlotDataSize, pDefaultPool);
+		void *slotTestMemory = pMemoryManager->Alloc(iSlotDataSize, pDefaultPool, "Slot Test Memory", "SaveSystem");
 		for (u8 i = 0; i < iTotalSlots; i ++)
 		{
 			error = this->Load(i, slotTestMemory);
@@ -184,7 +184,7 @@ eCartridgeError SaveSystem::Prepare(u32 myId, void *slotBlankData, u32 slotDataS
 			}
 		}
 
-		pMemoryManager->Free(slotTestMemory);
+		pMemoryManager->Free(slotTestMemory, pDefaultPool);
 	}
 
 	bIsSaving = FALSE;

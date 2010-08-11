@@ -91,7 +91,7 @@ void IFileSystem::BuildFileTable()
 			READ_U32(iLangCount, ptr);
 			READ_U32(iFileCount, ptr);
 
-			pFileTable = (StringFile *)pMemoryManager->Alloc(iLangCount * iFileCount * sizeof(const char *));
+			pFileTable = (StringFile *)pMemoryManager->Alloc(iLangCount * iFileCount * sizeof(const char *), pDefaultPool, "File Table", "FileSystem");
 			for (u32 l = 0; l < iLangCount; l++)
 			{
 				u32 lang = 0;
@@ -119,7 +119,7 @@ void IFileSystem::BuildFileTable()
 void IFileSystem::DestroyFileTable()
 {
 	Delete(pFile);
-	pMemoryManager->Free(pFileTable);
+	pMemoryManager->Free(pFileTable, pDefaultPool);
 
 	pSystem->RemoveListener(this);
 }

@@ -146,7 +146,7 @@ void *FileSystem::Read(const char *fname, IMemoryPool *pool, u32 *length)
 		this->iLastLength = ftell(fp);
 		fseek(fp, 0L, SEEK_SET);
 
-		void *buff = pMemoryManager->Alloc(this->iLastLength, pool, "File", fname);
+		void *buff = pMemoryManager->Alloc(this->iLastLength, pool, fname, "File");
 
 		u32 total = fread(buff, 1, iLastLength, fp);
 		fclose(fp);

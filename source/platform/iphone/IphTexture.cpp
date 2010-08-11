@@ -283,16 +283,22 @@ INLINE void Texture::UnloadTexture()
 		pRendererDevice->TextureRequestAbort(this, &pTextureId);
 	}
 
+	if (pData)
+		pMemoryManager->Free(pData, pPool);
+	pData = NULL;
+	
 	pTextureId = NULL;
 }
 
 INLINE void Texture::Close()
 {
 	stFile.Close();
-	
+
+#if !defined(DEBUG)
 	if (pData)
-		pMemoryManager->Free(pData);
+		pMemoryManager->Free(pData, pPool);
 	pData = NULL;
+#endif
 }
 
 // FIXME: 2009-02-15 | Use Width x Height from image. | Danny Angelo Carminati Grein
@@ -410,7 +416,7 @@ void Texture::LoadPNG(const char *file)
 	u32 bpc = CGImageGetBitsPerComponent(image);
 	u32 bpp = CGImageGetBitsPerPixel(image);
 	iBytesPerPixel = bpp / 8;
-	data = pMemoryManager->Alloc(height * width * iBytesPerPixel, pPool);
+	data = pMemoryManager->Alloc(height * width * iBytesPerPixel, pPool, file, "iOS Texture");
 	
 	switch (pixelFormat)
 	{
@@ -443,7 +449,7 @@ void Texture::LoadPNG(const char *file)
 	CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(image), CGImageGetHeight(image)), image);
 	if (pixelFormat == kTexture2DPixelFormat_RGB565)
 	{
-		tempData = pMemoryManager->Alloc(height * width * 2, this->pPool);
+		tempData = pMemoryManager->Alloc(height * width * 2, pPool, file, "iOS Texture");
 		inPixel32 = (unsigned int *)data;
 		outPixel16 = (unsigned short *)tempData;
 
