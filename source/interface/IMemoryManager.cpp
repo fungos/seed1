@@ -41,10 +41,20 @@ namespace Seed {
 
 IMemoryManager::IMemoryManager()
 {
+	arPool.Truncate();
 }
 
 IMemoryManager::~IMemoryManager()
 {
+}
+
+INLINE IMemoryPool *IMemoryManager::CreatePool(u32 len, const char *name)
+{
+	UNUSED(len);
+	UNUSED(name);
+	
+	SEED_ABSTRACT_METHOD;
+	return NULL;
 }
 
 INLINE u32 IMemoryManager::GetFreeMemory() const

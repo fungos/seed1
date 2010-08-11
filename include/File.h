@@ -40,6 +40,7 @@
 #include "Defines.h"
 #include "MemoryManager.h"
 #include "FileSystem.h"
+#include "interface/IObject.h"
 
 namespace Seed {
 
@@ -47,7 +48,7 @@ class IFileSystem;
 class IMemoryPool;
 class Package;
 
-class SEED_CORE_API File
+class SEED_CORE_API File : public IObject
 {
 	friend class IFileSystem;
 	friend class FSNS::FileSystem;
@@ -69,8 +70,10 @@ class SEED_CORE_API File
 		void SetData(const void *data);
 		void SetName(const char *name);
 
-		SEED_DISABLE_INSTANCING;
-
+		// IObject
+		virtual const char *GetObjectName() const;
+		virtual int GetObjectType() const;
+		
 	protected:
 		const char	*pName;
 		const void 	*pData;

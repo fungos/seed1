@@ -94,13 +94,19 @@ INLINE BOOL Cartridge::Prepare(eCartridgeSize size)
 	iType = size;
 	iSize = this->GetCardType(size);
 
-	const wchar_t *p = pFileSystem->GetWriteableDirectory();
+	const FilePath *p = pFileSystem->GetWriteableDirectory();
 	ASSERT_MSG(p!=NULL, "You must set a WriteableDirectory!");
 
-	MEMSET(strPath, '\0', PC_MAX_PATH);
+	MEMSET(strPath, '\0', sizeof(strPath));
+#if !defined(_IPHONE_)
 	wcsncpy(strPath, p, PC_MAX_PATH);
 	wcsncat(strPath, L"/", PC_MAX_PATH - 1);
 	wcsncat(strPath, CARTRIDGE_FILENAME, PC_MAX_PATH - wcslen(strPath) - 1);
+#else
+	strncpy(strPath, p, PC_MAX_PATH);
+	strncat(strPath, "/", PC_MAX_PATH - 1);
+	strncat(strPath, CARTRIDGE_FILENAME_A, PC_MAX_PATH - strlen(strPath) - 1);
+#endif
 
 	this->pData = static_cast<u8 *>(pMemoryManager->Alloc(iSize));
 	memset(this->pData, 0, iSize);
@@ -278,7 +284,7 @@ u32 Cartridge::GetCardType(eCartridgeSize size)
 	return i;
 }
 
-BOOL Cartridge::Verify(const wchar_t *filename, u32 filesize)
+BOOL Cartridge::Verify(const FilePath *filename, u32 filesize)
 {
 	u32 len = 0;
 	BOOL ret = FALSE;
@@ -294,7 +300,7 @@ BOOL Cartridge::Verify(const wchar_t *filename, u32 filesize)
 	return ret;
 }
 
-BOOL Cartridge::GetFileSize(const wchar_t *filename, u32 *length)
+BOOL Cartridge::GetFileSize(const FilePath *filename, u32 *length)
 {
 	FILE *fp = FOPEN(filename, "rb");
 	if (!fp)

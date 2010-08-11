@@ -165,6 +165,7 @@ typedef signed short int 		s16;
 typedef unsigned char 			u8;
 typedef signed char 			s8;
 typedef float 					f32;
+typedef wchar_t					FilePath;
 
 typedef float 					fixed32;
 typedef u32 					PIXEL;

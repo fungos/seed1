@@ -39,6 +39,8 @@
 #if defined(_PC_)
 
 #include "Log.h"
+#include "Enum.h"
+#include "SeedInit.h"
 #include <sys/types.h>
 
 #define TAG "[MemoryManager] "
@@ -47,13 +49,10 @@ namespace Seed { namespace PC {
 
 SEED_SINGLETON_DEFINE(MemoryManager);
 
-DefaultMemoryPool MemoryManager::defaultPool(MB60);
-LargeMemoryPool MemoryManager::largePool(MB20);
-
 extern "C" 
 {
-DefaultMemoryPool *const pDefaultPool = &MemoryManager::defaultPool;
-LargeMemoryPool *const pLargePool = &MemoryManager::largePool;
+PcMemoryPool *pDefaultPool = NULL;
+PcMemoryPool *pLargePool = NULL;
 }
 
 MemoryManager::MemoryManager()
@@ -74,8 +73,23 @@ BOOL MemoryManager::Initialize()
 	Log(TAG "Initializing...");
 
 	BOOL r = this->Reset();
-	defaultPool.Initialize();
-	largePool.Initialize();
+	ePlatformSimulation plat = pConfiguration->GetPlatformSimulation();
+	
+	switch (plat)
+	{
+		case Seed::SimulateIOS3G:
+		{
+			pLargePool = pDefaultPool = static_cast<PcMemoryPool *>(this->CreatePool(MB10, "iphone"));
+		}
+		break;
+		
+		default:
+		{
+			pDefaultPool = static_cast<PcMemoryPool *>(this->CreatePool(MB20, "default"));
+			pLargePool = static_cast<PcMemoryPool *>(this->CreatePool(MB60, "large"));
+		}
+		break;
+	};
 
 	Log(TAG "Initialization completed. Free Memory: %d.", this->GetFreeMemory());
 
@@ -87,15 +101,42 @@ BOOL MemoryManager::Initialize()
 BOOL MemoryManager::Shutdown()
 {
 	Log(TAG "Terminating...");
+	
+	for (u32 i = 0; i < arPool.Size(); i++)
+	{
+		IMemoryPool *pool = arPool[i];
+		Log(TAG "Releasing pool %s.", pool->pcName);
+		Delete(pool);
+	}
+	arPool.Truncate();
+	
 	BOOL r = this->Reset();
 	Log(TAG "Terminated.");
 
 	return r;
 }
 
+INLINE IMemoryPool *MemoryManager::CreatePool(u32 len, const char *name)
+{
+	PcMemoryPool *pool = New(PcMemoryPool(len, name));
+	pool->Initialize();
+	
+	arPool.Add(pool);
+	
+	return pool;
+}
+
 INLINE u32 MemoryManager::GetFreeMemory() const
 {
-	return defaultPool.GetFreeMemory() + largePool.GetFreeMemory();
+	u32 free = 0;
+	
+	for (u32 i = 0; i < arPool.Size(); i++)
+	{
+		IMemoryPool *pool = arPool[i];
+		free += pool->GetFreeMemory();
+	}
+
+	return free;
 }
 
 INLINE void *MemoryManager::Alloc(SIZE_T len, IMemoryPool *pool, const char *desc, const char *owner)
@@ -112,8 +153,14 @@ INLINE void MemoryManager::Free(void *ptr, IMemoryPool *pool)
 
 INLINE void MemoryManager::Info()
 {
-	Log(TAG "Default Pool: %d (Total allocations: %d Current: %d)", defaultPool.GetFreeMemory(), defaultPool.iTotalAllocations, defaultPool.iAllocations);
-	Log(TAG "Large Pool..: %d (Total allocations: %d Current: %d)", largePool.GetFreeMemory(), largePool.iTotalAllocations, largePool.iAllocations);
+	u32 free = 0;
+	for (u32 i = 0; i < arPool.Size(); i++)
+	{
+		IMemoryPool *pool = arPool[i];
+		Log(TAG "Pool %s: %d (Total allocations: %d Current: %d)", pool->pcName, pool->GetFreeMemory(), pool->iTotalAllocations, pool->iAllocations);
+		free += pool->GetFreeMemory();
+	}
+	Log(TAG "Total free memory: %d", free);
 }
 
 }} // namespace

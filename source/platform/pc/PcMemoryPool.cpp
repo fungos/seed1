@@ -38,6 +38,8 @@
 
 #if defined(_PC_)
 
+#define TAG "[PcMemoryPool] "
+
 #if defined(YMEM_DEBUG)
 	#include "extra/ymanager/yallocwrap.h"
 
@@ -58,10 +60,11 @@
 
 namespace Seed { namespace PC {
 
-PcMemoryPool::PcMemoryPool(u32 size)
+PcMemoryPool::PcMemoryPool(u32 size, const char *name)
 	YMANAGER_INIT
 {
 	UNUSED(size);
+	pcName = name;
 	YMANAGER_CREATE(size);
 }
 
@@ -82,6 +85,7 @@ INLINE u32 PcMemoryPool::GetFreeMemory() const
 
 INLINE void PcMemoryPool::Print() const
 {
+	Log(TAG "Name: %s", pcName);
 	YMANAGER_PRINT;
 }
 
@@ -99,24 +103,6 @@ void PcMemoryPool::Free(void *ptr)
 {
 	iAllocations--;
 	SEED_FREE(ptr);
-}
-
-DefaultMemoryPool::DefaultMemoryPool(u32 size)
-	: PcMemoryPool(size)
-{
-}
-
-DefaultMemoryPool::~DefaultMemoryPool()
-{
-}
-
-LargeMemoryPool::LargeMemoryPool(u32 size)
-	: PcMemoryPool(size)
-{
-}
-
-LargeMemoryPool::~LargeMemoryPool()
-{
 }
 
 }} // namespace

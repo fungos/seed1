@@ -18,8 +18,8 @@ using namespace Seed;
 
 iphTouchInfo iphTouchBuff[PLATFORM_MAX_INPUT];
 
-char _defaultRootPath[MAX_PATH_SIZE];
-char _defaultHomePath[MAX_PATH_SIZE];
+FilePath _defaultRootPathA[MAX_PATH_SIZE];
+FilePath _defaultHomePathA[MAX_PATH_SIZE];
 AppView *__view;
 
 
@@ -277,18 +277,18 @@ void iphSetContext(EAGLContext *c)
 	[__view SetContext:c];
 }
 
-const char *iphGetRootPath()
+const FilePath *iphGetRootPath()
 {
 	CFStringRef fileString;
 	fileString = (CFStringRef)[[NSBundle mainBundle] resourcePath];
 	
-	CFStringGetCString(fileString, _defaultRootPath, MAX_PATH_SIZE, kCFStringEncodingASCII);
+	CFStringGetCString(fileString, _defaultRootPathA, MAX_PATH_SIZE, kCFStringEncodingASCII);
 	//fprintf(stdout, "%s", _defaultRootPath);
 	
-	return _defaultRootPath;
+	return _defaultRootPathA;
 }
 
-const char *iphGetHomePath()
+const FilePath *iphGetHomePath()
 {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
 	NSString *documentsDirectory= [paths objectAtIndex: 0];
@@ -296,10 +296,10 @@ const char *iphGetHomePath()
 	CFStringRef fileString;
 	fileString = (CFStringRef)documentsDirectory;
 	
-	CFStringGetCString(fileString, _defaultHomePath, MAX_PATH_SIZE, kCFStringEncodingASCII);
+	CFStringGetCString(fileString, _defaultHomePathA, MAX_PATH_SIZE, kCFStringEncodingASCII);
 	//fprintf(stdout, "%s", _defaultHomePath);
 	
-	return _defaultHomePath;
+	return _defaultHomePathA;
 }
 
 #endif // _IPHONE_

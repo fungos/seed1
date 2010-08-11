@@ -42,6 +42,7 @@ namespace Seed {
 IMemoryPool::IMemoryPool()
 	: iAllocations(0)
 	, iTotalAllocations(0)
+	, pcName("")
 {
 }
 

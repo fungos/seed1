@@ -264,7 +264,7 @@ union uPixel
 #define SEED_DISABLE_INSTANCING_IMPL(Class)	\
 										INLINE void *Class::operator new(size_t len) \
 										{ \
-											return pMemoryManager->Alloc(len); \
+											return pMemoryManager->Alloc(len, pDefaultPool, "New Override", #Class); \
 										} \
 										 \
 										INLINE void Class::operator delete(void *ptr) \

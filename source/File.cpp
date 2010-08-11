@@ -120,6 +120,14 @@ INLINE void File::SetName(const char *name)
 	pName = name;
 }
 
-SEED_DISABLE_INSTANCING_IMPL(File);
+const char *File::GetObjectName() const
+{
+	return "File";
+}
+
+int File::GetObjectType() const
+{
+	return Seed::ObjectFile;
+}
 
 } // namespace

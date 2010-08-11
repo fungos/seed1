@@ -37,7 +37,10 @@
 #ifndef __IMEMORYMANAGER_H__
 #define __IMEMORYMANAGER_H__
 
+#include "Array.h"
 #include "IModule.h"
+
+#define SEED_MAX_MEMORY_POOL 10
 
 namespace Seed {
 
@@ -56,6 +59,7 @@ class SEED_CORE_API IMemoryManager : public IModule
 		virtual void Free(void *ptr, IMemoryPool *pool);
 		virtual void Info();
 
+		virtual IMemoryPool *CreatePool(u32 len, const char *name);
 		virtual u32 GetFreeMemory() const;
 
 		// IModule
@@ -64,6 +68,9 @@ class SEED_CORE_API IMemoryManager : public IModule
 		// IObject
 		virtual const char *GetObjectName() const;
 
+	protected:
+		mutable Array<IMemoryPool *, SEED_MAX_MEMORY_POOL> arPool;
+		
 	private:
 		SEED_DISABLE_COPY(IMemoryManager);
 };

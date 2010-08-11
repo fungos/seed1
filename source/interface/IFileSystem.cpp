@@ -304,27 +304,27 @@ INLINE void IFileSystem::SendEventFileSystemLoadCompleted(const EventFileSystem 
 	}
 }
 
-INLINE void IFileSystem::SetWorkDirectory(const wchar_t *dir)
+INLINE void IFileSystem::SetWorkDirectory(const FilePath *dir)
 {
 	pWorkDir = dir;
 }
 
-INLINE const wchar_t *IFileSystem::GetWorkDirectory() const
+INLINE const FilePath *IFileSystem::GetWorkDirectory() const
 {
 	return pWorkDir;
 }
 
-INLINE void IFileSystem::SetWriteableDirectory(const wchar_t *dir)
+INLINE void IFileSystem::SetWriteableDirectory(const FilePath *dir)
 {
 	pWriteDir = dir;
 }
 
-INLINE const wchar_t *IFileSystem::GetWriteableDirectory() const
+INLINE const FilePath *IFileSystem::GetWriteableDirectory() const
 {
 	return pWriteDir;
 }
 
-INLINE void IFileSystem::MakeDirectory(const wchar_t *dir) const
+INLINE void IFileSystem::MakeDirectory(const FilePath *dir) const
 {
 	UNUSED(dir);
 	SEED_ABSTRACT_METHOD;

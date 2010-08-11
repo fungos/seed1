@@ -51,8 +51,8 @@ void iphContextPresentRenderBuffer();
 EAGLContext *iphGetContext();
 void iphSetContext(EAGLContext *c);
 
-const char *iphGetRootPath();
-const char *iphGetHomePath();
+const FilePath *iphGetRootPath();
+const FilePath *iphGetHomePath();
 
 namespace Seed {
 	void SetGameApp(IGameApp *app);

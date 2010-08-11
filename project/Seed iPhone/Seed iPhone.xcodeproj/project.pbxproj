@@ -925,6 +925,7 @@
 					"-DDEBUG",
 					"-D_IPHONE_",
 					"-DYMEM_DEBUG",
+					"-DSEED_ENABLE_OGLES1",
 				);
 				PREBINDING = NO;
 				SDKROOT = iphoneos2.2.1;

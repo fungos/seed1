@@ -72,8 +72,8 @@ BOOL FileSystem::Initialize()
 	if (!this->pWorkDir)
 	{
 		char outdir[1024];
-		wchar_t dir[1024];
-		wchar_t dir2[1024];
+		FilePath dir[1024];
+		FilePath dir2[1024];
 		memset(dir2, '\0', 1024);
 		memset(dir, '\0', 1024);
 		memset(outdir, '\0', 1024);
@@ -174,7 +174,7 @@ INLINE u32 FileSystem::GetLength() const
 	return iLastLength;
 }
 
-INLINE void FileSystem::SetWorkDirectory(const wchar_t *dir)
+INLINE void FileSystem::SetWorkDirectory(const FilePath *dir)
 {
 	IFileSystem::SetWorkDirectory(dir);
 	if (change_directory(dir))
@@ -187,7 +187,7 @@ INLINE void FileSystem::SetWorkDirectory(const wchar_t *dir)
 	}
 }
 
-INLINE void FileSystem::MakeDirectory(const wchar_t *dir) const
+INLINE void FileSystem::MakeDirectory(const FilePath *dir) const
 {
 	create_directory(dir);
 }

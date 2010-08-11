@@ -50,6 +50,7 @@ class SEED_CORE_API IMemoryPool
 {
 	public:
 		IMemoryPool();
+		virtual ~IMemoryPool();
 
 		virtual void *Alloc(SIZE_T len, const char *desc, const char *owner) = 0;
 		virtual void Free(void *ptr) = 0;
@@ -58,9 +59,7 @@ class SEED_CORE_API IMemoryPool
 
 		u32 iAllocations;
 		u32 iTotalAllocations;
-
-	protected:
-		virtual ~IMemoryPool();
+		const char *pcName;
 
 	private:
 		SEED_DISABLE_COPY(IMemoryPool);
