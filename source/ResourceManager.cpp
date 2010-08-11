@@ -259,6 +259,23 @@ INLINE void ResourceManager::Remove(const char *filename)
 	mapResources.erase(it);
 }
 
+void ResourceManager::PrintUsedMemoryByResource()
+{
+	ResourceIterator it = mapResources.begin();
+	ResourceIterator itEnd = mapResources.end();
+
+	u32 total = 0;
+	for (; it != itEnd; ++it)
+	{
+		IResource *res = (*it).second;
+
+		Dbg(TAG "Resource: %s Memory: %d References: %d Type: %s", res->pFilename, res->GetUsedMemory(), res->GetReferenceCount(), res->GetObjectName());
+		total += res->GetUsedMemory();
+	}
+
+	Dbg(TAG "Total: %d", total);
+}
+
 u32 ResourceManager::GetTotalUsedMemory()
 {
 	ResourceIterator it = mapResources.begin();

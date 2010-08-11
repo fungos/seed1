@@ -43,12 +43,12 @@
 #if defined(YMEM_DEBUG)
 	#include "extra/ymanager/yallocwrap.h"
 
-	#define SEED_MALLOC(len, desc, owner)	(void *)yalloc(this->pMgr, len, desc, owner)
-	#define SEED_FREE(ptr)					yfree(this->pMgr, ptr)
-	#define YMANAGER_CREATE(len)			this->pMgr = ycreate(len)
-	#define YMANAGER_DESTROY				ydestroy(this->pMgr); this->pMgr = NULL;
-	#define YMANAGER_GETFREEMEM				if (this->pMgr) return this->pMgr->GetFreeMemory(); else return 0;
-	#define YMANAGER_PRINT					this->pMgr->PrintSnapshot();
+	#define SEED_MALLOC(len, desc, owner)	(void *)yalloc(pMgr, len, desc, owner, iReserved)
+	#define SEED_FREE(ptr)					yfree(pMgr, ptr)
+	#define YMANAGER_CREATE(len)			pMgr = ycreate(len)
+	#define YMANAGER_DESTROY				ydestroy(pMgr); pMgr = NULL;
+	#define YMANAGER_GETFREEMEM				if (pMgr) return pMgr->GetFreeMemory() - iReserved; else return 0;
+	#define YMANAGER_PRINT					pMgr->PrintSnapshot();
 #else
 	#define SEED_MALLOC(len, desc, owner)	(void *)malloc(len)
 	#define SEED_FREE(ptr)					free(ptr)

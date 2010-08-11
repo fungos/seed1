@@ -81,6 +81,20 @@ INLINE void IMemoryManager::Free(void *ptr, IMemoryPool *pool)
 	SEED_ABSTRACT_METHOD;
 }
 
+INLINE void IMemoryManager::Reserve(SIZE_T len, IMemoryPool *pool)
+{
+	UNUSED(len);
+	UNUSED(pool);
+	SEED_ABSTRACT_METHOD;
+}
+
+INLINE void IMemoryManager::Unreserve(SIZE_T len, IMemoryPool *pool)
+{
+	UNUSED(len);
+	UNUSED(pool);
+	SEED_ABSTRACT_METHOD;
+}
+
 INLINE void IMemoryManager::Info()
 {
 	SEED_ABSTRACT_METHOD;

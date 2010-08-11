@@ -42,6 +42,7 @@ namespace Seed {
 IMemoryPool::IMemoryPool()
 	: iAllocations(0)
 	, iTotalAllocations(0)
+	, iReserved(0)
 	, pcName("")
 {
 }
@@ -75,6 +76,16 @@ INLINE void IMemoryPool::Free(void *ptr)
 {
 	UNUSED(ptr);
 	SEED_ABSTRACT_METHOD;
+}
+
+INLINE void IMemoryPool::Reserve(SIZE_T len)
+{
+	iReserved += len;
+}
+
+INLINE void IMemoryPool::Unreserve(SIZE_T len)
+{
+	iReserved -= len;
 }
 
 } // namespace

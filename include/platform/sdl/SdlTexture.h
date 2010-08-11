@@ -94,6 +94,10 @@ class SEED_CORE_API Texture : public ITexture
 
 		u32 iAtlasWidth;
 		u32 iAtlasHeight;
+
+#if defined(DEBUG)
+		u32 iReserveLen;
+#endif
 };
 
 }} // namespace

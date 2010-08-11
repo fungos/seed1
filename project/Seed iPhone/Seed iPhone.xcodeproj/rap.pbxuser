@@ -506,6 +506,17 @@
 			2D7D56021212D61600D2ACE3 /* PBXTextBookmark */ = 2D7D56021212D61600D2ACE3 /* PBXTextBookmark */;
 			2D7D56031212D61600D2ACE3 /* PBXTextBookmark */ = 2D7D56031212D61600D2ACE3 /* PBXTextBookmark */;
 			2D7D564B1212D7B300D2ACE3 /* PBXTextBookmark */ = 2D7D564B1212D7B300D2ACE3 /* PBXTextBookmark */;
+			2D7D564E1212F00600D2ACE3 /* PBXTextBookmark */ = 2D7D564E1212F00600D2ACE3 /* PBXTextBookmark */;
+			2D7D564F1212F00600D2ACE3 /* PBXTextBookmark */ = 2D7D564F1212F00600D2ACE3 /* PBXTextBookmark */;
+			2D7D56501212F00600D2ACE3 /* PBXTextBookmark */ = 2D7D56501212F00600D2ACE3 /* PBXTextBookmark */;
+			2D7D56511212F00600D2ACE3 /* PBXTextBookmark */ = 2D7D56511212F00600D2ACE3 /* PBXTextBookmark */;
+			2D7D56521212F00600D2ACE3 /* PBXTextBookmark */ = 2D7D56521212F00600D2ACE3 /* PBXTextBookmark */;
+			2D7D56531212F00600D2ACE3 /* PBXTextBookmark */ = 2D7D56531212F00600D2ACE3 /* PBXTextBookmark */;
+			2D7D56541212F00600D2ACE3 /* PBXTextBookmark */ = 2D7D56541212F00600D2ACE3 /* PBXTextBookmark */;
+			2D7D56551212F00600D2ACE3 /* PBXTextBookmark */ = 2D7D56551212F00600D2ACE3 /* PBXTextBookmark */;
+			2D7D56571212F02400D2ACE3 /* PBXTextBookmark */ = 2D7D56571212F02400D2ACE3 /* PBXTextBookmark */;
+			2D7D56581212F02400D2ACE3 /* PBXTextBookmark */ = 2D7D56581212F02400D2ACE3 /* PBXTextBookmark */;
+			2D7D56591212F02400D2ACE3 /* PBXTextBookmark */ = 2D7D56591212F02400D2ACE3 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 2D18741C11EB5E7800A8EB9F /* Source Control */;
 		userBuildSettings = {
@@ -657,9 +668,9 @@
 	};
 	2D1874BC11EB5EAF00A8EB9F /* IMemoryPool.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {749, 1134}}";
-			sepNavSelRange = "{2130, 0}";
-			sepNavVisRange = "{961, 1047}";
+			sepNavIntBoundsRect = "{{0, 0}, {749, 1288}}";
+			sepNavSelRange = "{1705, 0}";
+			sepNavVisRange = "{1040, 1007}";
 		};
 	};
 	2D1874BF11EB5EAF00A8EB9F /* IMutex.cpp */ = {
@@ -4034,7 +4045,7 @@
 		fRef = 2D7D54251211F88D00D2ACE3 /* PcMemoryManager.h */;
 		name = "PcMemoryManager.h: 78";
 		rLen = 0;
-		rLoc = 2580;
+		rLoc = 2560;
 		rType = 0;
 		vrLen = 1100;
 		vrLoc = 1615;
@@ -4076,7 +4087,7 @@
 		fRef = 2D1874BC11EB5EAF00A8EB9F /* IMemoryPool.cpp */;
 		name = "IMemoryPool.cpp: 60";
 		rLen = 0;
-		rLoc = 1853;
+		rLoc = 1783;
 		rType = 0;
 		vrLen = 664;
 		vrLoc = 1483;
@@ -4248,7 +4259,7 @@
 		fRef = 2D7D543D1211F88D00D2ACE3 /* PcMemoryManager.h */;
 		name = "PcMemoryManager.h: 86";
 		rLen = 0;
-		rLoc = 2683;
+		rLoc = 2614;
 		rType = 0;
 		vrLen = 1106;
 		vrLoc = 1752;
@@ -4274,7 +4285,7 @@
 		fRef = 2D7D54401211F88D00D2ACE3 /* PcMemoryManager.h */;
 		name = "PcMemoryManager.h: 68";
 		rLen = 0;
-		rLoc = 2449;
+		rLoc = 2436;
 		rType = 0;
 		vrLen = 1139;
 		vrLoc = 1634;
@@ -4332,7 +4343,7 @@
 		fRef = 2D7D54461211F88D00D2ACE3 /* PcMemoryManager.h */;
 		name = "PcMemoryManager.h: 78";
 		rLen = 0;
-		rLoc = 2580;
+		rLoc = 2560;
 		rType = 0;
 		vrLen = 1100;
 		vrLoc = 1615;
@@ -4381,9 +4392,15 @@
 	};
 	2D7D544B1211F88D00D2ACE3 /* IMemoryManager.h */ = {
 		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.h;
 		name = IMemoryManager.h;
 		path = /techfront/SDK/seed/include/interface/IMemoryManager.h;
 		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {749, 1176}}";
+			sepNavSelRange = "{1673, 0}";
+			sepNavVisRange = "{1542, 1003}";
+		};
 	};
 	2D7D544C1211F88D00D2ACE3 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -4426,7 +4443,7 @@
 		fRef = 2D1874BC11EB5EAF00A8EB9F /* IMemoryPool.cpp */;
 		name = "IMemoryPool.cpp: 60";
 		rLen = 0;
-		rLoc = 1853;
+		rLoc = 1783;
 		rType = 0;
 		vrLen = 664;
 		vrLoc = 1483;
@@ -4686,9 +4703,9 @@
 		path = /techfront/SDK/seed/include/platform/pc/PcMemoryManager.h;
 		sourceTree = "<absolute>";
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {947, 1274}}";
-			sepNavSelRange = "{2167, 129}";
-			sepNavVisRange = "{1615, 1013}";
+			sepNavIntBoundsRect = "{{0, 0}, {816, 1316}}";
+			sepNavSelRange = "{2601, 0}";
+			sepNavVisRange = "{1714, 1250}";
 		};
 	};
 	2D7D547D1211F8BE00D2ACE3 /* PBXTextBookmark */ = {
@@ -4756,9 +4773,9 @@
 		path = /techfront/SDK/seed/include/interface/IMemoryPool.h;
 		sourceTree = "<absolute>";
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {749, 994}}";
-			sepNavSelRange = "{2151, 0}";
-			sepNavVisRange = "{1117, 1128}";
+			sepNavIntBoundsRect = "{{0, 0}, {749, 1036}}";
+			sepNavSelRange = "{2243, 0}";
+			sepNavVisRange = "{1209, 1127}";
 		};
 	};
 	2D7D54851211F8BE00D2ACE3 /* PBXTextBookmark */ = {
@@ -5254,7 +5271,7 @@
 		fRef = 2D1874BC11EB5EAF00A8EB9F /* IMemoryPool.cpp */;
 		name = "IMemoryPool.cpp: 64";
 		rLen = 81;
-		rLoc = 1880;
+		rLoc = 1810;
 		rType = 0;
 		vrLen = 664;
 		vrLoc = 1483;
@@ -5664,7 +5681,7 @@
 		fRef = 2D1874BC11EB5EAF00A8EB9F /* IMemoryPool.cpp */;
 		name = "IMemoryPool.cpp: 87";
 		rLen = 0;
-		rLoc = 2130;
+		rLoc = 2060;
 		rType = 0;
 		vrLen = 644;
 		vrLoc = 1633;
@@ -5674,7 +5691,7 @@
 		fRef = 2D1874BC11EB5EAF00A8EB9F /* IMemoryPool.cpp */;
 		name = "IMemoryPool.cpp: 78";
 		rLen = 0;
-		rLoc = 2130;
+		rLoc = 2060;
 		rType = 0;
 		vrLen = 1047;
 		vrLoc = 961;
@@ -5694,7 +5711,7 @@
 		fRef = 2D1874BC11EB5EAF00A8EB9F /* IMemoryPool.cpp */;
 		name = "IMemoryPool.cpp: 78";
 		rLen = 0;
-		rLoc = 2130;
+		rLoc = 2060;
 		rType = 0;
 		vrLen = 1047;
 		vrLoc = 961;
@@ -6241,6 +6258,116 @@
 		rType = 0;
 		vrLen = 1782;
 		vrLoc = 6865;
+	};
+	2D7D564E1212F00600D2ACE3 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2D5651AA11F4EC780058B701 /* Defines.h */;
+		name = "Defines.h: 267";
+		rLen = 0;
+		rLoc = 7717;
+		rType = 0;
+		vrLen = 1782;
+		vrLoc = 6865;
+	};
+	2D7D564F1212F00600D2ACE3 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2D7D54841211F8BE00D2ACE3 /* IMemoryPool.h */;
+		name = "IMemoryPool.h: 66";
+		rLen = 0;
+		rLoc = 2243;
+		rType = 0;
+		vrLen = 1127;
+		vrLoc = 1209;
+	};
+	2D7D56501212F00600D2ACE3 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2D7D544B1211F88D00D2ACE3 /* IMemoryManager.h */;
+		name = "IMemoryManager.h: 43";
+		rLen = 0;
+		rLoc = 1673;
+		rType = 0;
+		vrLen = 1003;
+		vrLoc = 1542;
+	};
+	2D7D56511212F00600D2ACE3 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2D7D547C1211F8BE00D2ACE3 /* PcMemoryManager.h */;
+		name = "PcMemoryManager.h: 55";
+		rLen = 0;
+		rLoc = 1943;
+		rType = 0;
+		vrLen = 1220;
+		vrLoc = 1594;
+	};
+	2D7D56521212F00600D2ACE3 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2D5651AA11F4EC780058B701 /* Defines.h */;
+		name = "Defines.h: 267";
+		rLen = 0;
+		rLoc = 7717;
+		rType = 0;
+		vrLen = 1782;
+		vrLoc = 6865;
+	};
+	2D7D56531212F00600D2ACE3 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2D7D54841211F8BE00D2ACE3 /* IMemoryPool.h */;
+		name = "IMemoryPool.h: 66";
+		rLen = 0;
+		rLoc = 2243;
+		rType = 0;
+		vrLen = 1127;
+		vrLoc = 1209;
+	};
+	2D7D56541212F00600D2ACE3 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2D7D544B1211F88D00D2ACE3 /* IMemoryManager.h */;
+		name = "IMemoryManager.h: 43";
+		rLen = 0;
+		rLoc = 1673;
+		rType = 0;
+		vrLen = 1003;
+		vrLoc = 1542;
+	};
+	2D7D56551212F00600D2ACE3 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2D7D547C1211F8BE00D2ACE3 /* PcMemoryManager.h */;
+		name = "PcMemoryManager.h: 77";
+		rLen = 0;
+		rLoc = 2601;
+		rType = 0;
+		vrLen = 1250;
+		vrLoc = 1714;
+	};
+	2D7D56571212F02400D2ACE3 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2D7D547C1211F8BE00D2ACE3 /* PcMemoryManager.h */;
+		name = "PcMemoryManager.h: 77";
+		rLen = 0;
+		rLoc = 2601;
+		rType = 0;
+		vrLen = 1250;
+		vrLoc = 1714;
+	};
+	2D7D56581212F02400D2ACE3 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2D7D547C1211F8BE00D2ACE3 /* PcMemoryManager.h */;
+		name = "PcMemoryManager.h: 77";
+		rLen = 0;
+		rLoc = 2601;
+		rType = 0;
+		vrLen = 1250;
+		vrLoc = 1714;
+	};
+	2D7D56591212F02400D2ACE3 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 2D1874BC11EB5EAF00A8EB9F /* IMemoryPool.cpp */;
+		name = "IMemoryPool.cpp: 46";
+		rLen = 0;
+		rLoc = 1705;
+		rType = 0;
+		vrLen = 1007;
+		vrLoc = 1040;
 	};
 	746D955E0FE736F700DEC14E /* Seed */ = {
 		activeExec = 0;

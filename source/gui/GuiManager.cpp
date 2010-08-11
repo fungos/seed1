@@ -80,12 +80,12 @@ INLINE BOOL GuiManager::Reset()
 INLINE BOOL GuiManager::Shutdown()
 {
 	pInput->RemovePointerListener(this);
-	return IModule::Shutdown();;
+	return IModule::Shutdown();
 }
 
 INLINE BOOL GuiManager::Update(f32 dt)
 {
-	cContainer.Update(dt);
+	//cContainer.Update(dt);
 	return TRUE;
 }
 

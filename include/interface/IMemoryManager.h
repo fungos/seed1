@@ -57,7 +57,10 @@ class SEED_CORE_API IMemoryManager : public IModule
 
 		virtual void *Alloc(SIZE_T len, IMemoryPool *pool, const char *desc = "Unknown", const char *owner = "Nobody");
 		virtual void Free(void *ptr, IMemoryPool *pool);
+
 		virtual void Info();
+		virtual void Reserve(SIZE_T len, IMemoryPool *pool);
+		virtual void Unreserve(SIZE_T len, IMemoryPool *pool);
 
 		virtual IMemoryPool *CreatePool(u32 len, const char *name);
 		virtual u32 GetFreeMemory() const;

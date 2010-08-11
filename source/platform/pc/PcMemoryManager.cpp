@@ -151,6 +151,16 @@ INLINE void MemoryManager::Free(void *ptr, IMemoryPool *pool)
 	ptr = NULL;
 }
 
+INLINE void MemoryManager::Reserve(SIZE_T len, IMemoryPool *pool)
+{
+	pool->Reserve(len);
+}
+
+INLINE void MemoryManager::Unreserve(SIZE_T len, IMemoryPool *pool)
+{
+	pool->Unreserve(len);
+}
+
 INLINE void MemoryManager::Info()
 {
 	u32 free = 0;
