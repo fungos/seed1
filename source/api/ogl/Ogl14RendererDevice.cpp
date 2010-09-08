@@ -405,7 +405,7 @@ INLINE void OGL14RendererDevice::TextureUnload(ITexture *texture)
 	if (texId)
 	{
 		GLuint *t = static_cast<GLuint *>(texId);
-		GLuint tex = (GLuint)t;
+		GLuint tex = (GLuint)*t; // FIXME
 		glDeleteTextures(1, &tex);
 	}
 }
@@ -416,7 +416,7 @@ INLINE void OGL14RendererDevice::TextureDataUpdate(ITexture *texture)
 	if (texId)
 	{
 		GLuint *t = static_cast<GLuint *>(texId);
-		GLuint tex = (GLuint)t;
+		GLuint tex = (GLuint)*t; // FIXME
 		glBindTexture(GL_TEXTURE_2D, tex);
 
 		GLuint w = texture->GetAtlasWidthInPixel();
@@ -455,7 +455,7 @@ INLINE void OGL14RendererDevice::UploadData(void *userData)
 
 	ITexture *texture = packet->pTexture;
 	GLuint *t = static_cast<GLuint *>(texture->GetTextureName());
-	GLuint tex = (GLuint)t;
+	GLuint tex = (GLuint)*t; // FIXME
 
 	sVertex *data = static_cast<sVertex *>(packet->pVertexData);
 

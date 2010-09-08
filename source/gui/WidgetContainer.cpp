@@ -101,6 +101,8 @@ void WidgetContainer::Reset()
 
 void WidgetContainer::Update(f32 dt)
 {
+	UNUSED(dt);
+
 	/*WidgetIterator it = vWidget.begin();
 	WidgetIterator end = vWidget.end();
 	for (; it != end; ++it)

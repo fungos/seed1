@@ -58,10 +58,9 @@ IResource *TextureResourceLoader(const char *filename, ResourceManager *res, IMe
 }
 
 Texture::Texture()
-	: pPool(NULL)
-	, iTextureId(0)
-	, iHalfWidth(0)
-	, iHalfHeight(0)
+	: iTextureId(0)
+	, iAtlasWidth(0)
+	, iAtlasHeight(0)
 {
 }
 
@@ -72,10 +71,11 @@ Texture::~Texture()
 
 INLINE BOOL Texture::Unload()
 {
-	return this->Reset();
+	this->Reset();
+	return TRUE;
 }
 
-BOOL Texture::Reset()
+void Texture::Reset()
 {
 	this->UnloadTexture();
 
@@ -86,10 +86,8 @@ BOOL Texture::Reset()
 
 	iWidth = 0;
 	iHeight = 0;
-	iHalfWidth = 0;
-	iHalfHeight = 0;
-
-	return TRUE;
+	iAtlasWidth = 0;
+	iAtlasHeight = 0;
 }
 
 BOOL Texture::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
@@ -114,8 +112,10 @@ BOOL Texture::Load(const char *filename, ResourceManager *res, IMemoryPool *pool
 		iWidth = image.width();
 		iHeight = image.height();
 
-		iHalfWidth = iWidth >> 1;
-		iHalfHeight = iHeight >> 1;
+		iAtlasWidth = iWidth;
+		iAtlasHeight = iHeight;
+		//iHalfWidth = iWidth >> 1;
+		//iHalfHeight = iHeight >> 1;
 
 		fWidth = (f32)iWidth / (f32)pScreen->GetWidth();
 		fHeight = (f32)iHeight / (f32)pScreen->GetHeight();
@@ -124,10 +124,10 @@ BOOL Texture::Load(const char *filename, ResourceManager *res, IMemoryPool *pool
 	return TRUE;
 }
 
-BOOL Texture::Load(u32 width, u32 height, PIXEL *buffer, IMemoryPool *pool)
+BOOL Texture::Load(u32 width, u32 height, PIXEL *buffer, u32 texWidth, u32 texHeight)
 {
-	UNUSED(pool);
-	ASSERT_NULL(pool);
+	UNUSED(texWidth);
+	UNUSED(texHeight);
 
 	ASSERT_MSG((void *)ROUND_UP(buffer, 32) == (void *)buffer, "ERROR: User texture buffer MUST BE 32bits aligned!");
 	ASSERT_MSG(ROUND_UP(width, 32) == width, "ERROR: User texture scanline MUST BE 32bits aligned - pitch/stride!");
@@ -144,8 +144,10 @@ BOOL Texture::Load(u32 width, u32 height, PIXEL *buffer, IMemoryPool *pool)
 		iWidth = width;
 		iHeight = height;
 
-		iHalfWidth = iWidth >> 1;
-		iHalfHeight = iHeight >> 1;
+		iAtlasWidth = iWidth;
+		iAtlasHeight = iHeight;
+		//iHalfWidth = iWidth >> 1;
+		//iHalfHeight = iHeight >> 1;
 
 		fWidth = (f32)iWidth / (f32)pScreen->GetWidth();
 		fHeight = (f32)iHeight / (f32)pScreen->GetHeight();
@@ -186,6 +188,7 @@ INLINE u32 Texture::GetUsedMemory() const
 	return image.byteCount() + sizeof(this);
 }
 
+/*
 INLINE int Texture::LoadTexture()
 {
 	bool a = !image.isNull();
@@ -220,10 +223,11 @@ INLINE int Texture::LoadTexture()
 
 	return this->iTextureId;
 }
+*/
 
-INLINE int Texture::GetTexture()
+INLINE void *Texture::GetTextureName()
 {
-	return this->iTextureId;
+	return &iTextureId;
 }
 
 INLINE void Texture::UnloadTexture()
@@ -231,6 +235,26 @@ INLINE void Texture::UnloadTexture()
 	if (iTextureId)
 		glDeleteTextures(1, &iTextureId);
 	iTextureId = 0;
+}
+
+INLINE u32 Texture::GetBytesPerPixel() const
+{
+	return 4;
+}
+
+INLINE void Texture::Update(PIXEL *buffer)
+{
+	UNUSED(buffer);
+}
+
+INLINE u32 Texture::GetAtlasWidthInPixel() const
+{
+	return iAtlasWidth;
+}
+
+INLINE u32 Texture::GetAtlasHeightInPixel() const
+{
+	return iAtlasHeight;
 }
 
 }} // namespace

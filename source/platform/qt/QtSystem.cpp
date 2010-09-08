@@ -52,7 +52,7 @@ SEED_SINGLETON_DEFINE(System);
 
 System::System()
 	: iRetraceCount(0)
-	, iFrameRate(RATE_60FPS)
+	, iFrameRate(Seed::FrameRateLockAt60)
 	, bShutdown(FALSE)
 	, fElapsedTime(0.0f)
 	, iLastFrameTime(0)
@@ -114,7 +114,7 @@ INLINE BOOL System::IsResetting() const
 	return FALSE;
 }
 
-INLINE void System::WaitForRetrace(eFrameRate rate)
+INLINE void System::WaitForRetrace(eSystemFrameRate rate)
 {
 	++this->iRetraceCount;
 
@@ -156,12 +156,12 @@ INLINE void System::WaitForRetrace(eFrameRate rate)
 	}
 }
 
-INLINE void System::SetFrameRate(eFrameRate rate)
+INLINE void System::SetFrameRate(eSystemFrameRate rate)
 {
 	this->iFrameRate = rate;
 }
 
-INLINE ISystem::eFrameRate System::GetFrameRate()
+INLINE eSystemFrameRate System::GetFrameRate()
 {
 	return this->iFrameRate;
 }

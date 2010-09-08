@@ -160,7 +160,8 @@ void get_current_directory(wchar_t *buff, int size)
 
 	memcpy(buff, pcBundle, size);
 #else
-	getcwd(buff, size);
+	char *b = (char *)static_cast<void *>(buff);
+	getcwd(b, size);
 #endif
 }
 
@@ -169,7 +170,7 @@ BOOL change_directory(const wchar_t *to)
 	BOOL ret = FALSE;
 	const char *path = (const char *)to;
 	int err = chdir(path);
-	
+
 	if (err == -1)
 	{
 		switch (errno)

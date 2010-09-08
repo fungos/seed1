@@ -30,7 +30,6 @@ void ydestroy(YMemoryManager *mm)
 	mm = NULL;
 }
 
-
 void *yalloc(YMemoryManager *mm, unsigned long size, const char *desc, const char *owner, int reserve)
 {
 	if (!mm)
@@ -42,6 +41,7 @@ void *yalloc(YMemoryManager *mm, unsigned long size, const char *desc, const cha
 #else
 	UNUSED(desc);
 	UNUSED(owner);
+	UNUSED(reserve);
 	void *ptr = mm->Alloc(size);
 #endif // YMEM_DEBUG
 

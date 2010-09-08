@@ -84,7 +84,7 @@ BOOL FileSystem::Initialize()
 		for (u32 i = 0; i < 1024; i++) // for print purpose only...
 			outdir[i] = (char)dir[i];
 #else
-		snprintf((char *)dir2, 1024, "%s/%s/", dir, FILESYSTEM_DEFAULT_PATH);
+		snprintf((char *)dir2, 1024, "%S/%s/", dir, FILESYSTEM_DEFAULT_PATH);
 		memcpy(outdir, dir, 1024);
 #endif
 

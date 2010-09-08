@@ -75,7 +75,7 @@
 												}
 
 #define SEED_SINGLETON_STACK_DEFINE(type)		type type::instance;
-												//type *type::Instance = &type::instance; \
+												//type *type::Instance = &type::instance;
 												//type *const p##type = type::GetInstance();
 
 

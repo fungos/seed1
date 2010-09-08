@@ -86,6 +86,7 @@ class SEED_CORE_API Texture : public ITexture
 
 	private:
 		SDL_Surface *pSurface;
+
 		void *pData;
 		void *pTextureId;
 

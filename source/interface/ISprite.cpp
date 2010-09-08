@@ -72,13 +72,13 @@ ISprite::ISprite()
 	, iHalfHeight(0)
 	, iWidth(0)
 	, iHeight(0)
-	, pRes(NULL)
-	, pPool(NULL)
-	, pFilename(NULL)
 	, fTexS0(0.0f)
 	, fTexS1(0.0f)
 	, fTexT0(0.0f)
 	, fTexT1(0.0f)
+	, pRes(NULL)
+	, pPool(NULL)
+	, pFilename(NULL)
 {
 	iNumVertices = 4;
 }
