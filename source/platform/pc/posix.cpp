@@ -81,7 +81,7 @@ BOOL create_directory(const FilePath *path)
 
 			case ENOENT:
 			{
-				Info(TAG "Path '%s' does not name an existin entry.", path);
+				Info(TAG "Path '%s' does not name an existing entry.", path);
 			}
 			break;
 
@@ -195,7 +195,7 @@ BOOL change_directory(const FilePath *to)
 
 			case ENOENT:
 			{
-				Info(TAG "Path '%s' does not name an existin entry.", path);
+				Info(TAG "Path '%s' does not name an existing entry.", path);
 			}
 			break;
 
