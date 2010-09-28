@@ -139,8 +139,8 @@ INLINE void OGLES1RendererDevice::Begin() const
 
 	this->TextureRequestProcess();
 	
-	glBindFramebufferOES(GL_FRAMEBUFFER_OES, pScreen->frameBuffer);
-	glBindRenderbufferOES(GL_RENDERBUFFER_OES, pScreen->renderBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, pScreen->frameBuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, pScreen->renderBuffer);
 
 	//glClearColor(255.0f, 0.0f, 255.0f, 255.0f);
 	//glClear(GL_COLOR_BUFFER_BIT);
@@ -635,9 +635,9 @@ INLINE void OGLES1RendererDevice::DrawRect(f32 x, f32 y, f32 w, f32 h, PIXEL col
 // FIXME: Viewport aspect ratio...
 INLINE void OGLES1RendererDevice::Enable2D() const
 {
-	if (glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES) != GL_FRAMEBUFFER_COMPLETE_OES)
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
-		Info(TAG "ERROR: Failed to make complete framebuffer object %x", glCheckFramebufferStatusOES(GL_FRAMEBUFFER_OES));
+		Info(TAG "ERROR: Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
 	}
 
 	glMatrixMode(GL_PROJECTION);

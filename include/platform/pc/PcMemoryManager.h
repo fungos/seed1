@@ -50,7 +50,7 @@
 
 #define MB60	(u32)(59 * 1024 * 1024)
 #define MB20	(u32)(19 * 1024 * 1024)
-#define MB10	(u32)(10 * 1024 * 1024)
+#define MB10	(u32)(13 * 1024 * 1024)
 
 namespace Seed { namespace PC {
 
@@ -61,7 +61,7 @@ SEED_CORE_API extern PcMemoryPool *pLargePool;
 
 class SEED_CORE_API MemoryManager : public IMemoryManager
 {
-	SEED_SINGLETON_DECLARE(MemoryManager);
+ 	SEED_SINGLETON_DECLARE(MemoryManager);
 
 	public:
 		virtual void *Alloc(SIZE_T len, IMemoryPool *pool = pDefaultPool, const char *desc = "Unknown", const char *owner = "Nobody");

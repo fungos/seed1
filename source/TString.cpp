@@ -206,6 +206,16 @@ INLINE String &String::Set(const u16 *paramName, u32 paramVal)
 	return *this;
 }
 
+INLINE String &String::Set(const u16 *paramName, s32 paramVal)
+{
+	char strTemp[16];
+	snprintf(strTemp, 16, "%d", paramVal);
+
+	this->Set(paramName, strTemp);
+
+	return *this;
+}
+
 INLINE String &String::Set(const u16 *paramName, f32 paramVal)
 {
 	char strTemp[32];

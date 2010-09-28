@@ -55,6 +55,7 @@ class SEED_CORE_API String
 		String &Set(const u16 *paramName, const u16 *paramVal);
 		String &Set(const u16 *paramName, const char *paramVal);
 		String &Set(const u16 *paramName, u32 paramVal);
+		String &Set(const u16 *paramName, s32 paramVal);
 		String &Set(const u16 *paramName, f32 paramVal);
 		String &Set(const u16 *paramName, bool paramVal);
 		String &Set(const u16 *paramName, const char paramVal);

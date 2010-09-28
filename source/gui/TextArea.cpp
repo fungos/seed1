@@ -65,6 +65,8 @@ TextArea::TextArea()
 
 TextArea::~TextArea()
 {
+	this->Reset();
+
 	if (Private::bInitialized)
 		pGuiManager->Remove(this);
 }

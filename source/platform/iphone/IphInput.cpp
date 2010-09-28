@@ -312,11 +312,13 @@ INLINE f32 Input::GetRelativeY(u16 joystick) const
 
 INLINE f32 Input::GetOrientation(u16 joystick) const
 {
+	UNUSED(joystick);
 	return 1;
 }
 
 INLINE f32 Input::GetDistance(u16 joystick) const
 {
+	UNUSED(joystick);
 	return 1;
 }
 

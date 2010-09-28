@@ -53,7 +53,7 @@
 #define TAG "[Sound] "
 
 #define AUDIO_FRAME_TIME 3
-#define AUDIO_DATA_PATH		"/" FILESYSTEM_DEFAULT_PATH
+#define AUDIO_DATA_PATH		"/" FILESYSTEM_DEFAULT_PATH "/"
 #define AUDIO_DATA_EXT		".caf"
 
 typedef ALvoid AL_APIENTRY (*alBufferDataStaticProcPtr) (const ALint bid, ALenum format, ALvoid *data, ALsizei size, ALsizei freq);
@@ -153,6 +153,7 @@ void Sound::ReadData(const char *file)
 	UInt32                      thePropertySize = sizeof(theFileFormat);
 	AudioFileID                 afid = 0;
 	void						*theData = NULL;
+	UInt32						dataSize = 0;
 
 	NSString *root = [NSString stringWithCString: iphGetRootPath() encoding: [NSString defaultCStringEncoding]];
 	NSString *fname = [NSString stringWithCString: file encoding: [NSString defaultCStringEncoding]];
@@ -195,7 +196,7 @@ void Sound::ReadData(const char *file)
 	if (err)
 		{ Log(TAG "ReadAudioData: AudioFileGetProperty(kAudioFilePropertyAudioDataByteCount) FAILED, Error = %ld, File: %s%s%s.", err, AUDIO_DATA_PATH, file, AUDIO_DATA_EXT); goto Exit; }
 
-	UInt32 dataSize = static_cast<UInt32>(fileDataSize);
+	dataSize = static_cast<UInt32>(fileDataSize);
 	theData = pMemoryManager->Alloc(dataSize, pPool, "Sound Data", "Sound");
 	if (theData)
 	{

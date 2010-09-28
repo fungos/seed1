@@ -166,6 +166,9 @@ BOOL SpriteObject::Load(const char *filename, ResourceManager *res, IMemoryPool 
 
 		for (u32 i = 0; i < iAnimations; i++)
 		{
+			if (!frame->iTime)
+				frame->iTime = 1;
+		
 			anim = &pAnimations[i];
 			pAnimationFrames[i] = frame;
 

@@ -37,6 +37,7 @@ AppView *__view;
 @interface AppView()
 	@property (nonatomic, retain) EAGLContext *context;
 	@property (nonatomic, assign) NSTimer *updateTimer;
+	@property (nonatomic, assign) eiOSOpenGLVersion iOSOpenGLVersion;
 @end
 
 
@@ -44,6 +45,7 @@ AppView *__view;
 
 @synthesize context;
 @synthesize updateTimer;
+@synthesize iOSOpenGLVersion;
 
 
 // You must implement this method
@@ -59,17 +61,32 @@ AppView *__view;
     if ((self = [super initWithCoder:coder])) 
 	{
         CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
+		
         eaglLayer.opaque = YES;
         eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys: [NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
         
-        context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+		iOSOpenGLVersion = OpenGLES1;
+		
+		if (!context)
+		{
+			context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+			iOSOpenGLVersion = OpenGLES1;
+		}
+			
         if (!context || ![EAGLContext setCurrentContext:context]) 
 		{
+			iOSOpenGLVersion = OpenGLFailed;
             [self release];
             return nil;
         }
     }
     return self;
+}
+
+- (eiOSOpenGLVersion)iOSOpenGLVersion
+{
+	return iOSOpenGLVersion;
 }
 
 - (void)Update
@@ -85,7 +102,7 @@ AppView *__view;
 
 - (void)PrepareContext
 {
-    [context renderbufferStorage:GL_RENDERBUFFER_OES fromDrawable:(CAEAGLLayer*)self.layer];
+    [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer];
 }
 
 - (void)SetContext
@@ -95,7 +112,7 @@ AppView *__view;
 
 - (void)ContextPresentRenderBuffer
 {
-	[context presentRenderbuffer:GL_RENDERBUFFER_OES];
+	[context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
 - (EAGLContext *)GetContext

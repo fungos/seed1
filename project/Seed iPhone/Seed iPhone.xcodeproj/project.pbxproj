@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -712,8 +712,15 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Seed iPhone" */;
-			compatibilityVersion = "Xcode 3.1";
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -883,6 +890,62 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		2DB7FFB2124CF2F100BEE6F9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEAD_CODE_STRIPPING = YES;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_EXCEPTIONS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SEED_ENABLE_OGLES1,
+					_IPHONE_,
+					RELEASE,
+				);
+				GCC_UNROLL_LOOPS = YES;
+				GCC_VERSION = 4.2;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				OTHER_CFLAGS = "-fvisibility=default";
+				PREBINDING = NO;
+				SDKROOT = iphoneos4.1;
+				SEPARATE_STRIP = YES;
+				USER_HEADER_SEARCH_PATHS = /techfront/SDK/seed/include;
+			};
+			name = Release;
+		};
+		2DB7FFB3124CF2F100BEE6F9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PFE_FILE_C_DIALECTS = "c objective-c c++ objective-c++";
+				PREBINDING = NO;
+				PRODUCT_NAME = Seed;
+				SDKROOT = iphoneos3.2;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
+			};
+			name = Release;
+		};
 		746D95600FE736F700DEC14E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -894,58 +957,34 @@
 				GCC_PFE_FILE_C_DIALECTS = "c objective-c c++ objective-c++";
 				PREBINDING = NO;
 				PRODUCT_NAME = Seed;
+				SDKROOT = iphoneos3.2;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
 			};
 			name = Debug;
-		};
-		746D95610FE736F700DEC14E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				PREBINDING = NO;
-				PRODUCT_NAME = Seed;
-				ZERO_LINK = NO;
-			};
-			name = Release;
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEAD_CODE_STRIPPING = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_VERSION = 4.0;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = (
-					"-DDEBUG",
-					"-D_IPHONE_",
-					"-DYMEM_DEBUG",
-					"-DSEED_ENABLE_OGLES1",
+				GCC_ENABLE_EXCEPTIONS = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SEED_ENABLE_OGLES1,
+					YMEM_DEBUG,
+					_IPHONE_,
+					DEBUG,
 				);
+				GCC_VERSION = 4.2;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				OTHER_CFLAGS = "-fvisibility=default";
 				PREBINDING = NO;
-				SDKROOT = iphoneos2.2.1;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
+				SDKROOT = iphoneos4.1;
 				USER_HEADER_SEARCH_PATHS = /techfront/SDK/seed/include;
 			};
 			name = Debug;
-		};
-		C01FCF5008A954540054247B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				PREBINDING = NO;
-				SDKROOT = iphoneos2.2.1;
-			};
-			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -954,19 +993,19 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				746D95600FE736F700DEC14E /* Debug */,
-				746D95610FE736F700DEC14E /* Release */,
+				2DB7FFB3124CF2F100BEE6F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Seed iPhone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
-				C01FCF5008A954540054247B /* Release */,
+				2DB7FFB2124CF2F100BEE6F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

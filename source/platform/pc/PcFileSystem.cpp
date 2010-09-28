@@ -147,6 +147,7 @@ void *FileSystem::Read(const char *fname, IMemoryPool *pool, u32 *length)
 		fseek(fp, 0L, SEEK_SET);
 
 		void *buff = pMemoryManager->Alloc(this->iLastLength, pool, fname, "File");
+		ASSERT_MSG(buff != NULL, "ERROR: Out of memory - trying to load file.");
 
 		u32 total = fread(buff, 1, iLastLength, fp);
 		fclose(fp);

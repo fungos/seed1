@@ -74,6 +74,7 @@ Texture::Texture()
 	, iPitch(0)
 	, iAtlasWidth(0)
 	, iAtlasHeight(0)
+	, iReserved(0)
 	//, bCompressed(FALSE)
 	, pixelFormat(kTexture2DPixelFormat_RGBA8888)
 {
@@ -106,6 +107,7 @@ INLINE BOOL Texture::Load(const char *filename, ResourceManager *res, IMemoryPoo
 {
 	if (ITexture::Load(filename, res, pool))
 	{
+		stFile.Close();
 		//#if !defined(ENABLE_NATIVE_PVRTC_FORMAT)
 		this->LoadPNG(filename);
 		//#else
@@ -287,18 +289,23 @@ INLINE void Texture::UnloadTexture()
 		pMemoryManager->Free(pData, pPool);
 	pData = NULL;
 	
+	if (iReserved)
+		pMemoryManager->Unreserve(iReserved, pDefaultPool);
+	iReserved = 0;
 	pTextureId = NULL;
 }
 
 INLINE void Texture::Close()
 {
+	Log("WARNING: Releasing texture buffer for %s, but keeping it size (%d) reserved in memory manager - this can cause memory fragmentation in platforms that VRAM and RAM are separated!", pFilename, iReserved);
+	pMemoryManager->Reserve(iReserved, pDefaultPool);
 	stFile.Close();
 
-#if !defined(DEBUG)
+//#if !defined(DEBUG)
 	if (pData)
 		pMemoryManager->Free(pData, pPool);
 	pData = NULL;
-#endif
+//#endif
 }
 
 // FIXME: 2009-02-15 | Use Width x Height from image. | Danny Angelo Carminati Grein
@@ -417,6 +424,7 @@ void Texture::LoadPNG(const char *file)
 	u32 bpp = CGImageGetBitsPerPixel(image);
 	iBytesPerPixel = bpp / 8;
 	data = pMemoryManager->Alloc(height * width * iBytesPerPixel, pPool, file, "iOS Texture");
+	ASSERT_MSG(data != NULL, "ERROR: not enought memory - trying to allocate texture buffer.");
 	
 	switch (pixelFormat)
 	{
@@ -473,6 +481,7 @@ void Texture::LoadPNG(const char *file)
 	iWidth = imageSize.width;
 	iHeight = imageSize.height;
 	iPitch = CGImageGetBytesPerRow(image);
+	iReserved = height * width * iBytesPerPixel;
 
 	pRendererDevice->TextureRequest(this, &pTextureId);
 

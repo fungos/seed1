@@ -143,6 +143,13 @@ void *YMemoryManager::Alloc(u32 len, const char *desc, const char *owner, int re
 		current = NEXT(current);
 	}
 
+	/*
+	u32 sizec = SIZE(current);
+	u32 usedc = USED(current);
+	const char *ownerc = (const char *)OWNR(current);
+	const char *descc = (const char *)DESC(current);
+	*/
+	
 	// handle the last block NEXT(current) = 0
 	if ((SIZE(current) >= len) && !USED(current))
 	{
@@ -154,7 +161,15 @@ void *YMemoryManager::Alloc(u32 len, const char *desc, const char *owner, int re
 		)
 		return ((void *)&pPool[current]);
 	}
-
+	
+	_YDEBUG
+	(
+		if (SIZE(current) < iFreeMemory)
+		{
+			LOG0(TAG "WARNING! You must be getting memory fragmentation, check your allocations and deallocations and reorder them. Check the current snapshot:\n");
+			this->PrintSnapshot();
+		}
+	)
 	return NULL;
 }
 
