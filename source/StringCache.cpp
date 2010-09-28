@@ -90,7 +90,7 @@ void StringCache::BuildStringTable()
 			SECURITY_CHECK(seed_validate_block(&stFile, block, SST_OBJECT_MAGIC, SST_OBJECT_VERSION), "Invalid block header for string cache list.");
 			READ_U32(iStringCount, ptr);
 
-			pStringTable = (CachedString *)pMemoryManager->Alloc(iStringCount * sizeof(const char *));
+			pStringTable = (CachedString *)pMemoryManager->Alloc(iStringCount * sizeof(const char *), pDefaultPool, "String Table", "StringCache");
 
 			for (u32 s = 0; s < iStringCount; s++)
 			{
@@ -108,7 +108,7 @@ void StringCache::BuildStringTable()
 
 INLINE void StringCache::DestroyStringTable()
 {
-	pMemoryManager->Free(pStringTable);
+	pMemoryManager->Free(pStringTable, pDefaultPool);
 	stFile.Close();
 }
 

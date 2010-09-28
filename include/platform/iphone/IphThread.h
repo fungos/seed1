@@ -39,6 +39,8 @@
 
 #if defined(_IPHONE_)
 
+#include <pthread.h>
+
 #include "Defines.h"
 #include "interface/IThread.h"
 
@@ -50,6 +52,7 @@ class Thread : public IThread
 		Thread();
 		virtual ~Thread();
 
+		virtual void Destroy();
 		virtual void Create();
 		virtual BOOL Run();
 
@@ -57,7 +60,9 @@ class Thread : public IThread
 		SEED_DISABLE_COPY(Thread);
 
 	private:
-		void 	*pThread;
+		BOOL bCreated;
+		BOOL bRunning;
+		pthread_t thread;
 };
 
 }} // namespace

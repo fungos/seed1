@@ -88,6 +88,7 @@ BOOL Music::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		pPool = pool;
 
 		/* Open file .music */
+		/* FIXME: This should be from a file resource acquired using a Get() from resource manager cache. */
 		SECURITY_CHECK(pFileSystem->Open(filename, &stFile, pool), "Music object couldn't be opened");
 
 		const u8 *ptr = static_cast<const u8 *>(stFile.GetData());
@@ -116,7 +117,6 @@ BOOL Music::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 			AVAudioPlayer *p =	[[[ AVAudioPlayer alloc ] initWithContentsOfURL: [ NSURL fileURLWithPath: path ] error: &err ] retain ];
 			pAVPlayer = (void *)p;
 
-			Log(TAG "Error: %s", [[err localizedDescription] cStringUsingEncoding: NSASCIIStringEncoding]);
 			if (!err)
 			{
 				p.numberOfLoops = -1; // inf
@@ -128,6 +128,7 @@ BOOL Music::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 			}
 			else
 			{
+				Log(TAG "Error: %s", [[err localizedDescription] cStringUsingEncoding: NSASCIIStringEncoding]);
 				Log(TAG "Error happened when trying to play music %s.", fname);
 				bLoaded = FALSE;
 			}
@@ -170,6 +171,9 @@ BOOL Music::Update(f32 dt)
 {
 	UNUSED(dt);
 	
+	if (!pAVPlayer)
+		return FALSE;
+	
 	AVAudioPlayer *p = (AVAudioPlayer *)pAVPlayer;
 	if (eState == Seed::MusicPlay || eState == Seed::MusicFadeIn)
 	{
@@ -191,20 +195,29 @@ INLINE void Music::SetVolume(f32 vol)
 {
 	IMusic::SetVolume(vol);
 	
-	AVAudioPlayer *p = (AVAudioPlayer *)pAVPlayer;
-	p.volume = fVolume * pSoundSystem->GetMusicVolume();
+	if (pAVPlayer)
+	{
+		AVAudioPlayer *p = (AVAudioPlayer *)pAVPlayer;
+		p.volume = fVolume * pSoundSystem->GetMusicVolume();
+	}
 }
 
 INLINE void Music::UpdateVolume()
 {
-	AVAudioPlayer *p = (AVAudioPlayer *)pAVPlayer;
-	p.volume = fVolume * pSoundSystem->GetMusicVolume();
+	if (pAVPlayer)
+	{
+		AVAudioPlayer *p = (AVAudioPlayer *)pAVPlayer;
+		p.volume = fVolume * pSoundSystem->GetMusicVolume();
+	}
 }
 
 INLINE void Music::FadeVolume(f32 vol)
 {
-	AVAudioPlayer *p = (AVAudioPlayer *)pAVPlayer;
-	p.volume = vol * pSoundSystem->GetMusicVolume();
+	if (pAVPlayer)
+	{
+		AVAudioPlayer *p = (AVAudioPlayer *)pAVPlayer;
+		p.volume = vol * pSoundSystem->GetMusicVolume();
+	}
 }
 
 INLINE const void *Music::GetData() const

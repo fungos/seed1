@@ -108,7 +108,7 @@ INLINE BOOL Theora::Unload()
 	bPlaying = FALSE;
 
 	if (pTexData)
-		pMemoryManager->Free(pTexData);
+		pMemoryManager->Free(pTexData, pDefaultPool);
 	pTexData = NULL;
 
 	return TRUE;
@@ -486,7 +486,7 @@ void Theora::ConfigureRendering()
 	{
 		//pTexData = reinterpret_cast<u8 *>(calloc(1, po2_width * po2_height * 4));
 		u32 size = po2_width * po2_height * 4;
-		pTexData = reinterpret_cast<u8 *>(pMemoryManager->Alloc(size));
+		pTexData = reinterpret_cast<u8 *>(pMemoryManager->Alloc(size, pDefaultPool, "Texture Data", "Theora"));
 		MEMSET(pTexData, '\0', size);
 		iTexWidth = po2_width;
 		iTexHeight = po2_height;

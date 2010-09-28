@@ -110,6 +110,8 @@ class Texture : public ITexture
 		
 		u32 iAtlasWidth;
 		u32 iAtlasHeight;
+		
+		u32 iReserved;
 
 		//BOOL bCompressed;
 		eTextureFormat pixelFormat;

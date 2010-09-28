@@ -40,6 +40,11 @@
 
 #if defined(_IPHONE_)
 
+/* For now we only support OpenGL ES 1.1 */
+#if !defined(SEED_ENABLE_OGLES1)
+#define SEED_ENABLE_OGLES1
+#endif // SEED_ENABLE_OGLES1
+
 #include <string.h>
 
 #define PLATFORM iPhone
@@ -69,6 +74,7 @@ typedef signed int 				s32;
 typedef signed short int 		s16;
 typedef signed char 			s8;
 typedef float 					f32;
+typedef char					FilePath;
 
 typedef float 					fixed32;
 
@@ -91,6 +97,8 @@ typedef int 					PIXEL;
 #define LIB_STRCASECMP				strcasecmp
 #define LIB_STRDUP					strdup
 #define LIB_RAND					rand()
+
+#define LIB_FOPEN(a, b)				fopen(a, b)
 
 // Math
 #define LIB_FAST_DIV(a, b)			(a/b)

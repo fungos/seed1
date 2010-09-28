@@ -157,16 +157,16 @@ void Screen::SwapSurfaces()
 
 void Screen::CreateHardwareSurfaces()
 {
-	glGenFramebuffersOES(1, &frameBuffer);
-	glGenRenderbuffersOES(1, &renderBuffer);
+	glGenFramebuffers(1, &frameBuffer);
+	glGenRenderbuffers(1, &renderBuffer);
 
-	glBindFramebufferOES(GL_FRAMEBUFFER_OES, frameBuffer);
-	glBindRenderbufferOES(GL_RENDERBUFFER_OES, renderBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
 	iphPrepareGLContext();
-	glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_RENDERBUFFER_OES, renderBuffer);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderBuffer);
 
-	glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &iWidth);
-	glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_HEIGHT_OES, &iHeight);
+	glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &iWidth);
+	glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &iHeight);
 	
 	if (nMode == Seed::Video_iPhoneLandscape || nMode == Seed::Video_iPhoneLandscapeGoofy)
 	{
@@ -182,13 +182,16 @@ void Screen::CreateHardwareSurfaces()
 	iHeight = iModeHeight;
 	iWidth = iModeWidth;
 	fAspectRatio = (f32)iHeight / (f32)iWidth;
+	
+	//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	// ...
 }
 
 void Screen::DestroyHardwareSurfaces()
 {
-	glDeleteFramebuffersOES(1, &frameBuffer);
+	glDeleteFramebuffers(1, &frameBuffer);
 	frameBuffer = 0;
-	glDeleteRenderbuffersOES(1, &renderBuffer);
+	glDeleteRenderbuffers(1, &renderBuffer);
 	renderBuffer = 0;
 }
 

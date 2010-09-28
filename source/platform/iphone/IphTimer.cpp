@@ -99,6 +99,7 @@ INLINE u64 Timer::GetMilliseconds() const
 
 INLINE void Timer::Sleep(u32 ms) const
 {
+	UNUSED(ms);
 }
 
 }} // namespace

@@ -101,7 +101,7 @@ class SEED_CORE_API OGLES1RendererDevice : public IRendererDevice
 }} // namespace
 
 #else // _OGL_
-	#error "Include 'RendererDevice.h' instead 'api/ogl/OglES1RendererDevice.h' directly."
+	#error "Include 'RendererDevice.h' instead 'api/ogl/OglES1RendererDevice.h' directly. Or maybe you need set define SEED_ENABLE_OGLES1."
 #endif // _OGL_
 
 #endif // __OGLES1_RENDERER_DEVICE_H__

@@ -72,14 +72,14 @@ class SEED_CORE_API IFileSystem : public IModule, public IEventSystemListener
 		virtual BOOL Open(const char *fileName, File *file, IMemoryPool *pool = pDefaultPool);
 		virtual void Close(File *file);
 
-		virtual void SetWorkDirectory(const wchar_t *dir);
-		virtual void SetWriteableDirectory(const wchar_t *dir);
-		virtual void MakeDirectory(const wchar_t *dir) const;
+		virtual void SetWorkDirectory(const FilePath *dir);
+		virtual void SetWriteableDirectory(const FilePath *dir);
+		virtual void MakeDirectory(const FilePath *dir) const;
 
 		virtual void OnSystemLanguageChanged(const EventSystem *ev);
 
-		const wchar_t *GetWorkDirectory() const;
-		const wchar_t *GetWriteableDirectory() const;
+		const FilePath *GetWorkDirectory() const;
+		const FilePath *GetWriteableDirectory() const;
 
 		u32 GetIdByFileName(const char *filename) const;
 		const char *GetFileNameById(u32 fileId) const;
@@ -97,8 +97,8 @@ class SEED_CORE_API IFileSystem : public IModule, public IEventSystemListener
 		void RemoveListener(IEventFileSystemListener *listener);
 
 	protected:
-		const wchar_t *pWorkDir;
-		const wchar_t *pWriteDir;
+		const FilePath *pWorkDir;
+		const FilePath *pWriteDir;
 		ListenerVector vListeners;
 
 	protected:

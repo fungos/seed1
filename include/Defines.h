@@ -265,12 +265,12 @@ union uPixel
 #define SEED_DISABLE_INSTANCING_IMPL(Class)	\
 										INLINE void *Class::operator new(size_t len) \
 										{ \
-											return pMemoryManager->Alloc(len); \
+											return pMemoryManager->Alloc(len, pDefaultPool, "operator new", #Class); \
 										} \
 										 \
 										INLINE void Class::operator delete(void *ptr) \
 										{ \
-											pMemoryManager->Free(ptr); \
+											pMemoryManager->Free(ptr, pDefaultPool); \
 										}
 
 #define SEED_FORWARD_DECLARATION(Class) namespace Seed { class Class; }

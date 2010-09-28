@@ -52,7 +52,7 @@
 static char pcBundle[2048];
 #endif
 
-BOOL create_directory(const wchar_t *path)
+BOOL create_directory(const FilePath *path)
 {
 	BOOL ret = FALSE;
 	int err = mkdir((const char *)path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
@@ -81,7 +81,7 @@ BOOL create_directory(const wchar_t *path)
 
 			case ENOENT:
 			{
-				Info(TAG "Path '%s' does not name an existin entry.", path);
+				Info(TAG "Path '%s' does not name an existing entry.", path);
 			}
 			break;
 
@@ -118,33 +118,33 @@ BOOL create_directory(const wchar_t *path)
 	return ret;
 }
 
-const wchar_t *get_user_name()
+const FilePath *get_user_name()
 {
-	const wchar_t *name = (wchar_t *)getenv("LOGNAME");
+	const FilePath *name = (FilePath *)getenv("LOGNAME");
 	if (!name)
-		name = (const wchar_t *)"Noname";
+		name = (const FilePath *)"Noname";
 	return name;
 }
 
-const wchar_t *get_user_savegame_folder()
+const FilePath *get_user_savegame_folder()
 {
 	return get_user_home_folder();
 }
 
-const wchar_t *get_user_appdata_folder()
+const FilePath *get_user_appdata_folder()
 {
 	return get_user_home_folder();
 }
 
-const wchar_t *get_user_home_folder()
+const FilePath *get_user_home_folder()
 {
-	const wchar_t *home = (wchar_t *)getenv("HOME");
+	const FilePath *home = (FilePath *)getenv("HOME");
 	if (!home)
-		home = (const wchar_t *)"./";
+		home = (const FilePath *)"./";
 	return home;
 }
 
-void get_current_directory(wchar_t *buff, int size)
+void get_current_directory(FilePath *buff, int size)
 {
 #if defined(_IPHONE_)
 	memset(buff, '\0', size);
@@ -165,7 +165,7 @@ void get_current_directory(wchar_t *buff, int size)
 #endif
 }
 
-BOOL change_directory(const wchar_t *to)
+BOOL change_directory(const FilePath *to)
 {
 	BOOL ret = FALSE;
 	const char *path = (const char *)to;
@@ -195,7 +195,7 @@ BOOL change_directory(const wchar_t *to)
 
 			case ENOENT:
 			{
-				Info(TAG "Path '%s' does not name an existin entry.", path);
+				Info(TAG "Path '%s' does not name an existing entry.", path);
 			}
 			break;
 

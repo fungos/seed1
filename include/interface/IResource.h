@@ -62,6 +62,7 @@ class SEED_CORE_API IResource : public IObject
 		virtual BOOL Unload() = 0;
 
 		virtual u32 GetUsedMemory() const;
+		const char *GetFilename() const;
 
 		void Release();
 		void Acquire();

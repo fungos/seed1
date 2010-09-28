@@ -65,6 +65,8 @@ TextArea::TextArea()
 
 TextArea::~TextArea()
 {
+	this->Reset();
+
 	if (Private::bInitialized)
 		pGuiManager->Remove(this);
 }
@@ -72,7 +74,7 @@ TextArea::~TextArea()
 void TextArea::Reset()
 {
 	if (pLines)
-		pMemoryManager->Free(pLines);
+		pMemoryManager->Free(pLines, pDefaultPool);
 
 	iId				= 0;
 	bDisabled		= TRUE;
@@ -89,7 +91,7 @@ void TextArea::Reset()
 void TextArea::ReleaseText()
 {
 	if (pLines)
-		pMemoryManager->Free(pLines);
+		pMemoryManager->Free(pLines, pDefaultPool);
 
 	pLines			= NULL;
 	iId				= 0;
@@ -179,8 +181,8 @@ void TextArea::Rebuild()
 	{
 		iLines = lines;
 
-		pMemoryManager->Free(pLines);
-		pLines = static_cast<struct sLineInfo *>(pMemoryManager->Alloc(sizeBuff, pDefaultPool));
+		pMemoryManager->Free(pLines, pDefaultPool);
+		pLines = static_cast<struct sLineInfo *>(pMemoryManager->Alloc(sizeBuff, pDefaultPool, "Text Area Lines", "TextArea"));
 	}
 	MEMSET(pLines, '\0', sizeBuff);
 

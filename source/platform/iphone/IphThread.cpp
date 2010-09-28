@@ -37,39 +37,53 @@
 #if defined(_IPHONE_)
 
 #include "platform/iphone/IphThread.h"
+#include "Log.h"
 
 #define TAG 	"[Thread] "
 
 namespace Seed { namespace iPhone {
 
-static int __seed_thread_loop_callback(void *param)
+static void *__seed_thread_loop_callback(void *param)
 {
 	Thread *pt = static_cast<Thread *>(param);
 	while (pt->Run());
+	pt->Destroy();
 
-	return 0;
+	return NULL;
 }
 
 Thread::Thread()
-	: pThread(NULL)
+	: bCreated(FALSE)
+	, bRunning(FALSE)
 {
 }
 
 Thread::~Thread()
 {
-	if (pThread)
-	{
-		//SDL_WaitThread(pThread, NULL);
-		//SDL_KillThread(pThread);
-	}
+	this->Destroy();
+}
 
-	pThread = NULL;
+INLINE void Thread::Destroy()
+{
+	bRunning = FALSE;
+	if (bCreated)
+	{
+		pthread_exit(NULL);
+		bCreated = FALSE;
+	}
+	thread = 0;
 }
 
 INLINE void Thread::Create()
 {
-	//pThread = SDL_CreateThread(__seed_thread_loop_callback, this);
-	//ASSERT_MSG(pThread != NULL, TAG "Failed to create thread.");
+	bRunning = TRUE;
+	if (!bCreated)
+	{
+		int err = pthread_create(&thread, 0, __seed_thread_loop_callback, (void *)this);
+		UNUSED(err);
+		ASSERT_MSG(err == 0, TAG "Failed to create thread.");
+		bCreated = TRUE;
+	}
 }
 
 INLINE BOOL Thread::Run()

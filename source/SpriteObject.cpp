@@ -123,7 +123,7 @@ BOOL SpriteObject::Load(const char *filename, ResourceManager *res, IMemoryPool 
 	*/
 		STRLCAT(tplName, "tpl\0", 128);
 
-		pTplFile = (char *)pMemoryManager->Alloc(STRLEN(tplName) + 1, pool);
+		pTplFile = (char *)pMemoryManager->Alloc(STRLEN(tplName) + 1, pool, "pTplFile", "SpriteObject");
 		ASSERT_NULL(pTplFile);
 
 		STRLCPY(pTplFile, &tplName[0], static_cast<u32>(STRLEN(tplName)));
@@ -166,6 +166,9 @@ BOOL SpriteObject::Load(const char *filename, ResourceManager *res, IMemoryPool 
 
 		for (u32 i = 0; i < iAnimations; i++)
 		{
+			if (!frame->iTime)
+				frame->iTime = 1;
+		
 			anim = &pAnimations[i];
 			pAnimationFrames[i] = frame;
 

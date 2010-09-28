@@ -65,6 +65,7 @@ enum eObjectType
 	ObjectRendererManager,
 
 	// System
+	ObjectFile,
 	ObjectConfiguration,
 	ObjectInterfaceModule,
 	ObjectInterfaceRenderable,
@@ -116,6 +117,7 @@ enum ePlatformSimulation
 	SimulateNothing,
 	SimulateWii,
 	SimulatePsp,
+	SimulateIOS3G,
 	SimulateN900
 };
 
@@ -147,6 +149,7 @@ enum eVideoMode
 	Video_NintendoWii,
 	Video_800x600,
 	Video_1024x768,
+	Video_iPad = Video_1024x768
 };
 
 /// Widget Alignment

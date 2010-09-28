@@ -27,9 +27,6 @@
 		2D18753611EB5EAF00A8EB9F /* EventMovie.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D18749011EB5EAF00A8EB9F /* EventMovie.cpp */; };
 		2D18753711EB5EAF00A8EB9F /* EventResourceLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D18749111EB5EAF00A8EB9F /* EventResourceLoader.cpp */; };
 		2D18753811EB5EAF00A8EB9F /* EventSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D18749211EB5EAF00A8EB9F /* EventSystem.cpp */; };
-		2D18753911EB5EAF00A8EB9F /* lzf_c.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D18749511EB5EAF00A8EB9F /* lzf_c.cpp */; };
-		2D18753A11EB5EAF00A8EB9F /* lzf_d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D18749611EB5EAF00A8EB9F /* lzf_d.cpp */; };
-		2D18753B11EB5EAF00A8EB9F /* tgs_lzf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D18749711EB5EAF00A8EB9F /* tgs_lzf.cpp */; };
 		2D18753C11EB5EAF00A8EB9F /* yallocwrap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D18749911EB5EAF00A8EB9F /* yallocwrap.cpp */; };
 		2D18753D11EB5EAF00A8EB9F /* ymemorymanager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D18749A11EB5EAF00A8EB9F /* ymemorymanager.cpp */; };
 		2D18753E11EB5EAF00A8EB9F /* File.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D18749B11EB5EAF00A8EB9F /* File.cpp */; };
@@ -117,7 +114,6 @@
 		2D18759911EB5EAF00A8EB9F /* PcRendererDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D1874FB11EB5EAF00A8EB9F /* PcRendererDevice.cpp */; };
 		2D18759A11EB5EAF00A8EB9F /* posix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D1874FC11EB5EAF00A8EB9F /* posix.cpp */; };
 		2D18759B11EB5EAF00A8EB9F /* win32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D1874FD11EB5EAF00A8EB9F /* win32.cpp */; };
-		2D18759C11EB5EAF00A8EB9F /* QtImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D1874FF11EB5EAF00A8EB9F /* QtImage.cpp */; };
 		2D18759D11EB5EAF00A8EB9F /* QtInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D18750011EB5EAF00A8EB9F /* QtInput.cpp */; };
 		2D18759E11EB5EAF00A8EB9F /* QtMutex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D18750111EB5EAF00A8EB9F /* QtMutex.cpp */; };
 		2D18759F11EB5EAF00A8EB9F /* QtScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D18750211EB5EAF00A8EB9F /* QtScene.cpp */; };
@@ -191,9 +187,6 @@
 		2D18749011EB5EAF00A8EB9F /* EventMovie.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventMovie.cpp; sourceTree = "<group>"; };
 		2D18749111EB5EAF00A8EB9F /* EventResourceLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventResourceLoader.cpp; sourceTree = "<group>"; };
 		2D18749211EB5EAF00A8EB9F /* EventSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EventSystem.cpp; sourceTree = "<group>"; };
-		2D18749511EB5EAF00A8EB9F /* lzf_c.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lzf_c.cpp; sourceTree = "<group>"; };
-		2D18749611EB5EAF00A8EB9F /* lzf_d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lzf_d.cpp; sourceTree = "<group>"; };
-		2D18749711EB5EAF00A8EB9F /* tgs_lzf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tgs_lzf.cpp; sourceTree = "<group>"; };
 		2D18749911EB5EAF00A8EB9F /* yallocwrap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yallocwrap.cpp; sourceTree = "<group>"; };
 		2D18749A11EB5EAF00A8EB9F /* ymemorymanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ymemorymanager.cpp; sourceTree = "<group>"; };
 		2D18749B11EB5EAF00A8EB9F /* File.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = File.cpp; sourceTree = "<group>"; };
@@ -281,7 +274,6 @@
 		2D1874FB11EB5EAF00A8EB9F /* PcRendererDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PcRendererDevice.cpp; sourceTree = "<group>"; };
 		2D1874FC11EB5EAF00A8EB9F /* posix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = posix.cpp; sourceTree = "<group>"; };
 		2D1874FD11EB5EAF00A8EB9F /* win32.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = win32.cpp; sourceTree = "<group>"; };
-		2D1874FF11EB5EAF00A8EB9F /* QtImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QtImage.cpp; sourceTree = "<group>"; };
 		2D18750011EB5EAF00A8EB9F /* QtInput.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QtInput.cpp; sourceTree = "<group>"; };
 		2D18750111EB5EAF00A8EB9F /* QtMutex.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QtMutex.cpp; sourceTree = "<group>"; };
 		2D18750211EB5EAF00A8EB9F /* QtScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QtScene.cpp; sourceTree = "<group>"; };
@@ -510,20 +502,9 @@
 		2D18749311EB5EAF00A8EB9F /* extra */ = {
 			isa = PBXGroup;
 			children = (
-				2D18749411EB5EAF00A8EB9F /* lzf */,
 				2D18749811EB5EAF00A8EB9F /* ymanager */,
 			);
 			path = extra;
-			sourceTree = "<group>";
-		};
-		2D18749411EB5EAF00A8EB9F /* lzf */ = {
-			isa = PBXGroup;
-			children = (
-				2D18749511EB5EAF00A8EB9F /* lzf_c.cpp */,
-				2D18749611EB5EAF00A8EB9F /* lzf_d.cpp */,
-				2D18749711EB5EAF00A8EB9F /* tgs_lzf.cpp */,
-			);
-			path = lzf;
 			sourceTree = "<group>";
 		};
 		2D18749811EB5EAF00A8EB9F /* ymanager */ = {
@@ -648,7 +629,6 @@
 		2D1874FE11EB5EAF00A8EB9F /* qt */ = {
 			isa = PBXGroup;
 			children = (
-				2D1874FF11EB5EAF00A8EB9F /* QtImage.cpp */,
 				2D18750011EB5EAF00A8EB9F /* QtInput.cpp */,
 				2D18750111EB5EAF00A8EB9F /* QtMutex.cpp */,
 				2D18750211EB5EAF00A8EB9F /* QtScene.cpp */,
@@ -713,7 +693,14 @@
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Seed iPhone" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -748,9 +735,6 @@
 				2D18753611EB5EAF00A8EB9F /* EventMovie.cpp in Sources */,
 				2D18753711EB5EAF00A8EB9F /* EventResourceLoader.cpp in Sources */,
 				2D18753811EB5EAF00A8EB9F /* EventSystem.cpp in Sources */,
-				2D18753911EB5EAF00A8EB9F /* lzf_c.cpp in Sources */,
-				2D18753A11EB5EAF00A8EB9F /* lzf_d.cpp in Sources */,
-				2D18753B11EB5EAF00A8EB9F /* tgs_lzf.cpp in Sources */,
 				2D18753C11EB5EAF00A8EB9F /* yallocwrap.cpp in Sources */,
 				2D18753D11EB5EAF00A8EB9F /* ymemorymanager.cpp in Sources */,
 				2D18753E11EB5EAF00A8EB9F /* File.cpp in Sources */,
@@ -838,7 +822,6 @@
 				2D18759911EB5EAF00A8EB9F /* PcRendererDevice.cpp in Sources */,
 				2D18759A11EB5EAF00A8EB9F /* posix.cpp in Sources */,
 				2D18759B11EB5EAF00A8EB9F /* win32.cpp in Sources */,
-				2D18759C11EB5EAF00A8EB9F /* QtImage.cpp in Sources */,
 				2D18759D11EB5EAF00A8EB9F /* QtInput.cpp in Sources */,
 				2D18759E11EB5EAF00A8EB9F /* QtMutex.cpp in Sources */,
 				2D18759F11EB5EAF00A8EB9F /* QtScene.cpp in Sources */,
@@ -883,6 +866,60 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		2DB7FFB2124CF2F100BEE6F9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: fungos bauux (M68294QGQV)";
+				DEAD_CODE_STRIPPING = YES;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = YES;
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_EXCEPTIONS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SEED_ENABLE_OGLES1,
+					_IPHONE_,
+					RELEASE,
+				);
+				GCC_UNROLL_LOOPS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				OTHER_CFLAGS = "-fvisibility=default";
+				PREBINDING = NO;
+				SDKROOT = iphonesimulator3.2;
+				SEPARATE_STRIP = YES;
+				USER_HEADER_SEARCH_PATHS = /techfront/SDK/seed/include;
+			};
+			name = Release;
+		};
+		2DB7FFB3124CF2F100BEE6F9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PFE_FILE_C_DIALECTS = "c objective-c c++ objective-c++";
+				PREBINDING = NO;
+				PRODUCT_NAME = Seed;
+				SDKROOT = iphoneos3.2;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
+			};
+			name = Release;
+		};
 		746D95600FE736F700DEC14E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -894,57 +931,31 @@
 				GCC_PFE_FILE_C_DIALECTS = "c objective-c c++ objective-c++";
 				PREBINDING = NO;
 				PRODUCT_NAME = Seed;
+				SDKROOT = iphoneos3.2;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
 			};
 			name = Debug;
-		};
-		746D95610FE736F700DEC14E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				PREBINDING = NO;
-				PRODUCT_NAME = Seed;
-				ZERO_LINK = NO;
-			};
-			name = Release;
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: fungos bauux (M68294QGQV)";
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_VERSION = 4.0;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = (
-					"-DDEBUG",
-					"-D_IPHONE_",
-					"-DYMEM_DEBUG",
+				GCC_ENABLE_EXCEPTIONS = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					SEED_ENABLE_OGLES1,
+					YMEM_DEBUG,
+					_IPHONE_,
+					DEBUG,
 				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				OTHER_CFLAGS = "-fvisibility=default";
 				PREBINDING = NO;
-				SDKROOT = iphoneos2.2.1;
-				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
+				SDKROOT = iphonesimulator3.2;
 				USER_HEADER_SEARCH_PATHS = /techfront/SDK/seed/include;
 			};
 			name = Debug;
-		};
-		C01FCF5008A954540054247B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				PREBINDING = NO;
-				SDKROOT = iphoneos2.2.1;
-			};
-			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -953,19 +964,19 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				746D95600FE736F700DEC14E /* Debug */,
-				746D95610FE736F700DEC14E /* Release */,
+				2DB7FFB3124CF2F100BEE6F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Seed iPhone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
-				C01FCF5008A954540054247B /* Release */,
+				2DB7FFB2124CF2F100BEE6F9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

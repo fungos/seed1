@@ -18,8 +18,8 @@ using namespace Seed;
 
 iphTouchInfo iphTouchBuff[PLATFORM_MAX_INPUT];
 
-char _defaultRootPath[MAX_PATH_SIZE];
-char _defaultHomePath[MAX_PATH_SIZE];
+FilePath _defaultRootPathA[MAX_PATH_SIZE];
+FilePath _defaultHomePathA[MAX_PATH_SIZE];
 AppView *__view;
 
 
@@ -37,6 +37,7 @@ AppView *__view;
 @interface AppView()
 	@property (nonatomic, retain) EAGLContext *context;
 	@property (nonatomic, assign) NSTimer *updateTimer;
+	@property (nonatomic, assign) eiOSOpenGLVersion iOSOpenGLVersion;
 @end
 
 
@@ -44,6 +45,7 @@ AppView *__view;
 
 @synthesize context;
 @synthesize updateTimer;
+@synthesize iOSOpenGLVersion;
 
 
 // You must implement this method
@@ -59,17 +61,32 @@ AppView *__view;
     if ((self = [super initWithCoder:coder])) 
 	{
         CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
+		
         eaglLayer.opaque = YES;
         eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys: [NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
         
-        context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+		iOSOpenGLVersion = OpenGLES1;
+		
+		if (!context)
+		{
+			context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+			iOSOpenGLVersion = OpenGLES1;
+		}
+			
         if (!context || ![EAGLContext setCurrentContext:context]) 
 		{
+			iOSOpenGLVersion = OpenGLFailed;
             [self release];
             return nil;
         }
     }
     return self;
+}
+
+- (eiOSOpenGLVersion)iOSOpenGLVersion
+{
+	return iOSOpenGLVersion;
 }
 
 - (void)Update
@@ -85,7 +102,7 @@ AppView *__view;
 
 - (void)PrepareContext
 {
-    [context renderbufferStorage:GL_RENDERBUFFER_OES fromDrawable:(CAEAGLLayer*)self.layer];
+    [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer];
 }
 
 - (void)SetContext
@@ -95,7 +112,7 @@ AppView *__view;
 
 - (void)ContextPresentRenderBuffer
 {
-	[context presentRenderbuffer:GL_RENDERBUFFER_OES];
+	[context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
 - (EAGLContext *)GetContext
@@ -277,18 +294,18 @@ void iphSetContext(EAGLContext *c)
 	[__view SetContext:c];
 }
 
-const char *iphGetRootPath()
+const FilePath *iphGetRootPath()
 {
 	CFStringRef fileString;
 	fileString = (CFStringRef)[[NSBundle mainBundle] resourcePath];
 	
-	CFStringGetCString(fileString, _defaultRootPath, MAX_PATH_SIZE, kCFStringEncodingASCII);
+	CFStringGetCString(fileString, _defaultRootPathA, MAX_PATH_SIZE, kCFStringEncodingASCII);
 	//fprintf(stdout, "%s", _defaultRootPath);
 	
-	return _defaultRootPath;
+	return _defaultRootPathA;
 }
 
-const char *iphGetHomePath()
+const FilePath *iphGetHomePath()
 {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
 	NSString *documentsDirectory= [paths objectAtIndex: 0];
@@ -296,10 +313,10 @@ const char *iphGetHomePath()
 	CFStringRef fileString;
 	fileString = (CFStringRef)documentsDirectory;
 	
-	CFStringGetCString(fileString, _defaultHomePath, MAX_PATH_SIZE, kCFStringEncodingASCII);
+	CFStringGetCString(fileString, _defaultHomePathA, MAX_PATH_SIZE, kCFStringEncodingASCII);
 	//fprintf(stdout, "%s", _defaultHomePath);
 	
-	return _defaultHomePath;
+	return _defaultHomePathA;
 }
 
 #endif // _IPHONE_

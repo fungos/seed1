@@ -56,14 +56,14 @@ class SEED_CORE_API FileSystem : public IFileSystem
 	public:
 		virtual BOOL Open(const char *pFname, File *file, IMemoryPool *pool = pDefaultPool);
 		virtual u32 GetLength() const;
-		virtual void MakeDirectory(const wchar_t *dir) const;
+		virtual void MakeDirectory(const FilePath *dir) const;
 
 		// IModule
 		virtual BOOL Initialize();
 		virtual BOOL Reset();
 		virtual BOOL Shutdown();
 
-		virtual void SetWorkDirectory(const wchar_t *dir);
+		virtual void SetWorkDirectory(const FilePath *dir);
 
 	private:
 		SEED_DISABLE_COPY(FileSystem);

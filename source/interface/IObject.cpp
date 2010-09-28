@@ -35,6 +35,7 @@
 */
 
 #include "interface/IObject.h"
+#include "MemoryManager.h"
 
 namespace Seed {
 
@@ -44,6 +45,16 @@ IObject::IObject()
 
 IObject::~IObject()
 {
+}
+
+void *IObject::operator new(size_t len)
+{
+	return pDefaultPool->Alloc(len, "operator new", "IObject");
+}
+
+void IObject::operator delete(void *p)
+{
+	pDefaultPool->Free(p);
 }
 
 } // namespace

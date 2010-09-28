@@ -72,8 +72,8 @@ BOOL FileSystem::Initialize()
 	if (!this->pWorkDir)
 	{
 		char outdir[1024];
-		wchar_t dir[1024];
-		wchar_t dir2[1024];
+		FilePath dir[1024];
+		FilePath dir2[1024];
 		memset(dir2, '\0', 1024);
 		memset(dir, '\0', 1024);
 		memset(outdir, '\0', 1024);
@@ -83,8 +83,11 @@ BOOL FileSystem::Initialize()
 		_snwprintf(dir2, 1024, L"%s\\%s\\", dir, FILESYSTEM_DEFAULT_PATH_WIDE);
 		for (u32 i = 0; i < 1024; i++) // for print purpose only...
 			outdir[i] = (char)dir[i];
-#else
+#elif #defined(_QT_)
 		snprintf((char *)dir2, 1024, "%S/%s/", dir, FILESYSTEM_DEFAULT_PATH);
+		memcpy(outdir, dir, 1024);
+#else
+		snprintf((char *)dir2, 1024, "%s/%s/", dir, FILESYSTEM_DEFAULT_PATH);
 		memcpy(outdir, dir, 1024);
 #endif
 
@@ -146,7 +149,8 @@ void *FileSystem::Read(const char *fname, IMemoryPool *pool, u32 *length)
 		this->iLastLength = ftell(fp);
 		fseek(fp, 0L, SEEK_SET);
 
-		void *buff = pMemoryManager->Alloc(this->iLastLength, pool, "File", fname);
+		void *buff = pMemoryManager->Alloc(this->iLastLength, pool, fname, "File");
+		ASSERT_MSG(buff != NULL, "ERROR: Out of memory - trying to load file.");
 
 		u32 total = fread(buff, 1, iLastLength, fp);
 		fclose(fp);
@@ -174,7 +178,7 @@ INLINE u32 FileSystem::GetLength() const
 	return iLastLength;
 }
 
-INLINE void FileSystem::SetWorkDirectory(const wchar_t *dir)
+INLINE void FileSystem::SetWorkDirectory(const FilePath *dir)
 {
 	IFileSystem::SetWorkDirectory(dir);
 	if (change_directory(dir))
@@ -187,7 +191,7 @@ INLINE void FileSystem::SetWorkDirectory(const wchar_t *dir)
 	}
 }
 
-INLINE void FileSystem::MakeDirectory(const wchar_t *dir) const
+INLINE void FileSystem::MakeDirectory(const FilePath *dir) const
 {
 	create_directory(dir);
 }

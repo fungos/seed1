@@ -6,9 +6,13 @@
 #include "interface/IGameApp.h"
 
 #import <UIKit/UIKit.h>
+
 #import <OpenGLES/EAGL.h>
+
 #import <OpenGLES/ES1/gl.h>
 #import <OpenGLES/ES1/glext.h>
+#import <OpenGLES/ES2/gl.h>
+#import <OpenGLES/ES2/glext.h>
 
 /*
 This class wraps the CAEAGLLayer from CoreAnimation into a convenient UIView subclass.
@@ -23,9 +27,17 @@ Note that setting the view non-opaque will only work if the EAGL surface has an 
 
 @interface AppView : UIView
 {
+	enum eiOSOpenGLVersion
+	{
+		OpenGLES1,
+		OpenGLES2,
+		OpenGLFailed,
+	};
+	
 	@private
 		EAGLContext *context;
 		NSTimer *updateTimer;
+		eiOSOpenGLVersion iOSOpenGLVersion;
 }
 
 - (void)Start;
@@ -38,6 +50,7 @@ Note that setting the view non-opaque will only work if the EAGL surface has an 
 - (void)ContextPresentRenderBuffer;
 - (EAGLContext *)GetContext;
 - (void)SetContext:(EAGLContext *)context;
+- (eiOSOpenGLVersion)iOSOpenGLVersion;
 
 @end
 
@@ -51,8 +64,8 @@ void iphContextPresentRenderBuffer();
 EAGLContext *iphGetContext();
 void iphSetContext(EAGLContext *c);
 
-const char *iphGetRootPath();
-const char *iphGetHomePath();
+const FilePath *iphGetRootPath();
+const FilePath *iphGetHomePath();
 
 namespace Seed {
 	void SetGameApp(IGameApp *app);
