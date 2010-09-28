@@ -101,7 +101,9 @@ void WidgetContainer::Reset()
 
 void WidgetContainer::Update(f32 dt)
 {
-	WidgetIterator it = vWidget.begin();
+	UNUSED(dt);
+
+	/*WidgetIterator it = vWidget.begin();
 	WidgetIterator end = vWidget.end();
 	for (; it != end; ++it)
 	{
@@ -109,7 +111,7 @@ void WidgetContainer::Update(f32 dt)
 		ASSERT_NULL(w);
 
 		w->Update(dt);
-	}
+	}*/
 
 	std::sort(vWidget.begin(), vWidget.end(), ITransformable2DDescendingPrioritySort());
 }

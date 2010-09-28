@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -45,7 +45,7 @@
 #if defined(_IPHONE_)
 	#include "platform/pc/PcRendererDevice.h"
 	#include "api/ogl/OglES1RendererDevice.h"
-	
+
 	using namespace Seed::PC;
 #endif
 
@@ -85,8 +85,11 @@
 #endif // _SDL_
 
 #if defined(_QT_)
-	#include "platform/qt/QtRendererDevice.h"
-	using namespace Seed::QT;
+//	#include "platform/qt/QtRendererDevice.h"
+	#include "platform/pc/PcRendererDevice.h"
+	#include "api/ogl/Ogl14RendererDevice.h"
+	using namespace Seed::PC;
+	//using namespace Seed::QT;
 #endif
 
 #endif // __RENDERER_DEVICE_H__

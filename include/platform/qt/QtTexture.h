@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -48,7 +48,7 @@
 
 namespace Seed { namespace QT {
 
-IResource *TextureResourceLoader(const char *filename, ResourceManager *res = &glResourceManager, IMemoryPool *pool = pDefaultPool);
+IResource *TextureResourceLoader(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 
 class Texture : public ITexture
 {
@@ -60,41 +60,46 @@ class Texture : public ITexture
 		virtual ~Texture();
 
 		// ITexture
-		virtual BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool);
-		virtual BOOL Load(u32 width, u32 height, PIXEL *buffer, IMemoryPool *pool = pDefaultPool);
-		virtual BOOL Unload();
-
 		virtual const void *GetData() const;
 		virtual void PutPixel(u32 x, u32 y, PIXEL px);
 		virtual PIXEL GetPixel(u32 x, u32 y) const;
 		virtual u8 GetPixelAlpha(u32 x, u32 y) const;
 
-		virtual f32 GetWidth() const;
-		virtual f32 GetHeight() const;
-		virtual u32 GetWidthInPixel() const;
-		virtual u32 GetHeightInPixel() const;
+		virtual u32 GetBytesPerPixel() const;
+		virtual void *GetTextureName();
 
-		virtual BOOL Reset();
+		virtual void Update(PIXEL *buffer);
+		virtual void Reset();
+		virtual BOOL Load(u32 width, u32 height, PIXEL *buffer, u32 texWidth, u32 texHeight);
+
+		virtual u32 GetAtlasWidthInPixel() const;
+		virtual u32 GetAtlasHeightInPixel() const;
 
 		// IResource
+		using IResource::Load;
+		virtual BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool);
+		virtual BOOL Unload();
 		virtual u32 GetUsedMemory() const;
-		int LoadTexture();
 
 	protected:
-		int GetTexture();
 		void UnloadTexture();
 
 	private:
 		SEED_DISABLE_COPY(Texture);
 
 	private:
-		IMemoryPool *pPool;
 		QImage image;
-
 		u32 iTextureId;
 
-		s32 iHalfWidth;
-		s32 iHalfHeight;
+		u32 iBytesPerPixel;
+		u32 iPitch;
+
+		u32 iAtlasWidth;
+		u32 iAtlasHeight;
+
+#if defined(DEBUG)
+		u32 iReserveLen;
+#endif
 };
 
 }} // namespace

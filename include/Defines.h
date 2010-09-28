@@ -205,6 +205,7 @@ union uPixel
 
 #else
 	#define SEED_ABSTRACT_METHOD
+	#define SEED_DEPRECATED_METHOD
 
 	#define SEED_DISABLE_INSTANCING		protected: \
 											void *operator new(size_t len); \

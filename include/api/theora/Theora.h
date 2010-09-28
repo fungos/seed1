@@ -63,15 +63,18 @@
 	#define SEM_CLEAR(p)		p = 0
 	typedef void*				semaphore;
 #else
-	#warning "Qt Semaphores not tested!"
+	#if !defined(QT_SEM_WARNING)
+		#warning "Qt Semaphores not tested!"
+		#define QT_SEM_WARNING 1
+	#endif
 	#include <QtCore>
-	#define SEM_CREATE(p, s)
-	#define SEM_SIGNAL(p)		p.release()
-	#define SEM_CLOSE(p)
-	#define SEM_WAIT(p)			p.acquire()
-	#define SEM_CHECK(p)
-	#define SEM_CLEAR(p)
-	typedef QSemaphore			semaphore;
+	#define SEM_CREATE(p, s)	{}
+	#define SEM_SIGNAL(p)		p->release()
+	#define SEM_CLOSE(p)		{}
+	#define SEM_WAIT(p)			p->acquire()
+	#define SEM_CHECK(p)		if (p)
+	#define SEM_CLEAR(p)		{}
+	typedef QSemaphore			*semaphore;
 /*
 	#include <semaphore.h>
 	#if defined(__FreeBSD__)

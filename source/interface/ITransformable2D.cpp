@@ -46,10 +46,10 @@ ITransformable2D::ITransformable2D()
 	, ptPos(0.0f, 0.0f)
 	, ptLocalPos(0.0f, 0.0f)
 	, ptScale(1.0f, 1.0f)
-	, fWidth(0.0f)
-	, fHeight(0.0f)
 	, fRotation(0.0f)
 	, iPriority(0)
+	, fWidth(0.0f)
+	, fHeight(0.0f)
 {
 }
 

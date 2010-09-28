@@ -94,7 +94,6 @@ class Screen : public IScreen
 		};
 
 	public:
-		virtual void Setup(u32 mode = SCREEN_AUTODETECTFS);
 		virtual void FadeOut();
 		virtual void FadeIn();
 		virtual void CancelFade();
@@ -148,9 +147,7 @@ class Screen : public IScreen
 		//QColor		cBackgroundColor;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Screen);
-}
+#define pScreen Screen::GetInstance()
 
 }} // namespace
 

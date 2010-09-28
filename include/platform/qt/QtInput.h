@@ -103,9 +103,7 @@ class Input : public IInput, public IInputPointer, public IInputKeyboard
 		eKey TranslateKey(u32 key);
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(Input);
-}
+#define pInput Input::GetInstance()
 
 }} // namespace
 

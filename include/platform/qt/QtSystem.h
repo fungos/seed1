@@ -53,12 +53,12 @@ class System : public ISystem
 		virtual void GoToMenu();
 		virtual void Sleep();
 		virtual void OnHomeCalled();
-		virtual void WaitForRetrace(ISystem::eFrameRate rate);
-		virtual void SetFrameRate(ISystem::eFrameRate rate);
+		virtual void WaitForRetrace(eSystemFrameRate rate);
+		virtual void SetFrameRate(eSystemFrameRate rate);
 		virtual void HangUp();
 		virtual void GoToDataManager();
 
-		virtual ISystem::eFrameRate GetFrameRate();
+		virtual eSystemFrameRate GetFrameRate();
 
 		virtual BOOL IsShuttingDown() const;
 		virtual BOOL IsResetting() const;
@@ -87,7 +87,7 @@ class System : public ISystem
 
 	private:
 		u32 		iRetraceCount;
-		eFrameRate 	iFrameRate;
+		eSystemFrameRate iFrameRate;
 		BOOL 		bShutdown;
 		f32 		fElapsedTime;
 		u64 		iLastFrameTime;
@@ -96,9 +96,7 @@ class System : public ISystem
 		QWidget		*pWidget;
 };
 
-extern "C" {
-SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(System);
-}
+#define pSystem System::GetInstance()
 
 }} // namespace
 
