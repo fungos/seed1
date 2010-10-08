@@ -95,7 +95,22 @@ class SEED_CORE_API Configuration : public IObject
 			\returns a const char * string;
 		 */
 		const char *GetApplicationDescription() const;
-
+		
+		//! Set the maximum radius for distance based widget collision
+		/*!
+			Set the maximum radius from widget center to consider
+			a widget collision when no collision happens by pixel or rect.
+			Useful for touch devices with finger based input.
+		 */
+		void SetInputDistanceRadius(f32 dist);
+		
+		//! Get the maximum radius for distance based widget collision
+		/*!
+			Returns the maximum radius from widget center to consider
+			a widget collision when no collision happens by pixel or rect.
+			Useful for touch devices with finger based input.
+		 */
+		f32 GetInputDistanceRadius() const;
 
 		void SetPlatformSimulation(ePlatformSimulation platform);
 		ePlatformSimulation GetPlatformSimulation() const;
@@ -145,6 +160,8 @@ class SEED_CORE_API Configuration : public IObject
 		// General
 		ePlatformSimulation iPlatformSimulation;
 		eRendererDeviceType iRendererDeviceType;
+		
+		f32 iInputRadius;
 };
 
 } // namespace

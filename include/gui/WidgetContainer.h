@@ -61,6 +61,7 @@ class SEED_CORE_API WidgetContainer : public IWidget
 		virtual void Remove(IWidget *widget);
 
 		virtual BOOL IsEventConsumed() const;
+		virtual IWidget *FindNearestByRadius(f32 radius, const EventInputPointer *ev) const;
 
 		// ITransformable2D
 		virtual void SetDisabled(BOOL b);
@@ -88,7 +89,8 @@ class SEED_CORE_API WidgetContainer : public IWidget
 	private:
 		typedef std::vector<IWidget *> WidgetVector;
 		typedef WidgetVector::iterator WidgetIterator;
-
+		typedef WidgetVector::const_iterator WidgetIteratorConst;
+		
 		BOOL bEventConsumed;
 
 		WidgetVector vWidget;

@@ -44,6 +44,7 @@
 #include "Screen.h"
 #include "platform/iphone/IphoneView.h"
 #include "EventInputPointer.h"
+#include "Timer.h"
 
 #define TAG "[Input] "
 
@@ -79,7 +80,7 @@ INLINE BOOL Input::Initialize()
 }
 
 BOOL Input::Update(f32 delta)
-{
+{		
 	UNUSED(delta);
 	for (u32 i = 0; i < PLATFORM_MAX_INPUT; i++)
 	{

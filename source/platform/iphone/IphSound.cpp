@@ -147,6 +147,7 @@ INLINE u32 Sound::GetUsedMemory() const
 
 void Sound::ReadData(const char *file)
 {
+	//Info("SOUND: %s", file);
 	OSStatus					err = noErr;
 	UInt64                      fileDataSize = 0;
 	AudioStreamBasicDescription theFileFormat;
@@ -200,7 +201,9 @@ void Sound::ReadData(const char *file)
 	theData = pMemoryManager->Alloc(dataSize, pPool, "Sound Data", "Sound");
 	if (theData)
 	{
-		AudioFileReadBytes(afid, false, 0, &dataSize, theData);
+		//Info("AudioFileReadBytes: %x, false, 0, %d, theData", afid, dataSize);
+		err = AudioFileReadBytes(afid, false, 0, &dataSize, theData);
+		//Info("AudioFileReadBytes: %x, false, 0, %d, theData = %d", afid, dataSize, result); 
 
 		if (err == noErr)
 		{

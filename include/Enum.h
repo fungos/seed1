@@ -101,11 +101,12 @@ enum eLanguage
 */
 enum eSystemFrameRate
 {
+	FrameRateLockAt120 = 120, /*!< 120 Frames per second. */
 	FrameRateLockAt60 = 60, /*!< 60 Frames per second. */
 	FrameRateLockAt30 = 30, /*!< 30 Frames per second. */
 	FrameRateLockAt20 = 20, /*!< 20 Frames per second. */
 	FrameRateLockAt15 = 15, /*!< 15 Frames per second. */
-	FrameRateUnlocked = 10000 /*!< 100 or more frames per second. */
+	FrameRateUnlocked = 1000 /*!< 120 or more frames per second. */
 };
 
 //! Platform Simulation
