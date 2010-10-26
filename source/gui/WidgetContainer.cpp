@@ -101,7 +101,9 @@ void WidgetContainer::Reset()
 
 void WidgetContainer::Update(f32 dt)
 {
-	WidgetIterator it = vWidget.begin();
+	UNUSED(dt);
+
+	/*WidgetIterator it = vWidget.begin();
 	WidgetIterator end = vWidget.end();
 	for (; it != end; ++it)
 	{
@@ -109,7 +111,7 @@ void WidgetContainer::Update(f32 dt)
 		ASSERT_NULL(w);
 
 		w->Update(dt);
-	}
+	}*/
 
 	std::sort(vWidget.begin(), vWidget.end(), ITransformable2DDescendingPrioritySort());
 }
@@ -194,6 +196,47 @@ INLINE BOOL WidgetContainer::IsEventConsumed() const
 	return bEventConsumed;
 }
 
+IWidget *WidgetContainer::FindNearestByRadius(f32 radius, const EventInputPointer *ev) const
+{
+	WidgetIteratorConst it = vWidget.begin();
+	WidgetIteratorConst end = vWidget.end();
+	
+	IWidget *nearest = NULL;
+	f32 distance = radius;
+	
+	f32 x = ev->GetX();
+	f32 y = ev->GetY();
+	
+	for (; it != end; ++it)
+	{
+		IWidget *w = (*it);
+		ASSERT_NULL(w);
+
+		if (w->IsDisabled())
+			continue;
+
+		if (!(w->GetTrigger() & ev->GetPressed()))
+			continue;
+
+		if (w->GetState() == Seed::WidgetStateDrag)
+			continue;
+
+		f32 wX = w->GetX() + (w->GetWidth() / 2.0f);
+		f32 wY = w->GetY() + (w->GetHeight() / 2.0f);
+		Point2f wp((x * x) - (wX * wX), (y * y)-(wY * wY));
+
+		f32 dX = wp.SquareLength();
+		
+		if (dX < distance)
+		{
+			distance = dX;
+			nearest = w;
+		}
+	}
+	
+	return nearest;
+}
+
 void WidgetContainer::OnInputPointerPress(const EventInputPointer *ev)
 {
 	ASSERT_NULL(ev);
@@ -201,6 +244,10 @@ void WidgetContainer::OnInputPointerPress(const EventInputPointer *ev)
 	WidgetIterator it = vWidget.begin();
 	WidgetIterator end = vWidget.end();
 
+	f32 cX = ev->GetX();
+	f32 cY = ev->GetY();
+	BOOL found = FALSE;
+	
 	for (; it != end; ++it)
 	{
 		IWidget *w = (*it);
@@ -210,9 +257,6 @@ void WidgetContainer::OnInputPointerPress(const EventInputPointer *ev)
 
 		if (w->IsDisabled())
 			continue;
-
-		f32 cX = ev->GetX();
-		f32 cY = ev->GetY();
 
 		if (!w->ContainsPoint(cX, cY))
 			continue;
@@ -238,6 +282,8 @@ void WidgetContainer::OnInputPointerPress(const EventInputPointer *ev)
 		{
 			continue;
 		}
+		
+		found = TRUE;
 
 		const EventWidget newEvent(w, NULL, WidgetEventPressed, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
 
@@ -260,6 +306,52 @@ void WidgetContainer::OnInputPointerPress(const EventInputPointer *ev)
 		bEventConsumed = newEvent.IsConsumed();
 		if (bEventConsumed)
 			break;
+	}
+
+	if (!found) // avoid call
+	{
+		// If no widget have collision, then we try distance based input;
+		f32 maxDist = pConfiguration->GetInputDistanceRadius();
+		if (maxDist)
+		{
+			IWidget *nearest = this->FindNearestByRadius(maxDist, ev);
+			if (nearest)
+			{
+				IWidget *w = nearest;
+				if (w->GetObjectType() == Seed::ObjectGuiWidgetContainer)
+				{
+					WidgetContainer *wc = reinterpret_cast<WidgetContainer *>(w);
+					wc->OnInputPointerPress(ev);
+
+					bEventConsumed = wc->IsEventConsumed();
+					if (bEventConsumed)
+						return;
+				}
+
+				u32 j = ev->GetJoystick();
+
+				const EventWidget newEvent(w, NULL, WidgetEventPressed, j, cX, cY, ev->GetPressed(), ev->GetHold(), ev->GetReleased());
+
+				LOG(">PRESSED_OVER [id: %d]", w->GetId());
+				// GetState eh o baseado em prioridade a partir de todos os inputs.
+				if (w->GetState() != Seed::WidgetStatePressedOver && w->GetPlayerState(j) != Seed::WidgetStatePressedOver)
+				{
+					// muda apenas o estado interno do widget
+					LOG("\tEstado WIDGET");
+					w->OnWidgetPress(&newEvent);
+				}
+
+				w->SetState(Seed::WidgetStatePressed);
+				w->SetPlayerState(Seed::WidgetStatePressedOver, j);
+				LOG("\tEstado PLAYER");
+
+				w->SendOnPress(&newEvent);
+				LOG("\tEvento");
+				bEventConsumed = newEvent.IsConsumed();
+				if (bEventConsumed)
+					return;
+			}
+		}
 	}
 }
 

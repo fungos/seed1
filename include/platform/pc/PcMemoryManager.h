@@ -50,19 +50,27 @@
 
 #define MB60	(u32)(59 * 1024 * 1024)
 #define MB20	(u32)(19 * 1024 * 1024)
+#define MB10	(u32)(13 * 1024 * 1024)
 
 namespace Seed { namespace PC {
 
+extern "C" {
+SEED_CORE_API extern PcMemoryPool *pDefaultPool;
+SEED_CORE_API extern PcMemoryPool *pLargePool;
+}
+
 class SEED_CORE_API MemoryManager : public IMemoryManager
 {
-	SEED_SINGLETON_DECLARE(MemoryManager);
+ 	SEED_SINGLETON_DECLARE(MemoryManager);
 
 	public:
+		virtual void *Alloc(SIZE_T len, IMemoryPool *pool = pDefaultPool, const char *desc = "Unknown", const char *owner = "Nobody");
+		virtual void Free(void *ptr, IMemoryPool *pool = pDefaultPool);
+		virtual void Info();
+		
+		virtual IMemoryPool *CreatePool(u32 len, const char *name);
 		virtual u32 GetFreeMemory() const;
 
-		virtual void *Alloc(SIZE_T len, IMemoryPool *pool = &defaultPool, const char *desc = "Unknown", const char *owner = "Nobody");
-		virtual void Free(void *ptr, IMemoryPool *pool = &defaultPool);
-		virtual void Info();
 		virtual void Reserve(SIZE_T len, IMemoryPool *pool);
 		virtual void Unreserve(SIZE_T len, IMemoryPool *pool);
 
@@ -71,22 +79,11 @@ class SEED_CORE_API MemoryManager : public IMemoryManager
 		virtual BOOL Reset();
 		virtual BOOL Shutdown();
 
-	public:
-		static DefaultMemoryPool defaultPool;
-		static LargeMemoryPool largePool;
-
 	private:
 		SEED_DISABLE_COPY(MemoryManager);
 };
 
-
 #define pMemoryManager MemoryManager::GetInstance()
-
-extern "C" {
-SEED_CORE_API extern DefaultMemoryPool *const pDefaultPool;
-SEED_CORE_API extern LargeMemoryPool *const pLargePool;
-}
-
 
 }} // namespace
 

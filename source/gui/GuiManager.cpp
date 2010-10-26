@@ -74,6 +74,7 @@ INLINE BOOL GuiManager::Initialize()
 INLINE BOOL GuiManager::Reset()
 {
 	this->pFocused = NULL;
+	cContainer.Reset();
 	return TRUE; // abstract IModule::Reset();
 }
 
@@ -85,7 +86,7 @@ INLINE BOOL GuiManager::Shutdown()
 
 INLINE BOOL GuiManager::Update(f32 dt)
 {
-	//cContainer.Update(dt);
+	cContainer.Update(dt);
 	return TRUE;
 }
 

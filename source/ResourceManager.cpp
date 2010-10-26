@@ -82,7 +82,7 @@ INLINE void ResourceManager::Reset()
 
 	for (; it != itEnd; ++it)
 	{
-		//LOG(TAG "Deallocating %s.", (*it).first);
+		LOG(TAG "Deallocating %s.", (*it).first);
 		Delete((*it).second);
 	}
 
@@ -132,7 +132,7 @@ void ResourceManager::GarbageCollect()
 	ResourceIterator it = mapResources.begin();
 	ResourceIterator itEnd = mapResources.end();
 
-	LOG(TAG "Starting garbage collection in '%s'...", pcName);
+	//LOG(TAG "Starting garbage collection in '%s'...", pcName);
 
 #if defined(DEBUG)
 	u64 begin = pTimer->GetMilliseconds();
@@ -146,7 +146,7 @@ void ResourceManager::GarbageCollect()
 		u32 r = res->GetReferenceCount();
 		if (!r)
 		{
-			LOG(TAG "\tdeleting %s from [%s].", (*it).first, pcName);
+			//LOG(TAG "\tdeleting %s from [%s].", (*it).first, pcName);
 			mapResources.erase(it++);
 			Delete(res);
 
@@ -158,9 +158,6 @@ void ResourceManager::GarbageCollect()
 		}
 	}
 
-/*
-FIXME: 30-10-2008 | BUG | MAJOR | CORE | Resources sendo liberados que liberarem resources iram deixar resources sem referencia. Workaround para remover. | Danny Angelo Carminati Grein
-*/
 	if (bHasUnusedResource)
 	{
 		bHasUnusedResource = FALSE;
@@ -173,6 +170,7 @@ FIXME: 30-10-2008 | BUG | MAJOR | CORE | Resources sendo liberados que liberarem
 	LOG(TAG "Resources inside '%s': ", pcName);
 	this->Print();
 #endif // DEBUG
+
 }
 
 INLINE void ResourceManager::Unload(Seed::eObjectType resourceType)
@@ -180,7 +178,6 @@ INLINE void ResourceManager::Unload(Seed::eObjectType resourceType)
 	ResourceIterator it = mapResources.begin();
 	ResourceIterator itEnd = mapResources.end();
 
-	//u32 total = 0;
 	for (; it != itEnd; ++it)
 	{
 		IResource *res = (*it).second;
@@ -198,7 +195,6 @@ INLINE void ResourceManager::Reload(Seed::eObjectType resourceType)
 	ResourceIterator it = mapResources.begin();
 	ResourceIterator itEnd = mapResources.end();
 
-	//u32 total = 0;
 	for (; it != itEnd; ++it)
 	{
 		IResource *res = (*it).second;

@@ -101,5 +101,10 @@ INLINE BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 }
 */
 
+INLINE const char *IResource::GetFilename() const
+{
+	return pFilename;
+}
+
 } // namespace
 

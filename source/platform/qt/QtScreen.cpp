@@ -58,7 +58,6 @@ Scene *Screen::pScene = NULL;
 
 Screen::Screen()
 {
-	iMode = SCREEN_AUTODETECTFS;
 	this->Reset();
 }
 
@@ -75,126 +74,58 @@ BOOL Screen::Reset()
 	return TRUE;
 }
 
-void Screen::Setup(u32 mode)
+void Screen::PrepareMode()
 {
-	this->iMode = mode;
-	this->iWidth = 800;
-	this->iHeight = 600;
+	iWidth = 800;
+	iHeight = 600;
+	iFlags = 0;
+	iBPP = 32;
 
-	switch (mode)
+	switch (nMode)
 	{
-		case SCREEN_AUTODETECTW:
+		case Video_480x272:
 		{
-			this->iWidth = 800;
-			this->iHeight = 600;
+			iWidth = 480;
+			iHeight = 272;
 		}
 		break;
 
-		case SCREEN_AUTODETECTFS:
+		case Video_iPhonePortrait:
 		{
-			this->iWidth = 800;
-			this->iHeight = 600;
+			iWidth = 320;
+			iHeight = 480;
 		}
 		break;
 
-		case SCREEN_320X240X32W_OPENGL:
+		case Video_iPhoneLandscape:
+		case Video_iPhoneLandscapeGoofy:
+		case Video_480x320:
 		{
-			this->iWidth = 320;
-			this->iHeight = 240;
+			iWidth = 480;
+			iHeight = 320;
 		}
 		break;
 
-		case SCREEN_PSP:
-		case SCREEN_480x272x32W_OPENGL:
+		case Video_NintendoWii:
+		case Video_640x480:
 		{
-			this->iWidth = 480;
-			this->iHeight = 272;
+			iWidth = 640;
+			iHeight = 480;
 		}
 		break;
 
-		case SCREEN_IPHONE:
-		case SCREEN_480x320x32W_OPENGL:
+		case Video_AutoDetect:
+		case Video_800x600:
 		{
-			this->iWidth = 480;
-			this->iHeight = 320;
+			iWidth = 800;
+			iHeight = 600;
 		}
 		break;
 
-		case SCREEN_640X480X32W_OPENGL:
+		case Video_1024x768:
 		{
-			this->iWidth = 640;
-			this->iHeight = 480;
-		}
-		break;
-
-		case SCREEN_WII:
-		case SCREEN_800X600X32W_OPENGL:
-		{
-			this->iWidth = 800;
-			this->iHeight = 600;
-		}
-		break;
-
-		case SCREEN_1024X768X32W_OPENGL:
-		{
-			this->iWidth = 1024;
-			this->iHeight = 768;
-		}
-		break;
-
-		case SCREEN_2048X1024X32W_OPENGL:
-		{
-			this->iWidth = 2048;
-			this->iHeight = 1024;
-		}
-		break;
-
-		case SCREEN_320X240X32FS_OPENGL:
-		{
-			this->iWidth = 320;
-			this->iHeight = 240;
-		}
-		break;
-
-		case SCREEN_480x272x32FS_OPENGL:
-		{
-			this->iWidth = 480;
-			this->iHeight = 272;
-		}
-		break;
-
-		case SCREEN_480x320x32FS_OPENGL:
-		{
-			this->iWidth = 480;
-			this->iHeight = 320;
-		}
-		break;
-
-		case SCREEN_640X480X32FS_OPENGL:
-		{
-			this->iWidth = 640;
-			this->iHeight = 480;
-		}
-		break;
-
-		case SCREEN_800X600X32FS_OPENGL:
-		{
-			this->iWidth = 800;
-			this->iHeight = 600;
-		}
-		break;
-
-		case SCREEN_1024X768X32FS_OPENGL:
-		{
-			this->iWidth = 1024;
-			this->iHeight = 768;
-		}
-		break;
-
-		case SCREEN_2048X1024X32FS_OPENGL:
-		{
-			this->iWidth = 2048;
-			this->iHeight = 1024;
+			iWidth = 1024;
+			iHeight = 768;
 		}
 		break;
 
@@ -204,30 +135,24 @@ void Screen::Setup(u32 mode)
 	}
 }
 
-void Screen::PrepareMode()
-{
-	iFlags = 0;
-	iBPP = 32;
-}
-
 BOOL Screen::Initialize()
 {
 	Log(TAG "Initializing...");
 	IModule::Initialize();
-	if (!this->pScene)
-		this->pScene = New(Scene(iWidth, iHeight));
-
-	this->Reset();
-	this->bFading		= FALSE;
-
-	this->CreateHardwareSurfaces();
 	this->PrepareMode();
 
+	if (!pScene)
+		pScene = New(Scene(iWidth, iHeight));
+
+	this->Reset();
+	this->CreateHardwareSurfaces();
+
 	Log(TAG "Video resolution is %dx%dx%d.", iWidth, iHeight, iBPP);
+	Log(TAG "Initialization completed.");
 
 	bFullScreen = FALSE;
+	bFading = FALSE;
 
-	Log(TAG "Initialization completed.");
 	return TRUE;
 }
 

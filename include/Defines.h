@@ -205,6 +205,7 @@ union uPixel
 
 #else
 	#define SEED_ABSTRACT_METHOD
+	#define SEED_DEPRECATED_METHOD
 
 	#define SEED_DISABLE_INSTANCING		protected: \
 											void *operator new(size_t len); \
@@ -264,12 +265,12 @@ union uPixel
 #define SEED_DISABLE_INSTANCING_IMPL(Class)	\
 										INLINE void *Class::operator new(size_t len) \
 										{ \
-											return pMemoryManager->Alloc(len); \
+											return pMemoryManager->Alloc(len, pDefaultPool, "operator new", #Class); \
 										} \
 										 \
 										INLINE void Class::operator delete(void *ptr) \
 										{ \
-											pMemoryManager->Free(ptr); \
+											pMemoryManager->Free(ptr, pDefaultPool); \
 										}
 
 #define SEED_FORWARD_DECLARATION(Class) namespace Seed { class Class; }

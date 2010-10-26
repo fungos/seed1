@@ -72,13 +72,13 @@ ISprite::ISprite()
 	, iHalfHeight(0)
 	, iWidth(0)
 	, iHeight(0)
-	, pRes(NULL)
-	, pPool(NULL)
-	, pFilename(NULL)
 	, fTexS0(0.0f)
 	, fTexS1(0.0f)
 	, fTexT0(0.0f)
 	, fTexT1(0.0f)
+	, pRes(NULL)
+	, pPool(NULL)
+	, pFilename(NULL)
 {
 	iNumVertices = 4;
 }
@@ -194,8 +194,7 @@ INLINE void ISprite::ReconfigureFrame()
 {
 	ASSERT_NULL(pFrameImage);
 
-	fCurrentFrameRate = 1.0f / static_cast<f32>(pFrame->iTime); // FIXME: iTime default value must be 1 not 0. <- division by zero
-
+	fCurrentFrameRate = static_cast<f32>(pFrame->iTime) * (1.0f / (f32)pConfiguration->GetFrameRate());
 	if (pFrame->iWidth == 0)
 		iWidth = pFrameImage->GetWidthInPixel();
 	else
@@ -347,7 +346,8 @@ INLINE void ISprite::Stop()
 INLINE void ISprite::Play()
 {
 	//iCurrentFrameTime = pFrame->iTime;
-	fCurrentFrameRate = 1.0f / static_cast<f32>(pFrame->iTime);
+	//fCurrentFrameRate = 1.0f / pConfiguration->GetFrameRate() / static_cast<f32>(pFrame->iTime);
+	fCurrentFrameRate = static_cast<f32>(pFrame->iTime) * (1.0f / (f32)pConfiguration->GetFrameRate());
 	bPlaying = TRUE;
 	bChanged = TRUE;
 }
@@ -443,9 +443,9 @@ void ISprite::Update(f32 delta)
 	{
 		fFrameTime += delta;
 
-		if (fFrameTime > this->fCurrentFrameRate)
+		if (fFrameTime > fCurrentFrameRate)
 		{
-			fFrameTime -= this->fCurrentFrameRate;
+			fFrameTime -= fCurrentFrameRate;
 
 			if (iCurrentFrame + 1 == iFrames)
 			{

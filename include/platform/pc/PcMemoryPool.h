@@ -61,7 +61,7 @@ class SEED_CORE_API PcMemoryPool : public IMemoryPool
 	friend class MemoryManager;
 
 	public:
-		PcMemoryPool(u32 size);
+		PcMemoryPool(u32 size, const char *name);
 		virtual void *Alloc(SIZE_T len, const char *desc, const char *owner);
 		virtual void Free(void *ptr);
 		virtual u32 GetFreeMemory() const;
@@ -76,34 +76,6 @@ class SEED_CORE_API PcMemoryPool : public IMemoryPool
 
 	private:
 		YMANAGER_VAR;
-};
-
-class SEED_CORE_API DefaultMemoryPool : public PcMemoryPool
-{
-	friend class MemoryManager;
-
-	public:
-		DefaultMemoryPool(u32 size);
-
-	protected:
-		virtual ~DefaultMemoryPool();
-
-	private:
-		SEED_DISABLE_COPY(DefaultMemoryPool);
-};
-
-class SEED_CORE_API LargeMemoryPool : public PcMemoryPool
-{
-	friend class MemoryManager;
-
-	public:
-		LargeMemoryPool(u32 size);
-
-	protected:
-		virtual ~LargeMemoryPool();
-
-	private:
-		SEED_DISABLE_COPY(LargeMemoryPool);
 };
 
 }} // namespace

@@ -51,6 +51,9 @@ class SEED_CORE_API IObject
 		IObject();
 		virtual ~IObject();
 
+		void *operator new(size_t len);
+		void operator delete(void *p);
+
 		virtual const char *GetObjectName() const = 0;
 		virtual int GetObjectType() const = 0;
 

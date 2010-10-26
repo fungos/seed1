@@ -43,6 +43,7 @@ IMemoryPool::IMemoryPool()
 	: iAllocations(0)
 	, iTotalAllocations(0)
 	, iReserved(0)
+	, pcName("")
 {
 }
 

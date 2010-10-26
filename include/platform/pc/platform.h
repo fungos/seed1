@@ -34,13 +34,13 @@
 
 #include "Defines.h"
 
-BOOL create_directory(const wchar_t *path);
-const wchar_t *get_user_name();
-const wchar_t *get_user_appdata_folder();
-const wchar_t *get_user_savegame_folder();
-const wchar_t *get_user_home_folder();
-void get_current_directory(wchar_t *buff, int size);
-BOOL change_directory(const wchar_t *to);
+BOOL create_directory(const FilePath *path);
+const FilePath *get_user_name();
+const FilePath *get_user_appdata_folder();
+const FilePath *get_user_savegame_folder();
+const FilePath *get_user_home_folder();
+void get_current_directory(FilePath *buff, int size);
+BOOL change_directory(const FilePath *to);
 void print_system_info();
 BOOL system_check_multiple_instance(bool warn);
 

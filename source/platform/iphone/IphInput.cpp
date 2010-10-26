@@ -44,6 +44,7 @@
 #include "Screen.h"
 #include "platform/iphone/IphoneView.h"
 #include "EventInputPointer.h"
+#include "Timer.h"
 
 #define TAG "[Input] "
 
@@ -79,7 +80,7 @@ INLINE BOOL Input::Initialize()
 }
 
 BOOL Input::Update(f32 delta)
-{
+{		
 	UNUSED(delta);
 	for (u32 i = 0; i < PLATFORM_MAX_INPUT; i++)
 	{
@@ -312,11 +313,13 @@ INLINE f32 Input::GetRelativeY(u16 joystick) const
 
 INLINE f32 Input::GetOrientation(u16 joystick) const
 {
+	UNUSED(joystick);
 	return 1;
 }
 
 INLINE f32 Input::GetDistance(u16 joystick) const
 {
+	UNUSED(joystick);
 	return 1;
 }
 

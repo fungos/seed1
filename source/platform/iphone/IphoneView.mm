@@ -11,6 +11,8 @@
 #include "System.h"
 #include "SeedInit.h"
 #include "Screen.h"
+#include "Input.h"
+#include "EventInputPointer.h"
 
 using namespace Seed;
 
@@ -18,8 +20,8 @@ using namespace Seed;
 
 iphTouchInfo iphTouchBuff[PLATFORM_MAX_INPUT];
 
-char _defaultRootPath[MAX_PATH_SIZE];
-char _defaultHomePath[MAX_PATH_SIZE];
+FilePath _defaultRootPathA[MAX_PATH_SIZE];
+FilePath _defaultHomePathA[MAX_PATH_SIZE];
 AppView *__view;
 
 
@@ -27,6 +29,7 @@ AppView *__view;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
+	(void)interfaceOrientation;
 	return YES;
 }
 
@@ -37,6 +40,7 @@ AppView *__view;
 @interface AppView()
 	@property (nonatomic, retain) EAGLContext *context;
 	@property (nonatomic, assign) NSTimer *updateTimer;
+	@property (nonatomic, assign) eiOSOpenGLVersion iOSOpenGLVersion;
 @end
 
 
@@ -44,6 +48,7 @@ AppView *__view;
 
 @synthesize context;
 @synthesize updateTimer;
+@synthesize iOSOpenGLVersion;
 
 
 // You must implement this method
@@ -59,17 +64,32 @@ AppView *__view;
     if ((self = [super initWithCoder:coder])) 
 	{
         CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
+		
         eaglLayer.opaque = YES;
         eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys: [NSNumber numberWithBool:NO], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
         
-        context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+		context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+		iOSOpenGLVersion = OpenGLES1;
+		
+		if (!context)
+		{
+			context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
+			iOSOpenGLVersion = OpenGLES1;
+		}
+			
         if (!context || ![EAGLContext setCurrentContext:context]) 
 		{
+			iOSOpenGLVersion = OpenGLFailed;
             [self release];
             return nil;
         }
     }
     return self;
+}
+
+- (eiOSOpenGLVersion)iOSOpenGLVersion
+{
+	return iOSOpenGLVersion;
 }
 
 - (void)Update
@@ -85,7 +105,7 @@ AppView *__view;
 
 - (void)PrepareContext
 {
-    [context renderbufferStorage:GL_RENDERBUFFER_OES fromDrawable:(CAEAGLLayer*)self.layer];
+    [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer];
 }
 
 - (void)SetContext
@@ -95,7 +115,7 @@ AppView *__view;
 
 - (void)ContextPresentRenderBuffer
 {
-	[context presentRenderbuffer:GL_RENDERBUFFER_OES];
+	[context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
 - (EAGLContext *)GetContext
@@ -147,7 +167,9 @@ AppView *__view;
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+	(void)event;
 	NSUInteger i = 0;
+	
 	for (UITouch *touch in touches) 
 	{
 		CGPoint p = [touch locationInView:self];
@@ -164,6 +186,11 @@ AppView *__view;
 			tp.y = p.x;
 		}
 		
+		i++;
+		//Info("Press %d %f,%f", i, tp.x, tp.y);
+		EventInputPointer ev(0, Seed::Button0, 0, 0, tp.x / pScreen->GetWidth(), tp.y / pScreen->GetHeight());
+		pInput->SendEventPointerPress(&ev);
+		/*
 		iphTouchBuff[i].iTaps = [touch tapCount];
 		iphTouchBuff[i].bStatus = 1;
 		iphTouchBuff[i].fRelX = tp.x - iphTouchBuff[i].fPosX;
@@ -176,11 +203,15 @@ AppView *__view;
 		
 		if (i == PLATFORM_MAX_INPUT)
 			break;
-    }    
+		*/
+    }
+	
+	//pInput->Update(1.0f / 60.0f);
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {  
+	(void)event;
 	NSUInteger i = 0;
 
 	for (UITouch *touch in touches)
@@ -212,6 +243,7 @@ AppView *__view;
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+	(void)event;
 	NSUInteger i = 0;
 	
 	for (UITouch *touch in touches)
@@ -229,16 +261,25 @@ AppView *__view;
 			tp.x = pScreen->GetWidth() - p.y;
 			tp.y = p.x;
 		}
-				
+		
+		i++;
+		//Info("Release %d %f,%f", i, tp.x, tp.y);
+		EventInputPointer ev(0, Seed::Button0, 0, 1, tp.x / pScreen->GetWidth(), tp.y / pScreen->GetHeight());
+		pInput->SendEventPointerRelease(&ev);
+		
+		/*
 		iphTouchBuff[i].iTaps = [touch tapCount];
 		iphTouchBuff[i].bStatus = 3;
 		iphTouchBuff[i].fPosX = tp.x;
 		iphTouchBuff[i].fPosY = tp.y;
 		i++;
-		
+				
 		if (i == PLATFORM_MAX_INPUT)
-			break;		
+			break;
+		*/
 	}
+	
+	//pInput->Update(1.0f / 60.0f);
 }
 
 @end
@@ -277,18 +318,18 @@ void iphSetContext(EAGLContext *c)
 	[__view SetContext:c];
 }
 
-const char *iphGetRootPath()
+const FilePath *iphGetRootPath()
 {
 	CFStringRef fileString;
 	fileString = (CFStringRef)[[NSBundle mainBundle] resourcePath];
 	
-	CFStringGetCString(fileString, _defaultRootPath, MAX_PATH_SIZE, kCFStringEncodingASCII);
+	CFStringGetCString(fileString, _defaultRootPathA, MAX_PATH_SIZE, kCFStringEncodingASCII);
 	//fprintf(stdout, "%s", _defaultRootPath);
 	
-	return _defaultRootPath;
+	return _defaultRootPathA;
 }
 
-const char *iphGetHomePath()
+const FilePath *iphGetHomePath()
 {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask,YES);
 	NSString *documentsDirectory= [paths objectAtIndex: 0];
@@ -296,10 +337,10 @@ const char *iphGetHomePath()
 	CFStringRef fileString;
 	fileString = (CFStringRef)documentsDirectory;
 	
-	CFStringGetCString(fileString, _defaultHomePath, MAX_PATH_SIZE, kCFStringEncodingASCII);
+	CFStringGetCString(fileString, _defaultHomePathA, MAX_PATH_SIZE, kCFStringEncodingASCII);
 	//fprintf(stdout, "%s", _defaultHomePath);
 	
-	return _defaultHomePath;
+	return _defaultHomePathA;
 }
 
 #endif // _IPHONE_

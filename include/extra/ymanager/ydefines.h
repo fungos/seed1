@@ -30,7 +30,7 @@ Description:
 	#define LOG0(arg);
 	#define LOG1(arg1, arg2);
 	#define LOG2(arg1, arg2, arg3);
-	#define LOG2(arg1, arg2, arg3, arg4);
+	#define LOG3(arg1, arg2, arg3, arg4);
 	#define _YDEBUG(x)
 #endif // YMEM_DEBUG
 

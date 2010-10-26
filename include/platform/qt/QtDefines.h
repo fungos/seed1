@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -82,7 +82,8 @@ typedef int						BOOL;
 	#define BOOL bool
 	#undef OUT
 	#define ATTRIBUTE_ALIGN(x)
-
+	#define LIB_FOPEN(a, b)					_wfopen((wchar_t *)a, L##b)
+	#define PLATFORM_PATH_SEPARATOR			'\\'
 	#if defined(_MSC_VER)
 		#include <direct.h>
 		#pragma warning(disable:4351)
@@ -91,6 +92,9 @@ typedef int						BOOL;
 		#define vsnprintf _vsnprintf
 		#define chdir _chdir
 	#endif // _MSC_VER
+#else
+	#define LIB_FOPEN(a, b)					fopen((const char *)a, b)
+	#define PLATFORM_PATH_SEPARATOR			'/'
 #endif // WIN32
 
 #if !defined(FALSE)
@@ -101,8 +105,8 @@ typedef int						BOOL;
 #define TRUE	1
 #endif // TRUE
 
-#define LIB_SIZE_T				size_t
-#define LIB_RAND				rand() //(u32)(srand((unsigned int)(time(NULL))))
+#define LIB_SIZE_T					size_t
+#define LIB_RAND					rand() //(u32)(srand((unsigned int)(time(NULL))))
 
 // Memory amd Stings
 #define LIB_MEMSET					memset
@@ -137,22 +141,6 @@ typedef int						BOOL;
 #define	LIB_PIXEL_COMPONENT(x)		(x&0xff)
 #define	LIB_PIXEL_COLOR(r, g, b, a)	((LIB_PIXEL_COMPONENT(b)<<LIB_PIXEL_B_SHIFT) | (LIB_PIXEL_COMPONENT(g)<<LIB_PIXEL_G_SHIFT) | (LIB_PIXEL_COMPONENT(r)<<LIB_PIXEL_R_SHIFT) | (LIB_PIXEL_COMPONENT(a)<<LIB_PIXEL_A_SHIFT))
 #define LIB_PIXEL_ALPHA_MAX_VALUE	255
-
-union uPixel
-{
-	PIXEL pixel;
-	struct _sPixel
-	{
-		u8 c[4];
-	} pComponent;
-	struct _cPixel
-	{
-		u8 a;
-		u8 b;
-		u8 g;
-		u8 r;
-	} component;
-};
 
 #define HALT	do { exit(-1); } while (1);
 
