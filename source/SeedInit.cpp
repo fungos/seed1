@@ -165,7 +165,6 @@ BOOL Initialize()
 	Info(SEED_TAG "\tTheora: %s", SEED_USE_THEORA ? "Yes" : "No");
 	Info(SEED_TAG "\tBuiltIn: %s", SEED_BUILTIN ? "Yes" : "No");
 	Info(SEED_TAG "\tSingleton: %s", SEED_SINGLETON_HEAP ? "Heap" : "Stack");
-	Info(SEED_TAG "\tParticles: %d", SEED_PARTICLES_MAX);
 	Info(SEED_TAG "\tMusic Buffer: %d", SEED_MUSIC_STREAMING_BUFFER_SIZE);
 	Info(SEED_TAG "Initializing...");
 

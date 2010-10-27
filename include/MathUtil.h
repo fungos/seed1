@@ -40,6 +40,10 @@
 
 #include <math.h>
 
+#if defined(_MSC_VER)
+#pragma warning(disable:4201) // nonstandard extension used : nameless struct/union
+#endif
+
 #define LIB_SQRT sqrt
 #define LIB_SIN	sin
 #define LIB_COS	cos
