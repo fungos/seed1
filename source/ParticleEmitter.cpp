@@ -108,6 +108,8 @@ INLINE void ParticleEmitter::Unload()
 	pPool		= NULL;
 	pFilename	= NULL;
 	pSpriteFilename = NULL;
+	arParticles = NULL;
+	iParticlesAmount = 0;
 }
 
 INLINE void ParticleEmitter::Reset()

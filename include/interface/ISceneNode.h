@@ -53,7 +53,6 @@ class SEED_CORE_API ISceneNode : public ISceneObject
 		virtual void Update(f32 dt);
 		virtual void Render();
 
-		virtual void Reset() = 0;
 		virtual void Add(ISceneObject *obj) = 0;
 		virtual void Remove(ISceneObject *obj) = 0;
 		virtual u32 Size() const = 0;
