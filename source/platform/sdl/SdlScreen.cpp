@@ -61,14 +61,14 @@ namespace Seed { namespace SDL {
 SEED_SINGLETON_DEFINE(Screen);
 
 Screen::Screen()
-	: surfaceSize(0)
+	: iHandle(0)
+	, surfaceSize(0)
 	, bFullScreen(FALSE)
 	, iFadeStatus(0)
 	, fadeType(FADE_IN)
 	, iBPP(32)
 	, iFlags(0)
 	, videoInfo(NULL)
-	, iHandle(0)
 {
 }
 

@@ -83,7 +83,7 @@ BOOL FileSystem::Initialize()
 		_snwprintf(dir2, 1024, L"%s\\%s\\", dir, FILESYSTEM_DEFAULT_PATH_WIDE);
 		for (u32 i = 0; i < 1024; i++) // for print purpose only...
 			outdir[i] = (char)dir[i];
-#elif #defined(_QT_)
+#elif defined(_QT_)
 		snprintf((char *)dir2, 1024, "%S/%s/", dir, FILESYSTEM_DEFAULT_PATH);
 		memcpy(outdir, dir, 1024);
 #else

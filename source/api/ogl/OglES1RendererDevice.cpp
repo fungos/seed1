@@ -109,7 +109,6 @@ INLINE BOOL OGLES1RendererDevice::Initialize()
 INLINE BOOL OGLES1RendererDevice::Reset()
 {
 	arTexture.Truncate();
-	arTextureName.Truncate();
 
 	return TRUE; // abstract IRenderer::Reset();
 }
@@ -332,25 +331,22 @@ INLINE void OGLES1RendererDevice::SetBlendingOperation(eBlendMode mode, PIXEL co
 	}
 }
 
-INLINE void OGLES1RendererDevice::TextureRequestAbort(ITexture *texture, void **texName)
+INLINE void OGLES1RendererDevice::TextureRequestAbort(ITexture *texture)
 {
 	arTexture.Remove(texture);
-	arTextureName.Remove(texName);
 }
 
-INLINE void OGLES1RendererDevice::TextureRequest(ITexture *texture, void **texName)
+INLINE void OGLES1RendererDevice::TextureRequest(ITexture *texture)
 {
 	arTexture.Add(texture);
-	arTextureName.Add(texName);
 }
 
 INLINE void OGLES1RendererDevice::TextureRequestProcess() const
 {
 	for (u32 i = 0; i < arTexture.Size(); i++)
 	{
-		GLuint **texId = (GLuint **)arTextureName[i];
 		ITexture *texture = arTexture[i];
-		if (!(*texId))
+		if (texture)
 		{
 			GLint tex = 0;
 			glGenTextures(1, (GLuint *)&tex);
@@ -420,13 +416,12 @@ INLINE void OGLES1RendererDevice::TextureRequestProcess() const
 			}
 			//glBindTexture(GL_TEXTURE_2D, 0);
 
-			*texId = (GLuint *)tex;
+			texture->iTextureId = tex;
 			texture->Close(); // free ram
 		}
 	}
 
 	arTexture.Truncate();
-	arTextureName.Truncate();
 }
 
 INLINE void OGLES1RendererDevice::TextureUnload(ITexture *texture)

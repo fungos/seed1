@@ -53,8 +53,8 @@ class SEED_CORE_API IRendererDevice : public IModule
 		IRendererDevice();
 		~IRendererDevice();
 
-		virtual void TextureRequest(ITexture *texture, void **texName);
-		virtual void TextureRequestAbort(ITexture *texture, void **texName);
+		virtual void TextureRequest(ITexture *texture);
+		virtual void TextureRequestAbort(ITexture *texture);
 		virtual void TextureRequestProcess() const;
 		virtual void TextureDataUpdate(ITexture *texture);
 		virtual void TextureUnload(ITexture *tex);

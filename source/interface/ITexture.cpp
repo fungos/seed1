@@ -42,7 +42,9 @@
 namespace Seed {
 
 ITexture::ITexture()
-	: stFile()
+	: pTextureId(NULL)
+	, iTextureId(0)
+	, stFile()
 	, nMinFilter(Seed::TextureFilterLinear)
 	, nMagFilter(Seed::TextureFilterNearest)
 	, iWidth(0)
@@ -206,11 +208,6 @@ INLINE eTextureFilter ITexture::GetFilter(eTextureFilterType type) const
 INLINE u32 ITexture::GetBytesPerPixel() const
 {
 	return 0;
-}
-
-INLINE void *ITexture::GetTextureName() const
-{
-	return NULL;
 }
 
 INLINE void ITexture::Update(PIXEL *buffer)
