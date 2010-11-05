@@ -72,13 +72,7 @@ The size of the music buffer for streaming from hard disk on platforms that supp
 #define SEED_MUSIC_STREAMING_BUFFER_SIZE	(1024 * 40)
 
 /*
-Maximum amount of particles per emitter.
-*/
-#define SEED_PARTICLES_MAX					500
-
-
-/*
-Maxium amount of viewports.
+Maximum amount of viewports.
 */
 #define SEED_VIEWPORT_MAX	32
 

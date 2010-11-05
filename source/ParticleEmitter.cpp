@@ -62,7 +62,8 @@ ParticleEmitter::ParticleEmitter()
 	, bEnabled(TRUE)
 	, nMinFilter(TextureFilterLinear)
 	, nMagFilter(TextureFilterLinear)
-	, arParticles()
+	, iParticlesAmount(0)
+	, arParticles(NULL)
 {
 }
 
@@ -92,7 +93,7 @@ INLINE void ParticleEmitter::Load(const char *filename, ResourceManager *res, IM
 
 INLINE void ParticleEmitter::Unload()
 {
-	for (u32 i = 0; i < SEED_PARTICLES_MAX; i++)
+	for (u32 i = 0; i < iParticlesAmount; i++)
 	{
 		if (!arParticles[i].bActive)
 			continue;
@@ -107,6 +108,8 @@ INLINE void ParticleEmitter::Unload()
 	pPool		= NULL;
 	pFilename	= NULL;
 	pSpriteFilename = NULL;
+	arParticles = NULL;
+	iParticlesAmount = 0;
 }
 
 INLINE void ParticleEmitter::Reset()
@@ -125,13 +128,30 @@ INLINE void ParticleEmitter::Reset()
 	fRespawnAge = 0.0f;
 	bPaused = FALSE;
 
-	for (u32 i = 0; i < SEED_PARTICLES_MAX; i++)
+	for (u32 i = 0; i < iParticlesAmount; i++)
 	{
 		if (!arParticles[i].bActive)
 			continue;
 
 		arParticles[i].Unload();
 		arParticles[i].bActive = FALSE;
+	}
+}
+
+INLINE void ParticleEmitter::SetParticlesBuffer(Particle *buffer, u32 amount)
+{
+	if (buffer)
+	{
+		arParticles = buffer;
+		iParticlesAmount = amount;
+	}
+	else
+	{
+		// we force to zero to guarantee the iteration in arParticles won't 
+		// happen and we won't get a segfault trying to access a particle.
+		// this is why we won't get the amount parameter no matter what.
+		arParticles = NULL;
+		iParticlesAmount = 0;
 	}
 }
 
@@ -168,7 +188,7 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 			fAge = -2.0f;
 	}
 
-	for (s32 i = 0; i < SEED_PARTICLES_MAX; i++)
+	for (u32 i = 0; i < iParticlesAmount; i++)
 	{
 		if (!arParticles[i].bActive)
 			continue;
@@ -240,11 +260,11 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 
 		for (u32 i = 0; i < iParticlesCreated; i++)
 		{
-			//if (arParticles.Size() >= SEED_PARTICLES_MAX)
+			//if (arParticles.Size() >= iParticlesAmount)
 			//	break;
 
 			BOOL bFull = TRUE;
-			for (u32 j = 0; j < SEED_PARTICLES_MAX; j++)
+			for (u32 j = 0; j < iParticlesAmount; j++)
 			{
 				if (!arParticles[j].bActive)
 				{
@@ -332,7 +352,10 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 		}
 	}
 
-	ITexture *img = arParticles[0].GetTexture();
+	ITexture *img = NULL;
+	if (arParticles)
+		 img = arParticles[0].GetTexture();
+
 	if (img)
 	{
 		img->SetFilter(TextureFilterTypeMag, nMagFilter);
@@ -345,7 +368,7 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 	ptPrevLocation = location;
 	bTransformationChanged = FALSE;
 
-	for (u32 i = 0; i < SEED_PARTICLES_MAX; i++)
+	for (u32 i = 0; i < iParticlesAmount; i++)
 	{
 		if (!arParticles[i].bActive)
 			continue;
@@ -358,7 +381,7 @@ INLINE void ParticleEmitter::Render()
 {
 	if (bEnabled)
 	{
-		for (u32 i = 0; i < SEED_PARTICLES_MAX; i++)
+		for (u32 i = 0; i < iParticlesAmount; i++)
 		{
 			if (!arParticles[i].bActive)
 				continue;
@@ -373,7 +396,7 @@ INLINE void ParticleEmitter::SetSprite(const char *filename)
 	if (bEnabled)
 	{
 		pSpriteFilename = filename;
-		for (u32 i = 0; i < SEED_PARTICLES_MAX; i++)
+		for (u32 i = 0; i < iParticlesAmount; i++)
 		{
 			if (!arParticles[i].bActive)
 				continue;
@@ -387,7 +410,7 @@ INLINE void ParticleEmitter::SetSprite(const char *filename)
 INLINE void ParticleEmitter::SetAnimation(u32 anim)
 {
 	iAnimation = anim;
-	for (u32 i = 0; i < SEED_PARTICLES_MAX; i++)
+	for (u32 i = 0; i < iParticlesAmount; i++)
 	{
 		if (!arParticles[i].bActive)
 			continue;
@@ -454,7 +477,7 @@ INLINE void ParticleEmitter::Kill()
 //	iParticlesAlive = 0;
 	bPaused = FALSE;
 
-	for (u32 i = 0; i < SEED_PARTICLES_MAX; i++)
+	for (u32 i = 0; i < iParticlesAmount; i++)
 	{
 		if (!arParticles[i].bActive)
 			continue;
@@ -496,7 +519,7 @@ INLINE void ParticleEmitter::MoveEverything(const Point<f32> &pos)
 	Point<f32> dpos = pos - ptPrevLocation;
 	ptPrevLocation = pos;
 
-	for (u32 i = 0; i < SEED_PARTICLES_MAX; i++)
+	for (u32 i = 0; i < iParticlesAmount; i++)
 	{
 		if (!arParticles[i].bActive)
 			continue;

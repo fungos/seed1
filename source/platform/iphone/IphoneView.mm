@@ -11,6 +11,8 @@
 #include "System.h"
 #include "SeedInit.h"
 #include "Screen.h"
+#include "Input.h"
+#include "EventInputPointer.h"
 
 using namespace Seed;
 
@@ -27,6 +29,7 @@ AppView *__view;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
+	(void)interfaceOrientation;
 	return YES;
 }
 
@@ -164,7 +167,9 @@ AppView *__view;
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
+	(void)event;
 	NSUInteger i = 0;
+	
 	for (UITouch *touch in touches) 
 	{
 		CGPoint p = [touch locationInView:self];
@@ -181,6 +186,11 @@ AppView *__view;
 			tp.y = p.x;
 		}
 		
+		i++;
+		//Info("Press %d %f,%f", i, tp.x, tp.y);
+		EventInputPointer ev(0, Seed::Button0, 0, 0, tp.x / pScreen->GetWidth(), tp.y / pScreen->GetHeight());
+		pInput->SendEventPointerPress(&ev);
+		/*
 		iphTouchBuff[i].iTaps = [touch tapCount];
 		iphTouchBuff[i].bStatus = 1;
 		iphTouchBuff[i].fRelX = tp.x - iphTouchBuff[i].fPosX;
@@ -193,11 +203,15 @@ AppView *__view;
 		
 		if (i == PLATFORM_MAX_INPUT)
 			break;
-    }    
+		*/
+    }
+	
+	//pInput->Update(1.0f / 60.0f);
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {  
+	(void)event;
 	NSUInteger i = 0;
 
 	for (UITouch *touch in touches)
@@ -229,6 +243,7 @@ AppView *__view;
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+	(void)event;
 	NSUInteger i = 0;
 	
 	for (UITouch *touch in touches)
@@ -246,16 +261,25 @@ AppView *__view;
 			tp.x = pScreen->GetWidth() - p.y;
 			tp.y = p.x;
 		}
-				
+		
+		i++;
+		//Info("Release %d %f,%f", i, tp.x, tp.y);
+		EventInputPointer ev(0, Seed::Button0, 0, 1, tp.x / pScreen->GetWidth(), tp.y / pScreen->GetHeight());
+		pInput->SendEventPointerRelease(&ev);
+		
+		/*
 		iphTouchBuff[i].iTaps = [touch tapCount];
 		iphTouchBuff[i].bStatus = 3;
 		iphTouchBuff[i].fPosX = tp.x;
 		iphTouchBuff[i].fPosY = tp.y;
 		i++;
-		
+				
 		if (i == PLATFORM_MAX_INPUT)
-			break;		
+			break;
+		*/
 	}
+	
+	//pInput->Update(1.0f / 60.0f);
 }
 
 @end

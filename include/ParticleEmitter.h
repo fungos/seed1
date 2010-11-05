@@ -80,6 +80,7 @@ class SEED_CORE_API ParticleEmitter : public ISceneObject
 		virtual BOOL IsEnabled() const;
 
 		virtual void SetParticlesFollowEmitter(BOOL bFollow);
+		virtual void SetParticlesBuffer(Particle *buffer, u32 amount = 0);
 
 		// IRenderable
 		virtual void Update(f32 delta);
@@ -114,7 +115,7 @@ class SEED_CORE_API ParticleEmitter : public ISceneObject
 		f32							fTy;
 		f32							fScale;
 
-		//u32							iParticlesAlive;
+		//u32						iParticlesAlive;
 		u32							iAnimation;
 
 		BOOL						bPaused;
@@ -123,7 +124,8 @@ class SEED_CORE_API ParticleEmitter : public ISceneObject
 		eTextureFilter				nMinFilter;
 		eTextureFilter				nMagFilter;
 
-		Particle					arParticles[SEED_PARTICLES_MAX];
+		u32							iParticlesAmount;
+		Particle					*arParticles; //arParticles[SEED_PARTICLES_MAX];
 };
 
 } // namespace

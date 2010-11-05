@@ -52,6 +52,7 @@ Configuration::Configuration()
 	, iMemorySize(20 * 1024 * 1024)
 	, iPlatformSimulation(Seed::SimulateNothing)
 	, iRendererDeviceType(Seed::RendererDeviceOpenGL14)
+	, iInputRadius(0.0f)
 {
 }
 
@@ -201,6 +202,16 @@ INLINE void Configuration::SetRendererDeviceType(eRendererDeviceType deviceType)
 INLINE eRendererDeviceType Configuration::GetRendererDeviceType() const
 {
 	return iRendererDeviceType;
+}
+
+void Configuration::SetInputDistanceRadius(f32 dist)
+{
+	iInputRadius = dist;
+}
+		
+f32 Configuration::GetInputDistanceRadius() const
+{
+	return iInputRadius;
 }
 
 INLINE const char *Configuration::GetObjectName() const

@@ -88,7 +88,7 @@ namespace Private
 ResourceManager *pResourceManager = NULL;
 const Configuration *pConfiguration = NULL;
 
-#define MAX_FRAME_DELTA (1.0f / 60.0f) * 5.0f
+#define MAX_FRAME_DELTA ((1.0f / 60.0f) * 5.0f)
 
 #if SEED_USE_STRING_POOL == 1
 StringPoolManager<u16> glStringPool;
@@ -165,7 +165,6 @@ BOOL Initialize()
 	Info(SEED_TAG "\tTheora: %s", SEED_USE_THEORA ? "Yes" : "No");
 	Info(SEED_TAG "\tBuiltIn: %s", SEED_BUILTIN ? "Yes" : "No");
 	Info(SEED_TAG "\tSingleton: %s", SEED_SINGLETON_HEAP ? "Heap" : "Stack");
-	Info(SEED_TAG "\tParticles: %d", SEED_PARTICLES_MAX);
 	Info(SEED_TAG "\tMusic Buffer: %d", SEED_MUSIC_STREAMING_BUFFER_SIZE);
 	Info(SEED_TAG "Initializing...");
 
@@ -196,7 +195,9 @@ BOOL Initialize()
 	ret = ret && pModuleManager->Add(pParticleManager);
 
 	pUpdater->Add(Private::pApplication);
+#if !defined(_IPHONE_)
 	pUpdater->Add(pInput);
+#endif
 	pUpdater->Add(pGuiManager);
 
 	if (!Private::bDisableSound)
@@ -238,9 +239,10 @@ void Update()
 	f32 newTime				= pTimer->GetMilliseconds() / 1000.0f;
 	f32 dt					= newTime - Private::fCurrentTime;
 	Private::fCurrentTime	= newTime;
+	f32 frameDelta			= (1.0f / pConfiguration->GetFrameRate()) * 5.0f;
 
-	if (dt > MAX_FRAME_DELTA)
-		dt = MAX_FRAME_DELTA;
+	if (dt > frameDelta)
+		dt = frameDelta;
 
 	pUpdater->Run(dt);
 

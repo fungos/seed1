@@ -312,8 +312,8 @@
 		2D18752411EB5EAF00A8EB9F /* Viewport.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Viewport.cpp; sourceTree = "<group>"; };
 		2D18777D11EB850000A8EB9F /* OglES1RendererDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OglES1RendererDevice.cpp; sourceTree = "<group>"; };
 		2D187BD911EBB8E900A8EB9F /* IphSoundSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IphSoundSource.cpp; sourceTree = "<group>"; };
+		2D4A391A12562A93009E6439 /* libSeed.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSeed.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		32CA4F630368D1EE00C91783 /* Seed_iPhone_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Seed_iPhone_Prefix.pch; sourceTree = "<group>"; };
-		746D955F0FE736F700DEC14E /* libSeed.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSeed.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		746D98880FE7446A00DEC14E /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
 		746D988C0FE7447900DEC14E /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
 		746D98930FE744B000DEC14E /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = /System/Library/Frameworks/OpenAL.framework; sourceTree = "<absolute>"; };
@@ -341,7 +341,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				746D955F0FE736F700DEC14E /* libSeed.a */,
+				2D4A391A12562A93009E6439 /* libSeed.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -683,7 +683,7 @@
 			);
 			name = Seed;
 			productName = Seed;
-			productReference = 746D955F0FE736F700DEC14E /* libSeed.a */;
+			productReference = 2D4A391A12562A93009E6439 /* libSeed.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -691,6 +691,9 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Seed iPhone" */;
 			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = English;
@@ -876,7 +879,7 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
 				GCC_ENABLE_CPP_RTTI = NO;
-				GCC_ENABLE_EXCEPTIONS = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
 				GCC_ENABLE_SSE3_EXTENSIONS = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -884,6 +887,7 @@
 					_IPHONE_,
 					RELEASE,
 				);
+				GCC_THUMB_SUPPORT = NO;
 				GCC_UNROLL_LOOPS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -898,7 +902,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				OTHER_CFLAGS = "-fvisibility=default";
 				PREBINDING = NO;
-				SDKROOT = iphonesimulator3.2;
+				SDKROOT = iphoneos3.2;
 				SEPARATE_STRIP = YES;
 				USER_HEADER_SEARCH_PATHS = /techfront/SDK/seed/include;
 			};
@@ -912,10 +916,8 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PFE_FILE_C_DIALECTS = "c objective-c c++ objective-c++";
 				PREBINDING = NO;
 				PRODUCT_NAME = Seed;
-				SDKROOT = iphoneos3.2;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
 			};
 			name = Release;
@@ -928,10 +930,8 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PFE_FILE_C_DIALECTS = "c objective-c c++ objective-c++";
 				PREBINDING = NO;
 				PRODUCT_NAME = Seed;
-				SDKROOT = iphoneos3.2;
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
 			};
 			name = Debug;
@@ -940,19 +940,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: fungos bauux (M68294QGQV)";
+				GCC_CHECK_RETURN_VALUE_OF_OPERATOR_NEW = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_ENABLE_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					SEED_ENABLE_OGLES1,
 					YMEM_DEBUG,
 					_IPHONE_,
 					DEBUG,
 				);
+				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				OTHER_CFLAGS = "-fvisibility=default";
 				PREBINDING = NO;
-				SDKROOT = iphonesimulator3.2;
+				SDKROOT = iphoneos3.2;
 				USER_HEADER_SEARCH_PATHS = /techfront/SDK/seed/include;
 			};
 			name = Debug;

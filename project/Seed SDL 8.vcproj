@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="Seed"
 	ProjectGUID="{D5B9F9EE-D553-47C6-B1E8-10D5145F6472}"
 	RootNamespace="Seed"
@@ -858,22 +858,6 @@
 				Name="extra"
 				>
 				<Filter
-					Name="lzf"
-					>
-					<File
-						RelativePath="..\source\extra\lzf\lzf_c.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\extra\lzf\lzf_d.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\source\extra\lzf\tgs_lzf.cpp"
-						>
-					</File>
-				</Filter>
-				<Filter
 					Name="ymanager"
 					>
 					<File
@@ -1277,22 +1261,6 @@
 			<Filter
 				Name="extra"
 				>
-				<Filter
-					Name="lzf"
-					>
-					<File
-						RelativePath="..\include\extra\lzf\lzf.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\extra\lzf\lzfP.h"
-						>
-					</File>
-					<File
-						RelativePath="..\include\extra\lzf\tgs_lzf.h"
-						>
-					</File>
-				</Filter>
 				<Filter
 					Name="ymanager"
 					>

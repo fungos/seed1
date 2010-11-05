@@ -82,11 +82,17 @@ BOOL MemoryManager::Initialize()
 			pLargePool = pDefaultPool = static_cast<PcMemoryPool *>(this->CreatePool(MB10, "iphone"));
 		}
 		break;
-		
+
+		case Seed::SimulateWii:
+		{
+			pDefaultPool = static_cast<PcMemoryPool *>(this->CreatePool(MB20, "MEM1"));
+			pLargePool = static_cast<PcMemoryPool *>(this->CreatePool(MB60, "MEM2"));
+		}
+		break;
+
 		default:
 		{
-			pDefaultPool = static_cast<PcMemoryPool *>(this->CreatePool(MB20, "default"));
-			pLargePool = static_cast<PcMemoryPool *>(this->CreatePool(MB60, "large"));
+			pLargePool = pDefaultPool = static_cast<PcMemoryPool *>(this->CreatePool(pConfiguration->GetMemorySize(), "default"));
 		}
 		break;
 	};
