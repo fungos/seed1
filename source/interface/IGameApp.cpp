@@ -53,13 +53,14 @@ IGameApp::IGameApp()
 
 IGameApp::~IGameApp()
 {
-	cResourceManager.Reset();
 }
 
 INLINE BOOL IGameApp::Shutdown()
 {
 	Log(TAG "Shutting down...");
 	pDictionary->Reset();
+
+	cResourceManager.Reset();
 
 	return TRUE;
 }
