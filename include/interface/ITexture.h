@@ -145,7 +145,6 @@ class SEED_CORE_API ITexture : public IResource
 		void *pTextureId;
 		u32 iTextureId;
 
-
 		SEED_DISABLE_INSTANCING;
 
 	protected:

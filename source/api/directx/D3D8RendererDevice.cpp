@@ -356,12 +356,12 @@ INLINE void D3D8RendererDevice::SetBlendingOperation(eBlendMode mode, PIXEL colo
 	}
 }
 
-INLINE void D3D8RendererDevice::TextureRequestAbort(ITexture *texture, void **texName)
+INLINE void D3D8RendererDevice::TextureRequestAbort(ITexture *texture)
 {
 	arTexture.Remove(texture);
 }
 
-INLINE void D3D8RendererDevice::TextureRequest(ITexture *texture, void **texName)
+INLINE void D3D8RendererDevice::TextureRequest(ITexture *texture)
 {
 	arTexture.Add(texture);
 }
@@ -374,7 +374,9 @@ INLINE void D3D8RendererDevice::TextureRequestProcess() const
 		File *file = texture->GetFile();
 		if (file->GetData())
 		{
-			D3DXCreateTextureFromFileInMemory(mDevice, file->GetData(), file->GetSize(), &texture->pTextureId);
+			IDirect3DTexture8 *t;
+			D3DXCreateTextureFromFileInMemory(mDevice, file->GetData(), file->GetSize(), &t);
+			texture->pTextureId = t;
 		}
 		else
 		{
@@ -382,8 +384,9 @@ INLINE void D3D8RendererDevice::TextureRequestProcess() const
 			u32 h = texture->GetAtlasHeightInPixel();
 
 			// FIXME: only 32bits for now
-			mDevice->CreateTexture(w, h, 0, D3DUSAGE_DYNAMIC, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, tex);
-			IDirect3DTexture8 *t = texture->pTextureId;
+			IDirect3DTexture8 *t;
+			mDevice->CreateTexture(w, h, 0, D3DUSAGE_DYNAMIC, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &t);
+			texture->pTextureId = t;
 
 			const void *data = texture->GetData();
 			if (t && data)
@@ -406,7 +409,7 @@ INLINE void D3D8RendererDevice::TextureRequestProcess() const
 
 INLINE void D3D8RendererDevice::TextureUnload(ITexture *texture)
 {
-	void *texId = texture->GetTextureName();
+	void *texId = texture->pTextureId;
 	if (texId)
 	{
 		IDirect3DTexture8 *t = static_cast<IDirect3DTexture8 *>(texId);
@@ -421,7 +424,7 @@ INLINE void D3D8RendererDevice::TextureDataUpdate(ITexture *texture)
 	{
 		u32 w = texture->GetAtlasWidthInPixel();
 		u32 h = texture->GetAtlasHeightInPixel();
-		IDirect3DTexture8 *t = static_cast<IDirect3DTexture8 *>(texture->GetTextureName());
+		IDirect3DTexture8 *t = static_cast<IDirect3DTexture8 *>(texture->pTextureId);
 
 		D3DLOCKED_RECT r;
 		t->LockRect(0, &r, NULL, D3DLOCK_DISCARD);
@@ -441,7 +444,7 @@ INLINE void D3D8RendererDevice::UploadData(void *userData)
 	this->SetBlendingOperation(packet->nBlendMode, packet->iColor.pixel);
 
 	ITexture *texture = packet->pTexture;
-	IDirect3DTexture8 *t = static_cast<IDirect3DTexture8 *>(texture->GetTextureName());
+	IDirect3DTexture8 *t = static_cast<IDirect3DTexture8 *>(texture->pTextureId);
 
 	mDevice->SetTexture(0, t);
 	mDevice->SetTextureStageState(0, D3DTSS_ADDRESSU, D3DTADDRESS_CLAMP);
