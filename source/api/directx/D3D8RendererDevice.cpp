@@ -62,7 +62,6 @@ D3D8RendererDevice::D3D8RendererDevice()
 	Log(TAG "Initializing...");
 
 	arTexture.Truncate();
-	arTextureName.Truncate();
 
 	Log(TAG "Initialization completed.");
 }
@@ -215,7 +214,6 @@ INLINE BOOL D3D8RendererDevice::Initialize()
 INLINE BOOL D3D8RendererDevice::Reset()
 {
 	arTexture.Truncate();
-	arTextureName.Truncate();
 
 	HWND hWnd = (HWND)pScreen->iHandle;
 	ZeroMemory(&mParams, sizeof(mParams));
@@ -252,7 +250,6 @@ INLINE BOOL D3D8RendererDevice::Shutdown()
 	BOOL ret = IRendererDevice::Shutdown();
 
 	arTexture.Truncate();
-	arTextureName.Truncate();
 
 	int objects = 0;
 	if (mDevice)
@@ -362,13 +359,11 @@ INLINE void D3D8RendererDevice::SetBlendingOperation(eBlendMode mode, PIXEL colo
 INLINE void D3D8RendererDevice::TextureRequestAbort(ITexture *texture, void **texName)
 {
 	arTexture.Remove(texture);
-	arTextureName.Remove(texName);
 }
 
 INLINE void D3D8RendererDevice::TextureRequest(ITexture *texture, void **texName)
 {
 	arTexture.Add(texture);
-	arTextureName.Add(texName);
 }
 
 INLINE void D3D8RendererDevice::TextureRequestProcess() const
@@ -376,12 +371,10 @@ INLINE void D3D8RendererDevice::TextureRequestProcess() const
 	for (u32 i = 0; i < arTexture.Size(); i++)
 	{
 		ITexture *texture = arTexture[i];
-		IDirect3DTexture8 **tex = (IDirect3DTexture8 **)arTextureName[i];
-
 		File *file = texture->GetFile();
 		if (file->GetData())
 		{
-			D3DXCreateTextureFromFileInMemory(mDevice, file->GetData(), file->GetSize(), tex);
+			D3DXCreateTextureFromFileInMemory(mDevice, file->GetData(), file->GetSize(), &texture->pTextureId);
 		}
 		else
 		{
@@ -390,7 +383,7 @@ INLINE void D3D8RendererDevice::TextureRequestProcess() const
 
 			// FIXME: only 32bits for now
 			mDevice->CreateTexture(w, h, 0, D3DUSAGE_DYNAMIC, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, tex);
-			IDirect3DTexture8 *t = *tex;
+			IDirect3DTexture8 *t = texture->pTextureId;
 
 			const void *data = texture->GetData();
 			if (t && data)
@@ -409,7 +402,6 @@ INLINE void D3D8RendererDevice::TextureRequestProcess() const
 	}
 
 	arTexture.Truncate();
-	arTextureName.Truncate();
 }
 
 INLINE void D3D8RendererDevice::TextureUnload(ITexture *texture)

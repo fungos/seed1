@@ -90,8 +90,8 @@ class SEED_CORE_API OGL14RendererDevice : public IRendererDevice
 
 		// IRendererDevice
 		virtual void TextureUnload(ITexture *tex);
-		virtual void TextureRequest(ITexture *texture, void **texName);
-		virtual void TextureRequestAbort(ITexture *texture, void **texName);
+		virtual void TextureRequest(ITexture *texture);
+		virtual void TextureRequestAbort(ITexture *texture);
 		virtual void TextureRequestProcess() const;
 		virtual void TextureDataUpdate(ITexture *texture);
 
@@ -112,7 +112,6 @@ class SEED_CORE_API OGL14RendererDevice : public IRendererDevice
 
 	protected:
 		mutable Array<ITexture *, 128> arTexture;
-		mutable Array<void **, 128> arTextureName;
 
 	private:
 		SEED_DISABLE_COPY(OGL14RendererDevice);

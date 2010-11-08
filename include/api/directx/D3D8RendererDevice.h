@@ -84,8 +84,8 @@ class SEED_CORE_API D3D8RendererDevice : public IRendererDevice
 
 		// IRendererDevice
 		virtual void TextureUnload(ITexture *texture);
-		virtual void TextureRequest(ITexture *texture, void **texName);
-		virtual void TextureRequestAbort(ITexture *texture, void **texName);
+		virtual void TextureRequest(ITexture *texture);
+		virtual void TextureRequestAbort(ITexture *texture);
 		virtual void TextureRequestProcess() const;
 		virtual void TextureDataUpdate(ITexture *texture);
 
@@ -111,21 +111,18 @@ class SEED_CORE_API D3D8RendererDevice : public IRendererDevice
 
 	protected:
 		mutable Array<ITexture *, 128> arTexture;
-		mutable Array<void **, 128> arTextureName;
 
 	private:
 		SEED_DISABLE_COPY(D3D8RendererDevice);
 		BOOL CheckExtension(const char *extName);
 
-		D3DCAPS8				mCaps;
-		LPDIRECT3D8				mObject;
-		LPDIRECT3DDEVICE8		mDevice;
+		D3DCAPS8		mCaps;
+		LPDIRECT3D8		mObject;
+		LPDIRECT3DDEVICE8	mDevice;
 		D3DPRESENT_PARAMETERS	mParams;
-		D3DDISPLAYMODE			mMode;
+		D3DDISPLAYMODE		mMode;
 
-		BOOL					bLost;
-		//LPDIRECT3DVERTEXBUFFER8 pVertexBuffer;
-		//IDirect3DTexture8		*iTextureId;
+		BOOL			bLost;
 };
 
 }} // namespace

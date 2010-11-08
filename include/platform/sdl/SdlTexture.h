@@ -63,7 +63,6 @@ class SEED_CORE_API Texture : public ITexture
 		virtual u8 GetPixelAlpha(u32 x, u32 y) const;
 
 		virtual u32 GetBytesPerPixel() const;
-		virtual void *GetTextureName() const;
 
 		virtual void Update(PIXEL *buffer);
 		virtual void Reset();
@@ -78,6 +77,8 @@ class SEED_CORE_API Texture : public ITexture
 		virtual BOOL Unload();
 		virtual u32 GetUsedMemory() const;
 
+		u32 iTextureId;
+
 	protected:
 		void UnloadTexture();
 
@@ -88,7 +89,6 @@ class SEED_CORE_API Texture : public ITexture
 		SDL_Surface *pSurface;
 
 		void *pData;
-		void *pTextureId;
 
 		u32 iBytesPerPixel;
 		u32 iPitch;

@@ -124,10 +124,10 @@ INLINE BOOL ISprite::Unload()
 	sRelease(pFrameImage);
 	sRelease(pSprite);
 
-	pAnimation		= NULL;
-	pFrame			= NULL;
+	pAnimation = NULL;
+	pFrame	= NULL;
 	pAnimationFrames = NULL;
-	bInitialized	= FALSE;
+	bInitialized = FALSE;
 
 	return TRUE;
 }

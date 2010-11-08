@@ -165,14 +165,14 @@ INLINE BOOL RendererDevice::Shutdown()
 	return ret;
 }
 
-INLINE void RendererDevice::TextureRequest(ITexture *texture, void **texName)
+INLINE void RendererDevice::TextureRequest(ITexture *texture)
 {
-	pApiDevice->TextureRequest(texture, texName);
+	pApiDevice->TextureRequest(texture);
 }
 
-INLINE void RendererDevice::TextureRequestAbort(ITexture *texture, void **texName)
+INLINE void RendererDevice::TextureRequestAbort(ITexture *texture)
 {
-	pApiDevice->TextureRequestAbort(texture, texName);
+	pApiDevice->TextureRequestAbort(texture);
 }
 
 INLINE void RendererDevice::TextureRequestProcess() const

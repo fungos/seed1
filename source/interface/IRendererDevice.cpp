@@ -94,17 +94,15 @@ INLINE BOOL IRendererDevice::IsRequired() const
 	return TRUE;
 }
 
-INLINE void IRendererDevice::TextureRequestAbort(ITexture *texture, void **texName)
+INLINE void IRendererDevice::TextureRequestAbort(ITexture *texture)
 {
 	UNUSED(texture);
-	UNUSED(texName);
 	SEED_ABSTRACT_METHOD;
 }
 
-INLINE void IRendererDevice::TextureRequest(ITexture *texture, void **texName)
+INLINE void IRendererDevice::TextureRequest(ITexture *texture)
 {
 	UNUSED(texture);
-	UNUSED(texName);
 	SEED_ABSTRACT_METHOD;
 }
 

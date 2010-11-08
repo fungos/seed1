@@ -1,0 +1,4 @@
+*.o
+libSeed.a
+Seed-build-desktop/
+Seed.pro.user

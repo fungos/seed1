@@ -133,7 +133,6 @@ BOOL ModuleManager::Shutdown()
 	u32 len = arModule.Size() - 1;
 	for (s32 i = len; i >= 0; i--)
 	{
-		fprintf(stdout, "%d", i);
 		IModule *obj = arModule[i];
 		ret = ret && (obj->Shutdown() || !obj->IsRequired());
 	}

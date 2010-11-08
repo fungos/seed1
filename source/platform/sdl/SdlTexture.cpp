@@ -65,9 +65,9 @@ IResource *TextureResourceLoader(const char *filename, ResourceManager *res, IMe
 }
 
 Texture::Texture()
-	: pSurface(NULL)
+	: iTextureId(0)
+	, pSurface(NULL)
 	, pData(NULL)
-	, pTextureId(NULL)
 	, iBytesPerPixel(0)
 	, iPitch(0)
 	, iAtlasWidth(0)
@@ -206,7 +206,7 @@ BOOL Texture::Load(const char *filename, ResourceManager *res, IMemoryPool *pool
 		iPitch = pSurface->pitch;
 		pData = pSurface->pixels;
 
-		pRendererDevice->TextureRequest(this, &pTextureId);
+		pRendererDevice->TextureRequest(this);
 
 		bLoaded = TRUE;
 
@@ -255,7 +255,7 @@ BOOL Texture::Load(u32 width, u32 height, PIXEL *buffer, u32 atlasWidth, u32 atl
 		iPitch = ROUND_UP(width, 32); // FIXME: parametized?
 		pData = buffer;
 
-		pRendererDevice->TextureRequest(this, &pTextureId);
+		pRendererDevice->TextureRequest(this);
 
 		bLoaded = TRUE;
 	}
@@ -266,7 +266,7 @@ BOOL Texture::Load(u32 width, u32 height, PIXEL *buffer, u32 atlasWidth, u32 atl
 INLINE void Texture::Update(PIXEL *data)
 {
 	//this->UnloadTexture();
-	//pRendererDevice->TextureRequest(this, &pTextureId);
+	//pRendererDevice->TextureRequest(this, &iTextureId);
 	pData = data;
 	pRendererDevice->TextureDataUpdate(this);
 }
@@ -421,23 +421,18 @@ INLINE u32 Texture::GetBytesPerPixel() const
 	return iBytesPerPixel;
 }
 
-INLINE void *Texture::GetTextureName() const
-{
-	return pTextureId;
-}
-
 INLINE void Texture::UnloadTexture()
 {
-	if (pTextureId)
+	if (iTextureId)
 	{
 		pRendererDevice->TextureUnload(this);
 	}
 	else
 	{
-		pRendererDevice->TextureRequestAbort(this, &pTextureId);
+		pRendererDevice->TextureRequestAbort(this);
 	}
 
-	pTextureId = NULL;
+	iTextureId = 0;
 }
 
 }} // namespace

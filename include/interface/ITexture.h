@@ -99,7 +99,6 @@ class SEED_CORE_API ITexture : public IResource
 
 		virtual File *GetFile();
 		virtual u32 GetBytesPerPixel() const;
-		virtual void *GetTextureName() const;
 
 		/// Close/free RAM texture data without unloading VRAM texture.
 		virtual void Close();
@@ -141,6 +140,11 @@ class SEED_CORE_API ITexture : public IResource
 		// IObject
 		virtual int GetObjectType() const;
 		virtual const char *GetObjectName() const;
+
+	public:
+		void *pTextureId;
+		u32 iTextureId;
+
 
 		SEED_DISABLE_INSTANCING;
 

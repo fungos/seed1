@@ -118,7 +118,6 @@ INLINE BOOL OGL14RendererDevice::Initialize()
 INLINE BOOL OGL14RendererDevice::Reset()
 {
 	arTexture.Truncate();
-	arTextureName.Truncate();
 
 	return TRUE; // abstract IRenderer::Reset();
 }
@@ -318,25 +317,22 @@ INLINE void OGL14RendererDevice::SetBlendingOperation(eBlendMode mode, PIXEL col
 	}
 }
 
-INLINE void OGL14RendererDevice::TextureRequestAbort(ITexture *texture, void **texName)
+INLINE void OGL14RendererDevice::TextureRequestAbort(ITexture *texture)
 {
 	arTexture.Remove(texture);
-	arTextureName.Remove(texName);
 }
 
-INLINE void OGL14RendererDevice::TextureRequest(ITexture *texture, void **texName)
+INLINE void OGL14RendererDevice::TextureRequest(ITexture *texture)
 {
 	arTexture.Add(texture);
-	arTextureName.Add(texName);
 }
 
 INLINE void OGL14RendererDevice::TextureRequestProcess() const
 {
 	for (u32 i = 0; i < arTexture.Size(); i++)
 	{
-		GLuint **texId = (GLuint **)arTextureName[i];
 		ITexture *texture = arTexture[i];
-		if (!(*texId))
+		if (texture)
 		{
 			GLint tex = 0;
 			glGenTextures(1, (GLuint *)&tex);
@@ -390,34 +386,25 @@ INLINE void OGL14RendererDevice::TextureRequestProcess() const
 			}
 			//glBindTexture(GL_TEXTURE_2D, 0);
 
-			*texId = (GLuint *)tex;
+			texture->iTextureId = tex;
 			texture->Close(); // free ram
 		}
 	}
 
 	arTexture.Truncate();
-	arTextureName.Truncate();
 }
 
 INLINE void OGL14RendererDevice::TextureUnload(ITexture *texture)
 {
-	void *texId = texture->GetTextureName();
-	if (texId)
-	{
-		GLuint *t = static_cast<GLuint *>(texId);
-		GLuint tex = (GLuint)t;
-		glDeleteTextures(1, &tex);
-	}
+	if (texture->iTextureId)
+		glDeleteTextures(1, &texture->iTextureId);
 }
 
 INLINE void OGL14RendererDevice::TextureDataUpdate(ITexture *texture)
 {
-	void *texId = texture->GetTextureName();
-	if (texId)
+	if (texture->iTextureId)
 	{
-		GLuint *t = static_cast<GLuint *>(texId);
-		GLuint tex = (GLuint)t;
-		glBindTexture(GL_TEXTURE_2D, tex);
+		glBindTexture(GL_TEXTURE_2D, texture->iTextureId);
 
 		GLuint w = texture->GetAtlasWidthInPixel();
 		GLuint h = texture->GetAtlasHeightInPixel();
@@ -454,9 +441,6 @@ INLINE void OGL14RendererDevice::UploadData(void *userData)
 	RendererPacket *packet = static_cast<RendererPacket *>(userData);
 
 	ITexture *texture = packet->pTexture;
-	GLuint *t = static_cast<GLuint *>(texture->GetTextureName());
-	GLuint tex = (GLuint)t;
-
 	sVertex *data = static_cast<sVertex *>(packet->pVertexData);
 
 	glPushMatrix();
@@ -464,7 +448,7 @@ INLINE void OGL14RendererDevice::UploadData(void *userData)
 
 	this->SetBlendingOperation(packet->nBlendMode, packet->iColor.pixel);
 
-	glBindTexture(GL_TEXTURE_2D, tex);
+	glBindTexture(GL_TEXTURE_2D, texture->iTextureId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
