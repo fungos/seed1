@@ -89,7 +89,6 @@ class Texture : public ITexture
 
 	private:
 		QImage image;
-		u32 iTextureId;
 
 		u32 iBytesPerPixel;
 		u32 iPitch;

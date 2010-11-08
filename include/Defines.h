@@ -273,6 +273,24 @@ union uPixel
 											pMemoryManager->Free(ptr, pDefaultPool); \
 										}
 
+#define SEED_ENABLE_INSTANCING(Class)	\
+										class Class##Instantiable : public Class \
+										{ \
+											public: \
+												inline void *operator new(size_t len) \
+												{ \
+													return pMemoryManager->Alloc(len, pDefaultPool, "operator new", "User Instanciable " #Class); \
+												} \
+												\
+												inline void operator delete(void *ptr) \
+												{ \
+													pMemoryManager->Free(ptr, pDefaultPool); \
+												} \
+												\
+												void *operator new[](size_t) throw() { return NULL; }; \
+												void operator delete[](void *) {}; \
+										};
+
 #define SEED_FORWARD_DECLARATION(Class) namespace Seed { class Class; }
 
 

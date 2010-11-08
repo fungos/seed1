@@ -65,8 +65,7 @@ IResource *TextureResourceLoader(const char *filename, ResourceManager *res, IMe
 }
 
 Texture::Texture()
-	: iTextureId(0)
-	, pSurface(NULL)
+	: pSurface(NULL)
 	, pData(NULL)
 	, iBytesPerPixel(0)
 	, iPitch(0)

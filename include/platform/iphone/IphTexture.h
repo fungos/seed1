@@ -103,7 +103,6 @@ class Texture : public ITexture
 
 	private:
 		void	*pData;
-		void	*pTextureId;
 
 		u32 iBytesPerPixel;
 		u32 iPitch;

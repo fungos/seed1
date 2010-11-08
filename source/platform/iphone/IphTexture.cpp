@@ -69,7 +69,6 @@ IResource *TextureResourceLoader(const char *filename, ResourceManager *res, IMe
 
 Texture::Texture()
 	: pData(NULL)
-	, pTextureId(NULL)
 	, iBytesPerPixel(4)
 	, iPitch(0)
 	, iAtlasWidth(0)

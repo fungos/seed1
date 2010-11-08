@@ -58,8 +58,7 @@ IResource *TextureResourceLoader(const char *filename, ResourceManager *res, IMe
 }
 
 Texture::Texture()
-	: iTextureId(0)
-	, iAtlasWidth(0)
+	: iAtlasWidth(0)
 	, iAtlasHeight(0)
 {
 }

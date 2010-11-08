@@ -71,7 +71,7 @@ INLINE f32 Rand::Get(f32 max)
 
 INLINE u32 Rand::Get(u32 min, u32 max)
 {
-	if(min == max)
+	if (min == max)
 		return min;
 
 	iSeed = 214013 * iSeed + 2531011;
@@ -82,7 +82,7 @@ INLINE u32 Rand::Get(u32 min, u32 max)
 
 INLINE f32 Rand::Get(f32 min, f32 max)
 {
-	if(min == max)
+	if (min == max)
 		return min;
 
 	iSeed = 214013 * iSeed + 2531011;
