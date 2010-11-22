@@ -194,7 +194,7 @@ INLINE void ISprite::ReconfigureFrame()
 {
 	ASSERT_NULL(pFrameImage);
 
-	fCurrentFrameRate = static_cast<f32>(pFrame->iTime) * (1.0f / (f32)pConfiguration->GetFrameRate());
+	fCurrentFrameRate = 1.0f / static_cast<f32>(pFrame->iTime);
 	if (pFrame->iWidth == 0)
 		iWidth = pFrameImage->GetWidthInPixel();
 	else
@@ -345,9 +345,7 @@ INLINE void ISprite::Stop()
 
 INLINE void ISprite::Play()
 {
-	//iCurrentFrameTime = pFrame->iTime;
-	//fCurrentFrameRate = 1.0f / pConfiguration->GetFrameRate() / static_cast<f32>(pFrame->iTime);
-	fCurrentFrameRate = static_cast<f32>(pFrame->iTime) * (1.0f / (f32)pConfiguration->GetFrameRate());
+	fCurrentFrameRate = 1.0f / static_cast<f32>(pFrame->iTime);
 	bPlaying = TRUE;
 	bChanged = TRUE;
 }
