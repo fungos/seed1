@@ -43,7 +43,7 @@
 namespace Seed {
 
 // was fixed32
-template <class TYPE> class SEED_CORE_API Point
+template <class TYPE> class Point
 {
 	public:
 		union

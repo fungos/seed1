@@ -130,7 +130,7 @@ void *YMemoryManager::Alloc(u32 len, const char *desc, const char *owner, int re
 	u32 current = START;
 	while (NEXT(current) != 0)
 	{
-		if ((SIZE(current) >= len) && USED(current) == FALSE)
+		if (USED(current) == FALSE && (SIZE(current) >= len))
 		{
 			this->Split(current, len, desc, owner);
 			_YDEBUG

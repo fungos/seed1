@@ -63,6 +63,7 @@ enum eObjectType
 	ObjectParticleManager,
 	ObjectViewManager,
 	ObjectRendererManager,
+	ObjectMap,
 
 	// System
 	ObjectFile,
