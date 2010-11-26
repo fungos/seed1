@@ -62,6 +62,7 @@
 #include <File.h>
 #include <FileSystem.h>
 #include <Font.h>
+#include <Formats.h>
 
 #include <gui/Button.h>
 #include <gui/EventWidget.h>
@@ -115,6 +116,7 @@
 #include <StringPool.h>
 #include <SceneManager.h>
 #include <System.h>
+#include <StringCache.h>
 #include <Updater.h>
 
 #include <Text.h>
@@ -137,7 +139,7 @@
 #endif
 
 #if defined(_IPHONE_)
-	
+
 #elif defined(_WII_)
 	#if defined(USE_AILIVE)
 		#include <platform/wii/WiiAiLive.h>

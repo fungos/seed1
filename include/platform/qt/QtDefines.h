@@ -76,6 +76,7 @@ typedef float 					f32;
 typedef float 					fixed32;
 typedef int 					PIXEL;
 typedef int						BOOL;
+typedef wchar_t					FilePath;
 
 #if defined(WIN32)
 	#undef BOOL
