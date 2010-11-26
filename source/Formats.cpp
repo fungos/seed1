@@ -54,7 +54,7 @@ const char *g_pcPlatform[] =
 
 
 /* Usado para checkar header de bloco dos objetos */
-BOOL seed_validate_block(File *file, ObjectHeader *block, u32 magic, u32 version)
+BOOL SEED_CORE_API seed_validate_block(File *file, ObjectHeader *block, u32 magic, u32 version)
 {
 	if (block->magic != magic)
 	{

@@ -114,6 +114,7 @@
 #include <StateMachine.h>
 #include <Sprite.h>
 #include <StringPool.h>
+#include <StringCache.h>
 #include <SceneManager.h>
 #include <System.h>
 #include <StringCache.h>

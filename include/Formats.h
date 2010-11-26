@@ -68,6 +68,8 @@
 #define FST_OBJECT_VERSION			0x00000001
 #define SST_OBJECT_MAGIC			0x00535346
 #define SST_OBJECT_VERSION			0x00000001
+#define MAP_OBJECT_MAGIC			0x0050414d
+#define MAP_OBJECT_VERSION			0x00000001
 
 #define READ_F32(var, ptr)			var = *((f32 *)ptr); ptr = &ptr[sizeof(f32)];
 #define READ_U32(var, ptr)			var = *((u32 *)ptr); ptr = &ptr[sizeof(u32)];
@@ -184,7 +186,39 @@ struct SEED_CORE_API FontObjectHeader
 	// const char *pSprite;
 };
 
-BOOL seed_validate_block(File *file, ObjectHeader *block, u32 magic, u32 version);
+struct SEED_CORE_API MapHeader
+{
+	ObjectHeader block;
+	u32 iType;
+	u32 iMapWidth;
+	u32 iMapHeight;
+	u32 iTileWidth;
+	u32 iTileHeight;
+	u32 iLayerCount;
+	// layers
+	// layerdata
+};
+
+struct SEED_CORE_API LayerHeader
+{
+	u32 iType;
+	u32 iNameId;
+	u32 iVisible;
+	f32 fOpacity;
+	u32 iDataIndex;
+};
+
+struct SEED_CORE_API LayerObjectHeader
+{
+	u32 iNameId;
+	u32 iTypeId;
+	f32 fPosX;
+	f32 fPosY;
+	f32 fWidth;
+	f32 fHeight;
+};
+
+BOOL SEED_CORE_API seed_validate_block(File *file, ObjectHeader *block, u32 magic, u32 version);
 
 } // namespace
 

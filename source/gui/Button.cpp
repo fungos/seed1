@@ -225,8 +225,8 @@ void Button::Update(f32 dt)
 		bButtonChanged = FALSE;
 	}
 
-	bTransformationChanged = FALSE;
 	cSprite.Update(dt);
+	bTransformationChanged = FALSE;
 }
 
 INLINE void Button::UpdateSprite()
