@@ -118,7 +118,6 @@ INLINE void SetGameApp(IGameApp *app, int argc, char **argv)
 	Private::iArgc = argc;
 	Private::pcArgv = argv;
 	Private::pApplication = app;
-	Private::pApplication->Setup(argc, argv);
 	pConfiguration  = app->GetConfiguration();
 	pResourceManager = app->GetResourceManager();
 

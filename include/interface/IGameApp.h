@@ -57,13 +57,6 @@ class SEED_CORE_API IGameApp : public IUpdatable, public IModule
 
 		virtual BOOL Shutdown();
 
-		/// Setup must be called before Seed::Initialize - it will perform per-module configurations.
-		/**
-		\param argc Command line parameter count. Just pass what you receive in your main.
-		\param argv Command line parameter values. Just pass what you receive in your main.
-		*/
-		virtual void Setup(int argc, char **argv);
-
 		/// Print output level string
 		virtual void WriteOut(const char *msg);
 
