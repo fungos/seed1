@@ -279,7 +279,7 @@ union uPixel
 											public: \
 												inline void *operator new(size_t len) \
 												{ \
-													return pMemoryManager->Alloc(len, pDefaultPool, "operator new", "User Instanciable " #Class); \
+													return pMemoryManager->Alloc(len, pDefaultPool, "operator new", "User Instantiable " #Class); \
 												} \
 												\
 												inline void operator delete(void *ptr) \
@@ -290,6 +290,7 @@ union uPixel
 												void *operator new[](size_t) throw() { return NULL; }; \
 												void operator delete[](void *) {}; \
 										};
+
 
 #define SEED_FORWARD_DECLARATION(Class) namespace Seed { class Class; }
 
