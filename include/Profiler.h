@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -47,14 +47,18 @@ class ProfileContext;
 
 struct SEED_CORE_API ProfilerEntry
 {
-	u64 time;
-	u64 maxtime;
+	f32 time;
+	f32 maxtime;
 	u32 calls;
+	f32 stack[256];
+	u32 pos;
 
 	ProfilerEntry()
 		: time(0)
 		, maxtime(0)
 		, calls(0)
+		, stack()
+		, pos(0)
 	{}
 };
 
@@ -69,8 +73,8 @@ class SEED_CORE_API Profiler
 		Profiler(const char *name);
 		~Profiler();
 
-		void AddSlice(const char *func, u64 time);
-		void AddTotal(const char *func, u64 time);
+		void AddSlice(const char *func, f32 time);
+		void AddTotal(const char *func, f32 time);
 		void Dump();
 		void Reset();
 
