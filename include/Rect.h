@@ -41,7 +41,7 @@
 
 namespace Seed {
 
-template <class TYPE> class SEED_CORE_API Rect
+template <class TYPE> class Rect
 {
 	public:
 		TYPE x;
@@ -125,6 +125,7 @@ template <class TYPE> class SEED_CORE_API Rect
 			TYPE top1, top2;
 			TYPE bottom1, bottom2;
 			TYPE over_bottom;
+
 			TYPE over_top;
 			TYPE over_left;
 			TYPE over_right;

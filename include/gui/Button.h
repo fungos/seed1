@@ -158,6 +158,7 @@ class SEED_CORE_API Button : public IWidget, public IResource
 		virtual void SetLabelDisabledColor(PIXEL px);
 		virtual void SetLabelPressOffset(f32 x, f32 y);
 		virtual void SetLabelHoverOffset(f32 x, f32 y);
+		virtual void SetLabelAutoAdjust(BOOL b);
 
 		// ITransformable2D - Sprite
 		virtual void SetSpriteWidth(f32 w);

@@ -95,7 +95,7 @@ class SEED_CORE_API System : public ISystem
 		u64 		iFpsTime;
 };
 
-#define pSystem System::GetInstance()
+#define pSystem SDL::System::GetInstance()
 
 }} // namespace
 

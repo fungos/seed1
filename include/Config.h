@@ -122,11 +122,13 @@ Try to keep these values at a minimum.
 	#define SEED_LOG_RESOURCEMANAGER		1
 #endif // DEBUG
 
+#if !defined(INLINE)
 #if SEED_BUILTIN == 1
 	#define INLINE inline
 // __attribute__((always_inline)) // GCC
 #else
-	#define INLINE
+		#define INLINE
 #endif // SEED_BUILTIN
+#endif // INLINE
 
 #endif // __CONFIG_H__

@@ -46,7 +46,7 @@
 
 namespace Seed { namespace PC {
 
-class RendererDevice : public IRendererDevice
+class SEED_CORE_API RendererDevice : public IRendererDevice
 {
 	SEED_SINGLETON_DECLARE(RendererDevice);
 	public:
