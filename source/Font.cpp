@@ -115,8 +115,13 @@ BOOL Font::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 
 		if (ext != SEED_INVALID_ID /*&& pSystem->GetLanguage() != Seed::en_US*/)
 		{
-			this->mFontExt.Load(_F(ext), res, pool);
-			this->pGlyphs = pDictionary->GetGlyphTable(&this->iTotalGlyphs);
+			File extf;
+			if (pFileSystem->Open(_F(ext), &extf, pool))
+			{
+				extf.Close();
+				this->mFontExt.Load(_F(ext), res, pool);
+				this->pGlyphs = pDictionary->GetGlyphTable(&this->iTotalGlyphs);
+			}
 		}
 
 		this->mFont.Load(_F(file), res, pool);

@@ -1216,6 +1216,11 @@ INLINE void Button::SetLabelAutoUpdate(BOOL b)
 	bChanged = TRUE;
 }
 
+INLINE void Button::SetLabelAutoAdjust(BOOL b)
+{
+	cLabel.SetAutoAdjust(b);
+}
+
 INLINE BOOL Button::IsLabelAutoUpdate() const
 {
 	return bLabelAutoUpdate;
