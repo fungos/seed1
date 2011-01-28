@@ -124,6 +124,13 @@ void Screen::PrepareMode()
 		}
 		break;
 
+		case Video_320x240:
+		{
+			iWidth = 320;
+			iHeight = 240;
+		}
+		break;
+
 		case Video_480x272:
 		{
 			iWidth = 480;
