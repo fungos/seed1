@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -93,7 +93,7 @@ template <class TYPE> class SEED_CORE_API Rect
 			return *this;
 		}
 
-		BOOL IsCollidedWith(const Rect<TYPE> &rect)
+		BOOL IsCollidedWith(const Rect<TYPE> &rect) const
 		{
 			TYPE left1, left2;
 			TYPE right1, right2;
@@ -118,7 +118,7 @@ template <class TYPE> class SEED_CORE_API Rect
 			return TRUE;
 		}
 
-		void GetOverlappedRect(const Rect<TYPE> &rect, Rect<TYPE> &rectDst)
+		BOOL GetOverlappedRect(const Rect<TYPE> &rect, Rect<TYPE> &rectDst) const
 		{
 			TYPE left1, left2;
 			TYPE right1, right2;
@@ -155,9 +155,17 @@ template <class TYPE> class SEED_CORE_API Rect
 			rectDst.y      = over_top;
 			rectDst.width  = (TYPE)(over_right - over_left);
 			rectDst.height = (TYPE)(over_bottom - over_top);
+
+			if (bottom1 < top2) return(FALSE);
+			if (top1 > bottom2) return(FALSE);
+
+			if (right1 < left2) return(FALSE);
+			if (left1 > right2) return(FALSE);
+
+			return TRUE;
 		}
 
-		BOOL Contains(TYPE pX, TYPE pY)
+		BOOL Contains(TYPE pX, TYPE pY) const
 		{
 			if (pX > (TYPE)(x + width))
 			{
@@ -179,9 +187,9 @@ template <class TYPE> class SEED_CORE_API Rect
 			return TRUE;
 		}
 
-		BOOL ContainsArea(const Rect<TYPE> &rect)
+		BOOL ContainsArea(const Rect<TYPE> &rect) const
 		{
-			if (this->Contains(rect.x, rect.y) && 
+			if (this->Contains(rect.x, rect.y) &&
 				this->Contains(rect.x+rect.width, rect.y+rect.height))
 				return TRUE;
 
