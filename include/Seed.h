@@ -54,6 +54,8 @@
 
 #include <EventInputMotion.h>
 #include <EventInputPointer.h>
+#include <EventInputKeyboard.h>
+#include <EventInputJoystick.h>
 #include <EventFileSystem.h>
 #include <EventResourceLoader.h>
 #include <EventSystem.h>
@@ -79,6 +81,7 @@
 #include <interface/IEventInputMotionListener.h>
 #include <interface/IEventInputKeyboardListener.h>
 #include <interface/IEventInputPointerListener.h>
+#include <interface/IEventInputJoystickListener.h>
 #include <interface/IEventResourceLoaderListener.h>
 #include <interface/IEventSystemListener.h>
 #include <interface/IEventFileSystemListener.h>

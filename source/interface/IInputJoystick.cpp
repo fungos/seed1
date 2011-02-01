@@ -81,7 +81,7 @@ void IInputJoystick::SendEventJoystickButtonPress(const EventInputJoystick *ev)
 	for (u32 i = 0; i < arJoystickListeners.Size(); i++)
 	{
 		ASSERT_NULL(arJoystickListeners[i]);
-		arJoystickListeners[i]->OnInputJoystickButtonRelease(ev);
+		arJoystickListeners[i]->OnInputJoystickButtonPress(ev);
 	}
 }
 

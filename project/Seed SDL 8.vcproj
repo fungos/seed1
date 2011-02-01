@@ -331,6 +331,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\source\EventInputJoystick.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\source\EventInputKeyboard.cpp"
 				>
 			</File>
@@ -674,6 +678,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\source\interface\IEventInputJoystickListener.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\source\interface\IEventInputKeyboardListener.cpp"
 					>
 				</File>
@@ -976,6 +984,10 @@
 			</File>
 			<File
 				RelativePath="..\include\EventFileSystem.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\EventInputJoystick.h"
 				>
 			</File>
 			<File
@@ -1327,6 +1339,10 @@
 				</File>
 				<File
 					RelativePath="..\include\interface\IEventInput.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\interface\IEventInputJoystickListener.h"
 					>
 				</File>
 				<File
