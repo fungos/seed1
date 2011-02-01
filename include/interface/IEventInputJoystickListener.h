@@ -29,32 +29,35 @@
  **
  *****************************************************************************/
 
-/*! \file Input.h
+/*! \file IEventInputJoystickListener.h
 	\author	Danny Angelo Carminati Grein
-	\brief Include selector
+	\brief Defines the event listener class interface
 */
 
-#ifndef __INPUT_H__
-#define __INPUT_H__
 
-#if defined(_WII_)
-	#include "platform/wii/WiiInput.h"
-	using namespace Seed::WII;
-#endif // _WII_
+#ifndef __IEVENT_INPUT_JOYSTICK_LISTENER_H__
+#define __IEVENT_INPUT_JOYSTICK_LISTENER_H__
 
-#if defined(_SDL_)
-	#include "platform/sdl/SdlInput.h"
-	using namespace Seed::SDL;
-#endif // _SDL_
+#include "interface/IEventListener.h"
+#include "EventInputJoystick.h"
 
-#if defined(_IPHONE_)
-	#include "platform/iphone/IphInput.h"
-	using namespace Seed::iPhone;
-#endif // _IPHONE_
+namespace Seed {
 
-#if defined(_QT_)
-	#include "platform/qt/QtInput.h"
-	using namespace Seed::QT;
-#endif // _QT_
+class SEED_CORE_API IEventInputJoystickListener : public IEventListener
+{
+	public:
+		IEventInputJoystickListener();
+		virtual ~IEventInputJoystickListener();
 
-#endif // __INPUT_H__
+		virtual void OnInputJoystickButtonPress(const EventInputJoystick *ev) const;
+		virtual void OnInputJoystickButtonRelease(const EventInputJoystick *ev) const;
+		virtual void OnInputJoystickDPadMove(const EventInputJoystick *ev) const;
+		virtual void OnInputJoystickAxisMove(const EventInputJoystick *ev) const;
+
+	private:
+		SEED_DISABLE_COPY(IEventInputJoystickListener);
+};
+
+} // namespace
+
+#endif // __IEVENT_INPUT_JOYSTICK_LISTENER_H__

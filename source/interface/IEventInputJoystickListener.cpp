@@ -29,32 +29,41 @@
  **
  *****************************************************************************/
 
-/*! \file Input.h
+/*! \file IEventInputJoystickListener.cpp
 	\author	Danny Angelo Carminati Grein
-	\brief Include selector
+	\brief Defines the event listener class interface
 */
 
-#ifndef __INPUT_H__
-#define __INPUT_H__
+#include "interface/IEventInputJoystickListener.h"
 
-#if defined(_WII_)
-	#include "platform/wii/WiiInput.h"
-	using namespace Seed::WII;
-#endif // _WII_
+namespace Seed {
 
-#if defined(_SDL_)
-	#include "platform/sdl/SdlInput.h"
-	using namespace Seed::SDL;
-#endif // _SDL_
+IEventInputJoystickListener::IEventInputJoystickListener()
+{
+}
 
-#if defined(_IPHONE_)
-	#include "platform/iphone/IphInput.h"
-	using namespace Seed::iPhone;
-#endif // _IPHONE_
+IEventInputJoystickListener::~IEventInputJoystickListener()
+{
+}
 
-#if defined(_QT_)
-	#include "platform/qt/QtInput.h"
-	using namespace Seed::QT;
-#endif // _QT_
+void IEventInputJoystickListener::OnInputJoystickButtonPress(const EventInputJoystick *ev) const
+{
+	UNUSED(ev);
+}
 
-#endif // __INPUT_H__
+void IEventInputJoystickListener::OnInputJoystickButtonRelease(const EventInputJoystick *ev) const
+{
+	UNUSED(ev);
+}
+
+void IEventInputJoystickListener::OnInputJoystickDPadMove(const EventInputJoystick *ev) const
+{
+	UNUSED(ev);
+}
+
+void IEventInputJoystickListener::OnInputJoystickAxisMove(const EventInputJoystick *ev) const
+{
+	UNUSED(ev);
+}
+
+} // namespace

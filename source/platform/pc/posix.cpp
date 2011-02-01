@@ -245,4 +245,4 @@ BOOL system_check_multiple_instance(bool warnUser)
 	return TRUE;
 }
 
-#endif // _LINUX_
+#endif

@@ -46,6 +46,7 @@
 #include "Input.h"
 #include "EventInputPointer.h"
 #include "EventInputKeyboard.h"
+#include "EventInputJoystick.h"
 #include "EventSystem.h"
 #include "ViewManager.h"
 #include "Viewport.h"
@@ -70,7 +71,8 @@ namespace Seed { namespace SDL {
 SEED_SINGLETON_DEFINE(Input);
 
 Input::Input()
-	: fX(0.0f)
+	: iJoystickCount(0)
+	, fX(0.0f)
 	, fY(0.0f)
 {
 }
@@ -83,6 +85,15 @@ Input::~Input()
 INLINE BOOL Input::Shutdown()
 {
 	Log(TAG "Terminating...");
+
+	for (u32 i = 0; i < iJoystickCount; i++)
+	{
+		if (SDL_JoystickOpened(i))
+			SDL_JoystickClose(parJoy[i]);
+	}
+
+	MEMSET(parJoy, '\0', sizeof(parJoy));
+
 	BOOL r = this->Reset();
 	Log(TAG "Terminated.");
 
@@ -96,6 +107,30 @@ INLINE BOOL Input::Initialize()
 	#if defined(WIN32) && defined(DEBUG)
 	SDL_EventState(SDL_SYSWMEVENT, SDL_ENABLE);
 	#endif
+
+	MEMSET(parJoy, '\0', sizeof(parJoy));
+	SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+
+	iJoystickCount = SDL_NumJoysticks();
+	if (iJoystickCount)
+	{
+		SDL_JoystickEventState(SDL_ENABLE);
+
+		Log(TAG "Joystick(s): ");
+		for (u32 i = 0; i < iJoystickCount; i++)
+		{
+			parJoy[i] = SDL_JoystickOpen(i);
+			if (parJoy[i])
+			{
+				Log("Opened Joystick %d:", i);
+				Log(TAG "\tName: %s", SDL_JoystickName(i));
+				Log(TAG "\t\tAxes: %d", SDL_JoystickNumAxes(parJoy[i]));
+				Log(TAG "\t\tButtons: %d", SDL_JoystickNumButtons(parJoy[i]));
+				Log(TAG "\t\tHats: %d", SDL_JoystickNumHats(parJoy[i]));
+				Log(TAG "\t\tBalls: %d", SDL_JoystickNumBalls(parJoy[i]));
+			}
+		}
+	}
 	Log(TAG "Initialization completed.");
 
 	return r;
@@ -280,6 +315,37 @@ FIXME: 2009-02-17 | BUG | Usar polling? Isso deve ferrar com o frame rate config
 			}
 			break;
 
+			case SDL_JOYBUTTONDOWN:
+			{
+				const EventInputJoystick ev(event.jbutton.which, event.jbutton.button, 0, 0, 0, 0);
+				this->SendEventJoystickButtonPress(&ev);
+			}
+			break;
+
+			case SDL_JOYBUTTONUP:
+			{
+				const EventInputJoystick ev(event.jbutton.which, 0, 0, event.jbutton.button, 0, 0);
+				this->SendEventJoystickButtonRelease(&ev);
+			}
+			break;
+
+			case SDL_JOYAXISMOTION:
+			{
+				const EventInputJoystick ev(event.jbutton.which, 0, 0, 0, event.jaxis.axis, event.jaxis.value);
+				this->SendEventJoystickAxisMove(&ev);
+			}
+			break;
+
+			case SDL_JOYHATMOTION:
+			{
+				const EventInputJoystick ev(event.jbutton.which, 0, 0, 0, event.jhat.hat, event.jhat.value);
+				this->SendEventJoystickDPadMove(&ev);
+			}
+			break;
+
+			case SDL_JOYBALLMOTION:
+			break;
+
 			default:
 			break;
 		}
@@ -420,13 +486,22 @@ INLINE Seed::eModifier Input::GetModifierCode(u32 mod) const
 	return m;
 }
 
+INLINE u32 Input::GetMaximumJoysticks() const
+{
+	return iJoystickCount;
+}
+
 INLINE BOOL Input::IsPointer() const
 {
 	return TRUE;
 }
 
 //INLINE BOOL Input::IsMotion() const;
-//INLINE BOOL Input::IsJoystick() const;
+INLINE BOOL Input::IsJoystick() const
+{
+	return iJoystickCount > 0;
+}
+
 INLINE BOOL Input::IsKeyboard() const
 {
 	return TRUE;

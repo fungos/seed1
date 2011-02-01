@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -37,9 +37,13 @@
 #ifndef __IINPUT_JOYSTICK_H__
 #define __IINPUT_JOYSTICK_H__
 
-#include "IInput.h"
+#include "interface/IInput.h"
+#include "Array.h"
 
 namespace Seed {
+
+class EventInputJoystick;
+class IEventInputJoystickListener;
 
 /// Joystick Input Interface
 /**
@@ -51,12 +55,19 @@ class SEED_CORE_API IInputJoystick
 		IInputJoystick();
 		virtual ~IInputJoystick();
 
-		virtual BOOL IsHold(u32 button, u16 joystick = 0);
-		virtual BOOL IsPressed(u32 button, u16 joystick = 0);
-		virtual BOOL IsReleased(u32 button, u16 joystick = 0);
+		virtual u32 GetMaximumJoysticks() const;
 
-		virtual f32 GetX(u16 joystick = 0);
-		virtual f32 GetY(u16 joystick = 0);
+		virtual void AddJoystickListener(IEventInputJoystickListener *listener);
+		virtual void RemoveJoystickListener(IEventInputJoystickListener *listener);
+
+	protected:
+		void SendEventJoystickButtonPress(const EventInputJoystick *ev);
+		void SendEventJoystickButtonRelease(const EventInputJoystick *ev);
+		void SendEventJoystickDPadMove(const EventInputJoystick *ev);
+		void SendEventJoystickAxisMove(const EventInputJoystick *ev);
+
+	protected:
+		Array<IEventInputJoystickListener *, 1000> arJoystickListeners;
 
 	private:
 		SEED_DISABLE_COPY(IInputJoystick);

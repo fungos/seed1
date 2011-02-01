@@ -29,32 +29,46 @@
  **
  *****************************************************************************/
 
-/*! \file Input.h
+/*! \file EventInputJoystick.h
 	\author	Danny Angelo Carminati Grein
-	\brief Include selector
+	\brief A event from an input joystick
 */
 
-#ifndef __INPUT_H__
-#define __INPUT_H__
+#ifndef __EVENT_INPUT_JOYSTICK_H__
+#define __EVENT_INPUT_JOYSTICK_H__
 
-#if defined(_WII_)
-	#include "platform/wii/WiiInput.h"
-	using namespace Seed::WII;
-#endif // _WII_
+#include "interface/IEventInput.h"
 
-#if defined(_SDL_)
-	#include "platform/sdl/SdlInput.h"
-	using namespace Seed::SDL;
-#endif // _SDL_
+namespace Seed {
 
-#if defined(_IPHONE_)
-	#include "platform/iphone/IphInput.h"
-	using namespace Seed::iPhone;
-#endif // _IPHONE_
+class SEED_CORE_API EventInputJoystick : public IEventInput
+{
+	public:
+		EventInputJoystick(u32 j, u32 pressed, u32 hold, u32 released, u32 axis, u32 value);
+		virtual ~EventInputJoystick();
 
-#if defined(_QT_)
-	#include "platform/qt/QtInput.h"
-	using namespace Seed::QT;
-#endif // _QT_
+		u32 GetJoystick() const;
+		u32 GetPressed()  const;
+		u32 GetReleased() const;
+		u32 GetHold() 	 const;
+		u32 GetAxis() 	 const;
+		u32 GetValue()	 const;
 
-#endif // __INPUT_H__
+		// IObject
+		const char *GetObjectName() const;
+
+	protected:
+		u32 iJoystick;
+		u32 iPressed;
+		u32 iHold;
+		u32 iReleased;
+		u32 iAxis;
+		u32 iValue;
+
+	private:
+		SEED_DISABLE_COPY(EventInputJoystick);
+};
+
+} // namespace
+
+#endif // __EVENT_INPUT_JOYSTICK_H__

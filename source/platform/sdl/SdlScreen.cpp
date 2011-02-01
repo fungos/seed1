@@ -232,7 +232,7 @@ INLINE BOOL Screen::InitializeVideo()
 		pSurface = NULL;
 	}
 
-#if defined(__APPLE_CC__) || defined(_LINUX_)
+#if defined(__APPLE_CC__) || defined(__linux__)
 	this->SetupOpenGL();
 #else
 	eRendererDeviceType type = pConfiguration->GetRendererDeviceType();
@@ -419,7 +419,7 @@ INLINE void Screen::ToggleFullscreen()
 #else
 	bFullScreen = !bFullScreen;
 	iFlags ^= SDL_FULLSCREEN;
-	
+
 	pResourceManager->Unload(Seed::ObjectTexture);
 	pRendererDevice->Shutdown();
 	this->InitializeVideo();

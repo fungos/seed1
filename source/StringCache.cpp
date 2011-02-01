@@ -115,7 +115,7 @@ INLINE void StringCache::DestroyStringTable()
 INLINE const char *StringCache::GetStringById(u32 strId) const
 {
 	const char *s = NULL;
-	if (pStringTable)
+	if (pStringTable && strId != SEED_INVALID_ID)
 		s = pStringTable[strId];
 
 	return s;

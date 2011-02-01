@@ -29,32 +29,74 @@
  **
  *****************************************************************************/
 
-/*! \file Input.h
+/*! \file EventInputJoystick.cpp
 	\author	Danny Angelo Carminati Grein
-	\brief Include selector
+	\brief A event from an input joystick
 */
 
-#ifndef __INPUT_H__
-#define __INPUT_H__
+#include "EventInputJoystick.h"
 
-#if defined(_WII_)
-	#include "platform/wii/WiiInput.h"
-	using namespace Seed::WII;
-#endif // _WII_
+namespace Seed {
 
-#if defined(_SDL_)
-	#include "platform/sdl/SdlInput.h"
-	using namespace Seed::SDL;
-#endif // _SDL_
 
-#if defined(_IPHONE_)
-	#include "platform/iphone/IphInput.h"
-	using namespace Seed::iPhone;
-#endif // _IPHONE_
+EventInputJoystick::EventInputJoystick(u32 j, u32 pressed, u32 hold, u32 released, u32 axis, u32 value)
+	: IEventInput(EVENT_INPUT_POINTER)
+	, iJoystick(j)
+	, iPressed(pressed)
+	, iHold(hold)
+	, iReleased(released)
+	, iAxis(axis)
+	, iValue(value)
+{
+}
 
-#if defined(_QT_)
-	#include "platform/qt/QtInput.h"
-	using namespace Seed::QT;
-#endif // _QT_
 
-#endif // __INPUT_H__
+EventInputJoystick::~EventInputJoystick()
+{
+}
+
+
+INLINE u32 EventInputJoystick::GetJoystick() const
+{
+	return iJoystick;
+}
+
+
+INLINE u32 EventInputJoystick::GetPressed()  const
+{
+	return iPressed;
+}
+
+
+INLINE u32 EventInputJoystick::GetReleased() const
+{
+	return iReleased;
+}
+
+
+INLINE u32 EventInputJoystick::GetHold() const
+{
+	return iHold;
+}
+
+
+INLINE u32 EventInputJoystick::GetAxis() const
+{
+	return iAxis;
+}
+
+
+INLINE u32 EventInputJoystick::GetValue() const
+{
+	return iValue;
+}
+
+
+INLINE const char *EventInputJoystick::GetObjectName() const
+{
+	return "EventInputJoystick";
+}
+
+
+} // namespace
+

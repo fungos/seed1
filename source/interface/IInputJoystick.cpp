@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -35,6 +35,7 @@
 */
 
 #include "interface/IInputJoystick.h"
+#include "interface/IEventInputJoystickListener.h"
 #include "Log.h"
 
 namespace Seed {
@@ -47,42 +48,74 @@ IInputJoystick::~IInputJoystick()
 {
 }
 
-INLINE BOOL IInputJoystick::IsHold(u32 button, u16 joystick)
+u32 IInputJoystick::GetMaximumJoysticks() const
 {
-	UNUSED(button);
-	UNUSED(joystick);
 	SEED_ABSTRACT_METHOD;
-	return FALSE;
+	return 0;
 }
 
-INLINE BOOL IInputJoystick::IsPressed(u32 button, u16 joystick)
+INLINE void IInputJoystick::AddJoystickListener(IEventInputJoystickListener *listener)
 {
-	UNUSED(button);
-	UNUSED(joystick);
-	SEED_ABSTRACT_METHOD;
-	return FALSE;
+	ASSERT_NULL(listener);
+	arJoystickListeners.Add(listener);
 }
 
-INLINE BOOL IInputJoystick::IsReleased(u32 button, u16 joystick)
+INLINE void IInputJoystick::RemoveJoystickListener(IEventInputJoystickListener *listener)
 {
-	UNUSED(button);
-	UNUSED(joystick);
-	SEED_ABSTRACT_METHOD;
-	return FALSE;
+	ASSERT_NULL(listener);
+
+	for (u32 i = 0; i < arJoystickListeners.Size(); i++)
+	{
+		if (arJoystickListeners[i] == listener)
+		{
+			arJoystickListeners.Del(i);
+			break;
+		}
+	}
 }
 
-INLINE f32 IInputJoystick::GetX(u16 joystick)
+void IInputJoystick::SendEventJoystickButtonPress(const EventInputJoystick *ev)
 {
-	UNUSED(joystick);
-	SEED_ABSTRACT_METHOD;
-	return 0.0f;
+	ASSERT_NULL(ev);
+
+	for (u32 i = 0; i < arJoystickListeners.Size(); i++)
+	{
+		ASSERT_NULL(arJoystickListeners[i]);
+		arJoystickListeners[i]->OnInputJoystickButtonRelease(ev);
+	}
 }
 
-INLINE f32 IInputJoystick::GetY(u16 joystick)
+void IInputJoystick::SendEventJoystickButtonRelease(const EventInputJoystick *ev)
 {
-	UNUSED(joystick);
-	SEED_ABSTRACT_METHOD;
-	return 0.0f;
+	ASSERT_NULL(ev);
+
+	for (u32 i = 0; i < arJoystickListeners.Size(); i++)
+	{
+		ASSERT_NULL(arJoystickListeners[i]);
+		arJoystickListeners[i]->OnInputJoystickButtonRelease(ev);
+	}
+}
+
+void IInputJoystick::SendEventJoystickDPadMove(const EventInputJoystick *ev)
+{
+	ASSERT_NULL(ev);
+
+	for (u32 i = 0; i < arJoystickListeners.Size(); i++)
+	{
+		ASSERT_NULL(arJoystickListeners[i]);
+		arJoystickListeners[i]->OnInputJoystickDPadMove(ev);
+	}
+}
+
+void IInputJoystick::SendEventJoystickAxisMove(const EventInputJoystick *ev)
+{
+	ASSERT_NULL(ev);
+
+	for (u32 i = 0; i < arJoystickListeners.Size(); i++)
+	{
+		ASSERT_NULL(arJoystickListeners[i]);
+		arJoystickListeners[i]->OnInputJoystickAxisMove(ev);
+	}
 }
 
 } // namespace

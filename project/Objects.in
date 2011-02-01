@@ -54,6 +54,7 @@ OBJECTS = \
 ../source/EventInputKeyboard.o \
 ../source/EventInputMotion.o \
 ../source/EventInputPointer.o \
+../source/EventInputJoystick.o \
 ../source/EventMovie.o \
 ../source/EventResourceLoader.o \
 ../source/EventSystem.o \
@@ -96,6 +97,7 @@ OBJECTS = \
 ../source/interface/IEventInputKeyboardListener.o \
 ../source/interface/IEventInputMotionListener.o \
 ../source/interface/IEventInputPointerListener.o \
+../source/interface/IEventInputJoystickListener.o \
 ../source/interface/IEventListener.o \
 ../source/interface/IEventMovieListener.o \
 ../source/interface/IEventResourceLoaderListener.o \

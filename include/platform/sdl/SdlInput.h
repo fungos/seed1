@@ -41,13 +41,16 @@
 
 #include "interface/IInput.h"
 #include "interface/IInputPointer.h"
+#include "interface/IInputJoystick.h"
 #include "interface/IInputKeyboard.h"
 #include "Enum.h"
 #include "Singleton.h"
 
+#define MAX_JOYSTICKS 32
+
 namespace Seed { namespace SDL {
 
-class SEED_CORE_API Input : public IInput, public IInputPointer, public IInputKeyboard
+class SEED_CORE_API Input : public IInput, public IInputPointer, public IInputKeyboard, public IInputJoystick
 {
 	SEED_SINGLETON_DECLARE(Input);
 	public:
@@ -55,8 +58,12 @@ class SEED_CORE_API Input : public IInput, public IInputPointer, public IInputKe
 		virtual Seed::eInputButton GetButtonCode(u32 button) const;
 		virtual u32 ConvertButtonFlags(u32 flags);
 
+		virtual BOOL IsJoystick() const;
 		virtual BOOL IsPointer() const;
 		virtual BOOL IsKeyboard() const;
+
+		// IInputJoystick
+		virtual u32 GetMaximumJoysticks() const;
 
 		// IInputKeyboard
 
@@ -94,8 +101,11 @@ class SEED_CORE_API Input : public IInput, public IInputPointer, public IInputKe
 		Seed::eModifier GetModifierCode(u32 mod) const;
 
 	private:
+		u32  iJoystickCount;
 		f32 fX;
 		f32 fY;
+
+		SDL_Joystick *parJoy[MAX_JOYSTICKS];
 };
 
 #define pInput Input::GetInstance()
