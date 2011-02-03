@@ -244,7 +244,7 @@ void Timeline::Update()
 			fCurrA			= kfFrom->iColorA;
 		}
 
-		if(pObject)
+		if (pObject)
 		{
 			pObject->SetPosition(fCurrPosX, fCurrPosY);
 			pObject->SetLocalPosition(fCurrLocalPosX, fCurrLocalPosY);
