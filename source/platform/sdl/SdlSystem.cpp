@@ -82,7 +82,7 @@ BOOL System::Initialize()
 
 	iFrameRate = pConfiguration->GetFrameRate();
 
-	if (!pConfiguration->GetCanHaveMultipleInstances() && !system_check_multiple_instance(pConfiguration->GetWarningMultipleInstances()))
+	if (!pConfiguration->GetCanHaveMultipleInstances() && !system_check_multiple_instance())
 	{
 		exit(1);
 	}

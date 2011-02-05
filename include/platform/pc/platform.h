@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -42,6 +42,6 @@ const FilePath *get_user_home_folder();
 void get_current_directory(FilePath *buff, int size);
 BOOL change_directory(const FilePath *to);
 void print_system_info();
-BOOL system_check_multiple_instance(bool warn);
+BOOL system_check_multiple_instance();
 
 #endif // __PC_PLATFORM_H__

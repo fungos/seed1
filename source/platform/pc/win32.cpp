@@ -172,7 +172,7 @@ void print_system_info()
 	Info(TAG "Memory: %ldKb total, %ldKb free", mem.dwTotalPhys/1024L, mem.dwAvailPhys/1024L);
 }
 
-BOOL system_check_multiple_instance(bool warnUser)
+BOOL system_check_multiple_instance()
 {
 #if !defined(_QT_)
 	DWORD error = 0;
@@ -192,7 +192,7 @@ BOOL system_check_multiple_instance(bool warnUser)
 		HWND hWnd = FindWindow(NULL, Seed::pConfiguration->GetApplicationTitle());
 		if (hWnd)
 		{
-			if (warnUser)
+			if (pConfiguration->GetWarningMultipleInstances())
 			{
 				MessageBox(NULL, "There is already an instance of this application running!", Seed::pConfiguration->GetApplicationTitle(), MB_ICONWARNING);
 			}

@@ -44,10 +44,18 @@ namespace Seed {
 template <class TYPE> class Rect
 {
 	public:
-		TYPE x;
-		TYPE y;
-		TYPE width;
-		TYPE height;
+		union
+		{
+			struct
+			{
+				TYPE x;
+				TYPE y;
+				TYPE width;
+				TYPE height;
+			};
+
+			TYPE v[4];
+		};
 
 	public:
 		Rect(TYPE x = 0, TYPE y = 0, TYPE width = 0, TYPE height = 0)

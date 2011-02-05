@@ -169,6 +169,13 @@ void Screen::PrepareMode()
 		}
 		break;
 
+		case Video_1024x600:
+		{
+			iWidth = 1024;
+			iHeight = 600;
+		}
+		break;
+
 		case Video_1024x768:
 		{
 			iWidth = 1024;

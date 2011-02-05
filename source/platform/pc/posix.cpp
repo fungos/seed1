@@ -238,9 +238,8 @@ void print_system_info()
 	#warning "Must implement function print_system_info"
 }
 
-BOOL system_check_multiple_instance(bool warnUser)
+BOOL system_check_multiple_instance()
 {
-	UNUSED(warnUser);
 	#warning "Must implement function system_check_multiple_instance"
 	return TRUE;
 }

@@ -150,6 +150,8 @@ enum eVideoMode
 	Video_640x480,
 	Video_NintendoWii,
 	Video_800x600,
+	Video_1024x600,
+	Video_Netbook = Video_1024x600,
 	Video_1024x768,
 	Video_iPad = Video_1024x768
 };

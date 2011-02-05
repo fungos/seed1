@@ -69,6 +69,12 @@ template <class TYPE, int SIZE> class Array
 			return array[index];
 		}
 
+		inline const TYPE& At(u32 index) const
+		{
+			ASSERT(index < used);
+			return array[index];
+		}
+
 		inline void Add(TYPE element)
 		{
 			ASSERT(used < SIZE);
