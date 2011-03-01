@@ -421,10 +421,10 @@ INLINE void Screen::ToggleFullscreen()
 	// change video mode
 	// reconfigure opengl context
 	// reload textures
+	bFullScreen = !bFullScreen;
 #if defined(__linux__)
 	SDL_WM_ToggleFullScreen(pSurface);
 #else
-	bFullScreen = !bFullScreen;
 	iFlags ^= SDL_FULLSCREEN;
 
 	pResourceManager->Unload(Seed::ObjectTexture);
