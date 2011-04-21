@@ -205,6 +205,7 @@ class SEED_CORE_API Button : public IWidget, public IResource
 		// Sprite
 		virtual void SetSpriteBlending(eBlendMode op);
 		virtual void SetSpriteColor(u32 r, u32 g, u32 b, u32 a);
+		virtual void SetSpriteColor(f32 r, f32 g, f32 b, f32 a);
 		virtual void SetSpriteColor(PIXEL px);
 		virtual PIXEL GetSpriteColor();
 		virtual void SetSpritePressOffset(f32 x, f32 y);

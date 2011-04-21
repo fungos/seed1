@@ -746,7 +746,7 @@ void Button::SetSprite(const char *spriteName, ResourceManager *res, IMemoryPool
 
 	f32 maxW, maxH;
 	maxW = maxH = 0.0f;
- 
+
 	if (bLabelBased)
 	{
 		maxW = cLabel.GetWidth();
@@ -1232,7 +1232,7 @@ INLINE void Button::SetText(const WideString str)
 
 	f32 maxW, maxH;
 	maxW = maxH = 0.0f;
- 
+
 	if (bSpriteBased)
 	{
 		maxW = cSprite.GetWidth();
@@ -1425,6 +1425,11 @@ INLINE void Button::SetSpriteBlending(eBlendMode op)
 }
 
 INLINE void Button::SetSpriteColor(u32 r, u32 g, u32 b, u32 a)
+{
+	cSprite.SetColor(r, g, b, a);
+}
+
+INLINE void Button::SetSpriteColor(f32 r, f32 g, f32 b, f32 a)
 {
 	cSprite.SetColor(r, g, b, a);
 }
