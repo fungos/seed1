@@ -42,6 +42,13 @@
 #define SEED_BEGIN_REGION_PROFILER(name, str)	ProfileContext _c##name(str, Profiler::regionProfilerInstance);
 #define SEED_END_REGION_PROFILER(name)			_c##name.Terminate();
 #define ProfilerReportPrint		Profiler::funcProfilerInstance->Dump(); Profiler::regionProfilerInstance->Dump();
+#define ProfilerTerminate		do { \
+									delete Profiler::funcProfilerInstance; \
+									Profiler::funcProfilerInstance = NULL; \
+									delete Profiler::regionProfilerInstance; \
+									Profiler::regionProfilerInstance = NULL; \
+								} \
+								while (0);
 
 class ProfileContext;
 
@@ -123,6 +130,7 @@ class SEED_CORE_API ProfileContext
 #define SEED_BEGIN_REGION_PROFILER(name, str)
 #define SEED_END_REGION_PROFILER(name)
 #define ProfilerReportPrint
+#define ProfilerTerminate
 
 #endif // SEED_ENABLE_PROFILER
 

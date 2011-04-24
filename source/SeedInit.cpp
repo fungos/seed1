@@ -284,6 +284,7 @@ void Shutdown()
 	pSystem->DestroyInstance();
 
 	ProfilerReportPrint;
+	ProfilerTerminate;
 	LeakReportPrint;
 
 	Private::bInitialized = FALSE;
