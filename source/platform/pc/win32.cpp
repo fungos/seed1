@@ -37,11 +37,14 @@
 #include "Log.h"
 #include "SeedInit.h"
 
+
 #pragma push_macro("Delete")
 #pragma push_macro("BOOL")
 #pragma push_macro("SIZE_T")
 #undef Delete
+#if defined(_MSC_VER)
 #undef BOOL
+#endif
 #undef SIZE_T
 #include <io.h>
 #include <windows.h>
@@ -62,6 +65,8 @@
 
 #define SYSTEM_APPDATA_FOLDER_VISTA_SEVEN	L"%LOCALAPPDATA%"
 #define SYSTEM_APPDATA_FOLDER_XP			L"%APPDATA%"
+
+#define CREATE_MUTEX_INITIAL_OWNER 0x00000001
 
 static wchar_t strUserName[SYSTEM_USERNAME_MAXLEN];
 static wchar_t strUserHomePath[SYSTEM_USERHOME_MAXLEN];
@@ -101,6 +106,19 @@ const wchar_t *get_user_name()
 	return strUserName;
 }
 
+const wchar_t *get_user_home_folder()
+{
+	memset((void *)strUserHomePath, '\0', sizeof(strUserHomePath));
+	u32 count = ExpandEnvironmentStringsW(L"%USERPROFILE%\\", (LPWSTR)&strUserHomePath[0], SYSTEM_USERHOME_MAXLEN);
+	if (count > SYSTEM_USERHOME_MAXLEN)
+	{
+		Log(TAG "WARNING: Could not get user home folder (too big!)");
+		return L"./";
+	}
+
+	return strUserHomePath;
+}
+
 const wchar_t *get_user_savegame_folder()
 {
 	const wchar_t *s = get_user_home_folder();
@@ -134,19 +152,6 @@ const wchar_t *get_user_appdata_folder()
 	}
 
 	return strUserAppDataPath;
-}
-
-const wchar_t *get_user_home_folder()
-{
-	memset((void *)strUserHomePath, '\0', sizeof(strUserHomePath));
-	u32 count = ExpandEnvironmentStringsW(L"%USERPROFILE%\\", (LPWSTR)&strUserHomePath[0], SYSTEM_USERHOME_MAXLEN);
-	if (count > SYSTEM_USERHOME_MAXLEN)
-	{
-		Log(TAG "WARNING: Could not get user home folder (too big!)");
-		return L"./";
-	}
-
-	return strUserHomePath;
 }
 
 void get_current_directory(wchar_t *buff, int size)
@@ -192,7 +197,7 @@ BOOL system_check_multiple_instance()
 		HWND hWnd = FindWindow(NULL, Seed::pConfiguration->GetApplicationTitle());
 		if (hWnd)
 		{
-			if (pConfiguration->GetWarningMultipleInstances())
+			if (Seed::pConfiguration->GetWarningMultipleInstances())
 			{
 				MessageBox(NULL, "There is already an instance of this application running!", Seed::pConfiguration->GetApplicationTitle(), MB_ICONWARNING);
 			}
