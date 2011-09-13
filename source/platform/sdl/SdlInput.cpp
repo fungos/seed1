@@ -56,7 +56,13 @@
 #pragma push_macro("BOOL")
 #pragma push_macro("SIZE_T")
 #undef Delete
+#if defined(_MSC_VER)
 #undef BOOL
+#else
+#define WM_IME_SETCONTEXT			0x281
+#define WM_IME_NOTIFY				0x282
+#define WM_DWMCOMPOSITIONCHANGED	0x31e
+#endif
 #undef SIZE_T
 #include <SDL/SDL_syswm.h>
 #pragma pop_macro("SIZE_T")

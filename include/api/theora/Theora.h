@@ -93,7 +93,9 @@
 #pragma push_macro("BOOL")
 #pragma push_macro("SIZE_T")
 #undef Delete
+#if defined(_MSC_VER)
 #undef BOOL
+#endif
 #undef SIZE_T
 #include <windows.h>
 #pragma pop_macro("SIZE_T")

@@ -82,7 +82,6 @@ INLINE void IGameApp::WriteDbg(const char *msg)
 
 INLINE BOOL IGameApp::HasError() const
 {
-	SEED_ABSTRACT_METHOD;
 	return FALSE;
 }
 

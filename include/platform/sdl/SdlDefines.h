@@ -184,7 +184,9 @@ typedef u32 					PIXEL;
 
 #if defined(WIN32)
 	#undef GetObject
+	#if defined(_MSC_VER)
 	#undef BOOL
+	#endif
 	#undef OUT
 	#define ATTRIBUTE_ALIGN(x)
 	#define LIB_FOPEN(a, b)					_wfopen((wchar_t *)a, L##b)
@@ -204,7 +206,6 @@ typedef u32 					PIXEL;
 	#define LIB_FOPEN(a, b)					fopen((const char *)a, b)
 	#define PLATFORM_PATH_SEPARATOR			'/'
 #endif // WIN32
-
 
 #define BOOL 	bool
 #define FALSE	0
@@ -253,7 +254,7 @@ typedef u32 					PIXEL;
 #define	LIB_PIXEL_COLOR(r, g, b, a)	((LIB_PIXEL_COMPONENT(b)<<LIB_PIXEL_B_SHIFT) | (LIB_PIXEL_COMPONENT(g)<<LIB_PIXEL_G_SHIFT) | (LIB_PIXEL_COMPONENT(r)<<LIB_PIXEL_R_SHIFT) | (LIB_PIXEL_COMPONENT(a)<<LIB_PIXEL_A_SHIFT))
 #define LIB_PIXEL_ALPHA_MAX_VALUE	255
 
-#if defined(WIN32)
+#if defined(_MSC_VER)
 #define HALT	do { __asm { int 3 }; exit(-1); } while (1);
 #else
 #define HALT	do { asm("int $3"); exit(-1); } while (1);

@@ -55,7 +55,9 @@
 #pragma push_macro("BOOL")
 #pragma push_macro("SIZE_T")
 #undef Delete
+#if defined(_MSC_VER)
 #undef BOOL
+#endif
 #undef SIZE_T
 #include <dx8/d3d8.h>
 #include <dx8/d3dx8.h>

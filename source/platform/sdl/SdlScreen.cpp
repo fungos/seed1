@@ -46,7 +46,11 @@
 #pragma push_macro("BOOL")
 #pragma push_macro("SIZE_T")
 #undef Delete
+#if defined(_MSC_VER)
 #undef BOOL
+#else
+#define USER_DEFAULT_SCREEN_DPI	96
+#endif
 #undef SIZE_T
 #include <SDL/SDL_syswm.h>
 #pragma pop_macro("SIZE_T")
