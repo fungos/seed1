@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -95,7 +95,21 @@ class SEED_CORE_API Configuration : public IObject
 			\returns a const char * string;
 		 */
 		const char *GetApplicationDescription() const;
-		
+
+		//! Sets the application publisher name.
+		/*!
+			Sets the application publisher name, mainly used for savegame data.
+			\param descr Publisher of the application ;
+		 */
+		void SetPublisherName(const char *desc);
+
+		//! Returns the application publisher name.
+		/*!
+			Returns the application publisher name.
+			\returns a const char * string;
+		 */
+		const char *GetPublisherName() const;
+
 		//! Set the maximum radius for distance based widget collision
 		/*!
 			Set the maximum radius from widget center to consider
@@ -103,7 +117,7 @@ class SEED_CORE_API Configuration : public IObject
 			Useful for touch devices with finger based input.
 		 */
 		void SetInputDistanceRadius(f32 dist);
-		
+
 		//! Get the maximum radius for distance based widget collision
 		/*!
 			Returns the maximum radius from widget center to consider
@@ -114,7 +128,7 @@ class SEED_CORE_API Configuration : public IObject
 
 		void SetPlatformSimulation(ePlatformSimulation platform);
 		ePlatformSimulation GetPlatformSimulation() const;
-		
+
 		void SetCanHaveMultipleInstances(BOOL enable);
 		BOOL GetCanHaveMultipleInstances() const;
 
@@ -153,6 +167,7 @@ class SEED_CORE_API Configuration : public IObject
 		eSystemFrameRate iFrameRate;
 		const char *pcTitle;
 		const char *pcDescription;
+		const char *pcPublisherName;
 
 		// Memory
 		u32 iMemorySize;
@@ -160,7 +175,7 @@ class SEED_CORE_API Configuration : public IObject
 		// General
 		ePlatformSimulation iPlatformSimulation;
 		eRendererDeviceType iRendererDeviceType;
-		
+
 		f32 iInputRadius;
 };
 

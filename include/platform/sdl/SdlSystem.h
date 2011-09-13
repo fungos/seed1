@@ -68,10 +68,10 @@ class SEED_CORE_API System : public ISystem
 
 		virtual void EnableDefaultCursor(BOOL b);
 
-		virtual const wchar_t *GetUsername() const;
-		virtual const wchar_t *GetHomeFolder() const;
-		virtual const wchar_t *GetApplicationDataFolder() const;
-		virtual const wchar_t *GetSaveGameFolder() const;
+		virtual const FilePath *GetUsername() const;
+		virtual const FilePath *GetHomeFolder() const;
+		virtual const FilePath *GetApplicationDataFolder() const;
+		virtual const FilePath *GetSaveGameFolder() const;
 
 		// IModule
 		virtual BOOL Initialize();

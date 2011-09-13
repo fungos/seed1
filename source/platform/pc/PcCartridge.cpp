@@ -98,15 +98,10 @@ INLINE BOOL Cartridge::Prepare(eCartridgeSize size)
 	ASSERT_MSG(p!=NULL, "You must set a WriteableDirectory!");
 
 	MEMSET(strPath, '\0', sizeof(strPath));
-#if !defined(_IPHONE_)
-	wcsncpy(strPath, p, PC_MAX_PATH);
-	wcsncat(strPath, L"/", PC_MAX_PATH - 1);
-	wcsncat(strPath, CARTRIDGE_FILENAME, PC_MAX_PATH - wcslen(strPath) - 1);
-#else
-	strncpy(strPath, p, PC_MAX_PATH);
-	strncat(strPath, "/", PC_MAX_PATH - 1);
-	strncat(strPath, CARTRIDGE_FILENAME_A, PC_MAX_PATH - strlen(strPath) - 1);
-#endif
+
+	PATHCOPY(strPath, p, PC_MAX_PATH);
+	PATHCAT(strPath, PATH_SEPARATOR, PC_MAX_PATH - 1);
+	PATHCAT(strPath, CARTRIDGE_FILENAME, PC_MAX_PATH - PATHLEN(strPath) - 1);
 
 	this->pData = static_cast<u8 *>(pMemoryManager->Alloc(iSize, pDefaultPool, "Cartridge Data", "Cartridge"));
 	memset(this->pData, 0, iSize);

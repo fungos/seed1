@@ -86,6 +86,7 @@ class SEED_CORE_API SaveSystem
 		eCartridgeError FormatShared(void *sharedBlankData);
 
 		void Wait();
+		void PrepareFilesystem();
 
 	private:
 		u32 iTotalSlots;
@@ -97,11 +98,9 @@ class SEED_CORE_API SaveSystem
 
 		static BOOL bIsSaving;
 		BOOL bInitialized;
-};
 
-//extern "C" {
-//SEED_CORE_API SEED_SINGLETON_EXTERNALIZE(SaveSystem);
-//}
+		FilePath pcSaveGameFolder[SEED_MAX_FOLDER_SIZE];
+};
 
 #define pSaveSystem SaveSystem::GetInstance()
 

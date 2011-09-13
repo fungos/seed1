@@ -199,22 +199,22 @@ INLINE void System::WaitForRetrace(eSystemFrameRate rate)
 	}
 }
 
-INLINE const wchar_t *System::GetUsername() const
+INLINE const FilePath *System::GetUsername() const
 {
 	return get_user_name();
 }
 
-INLINE const wchar_t *System::GetHomeFolder() const
+INLINE const FilePath *System::GetHomeFolder() const
 {
 	return get_user_home_folder();
 }
 
-INLINE const wchar_t *System::GetApplicationDataFolder() const
+INLINE const FilePath *System::GetApplicationDataFolder() const
 {
 	return get_user_appdata_folder();
 }
 
-INLINE const wchar_t *System::GetSaveGameFolder() const
+INLINE const FilePath *System::GetSaveGameFolder() const
 {
 	return get_user_savegame_folder();
 }

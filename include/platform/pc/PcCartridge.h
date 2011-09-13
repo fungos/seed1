@@ -48,8 +48,14 @@
 #include <stdlib.h>
 
 #define CARTRIDGE_SECTOR_ROUND(n, a)     (((u32) (n) + (a) - 1) & ~((a) - 1))
+
+#if SEED_PATH_WIDE == 1
 #define CARTRIDGE_FILENAME	L"savedata"
-#define CARTRIDGE_FILENAME_A "savedata"
+#define PATH_SEPARATOR		L"/"
+#else
+#define CARTRIDGE_FILENAME	"savedata"
+#define PATH_SEPARATOR		"/"
+#endif
 
 #define PC_MAX_PATH		2048
 

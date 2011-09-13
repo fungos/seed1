@@ -96,6 +96,16 @@ Toggle between instancing Singleton classes in the (0) Stack or in the (1) Heap
 #define SEED_MAX_PRIORITY					1000000
 
 /*
+Maximum size of a folder name string
+*/
+#define SEED_MAX_FOLDER_SIZE				4096
+
+/*
+Use wide char paths
+*/
+#define SEED_PATH_WIDE						0
+
+/*
 String Pools - Define the amount of each pool
 You MUST fine tune this accordingly your target platform, your needs and your use.
 Try to keep these values at a minimum.

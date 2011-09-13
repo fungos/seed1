@@ -65,6 +65,7 @@ class SEED_CORE_API String
 		void SubString(u32 index, u32 size);
 		void Append(WideChar chr);
 		void Append(const String *pString);
+		void Append(const char *pcString);
 
 		// Common string functions
 		u32 Length() const;

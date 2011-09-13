@@ -141,6 +141,7 @@ const FilePath *get_user_home_folder()
 	const FilePath *home = (FilePath *)getenv("HOME");
 	if (!home)
 		home = (const FilePath *)"./";
+
 	return home;
 }
 
@@ -230,7 +231,6 @@ BOOL change_directory(const FilePath *to)
 	}
 
 	return ret;
-
 }
 
 void print_system_info()

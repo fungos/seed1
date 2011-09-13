@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -72,7 +72,7 @@ INLINE String &String::Set(const WideString newStr)
 
 	iConstructedSize = this->Length(pOriginalStr) + 1;
 	pConstructedStr = glStringPool.Alloc(iConstructedSize);
-	
+
 	this->Copy(pOriginalStr);
 
 	return *this;
@@ -88,7 +88,7 @@ INLINE String &String::Reset()
 
 	iConstructedSize = this->Length(pOriginalStr) + 1;
 	pConstructedStr = glStringPool.Alloc(iConstructedSize);
-	
+
 	this->Copy(pOriginalStr);
 
 	return *this;
@@ -115,7 +115,7 @@ INLINE String &String::operator=(const String &string)
 	pOriginalStr		= string.pOriginalStr;
 
 	pConstructedStr		= glStringPool.Alloc(iConstructedSize);
-	
+
 	this->Copy(string.pConstructedStr);
 
 	return *this;
@@ -155,7 +155,7 @@ INLINE String &String::Set(const u16 *paramName, const char *paramVal)
 	}
 
 	parsedParamVal[len] = '\0';
- 
+
 	this->Replace(paramName, parsedParamVal);
 	//glStringPool.Free(parsedParamVal);
 
@@ -170,7 +170,7 @@ INLINE String &String::Set(const u16 *paramName, const char paramVal)
 	tmp[1] = '\0';
 	tmp[2] = '\0';
 	tmp[3] = '\0';
- 
+
 	this->Replace(paramName, (u16 *)tmp);
 
 	return *this;
@@ -190,7 +190,7 @@ INLINE String &String::Set(const u16 *paramName, const u16 paramVal)
 	tmp[1] = tmp2[1];
 	tmp[2] = '\0';
 	tmp[3] = '\0';
- 
+
 	this->Replace(paramName, (u16 *)paramVal);
 
 	return *this;
@@ -345,7 +345,7 @@ INLINE void String::Cut(u32 index, u32 size)
 {
 	if (!size)
 		return;
-	
+
 	u32 len = this->Length();
 	ASSERT(index + size <= len);
 
@@ -364,10 +364,40 @@ INLINE void String::Paste(u32 index, const u16 *val)
 	MEMCOPY(tmp, pConstructedStr, bufferLen * sizeof(u16));
 	MEMCOPY(&pConstructedStr[index + valueLen], &tmp[index], (bufferLen - index) * sizeof(u16));
 	glStringPool.Free(tmp);
-	
+
 	//paste string
 	MEMCOPY(&pConstructedStr[index], val, valueLen * sizeof(u16));
 	pConstructedStr[bufferLen + valueLen - 1] = NULL;
+}
+
+// Not Tested!
+INLINE void String::Append(const char *pcstr)
+{
+	if (!pConstructedStr)
+	{
+		iConstructedSize = 32;
+		pConstructedStr = glStringPool.Alloc(iConstructedSize);
+		this->Clear();
+	}
+
+	u32 len = this->Length();
+	u32 appendLen = STRLEN(pcstr);
+	u32 size = len + appendLen + 1; // len + strlen + null
+	if (size >= iConstructedSize)
+		this->Realloc(size);
+
+	for (u32 i = 0; i < appendLen; i++)
+	{
+		u16 t;
+		u8 *tmp = (u8 *)&t;
+
+		tmp[0] = pcstr[i];
+		tmp[1] = '\0';
+
+		pConstructedStr[len + i] = t;
+	}
+
+	pConstructedStr[size - 1] = NULL;
 }
 
 INLINE void String::Append(WideChar chr)
@@ -376,7 +406,7 @@ INLINE void String::Append(WideChar chr)
 	{
 		iConstructedSize = 32;
 		pConstructedStr = glStringPool.Alloc(iConstructedSize);
-		Clear();
+		this->Clear();
 	}
 
 	u32 len = this->Length() + 2; // len + 1char + null
@@ -393,19 +423,19 @@ INLINE void String::Append(const String *pString)
 	{
 		iConstructedSize = 32;
 		pConstructedStr = glStringPool.Alloc(iConstructedSize);
-		Clear();
+		this->Clear();
 	}
 
-	u32 iLen		= Length();
-	u32 iAppendLen	= pString->Length();
-	u32 iSize		= iLen + iAppendLen + 1; // len + stringlen + null
-	if (iSize >= iConstructedSize)
-		this->Realloc(iSize);
+	u32 len = this->Length();
+	u32 appendLen = pString->Length();
+	u32 size = len + appendLen + 1; // len + stringlen + null
+	if (size >= iConstructedSize)
+		this->Realloc(size);
 
-	for (u32 i = 0; i < iAppendLen; i++)
-		pConstructedStr[iLen + i] = pString->GetData()[i];
+	for (u32 i = 0; i < appendLen; i++)
+		pConstructedStr[len + i] = pString->GetData()[i];
 
-	pConstructedStr[iSize-1] = NULL;
+	pConstructedStr[size - 1] = NULL;
 }
 
 INLINE u32 String::Length() const

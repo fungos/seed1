@@ -40,6 +40,8 @@
 #include "MemoryManager.h"
 #include "Checksum.h"
 #include "System.h"
+#include "FileSystem.h"
+#include "SeedInit.h"
 
 #define TAG "[SaveSystem] "
 
@@ -56,6 +58,7 @@ SaveSystem::SaveSystem()
 	, iID(0)
 	, cardType(Cartridge512b)
 	, bInitialized(FALSE)
+	, pcSaveGameFolder()
 {
 }
 
@@ -69,6 +72,8 @@ eCartridgeError SaveSystem::Initialize(eCartridgeSize type)
 	{
 		Log(TAG "Initializing...");
 		cardType = type;
+
+		this->PrepareFilesystem();
 
 		if (!pCartridge->Prepare(type))
 		{
@@ -504,6 +509,37 @@ void SaveSystem::Wait()
 BOOL SaveSystem::IsSaving() const
 {
 	return bIsSaving;
+}
+
+/* Temporary hack so we can move this out from user code */
+void SaveSystem::PrepareFilesystem()
+{
+	FilePath tmpPath[SEED_MAX_FOLDER_SIZE];
+
+#if defined(WIN32)
+	_snwprintf(tmpPath, SEED_MAX_FOLDER_SIZE, L"%s\\%s\\",  pSystem->GetHomeFolder(), pConfiguration->GetPublisherName());
+#else
+	#if SEED_WIDE_PATH == 1
+		snprintf((char *)tmpPath, SEED_MAX_FOLDER_SIZE, "%S/.%s/", pSystem->GetHomeFolder(), pConfiguration->GetPublisherName());
+	#else
+		snprintf((char *)tmpPath, SEED_MAX_FOLDER_SIZE, "%s/.%s/", pSystem->GetHomeFolder(), pConfiguration->GetPublisherName());
+	#endif
+#endif
+
+	pFileSystem->MakeDirectory(tmpPath);
+
+#if defined(WIN32)
+	_snwprintf(tmpPath, SEED_MAX_FOLDER_SIZE, L"%s%s\\",  tmpPath, pConfiguration->GetApplicationTitle());
+#else
+	#if SEED_WIDE_PATH == 1
+		snprintf((char *)pcSaveGameFolder, SEED_MAX_FOLDER_SIZE, "%S%s/", tmpPath, pConfiguration->GetApplicationTitle());
+	#else
+		snprintf((char *)pcSaveGameFolder, SEED_MAX_FOLDER_SIZE, "%s%s/", tmpPath, pConfiguration->GetApplicationTitle());
+	#endif
+#endif
+
+	pFileSystem->MakeDirectory(pcSaveGameFolder);
+	pFileSystem->SetWriteableDirectory(pcSaveGameFolder);
 }
 
 } // namespace

@@ -147,6 +147,7 @@ Makefile
 ../source/ParticleManager.cpp
 ../include/extra/ymanager/yallocwrap.h
 ../include/extra/ymanager/ymemorymanager.h
+../include/platform/iphone/IphDefines.h
 ../include/platform/iphone/IphInput.h
 ../include/platform/iphone/IphMusic.h
 ../include/platform/iphone/IphMutex.h
@@ -174,6 +175,7 @@ Makefile
 ../include/platform/qt/QtTexture.h
 ../include/platform/qt/QtThread.h
 ../include/platform/qt/QtTimer.h
+../include/platform/sdl/SdlDefines.h
 ../include/platform/sdl/SdlInput.h
 ../include/platform/sdl/SdlMutex.h
 ../include/platform/sdl/SdlScreen.h
@@ -195,7 +197,9 @@ Makefile
 ../include/Checksum.h
 ../include/CollisionMask.h
 ../include/Configuration.h
+../include/Config.h
 ../include/Dictionary.h
+../include/Defines.h
 ../include/EventFileSystem.h
 ../include/EventInputKeyboard.h
 ../include/EventInputMotion.h
