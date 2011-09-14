@@ -81,7 +81,7 @@
 		#define SEED_CORE_API _declspec(dllimport)
 		#define SEED_EXTRA_API _declspec(dllexport)
 		#define SEED_PLATFORM_API _declspec(dllexport)
-	#elif defined(_MSC_VER) && defined(SEED_USE_LGPL)
+	#elif defined(SEED_USE_LGPL)
 		#define SEED_CORE_API __declspec(dllimport)
 		#define SEED_EXTRA_API __declspec(dllimport)
 		#define SEED_PLATFORM_API _declspec(dllimport)

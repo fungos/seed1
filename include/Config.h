@@ -7,7 +7,7 @@
 #define __CONFIG_H__
 
 #if defined(SEED_BUILD)
-	#if !defined(SEED_BUILD_COMMERCIAL)
+	#if !defined(SEED_USE_COMMERCIAL)
 		#define SEED_BUILD_LGPL
 		#define SEED_LICENSE "LGPL"
 	#else
