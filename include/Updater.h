@@ -48,7 +48,7 @@ class IUpdatable;
 
 class SEED_CORE_API Updater
 {
-	SEED_SINGLETON_DECLARE(Updater);
+	SEED_SINGLETON_DECLARE(Updater)
 	public:
 		void Run(f32 dt);
 		void Add(IUpdatable *obj);

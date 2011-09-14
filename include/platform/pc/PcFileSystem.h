@@ -52,7 +52,7 @@ namespace Seed { namespace PC {
 
 class SEED_CORE_API FileSystem : public IFileSystem
 {
-	SEED_SINGLETON_DECLARE(FileSystem);
+	SEED_SINGLETON_DECLARE(FileSystem)
 	public:
 		virtual BOOL Open(const char *pFname, File *file, IMemoryPool *pool = pDefaultPool);
 		virtual u32 GetLength() const;

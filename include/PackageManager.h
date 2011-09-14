@@ -53,7 +53,7 @@ class Package;
 class SEED_CORE_API PackageManager : public IModule
 {
 	friend class IFileSystem;
-	SEED_SINGLETON_DECLARE(PackageManager);
+	SEED_SINGLETON_DECLARE(PackageManager)
 
 	public:
 		typedef std::map<const char *, Package *, LowerThanStringComparator> PackageMap;

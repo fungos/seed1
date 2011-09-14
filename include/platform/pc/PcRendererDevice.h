@@ -48,7 +48,7 @@ namespace Seed { namespace PC {
 
 class SEED_CORE_API RendererDevice : public IRendererDevice
 {
-	SEED_SINGLETON_DECLARE(RendererDevice);
+	SEED_SINGLETON_DECLARE(RendererDevice)
 	public:
 		// IRendererDevice
 		virtual void TextureUnload(ITexture *tex);

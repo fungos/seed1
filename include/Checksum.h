@@ -45,7 +45,7 @@ namespace Seed {
 /// Helper class to calculate CRC checksums
 class SEED_CORE_API Checksum
 {
-	SEED_SINGLETON_DECLARE(Checksum);
+	SEED_SINGLETON_DECLARE(Checksum)
 	public:
 		/// Sets the first polynomial to use when generating CRC tables
 		void 	SetPolynomial1(unsigned int polynomial);

@@ -48,7 +48,7 @@ class Renderer;
 
 class SEED_CORE_API ViewManager : public IModule
 {
-	SEED_SINGLETON_DECLARE(ViewManager);
+	SEED_SINGLETON_DECLARE(ViewManager)
 	public:
 		virtual void Add(Viewport *view);
 		virtual void Remove(Viewport *view);
@@ -57,7 +57,7 @@ class SEED_CORE_API ViewManager : public IModule
 
 		virtual Renderer *GetCurrentRenderer() const;
 		virtual Viewport *GetCurrentViewport() const;
-		
+
 		virtual Viewport *GetViewportAt(f32 x, f32 y);
 
 		// IModule

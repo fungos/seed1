@@ -46,7 +46,7 @@ namespace Seed { namespace iPhone {
 
 class System : public ISystem
 {
-	SEED_SINGLETON_DECLARE(System);
+	SEED_SINGLETON_DECLARE(System)
 	public:
 		// ISystem
 		virtual void GoToMenu();
@@ -55,11 +55,11 @@ class System : public ISystem
 		virtual void WaitForRetrace(eSystemFrameRate rate);
 		virtual void HangUp();
 		virtual void GoToDataManager();
-		
+
 		virtual BOOL IsShuttingDown() const;
 		virtual BOOL IsResetting() const;
 		virtual BOOL IsSleeping() const;
-		
+
 		virtual void DisableHome();
 		virtual void EnableHome();
 		virtual BOOL IsHomeEnabled() const;

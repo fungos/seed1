@@ -47,7 +47,7 @@ class ISceneObject;
 
 class SEED_CORE_API SceneManager : public IUpdatable
 {
-	SEED_SINGLETON_DECLARE(SceneManager);
+	SEED_SINGLETON_DECLARE(SceneManager)
 	public:
 		virtual void Add(ISceneObject *obj);
 		virtual void Remove(ISceneObject *obj);

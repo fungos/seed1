@@ -52,7 +52,7 @@ class Input : public IInput, public IInputPointer, public IInputKeyboard
 {
 	friend class Scene;
 
-	SEED_SINGLETON_DECLARE(Input);
+	SEED_SINGLETON_DECLARE(Input)
 	public:
 		// IInput
 		virtual eInputButton GetButtonCode(u32 button) const;

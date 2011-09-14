@@ -46,7 +46,7 @@ namespace Seed { namespace SDL {
 
 class SEED_CORE_API System : public ISystem
 {
-	SEED_SINGLETON_DECLARE(System);
+	SEED_SINGLETON_DECLARE(System)
 	public:
 		// ISystem
 		virtual void GoToMenu();

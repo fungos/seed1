@@ -48,7 +48,7 @@ namespace Seed { namespace iPhone {
 
 class Timer : public ITimer
 {
-	SEED_SINGLETON_DECLARE(Timer);
+	SEED_SINGLETON_DECLARE(Timer)
 	public:
 		// ITimer
 		virtual u64 GetMilliseconds() const;

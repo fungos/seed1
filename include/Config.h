@@ -56,7 +56,7 @@
 //================================================================================
 // FEATURES CAPPING
 //================================================================================
-#define SEED_USE_THEORA						1
+#define SEED_USE_THEORA						0
 #define SEED_USE_3D							0
 #define SEED_USE_UNSTABLE					0
 #define SEED_ENABLE_DEPTH_TEST				0

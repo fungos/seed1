@@ -44,7 +44,7 @@ namespace Seed {
 
 class SEED_CORE_API Rand
 {
-	SEED_SINGLETON_DECLARE(Rand);
+	SEED_SINGLETON_DECLARE(Rand)
 	public:
 		virtual void Initialize(u32 seed = 0);
 		virtual u32 Get(u32 max);

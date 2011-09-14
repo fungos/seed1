@@ -56,7 +56,7 @@ Static string cache
 */
 class SEED_CORE_API StringCache : public IModule
 {
-	SEED_SINGLETON_DECLARE(StringCache);
+	SEED_SINGLETON_DECLARE(StringCache)
 	public:
 		const char *GetStringById(u32 fileId) const;
 		u32 GetIdByString(const char *str) const;

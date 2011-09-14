@@ -47,7 +47,7 @@ namespace Seed { namespace QT {
 
 class Timer : public ITimer
 {
-	SEED_SINGLETON_DECLARE(Timer);
+	SEED_SINGLETON_DECLARE(Timer)
 	public:
 		virtual BOOL Initialize();
 		virtual BOOL Reset();

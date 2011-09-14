@@ -67,7 +67,7 @@ class Screen : public IScreen
 	friend class Renderer;
 	friend class Renderer2D;
 
-	SEED_SINGLETON_DECLARE(Screen);
+	SEED_SINGLETON_DECLARE(Screen)
 
 	public:
 		enum eMode

@@ -57,7 +57,7 @@ namespace Seed {
 
 class SEED_CORE_API LeakReport
 {
-	SEED_SINGLETON_DECLARE(LeakReport);
+	SEED_SINGLETON_DECLARE(LeakReport)
 
 	public:
 		template <class T>

@@ -47,7 +47,7 @@ namespace Seed { namespace QT {
 
 class System : public ISystem
 {
-	SEED_SINGLETON_DECLARE(System);
+	SEED_SINGLETON_DECLARE(System)
 	public:
 		// ISystem
 		virtual void GoToMenu();

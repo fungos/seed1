@@ -48,11 +48,11 @@ namespace Seed { namespace iPhone {
 
 class Screen : public IScreen
 {
-	SEED_SINGLETON_DECLARE(Screen);
+	SEED_SINGLETON_DECLARE(Screen)
 	public:
 		void ApplyFade();
 		virtual void Update();
-		
+
 		// IScreen
 		virtual void FadeOut();
 		virtual void FadeIn();
@@ -82,7 +82,7 @@ class Screen : public IScreen
 			FADE_IN = 1,
 			FADE_OUT
 		};
-		
+
 		s32 		iFadeStatus;
 		eFadeType 	fadeType;
 		GLint		iHeight;
@@ -98,6 +98,6 @@ class Screen : public IScreen
 #else // _IPHONE_
 
 	#error "Include 'Screen.h' instead 'platform/iphone/IphScreen.h' directly."
-	
+
 #endif // _IPHONE_
 #endif // __IPH_SCREEN_H__

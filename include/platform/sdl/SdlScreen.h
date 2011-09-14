@@ -57,7 +57,7 @@ namespace Seed { namespace SDL {
 
 class SEED_CORE_API Screen : public IScreen
 {
-	SEED_SINGLETON_DECLARE(Screen);
+	SEED_SINGLETON_DECLARE(Screen)
 	public:
 		virtual bool Initialize();
 		virtual bool Reset();

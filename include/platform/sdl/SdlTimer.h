@@ -48,7 +48,7 @@ namespace Seed { namespace SDL {
 
 class SEED_CORE_API Timer : public ITimer
 {
-	SEED_SINGLETON_DECLARE(Timer);
+	SEED_SINGLETON_DECLARE(Timer)
 	public:
 		virtual BOOL Initialize();
 		virtual BOOL Reset();

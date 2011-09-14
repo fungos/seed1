@@ -50,7 +50,7 @@ namespace Seed {
 
 class SEED_CORE_API GuiManager : public IModule, public IUpdatable, public IEventInputPointerListener
 {
-	SEED_SINGLETON_DECLARE(GuiManager);
+	SEED_SINGLETON_DECLARE(GuiManager)
 	public:
 		void Add(IWidget *widget);
 		void Remove(IWidget *widget);

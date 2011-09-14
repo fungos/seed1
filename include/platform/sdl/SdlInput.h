@@ -52,7 +52,7 @@ namespace Seed { namespace SDL {
 
 class SEED_CORE_API Input : public IInput, public IInputPointer, public IInputKeyboard, public IInputJoystick
 {
-	SEED_SINGLETON_DECLARE(Input);
+	SEED_SINGLETON_DECLARE(Input)
 	public:
 		// IInput
 		virtual Seed::eInputButton GetButtonCode(u32 button) const;

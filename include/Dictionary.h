@@ -56,7 +56,7 @@ namespace Seed {
 
 class SEED_CORE_API Dictionary : public IModule, public IEventSystemListener
 {
-	SEED_SINGLETON_DECLARE(Dictionary);
+	SEED_SINGLETON_DECLARE(Dictionary)
 
 	public:
 		virtual const u16 *GetGlyphTable(u32 *outLen) const;

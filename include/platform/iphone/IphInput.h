@@ -48,16 +48,16 @@ namespace Seed { namespace iPhone {
 
 class Input : public IInput, public IInputPointer
 {
-	SEED_SINGLETON_DECLARE(Input);
+	SEED_SINGLETON_DECLARE(Input)
 	public:
 		// IInput
 		virtual Seed::eInputButton GetButtonCode(u32 button) const;
 		virtual u32 ConvertButtonFlags(u32 flags);
-	
+
 		// IInputKeyboard dummy
 		virtual void AddKeyboardListener(void *) {};
 		virtual void RemoveKeyboardListener(void *) {};
-		
+
 		// IInputPointer
 		virtual BOOL IsEnabled(u16 joystick = 0) const;
 		virtual BOOL IsHold(u32 button, u16 joystick = 0) const;

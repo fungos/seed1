@@ -61,7 +61,7 @@ namespace Seed { namespace OAL {
 
 class SEED_CORE_API SoundSystem : public ISoundSystem
 {
-	SEED_SINGLETON_DECLARE(SoundSystem);
+	SEED_SINGLETON_DECLARE(SoundSystem)
 	public:
 		// ISoundSystem
 		//virtual void PlayMusic(IMusic *mus, f32 ms = 0);

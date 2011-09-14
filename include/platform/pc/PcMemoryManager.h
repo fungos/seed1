@@ -61,13 +61,13 @@ SEED_CORE_API extern PcMemoryPool *pLargePool;
 
 class SEED_CORE_API MemoryManager : public IMemoryManager
 {
- 	SEED_SINGLETON_DECLARE(MemoryManager);
+	SEED_SINGLETON_DECLARE(MemoryManager)
 
 	public:
 		virtual void *Alloc(SIZE_T len, IMemoryPool *pool = pDefaultPool, const char *desc = "Unknown", const char *owner = "Nobody");
 		virtual void Free(void *ptr, IMemoryPool *pool = pDefaultPool);
 		virtual void Info();
-		
+
 		virtual IMemoryPool *CreatePool(u32 len, const char *name);
 		virtual u32 GetFreeMemory() const;
 

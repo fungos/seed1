@@ -48,7 +48,7 @@ class Renderer;
 
 class SEED_CORE_API RendererManager : public IModule, public IUpdatable
 {
-	SEED_SINGLETON_DECLARE(RendererManager);
+	SEED_SINGLETON_DECLARE(RendererManager)
 	public:
 		virtual void Add(Renderer *renderer);
 		virtual void Remove(Renderer *renderer);

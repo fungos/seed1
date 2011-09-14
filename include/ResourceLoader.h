@@ -57,7 +57,7 @@ Platform resource loader
 */
 class SEED_CORE_API ResourceLoader : public IModule, public IUpdatable, public Thread
 {
-	SEED_SINGLETON_DECLARE(ResourceLoader);
+	SEED_SINGLETON_DECLARE(ResourceLoader)
 
 	public:
 		typedef std::vector<IEventResourceLoaderListener *> 	ListenerVector;
