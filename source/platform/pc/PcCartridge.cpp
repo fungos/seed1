@@ -48,7 +48,7 @@
 
 namespace Seed { namespace PC {
 
-SEED_SINGLETON_DEFINE(Cartridge);
+SEED_SINGLETON_DEFINE(Cartridge)
 
 Cartridge::Cartridge()
 	: iType(0)

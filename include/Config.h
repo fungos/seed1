@@ -103,7 +103,7 @@ Maximum size of a folder name string
 /*
 Use wide char paths
 */
-#define SEED_PATH_WIDE						0
+#define SEED_PATH_WIDE						1
 
 /*
 String Pools - Define the amount of each pool

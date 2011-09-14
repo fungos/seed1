@@ -44,7 +44,7 @@
 
 namespace Seed {
 
-SEED_SINGLETON_DEFINE(SceneManager);
+SEED_SINGLETON_DEFINE(SceneManager)
 
 SceneManager::SceneManager()
 	: arObject()

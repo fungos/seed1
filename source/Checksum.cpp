@@ -39,7 +39,7 @@
 namespace Seed {
 
 Checksum *pChecksum = NULL;
-SEED_SINGLETON_DEFINE(Checksum);
+SEED_SINGLETON_DEFINE(Checksum)
 
 Checksum::Checksum()
 	: iPolynomial1(0)

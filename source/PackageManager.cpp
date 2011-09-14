@@ -42,7 +42,7 @@
 
 namespace Seed {
 
-SEED_SINGLETON_DEFINE(PackageManager);
+SEED_SINGLETON_DEFINE(PackageManager)
 
 PackageManager::PackageManager()
 	: mapPackage()

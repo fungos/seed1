@@ -45,7 +45,7 @@
 
 namespace Seed {
 
-SEED_SINGLETON_DEFINE(ResourceLoader);
+SEED_SINGLETON_DEFINE(ResourceLoader)
 
 ResourceLoader::ResourceLoader()
 	: vListeners()

@@ -41,7 +41,7 @@
 
 namespace Seed {
 
-SEED_SINGLETON_DEFINE(Updater);
+SEED_SINGLETON_DEFINE(Updater)
 
 Updater::Updater()
 	: fAccumulator(0.0f)

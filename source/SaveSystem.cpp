@@ -47,7 +47,7 @@
 
 namespace Seed {
 
-SEED_SINGLETON_DEFINE(SaveSystem);
+SEED_SINGLETON_DEFINE(SaveSystem)
 BOOL SaveSystem::bIsSaving = FALSE;
 
 SaveSystem::SaveSystem()
@@ -519,8 +519,8 @@ void SaveSystem::PrepareFilesystem()
 #if defined(WIN32)
 	_snwprintf(tmpPath, SEED_MAX_FOLDER_SIZE, L"%s\\%s\\",  pSystem->GetHomeFolder(), pConfiguration->GetPublisherName());
 #else
-	#if SEED_WIDE_PATH == 1
-		snprintf((char *)tmpPath, SEED_MAX_FOLDER_SIZE, "%S/.%s/", pSystem->GetHomeFolder(), pConfiguration->GetPublisherName());
+	#if SEED_PATH_WIDE == 1
+		swprintf(tmpPath, SEED_MAX_FOLDER_SIZE, L"%S/.%s/", pSystem->GetHomeFolder(), pConfiguration->GetPublisherName());
 	#else
 		snprintf((char *)tmpPath, SEED_MAX_FOLDER_SIZE, "%s/.%s/", pSystem->GetHomeFolder(), pConfiguration->GetPublisherName());
 	#endif
@@ -531,8 +531,8 @@ void SaveSystem::PrepareFilesystem()
 #if defined(WIN32)
 	_snwprintf(tmpPath, SEED_MAX_FOLDER_SIZE, L"%s%s\\",  tmpPath, pConfiguration->GetApplicationTitle());
 #else
-	#if SEED_WIDE_PATH == 1
-		snprintf((char *)pcSaveGameFolder, SEED_MAX_FOLDER_SIZE, "%S%s/", tmpPath, pConfiguration->GetApplicationTitle());
+	#if SEED_PATH_WIDE == 1
+		swprintf(pcSaveGameFolder, SEED_MAX_FOLDER_SIZE, L"%S%s/", tmpPath, pConfiguration->GetApplicationTitle());
 	#else
 		snprintf((char *)pcSaveGameFolder, SEED_MAX_FOLDER_SIZE, "%s%s/", tmpPath, pConfiguration->GetApplicationTitle());
 	#endif

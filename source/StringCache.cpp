@@ -45,7 +45,7 @@
 
 namespace Seed {
 
-SEED_SINGLETON_DEFINE(StringCache);
+SEED_SINGLETON_DEFINE(StringCache)
 
 StringCache::StringCache()
 	: stFile()

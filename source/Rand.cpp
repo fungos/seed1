@@ -40,7 +40,7 @@
 
 namespace Seed {
 
-SEED_SINGLETON_DEFINE(Rand);
+SEED_SINGLETON_DEFINE(Rand)
 
 Rand::Rand()
 	: iSeed(0)

@@ -76,7 +76,7 @@ void Scene::drawBackground(QPainter *painter, const QRectF &)
 bool Scene::drawScene()
 {
 	f32 newTime		= pTimer->GetMilliseconds() / 1000.0f;
-	f32 dt			= newTime - fLastTime;
+//	f32 dt			= newTime - fLastTime;
 	fLastTime		= newTime;
 
 	//Private::pRenderer->Render(dt); // FIXME: Viewport rendering!

@@ -48,7 +48,7 @@ class IModule;
 
 class SEED_CORE_API ModuleManager
 {
-	SEED_SINGLETON_DECLARE(ModuleManager);
+	SEED_SINGLETON_DECLARE(ModuleManager)
 	public:
 		BOOL Add(IModule *obj);
 		BOOL Remove(IModule *obj);

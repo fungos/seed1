@@ -43,7 +43,7 @@
 
 namespace Seed {
 
-SEED_SINGLETON_DEFINE(ModuleManager);
+SEED_SINGLETON_DEFINE(ModuleManager)
 
 ModuleManager::ModuleManager()
 	: arModule()

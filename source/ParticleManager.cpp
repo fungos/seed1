@@ -39,7 +39,7 @@
 
 namespace Seed {
 
-SEED_SINGLETON_DEFINE(ParticleManager);
+SEED_SINGLETON_DEFINE(ParticleManager)
 
 ParticleManager::ParticleManager()
 	: vEmitter()

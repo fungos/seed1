@@ -52,7 +52,7 @@
 
 namespace Seed { namespace QT {
 
-SEED_SINGLETON_DEFINE(Screen);
+SEED_SINGLETON_DEFINE(Screen)
 
 Scene *Screen::pScene = NULL;
 

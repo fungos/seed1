@@ -63,7 +63,7 @@ namespace Seed { namespace PC {
 
 class SEED_CORE_API Cartridge : public ICartridge
 {
-	SEED_SINGLETON_DECLARE(Cartridge);
+	SEED_SINGLETON_DECLARE(Cartridge)
 	public:
 		// IModule
 		virtual BOOL Initialize();

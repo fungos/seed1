@@ -43,7 +43,7 @@
 
 namespace Seed {
 
-SEED_SINGLETON_DEFINE(GuiManager);
+SEED_SINGLETON_DEFINE(GuiManager)
 
 GuiManager::GuiManager()
 	: pFocused(NULL)

@@ -52,7 +52,7 @@
 
 namespace Seed { namespace QT {
 
-SEED_SINGLETON_DEFINE(Input);
+SEED_SINGLETON_DEFINE(Input)
 
 Input::Input()
 	: fX(0.0f)

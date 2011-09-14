@@ -52,7 +52,7 @@
 
 namespace Seed { namespace PC {
 
-SEED_SINGLETON_DEFINE(FileSystem);
+SEED_SINGLETON_DEFINE(FileSystem)
 
 FileSystem::FileSystem()
 	: iLastLength(0)

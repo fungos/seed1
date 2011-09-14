@@ -47,9 +47,9 @@
 
 namespace Seed { namespace PC {
 
-SEED_SINGLETON_DEFINE(MemoryManager);
+SEED_SINGLETON_DEFINE(MemoryManager)
 
-extern "C" 
+extern "C"
 {
 PcMemoryPool *pDefaultPool = NULL;
 PcMemoryPool *pLargePool = NULL;
@@ -74,7 +74,7 @@ BOOL MemoryManager::Initialize()
 
 	BOOL r = this->Reset();
 	ePlatformSimulation plat = pConfiguration->GetPlatformSimulation();
-	
+
 	switch (plat)
 	{
 		case Seed::SimulateIOS3G:
@@ -107,7 +107,7 @@ BOOL MemoryManager::Initialize()
 BOOL MemoryManager::Shutdown()
 {
 	Log(TAG "Terminating...");
-	
+
 	for (u32 i = 0; i < arPool.Size(); i++)
 	{
 		IMemoryPool *pool = arPool[i];
@@ -115,7 +115,7 @@ BOOL MemoryManager::Shutdown()
 		Delete(pool);
 	}
 	arPool.Truncate();
-	
+
 	BOOL r = this->Reset();
 	Log(TAG "Terminated.");
 
@@ -126,16 +126,16 @@ INLINE IMemoryPool *MemoryManager::CreatePool(u32 len, const char *name)
 {
 	PcMemoryPool *pool = New(PcMemoryPool(len, name));
 	pool->Initialize();
-	
+
 	arPool.Add(pool);
-	
+
 	return pool;
 }
 
 INLINE u32 MemoryManager::GetFreeMemory() const
 {
 	u32 free = 0;
-	
+
 	for (u32 i = 0; i < arPool.Size(); i++)
 	{
 		IMemoryPool *pool = arPool[i];

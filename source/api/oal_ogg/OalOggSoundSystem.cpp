@@ -73,7 +73,7 @@
 
 namespace Seed { namespace OAL {
 
-SEED_SINGLETON_DEFINE(SoundSystem);
+SEED_SINGLETON_DEFINE(SoundSystem)
 
 SoundSystem::SoundSystem()
 	: pDevice(NULL)
@@ -177,7 +177,7 @@ INLINE BOOL SoundSystem::Update(f32 dt)
 
 		if (pCurrentMusic)
 			this->UpdateMusic(dt, pCurrentMusic);
-			
+
 		bChanged = FALSE;
 	}
 

@@ -43,7 +43,7 @@
 
 namespace Seed { namespace PC {
 
-SEED_SINGLETON_DEFINE(RendererDevice);
+SEED_SINGLETON_DEFINE(RendererDevice)
 
 RendererDevice::RendererDevice()
 	: IRendererDevice()

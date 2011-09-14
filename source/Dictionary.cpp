@@ -38,7 +38,7 @@
 
 namespace Seed {
 
-SEED_SINGLETON_DEFINE(Dictionary);
+SEED_SINGLETON_DEFINE(Dictionary)
 
 Dictionary::Dictionary()
 	: pPool(NULL)

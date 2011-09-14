@@ -76,7 +76,20 @@ typedef float 					f32;
 typedef float 					fixed32;
 typedef int 					PIXEL;
 typedef int						BOOL;
+
+#if SEED_PATH_WIDE == 1
 typedef wchar_t					FilePath;
+#define PATHCOPY				wcsncpy
+#define PATHCAT					wcsncat
+#define PATHLEN					wcslen
+#define SNPRINTF				swprintf
+#else
+typedef char					FilePath;
+#define PATHCOPY				strncpy
+#define PATHCAT					strncat
+#define PATHLEN					strlen
+#define SNPRINTF				snprintf
+#endif
 
 #if defined(WIN32)
 	#undef BOOL

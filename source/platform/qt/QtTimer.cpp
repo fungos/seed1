@@ -46,7 +46,7 @@
 
 namespace Seed { namespace QT {
 
-SEED_SINGLETON_DEFINE(Timer);
+SEED_SINGLETON_DEFINE(Timer)
 
 Timer::Timer()
 {

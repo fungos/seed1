@@ -46,7 +46,7 @@ namespace Seed {
 
 class SEED_CORE_API SaveSystem
 {
-	SEED_SINGLETON_DECLARE(SaveSystem);
+	SEED_SINGLETON_DECLARE(SaveSystem)
 
 	public:
 		struct SEED_CORE_API sSaveInfo

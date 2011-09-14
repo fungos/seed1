@@ -48,7 +48,7 @@
 
 namespace Seed { namespace QT {
 
-SEED_SINGLETON_DEFINE(System);
+SEED_SINGLETON_DEFINE(System)
 
 System::System()
 	: iRetraceCount(0)

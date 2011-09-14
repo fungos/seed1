@@ -1,6 +1,6 @@
-CONFIG += staticlib \
-		  precompile_header \
-		  silent
+CONFIG += staticlib silent
+#		  precompile_header \
+
 QT += opengl
 TEMPLATE = lib
 DEPENDPATH += .

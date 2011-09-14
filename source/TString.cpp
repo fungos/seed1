@@ -338,7 +338,7 @@ INLINE void String::SubString(u32 from, u32 to)
 
 	u32 len = to - from + 1;
 	MEMCOPY(pConstructedStr, &pConstructedStr[from], len * sizeof(u16));
-	pConstructedStr[len - 1] = NULL;
+	pConstructedStr[len - 1] = 0;
 }
 
 INLINE void String::Cut(u32 index, u32 size)
@@ -350,7 +350,7 @@ INLINE void String::Cut(u32 index, u32 size)
 	ASSERT(index + size <= len);
 
 	MEMCOPY(&pConstructedStr[index], &pConstructedStr[index + size], (len - index - size) * sizeof(u16));
-	pConstructedStr[len - size] = NULL;
+	pConstructedStr[len - size] = 0;
 }
 
 INLINE void String::Paste(u32 index, const u16 *val)
@@ -367,7 +367,7 @@ INLINE void String::Paste(u32 index, const u16 *val)
 
 	//paste string
 	MEMCOPY(&pConstructedStr[index], val, valueLen * sizeof(u16));
-	pConstructedStr[bufferLen + valueLen - 1] = NULL;
+	pConstructedStr[bufferLen + valueLen - 1] = 0;
 }
 
 // Not Tested!
@@ -397,7 +397,7 @@ INLINE void String::Append(const char *pcstr)
 		pConstructedStr[len + i] = t;
 	}
 
-	pConstructedStr[size - 1] = NULL;
+	pConstructedStr[size - 1] = 0;
 }
 
 INLINE void String::Append(WideChar chr)
@@ -414,7 +414,7 @@ INLINE void String::Append(WideChar chr)
 		this->Realloc(len);
 
 	pConstructedStr[len - 2] = chr;
-	pConstructedStr[len - 1] = NULL;
+	pConstructedStr[len - 1] = 0;
 }
 
 INLINE void String::Append(const String *pString)
@@ -435,7 +435,7 @@ INLINE void String::Append(const String *pString)
 	for (u32 i = 0; i < appendLen; i++)
 		pConstructedStr[len + i] = pString->GetData()[i];
 
-	pConstructedStr[size - 1] = NULL;
+	pConstructedStr[size - 1] = 0;
 }
 
 INLINE u32 String::Length() const
