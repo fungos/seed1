@@ -517,7 +517,7 @@ void SaveSystem::PrepareFilesystem()
 	FilePath tmpPath[SEED_MAX_FOLDER_SIZE];
 
 #if defined(WIN32)
-	_snwprintf(tmpPath, SEED_MAX_FOLDER_SIZE, L"%s\\%s\\",  pSystem->GetHomeFolder(), pConfiguration->GetPublisherName());
+	_snwprintf(tmpPath, SEED_MAX_FOLDER_SIZE, L"%s%S\\",  pSystem->GetHomeFolder(), pConfiguration->GetPublisherName());
 #else
 	#if SEED_PATH_WIDE == 1
 		swprintf(tmpPath, SEED_MAX_FOLDER_SIZE, L"%S/.%s/", pSystem->GetHomeFolder(), pConfiguration->GetPublisherName());
@@ -529,7 +529,7 @@ void SaveSystem::PrepareFilesystem()
 	pFileSystem->MakeDirectory(tmpPath);
 
 #if defined(WIN32)
-	_snwprintf(tmpPath, SEED_MAX_FOLDER_SIZE, L"%s%s\\",  tmpPath, pConfiguration->GetApplicationTitle());
+	_snwprintf(pcSaveGameFolder, SEED_MAX_FOLDER_SIZE, L"%s%S\\",  tmpPath, pConfiguration->GetApplicationTitle());
 #else
 	#if SEED_PATH_WIDE == 1
 		swprintf(pcSaveGameFolder, SEED_MAX_FOLDER_SIZE, L"%S%s/", tmpPath, pConfiguration->GetApplicationTitle());
@@ -537,7 +537,7 @@ void SaveSystem::PrepareFilesystem()
 		snprintf((char *)pcSaveGameFolder, SEED_MAX_FOLDER_SIZE, "%s%s/", tmpPath, pConfiguration->GetApplicationTitle());
 	#endif
 #endif
-
+	
 	pFileSystem->MakeDirectory(pcSaveGameFolder);
 	pFileSystem->SetWriteableDirectory(pcSaveGameFolder);
 }
