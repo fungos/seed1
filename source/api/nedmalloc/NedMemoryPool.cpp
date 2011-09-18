@@ -29,82 +29,71 @@
  **
  *****************************************************************************/
 
-/*! \file PcMemoryPool.cpp
+/*! \file NedMemoryPool.cpp
 	\author	Danny Angelo Carminati Grein
-	\brief Memory Pool PC implementation
+	\brief Memory Pool PC implementation using nedmalloc
 */
 
-#include "MemoryPool.h"
+#include "Defines.h"
 
-#if defined(_PC_) && SEED_USE_NEDMALLOC == 0
+#if SEED_USE_NEDMALLOC == 1
 
-#define TAG "[PcMemoryPool] "
+#include "api/nedmalloc/NedMemoryPool.h"
 
-#if defined(YMEM_DEBUG)
-	#include "extra/ymanager/yallocwrap.h"
+#define TAG "[NedMemoryPool] "
 
-	#define SEED_MALLOC(len, desc, owner)	(void *)yalloc(pMgr, len, desc, owner, iReserved)
-	#define SEED_FREE(ptr)					yfree(pMgr, ptr)
-	#define YMANAGER_CREATE(len)			pMgr = ycreate(len)
-	#define YMANAGER_DESTROY				ydestroy(pMgr); pMgr = NULL;
-	#define YMANAGER_GETFREEMEM				if (pMgr) return pMgr->GetFreeMemory() - iReserved; else return 0;
-	#define YMANAGER_PRINT					pMgr->PrintSnapshot();
-#else
-	#define SEED_MALLOC(len, desc, owner)	(void *)malloc(len)
-	#define SEED_FREE(ptr)					free(ptr)
-	#define YMANAGER_CREATE(len)
-	#define YMANAGER_DESTROY
-	#define YMANAGER_GETFREEMEM				return 0;
-	#define YMANAGER_PRINT
-#endif // DEBUG
+namespace Seed { 
 
-namespace Seed { namespace PC {
-
-PcMemoryPool::PcMemoryPool(u32 size, const char *name)
-	YMANAGER_INIT
+NedMemoryPool::NedMemoryPool(u32 size, const char *name)
+	: pPool(NULL)
 {
-	UNUSED(size);
 	pcName = name;
-	YMANAGER_CREATE(size);
+	pPool = nedcreatepool(size, 8);
+	//nedpsetvalue(pPool, 0xF0DAFOD4);
 }
 
-PcMemoryPool::~PcMemoryPool()
+NedMemoryPool::~NedMemoryPool()
 {
-	YMANAGER_DESTROY;
+	nedflushlogs(pPool, 0);
+	neddestroypool(pPool);
 }
 
-INLINE void PcMemoryPool::Initialize()
+INLINE void NedMemoryPool::Initialize()
 {
 }
 
-INLINE u32 PcMemoryPool::GetFreeMemory() const
+INLINE u32 NedMemoryPool::GetFreeMemory() const
 {
-	YMANAGER_GETFREEMEM;
-	//return 0;
+	return 0;
 }
 
-INLINE void PcMemoryPool::Print() const
+INLINE void NedMemoryPool::Print() const
 {
 	Log(TAG "Name: %s", pcName);
-	YMANAGER_PRINT;
 }
 
-void *PcMemoryPool::Alloc(SIZE_T len, const char *desc, const char *owner)
+void *NedMemoryPool::Alloc(SIZE_T len, const char *desc, const char *owner)
 {
 	UNUSED(owner);
 	UNUSED(desc);
 	iAllocations++;
 	iTotalAllocations++;
-	return SEED_MALLOC((unsigned long)len, desc, owner);
-	//return NULL;
+
+	return nedpmemalign(pPool, sizeof(int), len);
 }
 
-void PcMemoryPool::Free(void *ptr)
+void NedMemoryPool::DisableThreadCache()
+{
+	neddisablethreadcache(pPool);
+}
+
+void NedMemoryPool::Free(void *ptr)
 {
 	iAllocations--;
-	SEED_FREE(ptr);
+
+	nedpfree(pPool, ptr);
 }
 
-}} // namespace
+} // namespace
 
-#endif // _PC_
+#endif // SEED_USE_NEDMALLOC

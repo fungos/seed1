@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -29,29 +29,56 @@
  **
  *****************************************************************************/
 
-/*! \file Renderer2D.h
+/*! \file NedMemoryPool.h
 	\author	Danny Angelo Carminati Grein
-	\brief Include selector
+	\brief MemoryPool implementation using nedmalloc
 */
 
-#ifndef __RENDERER2D_H__
-#define __RENDERER2D_H__
+#ifndef __NED_MEMORY_POOL_H__
+#define __NED_MEMORY_POOL_H__
 
-#include "Config.h"
+#include "Defines.h"
 
-#if defined(_WII_)
-	#include "platform/wii/WiiRenderer2D.h"
-	using namespace Seed::WII;
-#endif // _WII_
+#if SEED_USE_NEDMALLOC == 1
 
-#if defined(_SDL_) || defined(_QT_)
-	#include "api/ogl/OglRenderer2D.h"
-	using namespace Seed::OGL;
-#endif // _SDL_ || _QT_
+#include <stdlib.h>
+#include "interface/IMemoryPool.h"
+#include "interface/IMemoryManager.h"
+#include "../contrib/nedmalloc.h"
 
-#if defined(_IPHONE_)
-	#include "platform/iphone/IphRenderer2D.h"
-	using namespace Seed::iPhone;
-#endif // _IPHONE_
+namespace Seed {
 
-#endif // __RENDERER2D_H__
+#if defined(_PC_)
+namespace PC { class MemoryManager; }
+#define MemoryManagerFriendship friend class PC::MemoryManager;
+#else
+#define MemoryManagerFriendship friend class MemoryManager;
+#endif
+
+class SEED_CORE_API NedMemoryPool : public IMemoryPool
+{
+	MemoryManagerFriendship
+
+	public:
+		NedMemoryPool(u32 size, const char *name);
+		virtual void *Alloc(SIZE_T len, const char *desc, const char *owner);
+		virtual void Free(void *ptr);
+		virtual u32 GetFreeMemory() const;
+		virtual void DisableThreadCache();
+		virtual void Print() const;
+
+	protected:
+		virtual void Initialize();
+		virtual ~NedMemoryPool();
+
+	private:
+		SEED_DISABLE_COPY(NedMemoryPool);
+
+	private:
+		nedpool *pPool;
+};
+
+} // namespace
+
+#endif // SEED_USE_NEDMALLOC 
+#endif // __NED_MEMORY_POOL_H__

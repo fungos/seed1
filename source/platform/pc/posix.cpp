@@ -41,6 +41,10 @@
 #include <sys/types.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <string>
+#include <locale>
+#include <iostream>
+#include <sstream>
 
 #define TAG	"[Platform] "
 
@@ -52,10 +56,45 @@
 static char pcBundle[2048];
 #endif
 
+#if SEED_PATH_WIDE == 1
+std::wstring widen(const std::string &str)
+{
+	using namespace std;
+
+	wostringstream wstm;
+	const ctype<wchar_t> &ctfacet = use_facet< ctype<wchar_t> >(wstm.getloc());
+	for (size_t i = 0; i < str.size(); ++i)
+		wstm << ctfacet.widen(str[i]);
+
+	return wstm.str();
+}
+
+std::string narrow(const std::wstring &str)
+{
+	using namespace std;
+
+	ostringstream stm;
+	const ctype<char> &ctfacet = use_facet< ctype<char> >(stm.getloc());
+	for (size_t i = 0 ; i < str.size(); ++i)
+		stm << ctfacet.narrow(str[i], 0);
+
+	return stm.str();
+}
+#endif
+
+inline const char *cpath(const FilePath *path)
+{
+#if SEED_PATH_WIDE == 1
+	return narrow(path).c_str();
+#else
+	return path;
+#endif
+}
+
 BOOL create_directory(const FilePath *path)
 {
 	BOOL ret = FALSE;
-	int err = mkdir((const char *)path, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+	int err = mkdir(cpath(path), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 
 	if (err == -1)
 	{
@@ -138,7 +177,8 @@ const FilePath *get_user_appdata_folder()
 
 const FilePath *get_user_home_folder()
 {
-	const FilePath *home = (FilePath *)getenv("HOME");
+	const char *chome = getenv("HOME");
+	const FilePath *home = (FilePath *)chome;
 	if (!home)
 		home = (const FilePath *)"./";
 

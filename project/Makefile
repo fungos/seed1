@@ -1,19 +1,20 @@
 PROJECT=libSeed.a
-include Objects.in
+include Objects.in2
 TARGET = ../bin/$(PROJECT)
 
 SEEDSDK=/media/d/SDK
 
 AR = ar
-AR_PARAM = cru
 AS = as
 NM = nm
 STRIP = strip
 LD = ld
 GCC = g++
-CFLAGS = -Wall -g -fPIC `sdl-config --cflags` $(CDEFS) -I$(SEEDSDK)/seed/include
-CDEFS = -D_SDL_ -DDEBUG -DYMEM_DEBUG -DYMEM_PARANOID_CHECK -DSEED_ENABLE_PROFILER -DLINUX
-LFLAGS = `sdl-config --libs` -lSDL_image -lopenal -lGL -lseed -logg -lvorbis -lvorbisfile -loggz -loggplay -ltheora
+
+AR_PARAM = cru
+CFLAGS = -Wall -g -fPIC `sdl-config --cflags` $(CDEFS) -I$(SEEDSDK)/seed/include -I$(SEEDSDK)/seed/contrib
+CDEFS = -D_SDL_ -DDEBUG -DLINUX 
+#-DYMEM_DEBUG -DYMEM_PARANOID_CHECK -DSEED_ENABLE_PROFILER
 CPPFLAGS = $(CFLAGS)
 LIBS =
 

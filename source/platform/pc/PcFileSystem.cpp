@@ -74,9 +74,9 @@ BOOL FileSystem::Initialize()
 		char outdir[1024];
 		FilePath dir[1024];
 		FilePath dir2[1024];
-		memset(dir2, '\0', 1024);
-		memset(dir, '\0', 1024);
-		memset(outdir, '\0', 1024);
+		MEMSET(dir2, '\0', 1024);
+		MEMSET(dir, '\0', 1024);
+		MEMSET(outdir, '\0', 1024);
 		get_current_directory(dir, 1024);
 
 #if defined(WIN32)
@@ -84,11 +84,11 @@ BOOL FileSystem::Initialize()
 		for (u32 i = 0; i < 1024; i++) // for print purpose only...
 			outdir[i] = (char)dir[i];
 #elif defined(_QT_)
-		snprintf((char *)dir2, 1024, "%S/%s/", dir, FILESYSTEM_DEFAULT_PATH);
-		memcpy(outdir, dir, 1024);
+		snprintf((char *)dir2, 1024, "%s/%s", dir, FILESYSTEM_DEFAULT_PATH);
+		MEMCOPY(outdir, dir, 1024);
 #else
-		snprintf((char *)dir2, 1024, "%s/%s/", dir, FILESYSTEM_DEFAULT_PATH);
-		memcpy(outdir, dir, 1024);
+		snprintf((char *)dir2, 1024, "%s/%s", dir, FILESYSTEM_DEFAULT_PATH);
+		MEMCOPY(outdir, dir, 1024);
 #endif
 
 		Info(TAG "Working dir is: %s", outdir);

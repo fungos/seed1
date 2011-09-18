@@ -51,6 +51,8 @@
 	#define SEED_PLATFORM_NAME "SDL"
 #elif defined(_QT_)
 	#define SEED_PLATFORM_NAME "Qt"
+#elif defined(_PS3DEV_)
+	#define SEED_PLATFORM_NAME "PS3"
 #endif // _IPHONE_
 
 //================================================================================
@@ -103,7 +105,12 @@ Maximum size of a folder name string
 /*
 Use wide char paths
 */
-#define SEED_PATH_WIDE						1
+#define SEED_PATH_WIDE						0
+
+/*
+Enable nedmalloc as default allocator
+*/
+#define SEED_USE_NEDMALLOC				0
 
 /*
 String Pools - Define the amount of each pool

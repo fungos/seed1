@@ -307,7 +307,7 @@ INLINE const char *ISprite::GetAnimationName() const
 {
 	const char *ret = NULL;
 	if (this->pAnimation)
-		ret = _S(pAnimation->iAnimationId); //pAnimation->pName;
+		ret = Str(pAnimation->iAnimationId); //pAnimation->pName;
 
 	return ret;
 }

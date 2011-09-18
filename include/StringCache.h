@@ -46,7 +46,7 @@
 #include <vector>
 #include <algorithm>
 
-#define _S(x)	pStringCache->GetStringById(x)
+#define Str(x)	pStringCache->GetStringById(x)
 
 namespace Seed {
 

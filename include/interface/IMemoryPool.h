@@ -57,6 +57,7 @@ class SEED_CORE_API IMemoryPool
 		virtual void Reserve(SIZE_T len);
 		virtual void Unreserve(SIZE_T len);
 		virtual u32 GetFreeMemory() const;
+		virtual void DisableThreadCache();
 		virtual void Print() const;
 
 		u32 iAllocations;

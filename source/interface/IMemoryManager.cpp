@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -35,6 +35,7 @@
 */
 
 #include "interface/IMemoryManager.h"
+#include "interface/IMemoryPool.h"
 #include "Log.h"
 
 namespace Seed {
@@ -52,7 +53,7 @@ INLINE IMemoryPool *IMemoryManager::CreatePool(u32 len, const char *name)
 {
 	UNUSED(len);
 	UNUSED(name);
-	
+
 	SEED_ABSTRACT_METHOD;
 	return NULL;
 }
@@ -98,6 +99,15 @@ INLINE void IMemoryManager::Unreserve(SIZE_T len, IMemoryPool *pool)
 INLINE void IMemoryManager::Info()
 {
 	SEED_ABSTRACT_METHOD;
+}
+
+INLINE void IMemoryManager::DisableThreadCache()
+{
+	for (u32 i = 0; i < arPool.Size(); i++)
+	{
+		IMemoryPool *pool = arPool[i];
+		pool->DisableThreadCache();
+	}
 }
 
 INLINE BOOL IMemoryManager::IsRequired() const

@@ -137,6 +137,7 @@
 #include <RendererManager.h>
 
 #include <SeedInit.h>
+#include <SeedRun.h>
 
 #if SEED_USE_THEORA == 1
 #include <api/theora/Theora.h>
