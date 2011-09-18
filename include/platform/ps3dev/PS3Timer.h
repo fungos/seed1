@@ -29,64 +29,46 @@
  **
  *****************************************************************************/
 
-/*! \file RendererDevice.h
+/*! \file PS3Timer.h
 	\author	Danny Angelo Carminati Grein
-	\brief Include selector
+	\brief ps3dev timer implementation
 */
 
-#ifndef __RENDERER_DEVICE_H__
-#define __RENDERER_DEVICE_H__
+#ifndef __PS3DEV_TIMER_H__
+#define __PS3DEV_TIMER_H__
 
-#if defined(_WII_)
-	#include "platform/wii/WiiRendererDevice.h"
-	using namespace Seed::WII;
-#elif defined(_IPHONE_)
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/OglES1RendererDevice.h"
+#if defined(_PS3DEV_)
 
-	using namespace Seed::PC;
-#elif defined(_SDL_)
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/Ogl14RendererDevice.h"
+#include "interface/ITimer.h"
+#include "Singleton.h"
 
-	#if defined(SEED_ENABLE_OGL20)
-	#include "api/ogl/Ogl20RendererDevice.h"
-	#endif
+#include <time.h>
 
-	#if defined(SEED_ENABLE_OGL30)
-	#include "api/ogl/Ogl30RendererDevice.h"
-	#endif
+namespace Seed { namespace PS3 {
 
-	#if defined(SEED_ENABLE_OGL40)
-	#include "api/ogl/Ogl40RendererDevice.h"
-	#endif
+class SEED_CORE_API Timer : public ITimer
+{
+	SEED_SINGLETON_DECLARE(Timer)
+	public:
+		virtual BOOL Initialize();
+		virtual BOOL Reset();
+		virtual BOOL Shutdown();
 
-	#if defined(SEED_ENABLE_D3D8)
-	#include "api/directx/D3D8RendererDevice.h"
-	#endif
+		virtual u64 GetMilliseconds() const;
+		virtual void Sleep(u32 ms) const;
 
-	#if defined(SEED_ENABLE_D3D9)
-	#include "api/directx/D3D9RendererDevice.h"
-	#endif
+	public:
+		u64 fStart;
 
-	#if defined(SEED_ENABLE_D3D10)
-	#include "api/directx/D3D10RendererDevice.h"
-	#endif
+	private:
+		SEED_DISABLE_COPY(Timer);
+};
 
-	#if defined(SEED_ENABLE_D3D11)
-	#include "api/directx/D3D11RendererDevice.h"
-	#endif
+#define pTimer Timer::GetInstance()
 
-	using namespace Seed::PC;
-#elif defined(_QT_)
-//	#include "platform/qt/QtRendererDevice.h"
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/Ogl14RendererDevice.h"
-	using namespace Seed::PC;
-	//using namespace Seed::QT;
-#elif defined(_PS3DEV_)
-	#include "platform/ps3dev/PS3RendererDevice.h"
-	using namespace Seed::PS3;
-#endif
+}} // namespace
 
-#endif // __RENDERER_DEVICE_H__
+#else // _PS3DEV_
+	#error "Include 'Timer.h' instead 'platform/ps3dev/PS3Timer.h' directly."
+#endif // _PS3DEV_
+#endif // __PS3DEV_TIMER_H__

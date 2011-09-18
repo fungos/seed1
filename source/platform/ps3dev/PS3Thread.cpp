@@ -29,64 +29,69 @@
  **
  *****************************************************************************/
 
-/*! \file RendererDevice.h
+/*! \file PS3Thread.cpp
 	\author	Danny Angelo Carminati Grein
-	\brief Include selector
+	\brief ps3dev thread implementation
 */
 
-#ifndef __RENDERER_DEVICE_H__
-#define __RENDERER_DEVICE_H__
+#if defined(_PS3DEV_)
 
-#if defined(_WII_)
-	#include "platform/wii/WiiRendererDevice.h"
-	using namespace Seed::WII;
-#elif defined(_IPHONE_)
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/OglES1RendererDevice.h"
+#include "Thread.h"
+#include "MemoryManager.h"
 
-	using namespace Seed::PC;
-#elif defined(_SDL_)
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/Ogl14RendererDevice.h"
+#define TAG 	"[Thread] "
 
-	#if defined(SEED_ENABLE_OGL20)
-	#include "api/ogl/Ogl20RendererDevice.h"
-	#endif
+namespace Seed { namespace PS3 {
 
-	#if defined(SEED_ENABLE_OGL30)
-	#include "api/ogl/Ogl30RendererDevice.h"
-	#endif
+static int __seed_thread_loop_callback(void *param)
+{
+	Thread *pt = static_cast<Thread *>(param);
+	while (pt->Run());
 
-	#if defined(SEED_ENABLE_OGL40)
-	#include "api/ogl/Ogl40RendererDevice.h"
-	#endif
+	pMemoryManager->DisableThreadCache();
 
-	#if defined(SEED_ENABLE_D3D8)
-	#include "api/directx/D3D8RendererDevice.h"
-	#endif
+	pt->Destroy();
+	return 0;
+}
 
-	#if defined(SEED_ENABLE_D3D9)
-	#include "api/directx/D3D9RendererDevice.h"
-	#endif
+Thread::Thread()
+	: bRunning(TRUE)
+	, pThread(NULL)
+{
+}
 
-	#if defined(SEED_ENABLE_D3D10)
-	#include "api/directx/D3D10RendererDevice.h"
-	#endif
+Thread::~Thread()
+{
+	this->Destroy();
+}
 
-	#if defined(SEED_ENABLE_D3D11)
-	#include "api/directx/D3D11RendererDevice.h"
-	#endif
+INLINE void Thread::Create(s32 priority)
+{
+	UNUSED(priority);
 
-	using namespace Seed::PC;
-#elif defined(_QT_)
-//	#include "platform/qt/QtRendererDevice.h"
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/Ogl14RendererDevice.h"
-	using namespace Seed::PC;
-	//using namespace Seed::QT;
-#elif defined(_PS3DEV_)
-	#include "platform/ps3dev/PS3RendererDevice.h"
-	using namespace Seed::PS3;
-#endif
+	bRunning = TRUE;
+	if (!pThread)
+	{
+		pThread = SDL_CreateThread(__seed_thread_loop_callback, this);
+		ASSERT_MSG(pThread != NULL, TAG "Failed to create thread.");
+	}
+}
 
-#endif // __RENDERER_DEVICE_H__
+INLINE void Thread::Destroy()
+{
+	bRunning = FALSE;
+
+	if (pThread)
+		SDL_KillThread(pThread);
+
+	pThread = NULL;
+}
+
+INLINE BOOL Thread::Run()
+{
+	return bRunning;
+}
+
+}} // namespace
+
+#endif // _PS3DEV_

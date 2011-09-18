@@ -44,11 +44,21 @@
 #if defined(_WII_)
 	#include "platform/wii/WiiMemoryPool.h"
 	using namespace Seed::WII;
+
+	#define MemoryPool WiiMemoryPool
 #endif // _WII_
 */
-#if defined(_SDL_) || defined(_QT_) || defined(_IPHONE_)
-	#include "platform/pc/PcMemoryPool.h"
-	using namespace Seed::PC;
-#endif // _SDL_ || _QT_ || _IPHONE_
+#if defined(_SDL_) || defined(_QT_) || defined(_IPHONE_) || defined(_PS3DEV_)
+	#if SEED_USE_NEDMALLOC == 1
+		#include "api/nedmalloc/NedMemoryPool.h"
+
+		#define MemoryPool NedMemoryPool
+	#else
+		#include "platform/pc/PcMemoryPool.h"
+		using namespace Seed::PC;
+
+		#define MemoryPool PcMemoryPool
+	#endif
+#endif // _PC_
 
 #endif // __MEMORY_POOL_H__

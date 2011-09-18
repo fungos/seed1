@@ -29,64 +29,67 @@
  **
  *****************************************************************************/
 
-/*! \file RendererDevice.h
+/*! \file PS3Timer.cpp
 	\author	Danny Angelo Carminati Grein
-	\brief Include selector
+	\brief ps3dev timer implementation
 */
 
-#ifndef __RENDERER_DEVICE_H__
-#define __RENDERER_DEVICE_H__
+#if defined(_PS3DEV_)
 
-#if defined(_WII_)
-	#include "platform/wii/WiiRendererDevice.h"
-	using namespace Seed::WII;
-#elif defined(_IPHONE_)
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/OglES1RendererDevice.h"
+#include "Defines.h"
+#include "Timer.h"
+#include "Log.h"
 
-	using namespace Seed::PC;
-#elif defined(_SDL_)
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/Ogl14RendererDevice.h"
+#include <SDL/SDL.h>
 
-	#if defined(SEED_ENABLE_OGL20)
-	#include "api/ogl/Ogl20RendererDevice.h"
-	#endif
+#define TAG "[Timer] "
 
-	#if defined(SEED_ENABLE_OGL30)
-	#include "api/ogl/Ogl30RendererDevice.h"
-	#endif
+namespace Seed { namespace PS3 {
 
-	#if defined(SEED_ENABLE_OGL40)
-	#include "api/ogl/Ogl40RendererDevice.h"
-	#endif
+SEED_SINGLETON_DEFINE(Timer);
 
-	#if defined(SEED_ENABLE_D3D8)
-	#include "api/directx/D3D8RendererDevice.h"
-	#endif
+Timer::Timer()
+	: fStart(0)
+{
+}
 
-	#if defined(SEED_ENABLE_D3D9)
-	#include "api/directx/D3D9RendererDevice.h"
-	#endif
+Timer::~Timer()
+{
+}
 
-	#if defined(SEED_ENABLE_D3D10)
-	#include "api/directx/D3D10RendererDevice.h"
-	#endif
+INLINE BOOL Timer::Initialize()
+{
+	Log(TAG "Initializing...");
+	this->Reset();
+	Log(TAG "Initialization completed.");
 
-	#if defined(SEED_ENABLE_D3D11)
-	#include "api/directx/D3D11RendererDevice.h"
-	#endif
+	return TRUE;
+}
 
-	using namespace Seed::PC;
-#elif defined(_QT_)
-//	#include "platform/qt/QtRendererDevice.h"
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/Ogl14RendererDevice.h"
-	using namespace Seed::PC;
-	//using namespace Seed::QT;
-#elif defined(_PS3DEV_)
-	#include "platform/ps3dev/PS3RendererDevice.h"
-	using namespace Seed::PS3;
-#endif
+INLINE BOOL Timer::Reset()
+{
+	fStart = SDL_GetTicks();
 
-#endif // __RENDERER_DEVICE_H__
+	return TRUE;
+}
+
+INLINE BOOL Timer::Shutdown()
+{
+	return this->Reset();
+}
+
+INLINE u64 Timer::GetMilliseconds() const
+{
+	u64 ret = SDL_GetTicks();
+
+	return (ret - fStart);
+}
+
+INLINE void Timer::Sleep(u32 ms) const
+{
+	SDL_Delay(ms);
+}
+
+}} // namespace
+
+#endif // _PS3DEV_

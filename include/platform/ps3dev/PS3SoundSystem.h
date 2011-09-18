@@ -29,64 +29,71 @@
  **
  *****************************************************************************/
 
-/*! \file RendererDevice.h
+/*! \file PS3SoundSystem.h
 	\author	Danny Angelo Carminati Grein
-	\brief Include selector
+	\brief ps3dev soundSystem
 */
 
-#ifndef __RENDERER_DEVICE_H__
-#define __RENDERER_DEVICE_H__
+#ifndef __PS3DEV_SOUND_SYSTEM_H__
+#define __PS3DEV_OGG_SOUND_SYSTEM_H__
 
-#if defined(_WII_)
-	#include "platform/wii/WiiRendererDevice.h"
-	using namespace Seed::WII;
-#elif defined(_IPHONE_)
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/OglES1RendererDevice.h"
+#include "Defines.h"
 
-	using namespace Seed::PC;
-#elif defined(_SDL_)
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/Ogl14RendererDevice.h"
+#if defined(_PS3DEV_)
 
-	#if defined(SEED_ENABLE_OGL20)
-	#include "api/ogl/Ogl20RendererDevice.h"
-	#endif
+#include "interface/ISoundSystem.h"
+#include "interface/IResource.h"
+#include "SoundSource.h"
+#include "Music.h"
+#include "File.h"
+#include "Array.h"
+#include "Singleton.h"
 
-	#if defined(SEED_ENABLE_OGL30)
-	#include "api/ogl/Ogl30RendererDevice.h"
-	#endif
+#define SOUND_MASTER_VOLUME		0.2f
 
-	#if defined(SEED_ENABLE_OGL40)
-	#include "api/ogl/Ogl40RendererDevice.h"
-	#endif
+namespace Seed { namespace PS3 {
 
-	#if defined(SEED_ENABLE_D3D8)
-	#include "api/directx/D3D8RendererDevice.h"
-	#endif
+#define ALCdevice void*
+#define ALCcontext void*
 
-	#if defined(SEED_ENABLE_D3D9)
-	#include "api/directx/D3D9RendererDevice.h"
-	#endif
+class SEED_CORE_API SoundSystem : public ISoundSystem
+{
+	SEED_SINGLETON_DECLARE(SoundSystem)
+	public:
+		// ISoundSystem
+		//virtual void PlayMusic(IMusic *mus, f32 ms = 0);
+		//virtual void StopMusic(f32 ms = 0, IMusic *mus = NULL);
+		//virtual void StopSounds();
+		virtual void Pause();
+		virtual void Resume();
 
-	#if defined(SEED_ENABLE_D3D10)
-	#include "api/directx/D3D10RendererDevice.h"
-	#endif
+		//virtual void Add(ISoundSource *src);
+		//virtual void Remove(ISoundSource *src);
 
-	#if defined(SEED_ENABLE_D3D11)
-	#include "api/directx/D3D11RendererDevice.h"
-	#endif
+		// IUpdatable
+		virtual BOOL Update(f32 dt);
 
-	using namespace Seed::PC;
-#elif defined(_QT_)
-//	#include "platform/qt/QtRendererDevice.h"
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/Ogl14RendererDevice.h"
-	using namespace Seed::PC;
-	//using namespace Seed::QT;
-#elif defined(_PS3DEV_)
-	#include "platform/ps3dev/PS3RendererDevice.h"
-	using namespace Seed::PS3;
-#endif
+		// IModule
+		virtual BOOL Initialize();
+		virtual BOOL Reset();
+		virtual BOOL Shutdown();
 
-#endif // __RENDERER_DEVICE_H__
+	private:
+		SEED_DISABLE_COPY(SoundSystem);
+
+		void UpdateMusic(f32 dt, IMusic *mus);
+		void UpdateSounds(f32 dt);
+
+	private:
+		ALCdevice			*pDevice;
+		ALCcontext			*pContext;
+};
+
+#define pSoundSystem SoundSystem::GetInstance()
+
+}} // namespace
+
+#else // _PS3DEV_
+	#error "Include 'SoundSystem.h' instead 'api/oal_ogg/OalOggSoundSystem.h' directly."
+#endif // _PS3DEV_
+#endif // __PS3DEV_SOUND_SYSTEM_H__

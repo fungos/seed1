@@ -29,29 +29,40 @@
  **
  *****************************************************************************/
 
-/*! \file System.h
-	\author	Danny Angelo Carminati Grein
-	\brief Include selector
-*/
+#ifndef __PS3DEV_VORBIS_UTIL_H__
+#define __PS3DEV_VORBIS_UTIL_H__
 
-#ifndef __SYSTEM_H__
-#define __SYSTEM_H__
+#if defined(_PS3DEV_)
 
-#if defined(_WII_)
-	#include "platform/wii/WiiSystem.h"
-	using namespace Seed::WII;
-#elif defined(_SDL_)
-	#include "platform/sdl/SdlSystem.h"
-	using namespace Seed::SDL;
-#elif defined(_IPHONE_)
-	#include "platform/iphone/IphSystem.h"
-	using namespace Seed::iPhone;
-#elif defined(_QT_)
-	#include "platform/qt/QtSystem.h"
-	using namespace Seed::QT;
-#elif defined(_PS3DEV_)
-	#include "platform/ps3dev/PS3System.h"
-	using namespace Seed::PS3;
-#endif // platform
+#include <vorbis/codec.h>
+#include <vorbis/vorbisfile.h>
 
-#endif // __SYSTEM_H__
+#include "Defines.h"
+
+// 40kb para que em maquinas lentas nao fique engasgando no som
+#define VORBIS_BUFFER_SIZE SEED_MUSIC_STREAMING_BUFFER_SIZE
+
+
+struct SEED_CORE_API sOggFile
+{
+	u8		*dataPtr;
+	u32		dataSize;
+	u64		dataRead;
+
+	sOggFile()
+		: dataPtr(NULL)
+		, dataSize(0)
+		, dataRead(0)
+	{}
+};
+
+
+size_t vorbis_read(void *ptr, size_t byteSize, size_t sizeToRead, void *datasource);
+int vorbis_seek(void *datasource, ogg_int64_t offset, int whence);
+int vorbis_close(void *datasource);
+long vorbis_tell(void *datasource);
+bool ogg_update_stream(OggVorbis_File *oggStream, ogg_int64_t rate, int format, u32 buffer, bool loop);
+
+#endif // _PS3DEV_
+
+#endif // __PS3DEV_VORBIS_UTIL_H__

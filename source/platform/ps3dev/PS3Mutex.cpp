@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
-
+ 
  ** This file is part of the Seed Framework.
-
+ 
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
-
+ 
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -29,64 +29,42 @@
  **
  *****************************************************************************/
 
-/*! \file RendererDevice.h
+/*! \file PS3Mutex.cpp
 	\author	Danny Angelo Carminati Grein
-	\brief Include selector
+	\brief Mutex
 */
 
-#ifndef __RENDERER_DEVICE_H__
-#define __RENDERER_DEVICE_H__
+#if defined(_PS3DEV_)
 
-#if defined(_WII_)
-	#include "platform/wii/WiiRendererDevice.h"
-	using namespace Seed::WII;
-#elif defined(_IPHONE_)
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/OglES1RendererDevice.h"
+#include <SDL/SDL_mutex.h>
+#include "Mutex.h"
 
-	using namespace Seed::PC;
-#elif defined(_SDL_)
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/Ogl14RendererDevice.h"
+namespace Seed { namespace PS3 {
 
-	#if defined(SEED_ENABLE_OGL20)
-	#include "api/ogl/Ogl20RendererDevice.h"
-	#endif
+Mutex::Mutex()
+	: pMutex(NULL)
+{
+	pMutex = SDL_CreateMutex();
+	ASSERT_NULL(pMutex);
+}
 
-	#if defined(SEED_ENABLE_OGL30)
-	#include "api/ogl/Ogl30RendererDevice.h"
-	#endif
+Mutex::~Mutex()
+{
+	SDL_DestroyMutex(pMutex);
+}
 
-	#if defined(SEED_ENABLE_OGL40)
-	#include "api/ogl/Ogl40RendererDevice.h"
-	#endif
+INLINE void Mutex::Lock()
+{
+	IMutex::Lock();
+	SDL_mutexP(pMutex);
+}
 
-	#if defined(SEED_ENABLE_D3D8)
-	#include "api/directx/D3D8RendererDevice.h"
-	#endif
+INLINE void Mutex::Unlock()
+{
+	SDL_mutexV(pMutex);
+	IMutex::Unlock();
+}
 
-	#if defined(SEED_ENABLE_D3D9)
-	#include "api/directx/D3D9RendererDevice.h"
-	#endif
+}} // namespace
 
-	#if defined(SEED_ENABLE_D3D10)
-	#include "api/directx/D3D10RendererDevice.h"
-	#endif
-
-	#if defined(SEED_ENABLE_D3D11)
-	#include "api/directx/D3D11RendererDevice.h"
-	#endif
-
-	using namespace Seed::PC;
-#elif defined(_QT_)
-//	#include "platform/qt/QtRendererDevice.h"
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/Ogl14RendererDevice.h"
-	using namespace Seed::PC;
-	//using namespace Seed::QT;
-#elif defined(_PS3DEV_)
-	#include "platform/ps3dev/PS3RendererDevice.h"
-	using namespace Seed::PS3;
-#endif
-
-#endif // __RENDERER_DEVICE_H__
+#endif // _PS3DEV_

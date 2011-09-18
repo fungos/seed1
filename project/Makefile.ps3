@@ -1,0 +1,34 @@
+PROJECT=libSeed.a
+#include Project.in
+include Objects.in2
+TARGET = ../bin/$(PROJECT)
+
+SEEDSDK=/media/d/SDK
+
+CROSS = powerpc64-ps3-elf-
+
+AR = $(CROSS)ar
+AS = $(CROSS)as
+NM = $(CROSS)nm
+STRIP = $(CROSS)strip
+LD = $(CROSS)ld
+GCC = $(CROSS)g++
+CC = $(CROSS)g++
+
+AR_PARAM = cru
+CFLAGS = -Wall -g -fPIC $(CDEFS) -I$(SEEDSDK)/seed/include -I$(SEEDSDK)/seed/contrib -I$(PS3DEV)/portlibs/ppu/include/
+CDEFS = -D_PS3DEV_ -DDEBUG
+LFLAGS = `sdl-config --libs` -logg -lvorbis -lvorbisfile -loggz -loggplay -ltheora
+CPPFLAGS = $(CFLAGS)
+LIBS =
+
+%.o: %.cpp
+	$(GCC) $(CFLAGS) -c $< -o $@
+
+all:	$(TARGET)
+
+$(TARGET): $(OBJECTS)
+	$(AR) $(AR_PARAM) $(TARGET) $(OBJECTS)
+
+clean:
+	rm -f $(OBJECTS) $(TARGET) *~

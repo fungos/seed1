@@ -40,21 +40,18 @@
 #if defined(_WII_)
 	#include "platform/wii/WiiMutex.h"
 	using namespace Seed::WII;
-#endif // _WII_
-
-#if defined(_SDL_)
+#elif defined(_SDL_)
 	#include "platform/sdl/SdlMutex.h"
 	using namespace Seed::SDL;
-#endif // _SDL_
-
-#if defined(_IPHONE_)
+#elif defined(_IPHONE_)
 	#include "platform/iphone/IphMutex.h"
 	using namespace Seed::iPhone;
-#endif // _IPHONE_
-
-#if defined(_QT_)
+#elif defined(_QT_)
 	#include "platform/qt/QtMutex.h"
 	using namespace Seed::QT;
-#endif // _QT_
+#elif defined(_PS3DEV_)
+	#include "platform/ps3dev/PS3Mutex.h"
+	using namespace Seed::PS3;
+#endif // platform
 
 #endif // __MUTEX_H__

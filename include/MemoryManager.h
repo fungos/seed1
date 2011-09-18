@@ -40,12 +40,10 @@
 #if defined(_WII_)
 	#include "platform/wii/WiiMemoryManager.h"
 	using namespace Seed::WII;
-#endif // _WII_
-
-#if defined(_SDL_) || defined(_QT_) || defined(_IPHONE_)
+#elif defined(_SDL_) || defined(_QT_) || defined(_IPHONE_) || defined(_PS3DEV_)
 	#include "platform/pc/PcMemoryManager.h"
 	using namespace Seed::PC;
-#endif // _SDL_ || _QT_ || _IPHONE_
+#endif // _PC_
 
 #include "LeakReport.h"
 

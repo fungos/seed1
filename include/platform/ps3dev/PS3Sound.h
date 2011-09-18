@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
-
+ 
  ** This file is part of the Seed Framework.
-
+ 
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
-
+ 
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -29,64 +29,60 @@
  **
  *****************************************************************************/
 
-/*! \file RendererDevice.h
+/*! \file PS3Sound.h
 	\author	Danny Angelo Carminati Grein
-	\brief Include selector
+	\brief ps3dev sound implementation
 */
 
-#ifndef __RENDERER_DEVICE_H__
-#define __RENDERER_DEVICE_H__
+#ifndef __PS3DEV_SOUND_H__
+#define __PS3DEV_SOUND_H__
 
-#if defined(_WII_)
-	#include "platform/wii/WiiRendererDevice.h"
-	using namespace Seed::WII;
-#elif defined(_IPHONE_)
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/OglES1RendererDevice.h"
+#include "Defines.h"
 
-	using namespace Seed::PC;
-#elif defined(_SDL_)
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/Ogl14RendererDevice.h"
+#if defined(_PS3DEV_)
 
-	#if defined(SEED_ENABLE_OGL20)
-	#include "api/ogl/Ogl20RendererDevice.h"
-	#endif
+#include "File.h"
+#include "SeedInit.h"
+#include "interface/IResource.h"
+#include "interface/ISound.h"
+#include "api/oal_ogg/vorbis_util.h"
 
-	#if defined(SEED_ENABLE_OGL30)
-	#include "api/ogl/Ogl30RendererDevice.h"
-	#endif
+namespace Seed { namespace PS3 {
 
-	#if defined(SEED_ENABLE_OGL40)
-	#include "api/ogl/Ogl40RendererDevice.h"
-	#endif
+IResource *SoundResourceLoader(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
 
-	#if defined(SEED_ENABLE_D3D8)
-	#include "api/directx/D3D8RendererDevice.h"
-	#endif
+class SEED_CORE_API Sound : public ISound
+{
+	friend IResource *SoundResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
+	friend class SoundSystem;
+	friend class SoundSource;
 
-	#if defined(SEED_ENABLE_D3D9)
-	#include "api/directx/D3D9RendererDevice.h"
-	#endif
+	public:
+		Sound();
+		virtual ~Sound();
 
-	#if defined(SEED_ENABLE_D3D10)
-	#include "api/directx/D3D10RendererDevice.h"
-	#endif
+		void Reset();
 
-	#if defined(SEED_ENABLE_D3D11)
-	#include "api/directx/D3D11RendererDevice.h"
-	#endif
+		// IResource
+		using IResource::Load;
+		virtual BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool);
+		virtual BOOL Unload();
+		virtual u32 GetUsedMemory() const;
 
-	using namespace Seed::PC;
-#elif defined(_QT_)
-//	#include "platform/qt/QtRendererDevice.h"
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/Ogl14RendererDevice.h"
-	using namespace Seed::PC;
-	//using namespace Seed::QT;
-#elif defined(_PS3DEV_)
-	#include "platform/ps3dev/PS3RendererDevice.h"
-	using namespace Seed::PS3;
-#endif
+	protected:
+		virtual const void *GetData() const;
 
-#endif // __RENDERER_DEVICE_H__
+	private:
+		SEED_DISABLE_COPY(Sound);
+
+	private:
+		u32			iBuffer;
+		File			stFile;
+};
+
+}} // namespace
+
+#else // _PS3DEV_
+	#error "Include 'Sound.h' instead 'platform/ps3dev/PS3Sound.h' directly."
+#endif // _PS3DEV_
+#endif // __PS3DEV_SOUND_H__

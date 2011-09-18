@@ -50,6 +50,7 @@
 namespace Seed {
 
 class Movie;
+class ISceneObject;
 
 class SEED_CORE_API Timeline
 {

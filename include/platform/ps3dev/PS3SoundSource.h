@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
-
+ 
  ** This file is part of the Seed Framework.
-
+ 
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
-
+ 
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -29,64 +29,58 @@
  **
  *****************************************************************************/
 
-/*! \file RendererDevice.h
+/*! \file PS3SoundSource.h
 	\author	Danny Angelo Carminati Grein
-	\brief Include selector
+	\brief ps3dev sound source implementation
 */
 
-#ifndef __RENDERER_DEVICE_H__
-#define __RENDERER_DEVICE_H__
+#ifndef __PS3DEV_SOUND_SOURCE_H__
+#define __PS3DEV_SOUND_SOURCE_H__
 
-#if defined(_WII_)
-	#include "platform/wii/WiiRendererDevice.h"
-	using namespace Seed::WII;
-#elif defined(_IPHONE_)
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/OglES1RendererDevice.h"
+#include "Defines.h"
 
-	using namespace Seed::PC;
-#elif defined(_SDL_)
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/Ogl14RendererDevice.h"
+#if defined(_PS3DEV_)
 
-	#if defined(SEED_ENABLE_OGL20)
-	#include "api/ogl/Ogl20RendererDevice.h"
-	#endif
+#include "Sound.h"
+#include "interface/ISoundSource.h"
+#include "interface/ISound.h"
+#include "File.h"
 
-	#if defined(SEED_ENABLE_OGL30)
-	#include "api/ogl/Ogl30RendererDevice.h"
-	#endif
+namespace Seed { namespace PS3 {
 
-	#if defined(SEED_ENABLE_OGL40)
-	#include "api/ogl/Ogl40RendererDevice.h"
-	#endif
+class SEED_CORE_API SoundSource : public ISoundSource
+{
+	friend class SoundSystem;
 
-	#if defined(SEED_ENABLE_D3D8)
-	#include "api/directx/D3D8RendererDevice.h"
-	#endif
+	public:
+		SoundSource();
+		virtual ~SoundSource();
 
-	#if defined(SEED_ENABLE_D3D9)
-	#include "api/directx/D3D9RendererDevice.h"
-	#endif
+		// ISoundSource
+		using ISoundSource::Load;
+		virtual void Load(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+		virtual void Unload();
 
-	#if defined(SEED_ENABLE_D3D10)
-	#include "api/directx/D3D10RendererDevice.h"
-	#endif
+		virtual void SetLoop(BOOL b);
+		virtual void Play();
+		virtual void Stop(f32 ms = 0.0f);
+		virtual void Resume();
 
-	#if defined(SEED_ENABLE_D3D11)
-	#include "api/directx/D3D11RendererDevice.h"
-	#endif
+		virtual void SetVolume(f32 vol);
+		virtual void UpdateVolume();
 
-	using namespace Seed::PC;
-#elif defined(_QT_)
-//	#include "platform/qt/QtRendererDevice.h"
-	#include "platform/pc/PcRendererDevice.h"
-	#include "api/ogl/Ogl14RendererDevice.h"
-	using namespace Seed::PC;
-	//using namespace Seed::QT;
-#elif defined(_PS3DEV_)
-	#include "platform/ps3dev/PS3RendererDevice.h"
-	using namespace Seed::PS3;
-#endif
+	private:
+		SEED_DISABLE_COPY(SoundSource);
 
-#endif // __RENDERER_DEVICE_H__
+	private:
+		u32			iSource;
+		Sound			*pSound;
+		File			stFile;
+};
+
+}} // namespace
+
+#else // _PS3DEV_
+	#error "Include 'SoundSource.h' instead 'platform/ps3dev/PS3SoundSource.h' directly."
+#endif // _PS3DEV_
+#endif // __PS3DEV_SOUND_SOURCE_H__

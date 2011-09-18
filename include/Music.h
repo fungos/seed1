@@ -40,16 +40,15 @@
 #if defined(_WII_)
 	#include "platform/wii/WiiMusic.h"
 	using namespace Seed::WII;
-#endif // _WII_
-
-#if defined(_SDL_) || defined(_QT_)
+#elif defined(_SDL_) || defined(_QT_)
 	#include "api/oal_ogg/OalOggMusic.h"
 	using namespace Seed::OAL;
-#endif // _SDL_ || _QT_
-
-#if defined(_IPHONE_)
+#elif defined(_IPHONE_)
 	#include "platform/iphone/IphMusic.h"
 	using namespace Seed::iPhone;
-#endif // _IPHONE_
+#elif defined(_PS3DEV_)
+	#include "platform/ps3dev/PS3Music.h"
+	using namespace Seed::PS3;	
+#endif // platform
 
 #endif // __MUSIC_H__

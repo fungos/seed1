@@ -29,29 +29,73 @@
  **
  *****************************************************************************/
 
-/*! \file System.h
+/*! \file PS3Music.h
 	\author	Danny Angelo Carminati Grein
-	\brief Include selector
+	\brief ps3dev music implementation
 */
 
-#ifndef __SYSTEM_H__
-#define __SYSTEM_H__
+#ifndef __PS3DEV_MUSIC_H__
+#define __PS3DEV_MUSIC_H__
 
-#if defined(_WII_)
-	#include "platform/wii/WiiSystem.h"
-	using namespace Seed::WII;
-#elif defined(_SDL_)
-	#include "platform/sdl/SdlSystem.h"
-	using namespace Seed::SDL;
-#elif defined(_IPHONE_)
-	#include "platform/iphone/IphSystem.h"
-	using namespace Seed::iPhone;
-#elif defined(_QT_)
-	#include "platform/qt/QtSystem.h"
-	using namespace Seed::QT;
-#elif defined(_PS3DEV_)
-	#include "platform/ps3dev/PS3System.h"
-	using namespace Seed::PS3;
-#endif // platform
+#include "Defines.h"
 
-#endif // __SYSTEM_H__
+#if defined(_PS3DEV_)
+
+#include "File.h"
+#include "interface/IMusic.h"
+#include "SeedInit.h"
+#include "Sound.h"
+#include "vorbis_util.h"
+
+#define PS3_MUSIC_BUFFERS	2
+
+namespace Seed { namespace PS3 {
+
+IResource *MusicResourceLoader(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);
+
+class SEED_CORE_API Music : public IMusic
+{
+	friend IResource *MusicResourceLoader(const char *filename, ResourceManager *res, IMemoryPool *pool);
+	friend class SoundSystem;
+
+	public:
+		Music();
+		virtual ~Music();
+
+		// IMusic
+		virtual void Reset();
+		virtual BOOL Update(f32 dt);
+		virtual const void *GetData() const;
+
+		virtual void SetVolume(f32 vol);
+		virtual void UpdateVolume();
+
+		// IResouce
+		using IResource::Load;
+		virtual BOOL Load(const char *filename, ResourceManager *res, IMemoryPool *pool);
+		virtual BOOL Unload();
+
+	protected:
+		virtual BOOL DoStream(u32 buffer);
+
+	private:
+		SEED_DISABLE_COPY(Music);
+
+	private:
+		u32			iBuffers[PS3_MUSIC_BUFFERS];
+		u32			iSource;
+
+		vorbis_info		*vorbisInfo;
+		vorbis_comment		*vorbisComment;
+		OggVorbis_File		oggStream;
+		int			eFormat;
+		BOOL			bLoop;
+		File			stFile;
+};
+
+}} // namespace
+
+#else // _PS3DEV_
+	#error "Include 'Music.h' instead 'platform/ps3dev/PS3Music.h' directly."
+#endif // _PS3DEV_
+#endif // __PS3DEV_MUSIC_H__
