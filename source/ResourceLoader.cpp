@@ -79,6 +79,7 @@ INLINE BOOL ResourceLoader::Initialize()
 INLINE BOOL ResourceLoader::Shutdown()
 {
 	this->bRunning = FALSE;
+	this->Destroy();
 	IModule::Shutdown();
 	Log(TAG "Terminated.");
 

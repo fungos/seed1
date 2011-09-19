@@ -53,7 +53,7 @@ Everything from Seed SDK will be inside Seed namespace.
 namespace Seed {
 
 	SEED_CORE_API extern ResourceManager *pResourceManager;
-	SEED_CORE_API extern const Configuration *pConfiguration;
+	SEED_CORE_API extern Configuration *pConfiguration;
 
 	#if SEED_USE_STRING_POOL == 1
 	SEED_CORE_API extern StringPoolManager<u16> glStringPool;
@@ -100,8 +100,8 @@ namespace Seed {
 
 	/// Render
 	/**
- 	Renders the game state and will be called once per frame.
- 	*/
+	Renders the game state and will be called once per frame.
+	*/
 	SEED_CORE_API void Render();
 
 	/// Shutdown Seed

@@ -40,13 +40,11 @@
 #if defined(_WII_)
 	#include "platform/wii/WiiSprite.h"
 	using namespace Seed::WII;
-#endif // _WII_
-
-#if defined(_SDL_) || defined(_QT_) || defined(_IPHONE_)
+#elif defined(_SDL_) || defined(_QT_) || defined(_IPHONE_) || defined(_PS3DEV_)
 	#include "interface/ISprite.h"
 	using namespace Seed;
 	//typedef ISprite Sprite;
 	#define Sprite ISprite
-#endif // _SDL_
+#endif // platform
 
 #endif // __SPRITE_H__

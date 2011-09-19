@@ -104,7 +104,7 @@ INLINE BOOL Cartridge::Prepare(eCartridgeSize size)
 	PATHCAT(strPath, CARTRIDGE_FILENAME, PC_MAX_PATH - PATHLEN(strPath) - 1);
 
 	this->pData = static_cast<u8 *>(pMemoryManager->Alloc(iSize, pDefaultPool, "Cartridge Data", "Cartridge"));
-	memset(this->pData, 0, iSize);
+	MEMSET(this->pData, 0, iSize);
 
 	if (!this->Verify(strPath, iSize))
 	{

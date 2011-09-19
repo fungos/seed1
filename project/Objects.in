@@ -36,6 +36,19 @@ OBJECTS = \
 ../source/platform/sdl/SdlTexture.o \
 ../source/platform/sdl/SdlThread.o \
 ../source/platform/sdl/SdlTimer.o \
+../source/platform/ps3dev/PS3Input.o \
+../source/platform/ps3dev/PS3Mutex.o \
+../source/platform/ps3dev/PS3Screen.o \
+../source/platform/ps3dev/PS3System.o \
+../source/platform/ps3dev/PS3Texture.o \
+../source/platform/ps3dev/PS3Thread.o \
+../source/platform/ps3dev/PS3Timer.o \
+../source/platform/ps3dev/PS3Music.o \
+../source/platform/ps3dev/PS3Sound.o \
+../source/platform/ps3dev/PS3SoundSource.o \
+../source/platform/ps3dev/PS3SoundSystem.o \
+../source/platform/ps3dev/PS3RendererDevice.o \
+../source/platform/ps3dev/vorbis_util.o \
 ../source/api/directx/D3D8RendererDevice.o \
 ../source/api/directx/DirectXVersion.o \
 ../source/api/oal_ogg/OalOggMusic.o \
@@ -46,6 +59,7 @@ OBJECTS = \
 ../source/api/ogl/Ogl14RendererDevice.o \
 ../source/api/ogl/OglES1RendererDevice.o \
 ../source/api/theora/Theora.o \
+../source/api/nedmalloc/NedMemoryPool.o \
 ../source/Checksum.o \
 ../source/CollisionMask.o \
 ../source/Configuration.o \
@@ -145,6 +159,7 @@ OBJECTS = \
 ../source/ParticleEmitter.o \
 ../source/ParticleEmitterObject.o \
 ../source/ParticleManager.o \
+../contrib/nedmalloc.o \
 ../contrib/ogg/framing.o \
 ../contrib/ogg/bitwise.o \
 ../contrib/theora/tokenize.o \

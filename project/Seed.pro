@@ -6,6 +6,7 @@ TEMPLATE = lib
 DEPENDPATH += .
 INCLUDEPATH += . \
 	"../include" \
+	"../contrib" \
 	"$$(SEEDSDK)/dependency/common/include" \
 	"$$(SEEDSDK)/dependency/mingw/include"
 DEFINES += _QT_
@@ -13,8 +14,7 @@ Debug {
 	OBJECTS_DIR = ../bin/debug/qt/obj
 	DESTDIR = ../bin/debug/qt
 	MOC_DIR = ../bin/debug/qt/moc
-	DEFINES += DEBUG \
-		YMEM_DEBUG
+	DEFINES += DEBUG
 }
 Release {
 	DESTDIR = ../bin/release/qt
@@ -26,8 +26,7 @@ Release {
 PRECOMPILED_HEADER = ../include/platform/qt/QtPch.h
 
 # Windows
-win32:DEFINES += WIN32 \
-	_WIN32_
+win32:DEFINES += WIN32 _WIN32_
 HEADERS += ../include/api/directx/D3D8RendererDevice.h \
 	../include/api/directx/DirectXVersion.h \
 	../include/api/oal_ogg/OalOggMusic.h \
@@ -236,6 +235,8 @@ HEADERS += ../include/api/directx/D3D8RendererDevice.h \
 	../include/FileSystem.h \
 	../include/PackageManager.h \
 	../include/SceneNode.h \
+	../contrib/nedmalloc.h \
+	../contrib/nedtrie.h \
 	../include/platform/qt/QtPch.h
 
 SOURCES += ../source/LeakReport.cpp \
@@ -381,4 +382,5 @@ SOURCES += ../source/LeakReport.cpp \
 	../source/TString.cpp \
 	../source/Updater.cpp \
 	../source/ViewManager.cpp \
-	../source/Viewport.cpp
+	../source/Viewport.cpp \
+	../contrib/nedmalloc.c

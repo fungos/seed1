@@ -3,14 +3,14 @@
  ** All rights reserved
  ** Contact: licensing@seedframework.org
  ** Website: http://www.seedframework.org
- 
+
  ** This file is part of the Seed Framework.
- 
+
  ** Commercial Usage
  ** Seed Framework is available under proprietary license for those who cannot,
  ** or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
  ** Nintendo Wii and others).
- 
+
  ** GNU Lesser General Public License Usage
  ** Alternatively, this file may be used under the terms of the GNU Lesser
  ** General Public License version 2.1 as published by the Free Software
@@ -29,29 +29,69 @@
  **
  *****************************************************************************/
 
-/*! \file Renderer2D.h
+/*! \file PS3Thread.cpp
 	\author	Danny Angelo Carminati Grein
-	\brief Include selector
+	\brief ps3dev thread implementation
 */
 
-#ifndef __RENDERER2D_H__
-#define __RENDERER2D_H__
+#if defined(_PS3DEV_)
 
-#include "Config.h"
+#include "Thread.h"
+#include "MemoryManager.h"
 
-#if defined(_WII_)
-	#include "platform/wii/WiiRenderer2D.h"
-	using namespace Seed::WII;
-#endif // _WII_
+#define TAG 	"[Thread] "
 
-#if defined(_SDL_) || defined(_QT_)
-	#include "api/ogl/OglRenderer2D.h"
-	using namespace Seed::OGL;
-#endif // _SDL_ || _QT_
+namespace Seed { namespace PS3 {
 
-#if defined(_IPHONE_)
-	#include "platform/iphone/IphRenderer2D.h"
-	using namespace Seed::iPhone;
-#endif // _IPHONE_
+static int __seed_thread_loop_callback(void *param)
+{
+	Thread *pt = static_cast<Thread *>(param);
+	while (pt->Run());
 
-#endif // __RENDERER2D_H__
+	pMemoryManager->DisableThreadCache();
+
+	pt->Destroy();
+	return 0;
+}
+
+Thread::Thread()
+	: bRunning(TRUE)
+	, pThread(NULL)
+{
+}
+
+Thread::~Thread()
+{
+	this->Destroy();
+}
+
+INLINE void Thread::Create(s32 priority)
+{
+	UNUSED(priority);
+
+	bRunning = TRUE;
+	if (!pThread)
+	{
+		pThread = SDL_CreateThread(__seed_thread_loop_callback, this);
+		ASSERT_MSG(pThread != NULL, TAG "Failed to create thread.");
+	}
+}
+
+INLINE void Thread::Destroy()
+{
+	bRunning = FALSE;
+
+	if (pThread)
+		SDL_KillThread(pThread);
+
+	pThread = NULL;
+}
+
+INLINE BOOL Thread::Run()
+{
+	return bRunning;
+}
+
+}} // namespace
+
+#endif // _PS3DEV_

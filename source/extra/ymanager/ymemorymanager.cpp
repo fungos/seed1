@@ -149,7 +149,7 @@ void *YMemoryManager::Alloc(u32 len, const char *desc, const char *owner, int re
 	const char *ownerc = (const char *)OWNR(current);
 	const char *descc = (const char *)DESC(current);
 	*/
-	
+
 	// handle the last block NEXT(current) = 0
 	if ((SIZE(current) >= len) && !USED(current))
 	{
@@ -161,7 +161,7 @@ void *YMemoryManager::Alloc(u32 len, const char *desc, const char *owner, int re
 		)
 		return ((void *)&pPool[current]);
 	}
-	
+
 	_YDEBUG
 	(
 		if (SIZE(current) < iFreeMemory)

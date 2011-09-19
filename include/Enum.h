@@ -70,6 +70,7 @@ enum eObjectType
 	ObjectConfiguration,
 	ObjectInterfaceModule,
 	ObjectInterfaceRenderable,
+	ObjectInterfaceBaseApp,
 	ObjectInterfaceGameApp,
 
 	// GUI Elements
@@ -120,7 +121,8 @@ enum ePlatformSimulation
 	SimulateWii,
 	SimulatePsp,
 	SimulateIOS3G,
-	SimulateN900
+	SimulateN900,
+	SimulatePS3
 };
 
 enum eRendererDeviceType

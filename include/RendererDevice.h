@@ -40,16 +40,12 @@
 #if defined(_WII_)
 	#include "platform/wii/WiiRendererDevice.h"
 	using namespace Seed::WII;
-#endif // _WII_
-
-#if defined(_IPHONE_)
+#elif defined(_IPHONE_)
 	#include "platform/pc/PcRendererDevice.h"
 	#include "api/ogl/OglES1RendererDevice.h"
 
 	using namespace Seed::PC;
-#endif
-
-#if defined(_SDL_)
+#elif defined(_SDL_)
 	#include "platform/pc/PcRendererDevice.h"
 	#include "api/ogl/Ogl14RendererDevice.h"
 
@@ -82,14 +78,15 @@
 	#endif
 
 	using namespace Seed::PC;
-#endif // _SDL_
-
-#if defined(_QT_)
+#elif defined(_QT_)
 //	#include "platform/qt/QtRendererDevice.h"
 	#include "platform/pc/PcRendererDevice.h"
 	#include "api/ogl/Ogl14RendererDevice.h"
 	using namespace Seed::PC;
 	//using namespace Seed::QT;
+#elif defined(_PS3DEV_)
+	#include "platform/ps3dev/PS3RendererDevice.h"
+	using namespace Seed::PS3;
 #endif
 
 #endif // __RENDERER_DEVICE_H__

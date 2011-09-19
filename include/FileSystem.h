@@ -41,13 +41,11 @@
 	#include "platform/wii/WiiFileSystem.h"
 	using namespace Seed::WII;
 	#define FSNS WII
-#endif // _WII_
-
-#if defined(_SDL_) || defined(_QT_) || defined(_IPHONE_)
+#elif defined(_SDL_) || defined(_QT_) || defined(_IPHONE_) || defined(_PS3DEV_)
 	#include "platform/pc/PcFileSystem.h"
 	using namespace Seed::PC;
 	#define FSNS PC
-#endif // _SDL_ || _QT_ || _IPHONE_
+#endif // _PC_
 
 
 #endif // __FILE_SYSTEM_H__

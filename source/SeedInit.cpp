@@ -86,7 +86,7 @@ namespace Private
 }
 
 ResourceManager *pResourceManager = NULL;
-const Configuration *pConfiguration = NULL;
+Configuration *pConfiguration = NULL;
 
 #define MAX_FRAME_DELTA ((1.0f / 60.0f) * 5.0f)
 

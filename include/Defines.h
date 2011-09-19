@@ -55,19 +55,15 @@ http://www.unknownroad.com/rtfm/VisualStudio/warningC4251.html
 
 #if defined(_WII_)
 	#include "platform/wii/WiiDefines.h"
-#else
-	#if defined(_SDL_)
-		#include "platform/sdl/SdlDefines.h"
-	#else
-		#if defined(_IPHONE_)
-			#include "platform/iphone/IphDefines.h"
-		#else
-			#if defined(_QT_)
-				#include "platform/qt/QtDefines.h"
-			#endif // _QT_
-		#endif // IPHONE
-	#endif // SDL
-#endif // WII
+#elif defined(_SDL_)
+	#include "platform/sdl/SdlDefines.h"
+#elif defined(_IPHONE_)
+	#include "platform/iphone/IphDefines.h"
+#elif defined(_QT_)
+	#include "platform/qt/QtDefines.h"
+#elif defined(_PS3DEV_)
+	#include "platform/ps3dev/PS3Defines.h"
+#endif // platform selector
 
 #ifndef SEED_CORE_API
 #define SEED_CORE_API

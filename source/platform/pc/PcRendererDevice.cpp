@@ -37,7 +37,7 @@
 #include "RendererDevice.h"
 #include "SeedInit.h"
 
-#if defined(_PC_)
+#if defined(_PC_) && !defined(_PS3DEV_)
 
 #define TAG "[RendererDevice] "
 

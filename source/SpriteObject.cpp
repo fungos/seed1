@@ -168,7 +168,7 @@ BOOL SpriteObject::Load(const char *filename, ResourceManager *res, IMemoryPool 
 		{
 			if (!frame->iTime)
 				frame->iTime = 1;
-		
+
 			anim = &pAnimations[i];
 			pAnimationFrames[i] = frame;
 
@@ -282,6 +282,6 @@ INLINE int SpriteObject::GetObjectType() const
 	return Seed::ObjectSprite;
 }
 
-SEED_DISABLE_INSTANCING_IMPL(SpriteObject);
+SEED_DISABLE_INSTANCING_IMPL(SpriteObject)
 
 } // namespace

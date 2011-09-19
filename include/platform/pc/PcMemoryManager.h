@@ -55,8 +55,8 @@
 namespace Seed { namespace PC {
 
 extern "C" {
-SEED_CORE_API extern PcMemoryPool *pDefaultPool;
-SEED_CORE_API extern PcMemoryPool *pLargePool;
+SEED_CORE_API extern MemoryPool *pDefaultPool;
+SEED_CORE_API extern MemoryPool *pLargePool;
 }
 
 class SEED_CORE_API MemoryManager : public IMemoryManager

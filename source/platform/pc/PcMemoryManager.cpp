@@ -51,8 +51,8 @@ SEED_SINGLETON_DEFINE(MemoryManager)
 
 extern "C"
 {
-PcMemoryPool *pDefaultPool = NULL;
-PcMemoryPool *pLargePool = NULL;
+	MemoryPool *pDefaultPool = NULL;
+	MemoryPool *pLargePool = NULL;
 }
 
 MemoryManager::MemoryManager()
@@ -79,20 +79,20 @@ BOOL MemoryManager::Initialize()
 	{
 		case Seed::SimulateIOS3G:
 		{
-			pLargePool = pDefaultPool = static_cast<PcMemoryPool *>(this->CreatePool(MB10, "iphone"));
+			pLargePool = pDefaultPool = static_cast<MemoryPool *>(this->CreatePool(MB10, "iphone"));
 		}
 		break;
 
 		case Seed::SimulateWii:
 		{
-			pDefaultPool = static_cast<PcMemoryPool *>(this->CreatePool(MB20, "MEM1"));
-			pLargePool = static_cast<PcMemoryPool *>(this->CreatePool(MB60, "MEM2"));
+			pDefaultPool = static_cast<MemoryPool *>(this->CreatePool(MB20, "MEM1"));
+			pLargePool = static_cast<MemoryPool *>(this->CreatePool(MB60, "MEM2"));
 		}
 		break;
 
 		default:
 		{
-			pLargePool = pDefaultPool = static_cast<PcMemoryPool *>(this->CreatePool(pConfiguration->GetMemorySize(), "default"));
+			pLargePool = pDefaultPool = static_cast<MemoryPool *>(this->CreatePool(pConfiguration->GetMemorySize(), "default"));
 		}
 		break;
 	};
@@ -124,7 +124,7 @@ BOOL MemoryManager::Shutdown()
 
 INLINE IMemoryPool *MemoryManager::CreatePool(u32 len, const char *name)
 {
-	PcMemoryPool *pool = New(PcMemoryPool(len, name));
+	MemoryPool *pool = New(MemoryPool(len, name));
 	pool->Initialize();
 
 	arPool.Add(pool);

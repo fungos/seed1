@@ -57,6 +57,11 @@ INLINE u32 IMemoryPool::GetFreeMemory() const
 	return 0;
 }
 
+INLINE void IMemoryPool::DisableThreadCache()
+{
+	SEED_ABSTRACT_METHOD;
+}
+
 INLINE void IMemoryPool::Print() const
 {
 	SEED_ABSTRACT_METHOD;
