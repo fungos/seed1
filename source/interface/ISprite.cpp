@@ -383,7 +383,7 @@ INLINE void ISprite::PreviousFrame()
 
 INLINE void ISprite::SetCurrentFrame(u32 frame)
 {
-	if (frame >= iFrames)
+	if (frame >= iFrames || frame == iCurrentFrame)
 		return;
 
 	iCurrentFrame = frame;
