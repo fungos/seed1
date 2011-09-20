@@ -48,7 +48,9 @@ checking too.
 
 #define NEDMALLOC_DEBUG 1
 #define ENABLE_LOGGING 1
-#define MAX_PATH 1024
+#if !defined(_MSC_VER)
+#define MAX_PATH 260
+#endif
 
 /*! \def ENABLE_LARGE_PAGES
 \brief Defines whether nedalloc uses large pages (>=2Mb)

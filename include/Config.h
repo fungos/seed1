@@ -105,12 +105,16 @@ Maximum size of a folder name string
 /*
 Use wide char paths
 */
+#if defined(WIN32)
+#define SEED_PATH_WIDE						1 // For windows this is required
+#else
 #define SEED_PATH_WIDE						0
+#endif
 
 /*
 Enable nedmalloc as default allocator
 */
-#define SEED_USE_NEDMALLOC				0
+#define SEED_USE_NEDMALLOC				1
 
 /*
 String Pools - Define the amount of each pool

@@ -54,6 +54,7 @@
 												static inline void DestroyInstance() \
 												{ \
 													delete type::Instance; \
+													type::Instance = NULL; \
 												}
 
 #define SEED_SINGLETON_HEAP_DEFINE(type)		type *type::Instance = NULL;

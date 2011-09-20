@@ -35,6 +35,7 @@
 */
 
 #include "ParticleEmitter.h"
+#include "ParticleManager.h"
 #include "Rand.h"
 #include "Number.h"
 #include "Texture.h"
@@ -69,11 +70,16 @@ ParticleEmitter::ParticleEmitter()
 
 ParticleEmitter::~ParticleEmitter()
 {
+	if (pParticleManager)
+		pParticleManager->Remove(this);
+
 	this->Unload();
 }
 
 INLINE void ParticleEmitter::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 {
+	this->Unload();
+
 	if (bEnabled)
 	{
 		ASSERT_NULL(filename);
@@ -102,14 +108,16 @@ INLINE void ParticleEmitter::Unload()
 		arParticles[i].bActive = FALSE;
 	}
 
+	fInterval = 0.0f;
+	iAnimation = 0;
 	sRelease(pEmitterObject);
-
-	pRes		= NULL;
-	pPool		= NULL;
 	pFilename	= NULL;
-	pSpriteFilename = NULL;
-	arParticles = NULL;
-	iParticlesAmount = 0;
+	pPool		= NULL;
+	pRes		= NULL;
+
+	//pSpriteFilename = NULL;
+	//arParticles = NULL;
+	//iParticlesAmount = 0;
 }
 
 INLINE void ParticleEmitter::Reset()
@@ -157,7 +165,7 @@ INLINE void ParticleEmitter::SetParticlesBuffer(Particle *buffer, u32 amount)
 
 INLINE void ParticleEmitter::Update(f32 deltaTime)
 {
-	if (!(bEnabled && pSpriteFilename && !bPaused))
+	if (!(bEnabled && pEmitterObject && !bPaused))
 		return;
 
 	//deltaTime = 0.017000001f;
@@ -379,7 +387,7 @@ INLINE void ParticleEmitter::Update(f32 deltaTime)
 
 INLINE void ParticleEmitter::Render()
 {
-	if (bEnabled)
+	if (bEnabled && pEmitterObject)
 	{
 		for (u32 i = 0; i < iParticlesAmount; i++)
 		{
@@ -393,7 +401,7 @@ INLINE void ParticleEmitter::Render()
 
 INLINE void ParticleEmitter::SetSprite(const char *filename)
 {
-	if (bEnabled)
+	if (bEnabled && pEmitterObject)
 	{
 		pSpriteFilename = filename;
 		for (u32 i = 0; i < iParticlesAmount; i++)
@@ -421,7 +429,7 @@ INLINE void ParticleEmitter::SetAnimation(u32 anim)
 
 INLINE void ParticleEmitter::Play()
 {
-	if (bEnabled)
+	if (bEnabled && pEmitterObject)
 	{
 		fInterval = psInfo.fInterval;
 

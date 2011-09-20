@@ -1091,6 +1091,14 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="nedmalloc"
+					>
+					<File
+						RelativePath="..\source\api\nedmalloc\NedMemoryPool.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -1971,6 +1979,14 @@
 						>
 					</File>
 				</Filter>
+				<Filter
+					Name="nedmalloc"
+					>
+					<File
+						RelativePath="..\include\api\nedmalloc\NedMemoryPool.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
@@ -1978,6 +1994,26 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+		</Filter>
+		<Filter
+			Name="contrib"
+			>
+			<File
+				RelativePath="..\contrib\malloc.c.h"
+				>
+			</File>
+			<File
+				RelativePath="..\contrib\nedmalloc.c"
+				>
+			</File>
+			<File
+				RelativePath="..\contrib\nedmalloc.h"
+				>
+			</File>
+			<File
+				RelativePath="..\contrib\nedtrie.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
