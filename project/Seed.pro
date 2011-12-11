@@ -383,4 +383,4 @@ SOURCES += ../source/LeakReport.cpp \
 	../source/Updater.cpp \
 	../source/ViewManager.cpp \
 	../source/Viewport.cpp \
-	../contrib/nedmalloc.c
+	../contrib/nedmalloc/nedmalloc.c

@@ -45,36 +45,16 @@
 #include "System.h"
 #include "Input.h"
 #include "EventInputPointer.h"
-#include "EventInputKeyboard.h"
 #include "EventInputJoystick.h"
 #include "EventSystem.h"
 #include "ViewManager.h"
 #include "Viewport.h"
 
-#if defined(WIN32)
-#pragma push_macro("Delete")
-#pragma push_macro("BOOL")
-#pragma push_macro("SIZE_T")
-#undef Delete
-#if defined(_MSC_VER)
-#undef BOOL
-#else
-#define WM_IME_SETCONTEXT			0x281
-#define WM_IME_NOTIFY				0x282
-#define WM_DWMCOMPOSITIONCHANGED	0x31e
-#endif
-#undef SIZE_T
-#include <SDL/SDL_syswm.h>
-#pragma pop_macro("SIZE_T")
-#pragma pop_macro("BOOL")
-#pragma pop_macro("Delete")
-#endif
-
 #define TAG "[Input] "
 
 namespace Seed { namespace PS3 {
 
-SEED_SINGLETON_DEFINE(Input);
+SEED_SINGLETON_DEFINE(Input)
 
 Input::Input()
 	: iJoystickCount(0)
@@ -92,13 +72,7 @@ INLINE BOOL Input::Shutdown()
 {
 	Log(TAG "Terminating...");
 
-	for (u32 i = 0; i < iJoystickCount; i++)
-	{
-		if (SDL_JoystickOpened(i))
-			SDL_JoystickClose(parJoy[i]);
-	}
-
-	MEMSET(parJoy, '\0', sizeof(parJoy));
+	ioPadEnd();
 
 	BOOL r = this->Reset();
 	Log(TAG "Terminated.");
@@ -110,30 +84,31 @@ INLINE BOOL Input::Initialize()
 {
 	Log(TAG "Initializing...");
 	BOOL r = this->Reset();
-	#if defined(WIN32) && defined(DEBUG)
-	SDL_EventState(SDL_SYSWMEVENT, SDL_ENABLE);
-	#endif
 
-	MEMSET(parJoy, '\0', sizeof(parJoy));
-	SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+	ioPadInit(MAX_JOYSTICKS);
 
-	iJoystickCount = SDL_NumJoysticks();
+	ioPadGetInfo(&cPadInfo);
+	ioPadGetInfo2(&cPadInfo2);
+
+	padCapabilityInfo info;
+
+	iJoystickCount = cPadInfo2.max;
 	if (iJoystickCount)
 	{
-		SDL_JoystickEventState(SDL_ENABLE);
-
 		Log(TAG "Joystick(s): ");
 		for (u32 i = 0; i < iJoystickCount; i++)
 		{
-			parJoy[i] = SDL_JoystickOpen(i);
-			if (parJoy[i])
+			s32 ret = ioPadGetCapabilityInfo(i, &info);
+			if (ret)
 			{
 				Log("Opened Joystick %d:", i);
-				Log(TAG "\tName: %s", SDL_JoystickName(i));
-				Log(TAG "\t\tAxes: %d", SDL_JoystickNumAxes(parJoy[i]));
-				Log(TAG "\t\tButtons: %d", SDL_JoystickNumButtons(parJoy[i]));
-				Log(TAG "\t\tHats: %d", SDL_JoystickNumHats(parJoy[i]));
-				Log(TAG "\t\tBalls: %d", SDL_JoystickNumBalls(parJoy[i]));
+				Log(TAG "\tProduct Id..: %d", cPadInfo.product_id[i]);
+				Log(TAG "\tVendor Id...: %d", cPadInfo.vendor_id[i]);
+				Log(TAG "\tPS3Spec.....: %d", info.ps3spec);
+				Log(TAG "\tHas Pressure: %d", info.has_pressure);
+				Log(TAG "\tHas Sensors.: %d", info.has_sensors);
+				Log(TAG "\tHas HPS.....: %d", info.has_hps);
+				Log(TAG "\tHas Vibrate.: %d", info.has_vibrate);
 			}
 		}
 	}
@@ -146,109 +121,30 @@ INLINE BOOL Input::Update(f32 dt)
 {
 	UNUSED(dt);
 
-/*
-FIXME: 2009-02-17 | BUG | Usar polling? Isso deve ferrar com o frame rate configurado pelo usuario. Verificar tambem... | Danny Angelo Carminati Grein
-*/
-	SDL_Event event;
-	while (SDL_PollEvent(&event))
+	ioPadGetInfo2(&cPadInfo2);
+	iJoystickCount = cPadInfo2.max;
+
+	for (u32 i = 0; i < iJoystickCount; i++)
 	{
-		switch (event.type)
+		padData *e = &cData[i];
+		ioPadGetData(i, e);
+
+		if (e->BTN_DOWN)
 		{
-			#if defined(WIN32) && defined(DEBUG)
-			case SDL_SYSWMEVENT:
-			{
-				switch (event.syswm.msg->msg)
-				{
-					case WM_SYSCOMMAND:
-					case WM_IME_SETCONTEXT:
-					case WM_IME_NOTIFY:
-					break;
-
-					case WM_GETTEXT:
-					case WM_GETICON:
-					case WM_NCHITTEST:
-					case WM_NCMOUSEMOVE:
-					case WM_NCLBUTTONDOWN:
-					case WM_NCLBUTTONDBLCLK:
-					case WM_NCLBUTTONUP:
-					case WM_CAPTURECHANGED:
-					case WM_WINDOWPOSCHANGING:
-					case WM_WINDOWPOSCHANGED:
-					case WM_MOVE:
-					case WM_MOVING:
-					case WM_ENTERSIZEMOVE:
-					case WM_EXITSIZEMOVE:
-					case WM_MOUSEACTIVATE:
-					case WM_NCCALCSIZE:
-					case WM_SIZE:
-					case WM_QUERYOPEN:
-					break;
-
-					case WM_DISPLAYCHANGE:
-						Log(TAG "event DISPLAYCHANGE");
-					break;
-
-					case WM_SYNCPAINT:
-						Log(TAG "event SYNCPAINT");
-					break;
-
-					case WM_NCPAINT:
-						Log(TAG "event NCPAINT");
-					break;
-
-					case WM_NCACTIVATE:
-						Log(TAG "event NCACTIVATE");
-					break;
-
-					case WM_KILLFOCUS:
-						Log(TAG "event KILLFOCUS");
-					break;
-
-					case WM_SETFOCUS:
-						Log(TAG "event SETFOCUS");
-					break;
-
-					case WM_ACTIVATEAPP:
-						Log(TAG "event ACTIVATEAPP");
-					break;
-
-					case 0xc086: //WM_TASKBAR_CREATED:
-						Log(TAG "event TASKBAR_CREATED");
-					break;
-
-					case WM_DWMCOMPOSITIONCHANGED:
-						Log(TAG "event DWMCOMPOSITIONCHANGED");
-					break;
-
-					default:
-						Log(TAG "Received system event. Message (0x%x) wParam = %d, lParam = %d.", event.syswm.msg->msg, event.syswm.msg->wParam, event.syswm.msg->lParam);
-					break;
-				}
-			}
-			break;
-			#endif
-
-			case SDL_KEYDOWN:
-			{
-				EventInputKeyboard ev(event.key.keysym.sym, event.key.keysym.mod, event.key.keysym.scancode, 0);
-				this->SendEventKeyboardPress(&ev);
-			}
-			break;
-
-			case SDL_KEYUP:
-			{
-				EventInputKeyboard ev(event.key.keysym.sym, event.key.keysym.mod, event.key.keysym.scancode, 0);
-				this->SendEventKeyboardRelease(&ev);
-			}
-			break;
-
-			case SDL_QUIT:
-			{
-				EventSystem ev;
-				pSystem->SendEventShutdown(&ev);
-			}
-			break;
-
+//			EventInputKeyboard ev(event.key.keysym.sym, event.key.keysym.mod, event.key.keysym.scancode, 0);
+//			this->SendEventKeyboardPress(&ev);
+		}
+		else if (e->BTN_UP)
+		{
+//			EventInputKeyboard ev(event.key.keysym.sym, event.key.keysym.mod, event.key.keysym.scancode, 0);
+//			this->SendEventKeyboardRelease(&ev);
+		}
+//		else if (e->QUIT)
+//		{
+//			EventSystem ev;
+//			pSystem->SendEventShutdown(&ev);
+//		}
+/*
 			case SDL_MOUSEMOTION:
 			{
 				f32 x, y;
@@ -355,6 +251,7 @@ FIXME: 2009-02-17 | BUG | Usar polling? Isso deve ferrar com o frame rate config
 			default:
 			break;
 		}
+		*/
 	}
 
 	return TRUE;

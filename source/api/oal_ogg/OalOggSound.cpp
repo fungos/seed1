@@ -101,7 +101,7 @@ BOOL Sound::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 		{
 			Log(TAG "Could not read ogg file from memory");
 
-			memset(&oggFile, '\0', sizeof(oggFile));
+			MEMSET(&oggFile, '\0', sizeof(oggFile));
 			stFile.Close();
 		}
 		else
@@ -136,9 +136,9 @@ BOOL Sound::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 			alBufferData(iBuffer, format, &buffer[0], static_cast<ALsizei>(buffer.size()), freq);
 		}
 
-	#if !defined(DEBUG)
+#if !defined(DEBUG)
 		stFile.Close();
-	#endif
+#endif
 
 		bLoaded = TRUE;
 	}

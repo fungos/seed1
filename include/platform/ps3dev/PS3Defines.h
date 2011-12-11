@@ -85,11 +85,11 @@
 
 #define PLATFORM PS3
 
-#define PLATFORM_MAX_SCREEN_WIDTH		1024
-#define PLATFORM_MAX_SCREEN_HEIGHT		768
-#define PLATFORM_CODE				3 // 9
-#define PLATFORM_MAX_INPUT			4
-#define PLATFORM_SAVESYSTEM_SLOTS_MAX		20
+#define PLATFORM_MAX_SCREEN_WIDTH		1600
+#define PLATFORM_MAX_SCREEN_HEIGHT		1080
+#define PLATFORM_CODE					9
+#define PLATFORM_MAX_INPUT				8
+#define PLATFORM_SAVESYSTEM_SLOTS_MAX	20
 
 
 // Types
@@ -125,8 +125,8 @@
 	typedef unsigned short int 		u16;
 #elif defined(__GNUC__)
 	#include <inttypes.h>
-	typedef uint64_t  			s64;
-	typedef int64_t 			u64;
+	typedef int64_t  			s64;
+	typedef uint64_t 			u64;
 	typedef signed int 			s32;
 	typedef unsigned int 			u32;
 	typedef signed short int 		s16;

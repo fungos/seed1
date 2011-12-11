@@ -1,4 +1,4 @@
-/******************************************************************************
+ /******************************************************************************
  ** Copyright (c) 2010 Seed Developers
  ** All rights reserved
  ** Contact: licensing@seedframework.org
@@ -37,13 +37,16 @@
 #ifndef __PS3DEV_RENDERER_DEVICE_H__
 #define __PS3DEV_RENDERER_DEVICE_H__
 
-#if defined(_PS3DEV_)
+//#if defined(_PS3DEV_)
 
 #include "Singleton.h"
 #include "Defines.h"
 #include "Enum.h"
 #include "Vertex.h"
 #include "interface/IRendererDevice.h"
+
+#include <rsx/gcm_sys.h>
+#include <rsx/rsx.h>
 
 namespace Seed {
 
@@ -91,6 +94,9 @@ class SEED_CORE_API RSXRendererDevice : public IRendererDevice
 	private:
 		SEED_DISABLE_COPY(RSXRendererDevice);
 		int GetRSXMeshType(eMeshType type) const;
+
+	private:
+		gcmContextData	*pContext;
 };
 
 }} // namespace

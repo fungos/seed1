@@ -41,7 +41,10 @@
 
 #include "interface/IScreen.h"
 #include "Singleton.h"
-#include <SDL/SDL.h>
+
+#include <sysutil/video.h>
+#include <rsx/gcm_sys.h>
+#include <rsx/rsx.h>
 
 #define FADE_OUT_COLOR  0xff
 #define FADE_OUT_SOLID  0xff
@@ -53,10 +56,19 @@
 #define FADE_INCREMENT	0x04
 #endif // DEBUG
 
+#define PS3_MAX_BUFFERS 2
+
 namespace Seed { namespace PS3 {
 
 class SEED_CORE_API Screen : public IScreen
 {
+	typedef struct _RSXBuffer
+	{
+		u32 *pData;
+		u32 iOffset;
+		u32 iId;
+	} RSXBuffer; // Move to RendererDevice
+
 	SEED_SINGLETON_DECLARE(Screen)
 	public:
 		virtual bool Initialize();
@@ -78,22 +90,22 @@ class SEED_CORE_API Screen : public IScreen
 		// IScreen
 		virtual void Update();
 
-		// HACK - test
-		int			iHandle;
+		RSXBuffer		*pColorBuffer; // Move to RendererDevice
+		gcmContextData	*pContext;
 
 	protected:
-		int		surfaceSize;
-		SDL_Surface 	*pSurface;
+		int				surfaceSize;
 
 	private:
 		SEED_DISABLE_COPY(Screen);
 
 		BOOL InitializeVideo();
-		void PrepareMode();
-
-#if defined(DEBUG)
-		void PrintVideoMode();
-#endif // DEBUG
+		BOOL PrepareMode();
+		BOOL MakeColorBuffer(RSXBuffer *buf, s32 bid); // Move to RendererDevice
+		BOOL MakeDepthBuffer(RSXBuffer *buf); // Move to RendererDevice
+		void SetRenderTarget(RSXBuffer *buf); // Move to RendererDevice
+		void WaitIdle();
+		void WaitFlip();
 
 	private:
 		enum eFadeType
@@ -102,12 +114,19 @@ class SEED_CORE_API Screen : public IScreen
 			FADE_OUT
 		};
 
-		bool		bFullScreen;
-		int 		iFadeStatus;
-		eFadeType 	fadeType;
-		int			iBPP;
-		int			iFlags;
-		SDL_VideoInfo *videoInfo;
+		videoDeviceInfo		cVideoDeviceInfo;
+		videoState			cVideoState;
+		videoConfiguration	cVideoConfig;
+
+		u32					iCurBuffer;
+		s32					iFadeStatus;
+		s32					iBPP;
+		eFadeType			fadeType;
+		u32					iLabel;
+
+		RSXBuffer			arColorBuffers[PS3_MAX_BUFFERS]; // Move to RendererDevice
+		RSXBuffer			sDepthBuffer; // Move to RendererDevice
+		void				*pHostAddr;
 };
 
 #define pScreen Screen::GetInstance()

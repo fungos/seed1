@@ -1,6 +1,6 @@
 #if !defined(_mathops_H)
 # define _mathops_H (1)
-# include <ogg/ogg.h>
+# include "ogg/ogg.h"
 
 # ifdef __GNUC_PREREQ
 #  if __GNUC_PREREQ(3,4)
@@ -21,7 +21,7 @@
 #    define OC_CLZ64_OFFS ((int)sizeof(unsigned long)*CHAR_BIT)
 #    define OC_CLZ64(_x) (__builtin_clzl(_x))
 #   elif LLONG_MAX>=9223372036854775807LL|| \
-     __LONG_LONG_MAX__>=9223372036854775807LL
+	 __LONG_LONG_MAX__>=9223372036854775807LL
 #    define OC_CLZ64_OFFS ((int)sizeof(unsigned long long)*CHAR_BIT)
 #    define OC_CLZ64(_x) (__builtin_clzll(_x))
 #   endif

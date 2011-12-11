@@ -40,23 +40,34 @@
 #include "Log.h"
 #include "SeedInit.h"
 #include "RendererDevice.h"
+#include <malloc.h>
+#include <unistd.h>
 
 #define TAG "[Screen] "
 
+#define HOST_SIZE (32 * 1024 * 1024)
+
 namespace Seed { namespace PS3 {
 
-SEED_SINGLETON_DEFINE(Screen);
+SEED_SINGLETON_DEFINE(Screen)
 
 Screen::Screen()
-	: iHandle(0)
+	: pColorBuffer(NULL)
+	, pContext(NULL)
 	, surfaceSize(0)
-	, bFullScreen(FALSE)
+	, cVideoDeviceInfo()
+	, cVideoState()
+	, cVideoConfig()
+	, iCurBuffer(PS3_MAX_BUFFERS - 1)
 	, iFadeStatus(0)
-	, fadeType(FADE_IN)
 	, iBPP(32)
-	, iFlags(0)
-	, videoInfo(NULL)
+	, fadeType(FADE_IN)
+	, iLabel(1)
+	, arColorBuffers()
+	, sDepthBuffer()
+	, pHostAddr(NULL)
 {
+	pColorBuffer = &arColorBuffers[0];
 }
 
 Screen::~Screen()
@@ -64,120 +75,100 @@ Screen::~Screen()
 	this->Reset();
 }
 
-BOOL Screen::Reset()
+INLINE BOOL Screen::Reset()
 {
 	return TRUE;
 }
 
-void Screen::PrepareMode()
+INLINE BOOL Screen::PrepareMode()
 {
-	videoInfo = const_cast<SDL_VideoInfo *>(SDL_GetVideoInfo());
-	if (videoInfo)
+	videoGetDeviceInfo(0, 0, &cVideoDeviceInfo);
+
+	videoColorInfo *ci = &cVideoDeviceInfo.colorInfo;
+
+	Info(TAG "PS3 Video Device Info:");
+	Info(TAG "\tPort Type............: %s (%d)", (cVideoDeviceInfo.portType == VIDEO_PORT_NONE ? "none" :
+											cVideoDeviceInfo.portType == VIDEO_PORT_HDMI ? "hdmi" :
+											cVideoDeviceInfo.portType == VIDEO_PORT_NETWORK ? "network" :
+											cVideoDeviceInfo.portType == VIDEO_PORT_COMPOSITE ? "composite" :
+											cVideoDeviceInfo.portType == VIDEO_PORT_D ? "D" :
+											cVideoDeviceInfo.portType == VIDEO_PORT_COMPONENT ? "component" :
+											cVideoDeviceInfo.portType == VIDEO_PORT_RGB ? "rgb" :
+											cVideoDeviceInfo.portType == VIDEO_PORT_SCART ? "scart" : "dsub"), cVideoDeviceInfo.portType);
+	Info(TAG "\tColor Space..........: %s (%d)", (cVideoDeviceInfo.colorSpace == VIDEO_COLOR_RGB ? "rgb" :
+											cVideoDeviceInfo.colorSpace == VIDEO_COLOR_YUV ? "yuv" : "xvycc"), cVideoDeviceInfo.colorSpace);
+	Info(TAG "\tLatency..............: %s (%d)", (cVideoDeviceInfo.latency == VIDEO_REFRESH_AUTO ? "auto" :
+											cVideoDeviceInfo.latency == VIDEO_REFRESH_59_94HZ ? "59.94Hz" :
+											cVideoDeviceInfo.latency == VIDEO_REFRESH_50HZ ? "50Hz" :
+											cVideoDeviceInfo.latency == VIDEO_REFRESH_60HZ ? "60Hz" : "30Hz"), cVideoDeviceInfo.latency);
+	Info(TAG "\tAvailable Mode Count.: %d", cVideoDeviceInfo.availableModeCount);
+	Info(TAG "\tState................: %s (%d)", (cVideoDeviceInfo.state == VIDEO_STATE_DISABLED ? "disabled" :
+											cVideoDeviceInfo.state == VIDEO_STATE_ENABLED ? "enabled" : "busy"), cVideoDeviceInfo.state);
+	Info(TAG "\tRGB Output Range.....: %d", cVideoDeviceInfo.rgbOutputRange);
+	Info(TAG "\tColor Info...........: (%d/%d,%d/%d,%d/%d,%d/%d,%d)", ci->redX, ci->redY, ci->greenX, ci->greenY, ci->blueX, ci->blueY, ci->whiteX, ci->whiteY, ci->gamma);
+	Info(TAG "\tModes................: ");
+	for (int i = 0; i < cVideoDeviceInfo.availableModeCount; i++)
 	{
-		Info(TAG "SDL Video Info:");
-		Info(TAG "\tHardware surface available...: %s", videoInfo->hw_available ? "yes" : "no");
-		Info(TAG "\tWindow manager available.....: %s", videoInfo->wm_available ? "yes" : "no");
-		Info(TAG "\tHardware blit accelerated....: %s", videoInfo->blit_hw ? "yes" : "no");
-		Info(TAG "\tHardware colorkey blit.......: %s", videoInfo->blit_hw_CC ? "yes" : "no");
-		Info(TAG "\tHardware alpha blit..........: %s", videoInfo->blit_hw_A ? "yes" : "no");
-		Info(TAG "\tSoftware to hardware blit....: %s", videoInfo->blit_sw ? "yes" : "no");
-		Info(TAG "\tSoftware to hardware colorkey: %s", videoInfo->blit_sw_CC ? "yes" : "no");
-		Info(TAG "\tSoftware to hardware alpha...: %s", videoInfo->blit_sw_A ? "yes" : "no");
-		Info(TAG "\tColor fill accelerated.......: %s", videoInfo->blit_fill ? "yes" : "no");
-		Info(TAG "\tDisplay pixel format.........: ");
-		Info(TAG "\t\tBytes per pixel............: %d", videoInfo->vfmt->BytesPerPixel);
-		Info(TAG "\t\tRGBA loss..................: %d %d %d %d", videoInfo->vfmt->Rloss, videoInfo->vfmt->Gloss, videoInfo->vfmt->Bloss, videoInfo->vfmt->Aloss);
-		Info(TAG "\tBest resolution..............: %dx%d", videoInfo->current_w, videoInfo->current_h);
-		Info(TAG "\tTotal video memory available.: %d", videoInfo->video_mem);
+		videoDisplayMode *dm = &cVideoDeviceInfo.availableModes[i];
+		Info(TAG "\t\tMode.............: %d",	i);
+		Info(TAG "\t\tResolution.......: %s (%d)",	(dm->resolution == VIDEO_RESOLUTION_UNDEFINED ? "undefined" :
+												dm->resolution == VIDEO_RESOLUTION_1080 ? "1080" :
+												dm->resolution == VIDEO_RESOLUTION_720 ? "720" :
+												dm->resolution == VIDEO_RESOLUTION_480 ? "480" :
+												dm->resolution == VIDEO_RESOLUTION_576 ? "576" :
+												dm->resolution == VIDEO_RESOLUTION_1600x1080 ? "1600x1080" :
+												dm->resolution == VIDEO_RESOLUTION_1440x1080 ? "1440x1080" :
+												dm->resolution == VIDEO_RESOLUTION_1280x1080 ? "1280x1080" :
+												dm->resolution == VIDEO_RESOLUTION_960x1080 ? "960x1080" :
+												dm->resolution == VIDEO_RESOLUTION_720_3D_FRAME_PACKING ? "720 3D" :
+												dm->resolution == VIDEO_RESOLUTION_1024x720_3D_FRAME_PACKING ? "1024x720 3D" :
+												dm->resolution == VIDEO_RESOLUTION_960x720_3D_FRAME_PACKING ? "960x720 3D" :
+												dm->resolution == VIDEO_RESOLUTION_800x720_3D_FRAME_PACKING ? "800x720 3D" : "640x720 3D"), dm->resolution);
+		Info(TAG "\t\tScan Mode........: %d",	dm->scanMode);
+		Info(TAG "\t\tConversion.......: %d",	dm->conversion);
+		Info(TAG "\t\tAspect...........: %s (%d)",	(dm->aspect == VIDEO_ASPECT_AUTO ? "auto" :
+												dm->aspect == VIDEO_ASPECT_4_3 ? "4:3" : "16:9"), dm->aspect);
+		Info(TAG "\t\tRefresh Rates....: %s (%d)",	(dm->refreshRates == VIDEO_REFRESH_AUTO ? "auto" :
+												dm->refreshRates == VIDEO_REFRESH_59_94HZ ? "59.94Hz" :
+												dm->refreshRates == VIDEO_REFRESH_50HZ ? "50Hz" :
+												dm->refreshRates == VIDEO_REFRESH_60HZ ? "60Hz" : "30Hz"), dm->refreshRates);
 	}
 
-	switch (nMode)
-	{
-		case Video_AutoDetect:
-		{
-			if (videoInfo)
-			{
-				iWidth = videoInfo->current_w;
-				iHeight = videoInfo->current_h;
-				iBPP = videoInfo->vfmt->BitsPerPixel;
-			}
-			else
-			{
-				Log(TAG "Error: Failed to auto detect video mode.");
-				return;
-			}
-		}
-		break;
+	if (videoGetState(0, 0, &cVideoState) != 0)
+		return FALSE;
 
-		case Video_320x240:
-		{
-			iWidth = 320;
-			iHeight = 240;
-		}
-		break;
+	if (cVideoState.state != 0)
+		return FALSE;
 
-		case Video_480x272:
-		{
-			iWidth = 480;
-			iHeight = 272;
-		}
-		break;
+	videoResolution res;
+	if (videoGetResolution(cVideoState.displayMode.resolution, &res) != 0)
+		return FALSE;
 
-		case Video_iPhonePortrait:
-		{
-			iWidth = 320;
-			iHeight = 480;
-		}
-		break;
+	MEMSET(&cVideoConfig, 0, sizeof(videoConfiguration));
+	cVideoConfig.resolution = cVideoState.displayMode.resolution;
+	cVideoConfig.format = VIDEO_BUFFER_FORMAT_XRGB;
+	cVideoConfig.pitch = res.width * sizeof(u32);
+	cVideoConfig.aspect = cVideoState.displayMode.aspect;
 
-		case Video_iPhoneLandscape:
-		case Video_iPhoneLandscapeGoofy:
-		case Video_480x320:
-		{
-			iWidth = 480;
-			iHeight = 320;
-		}
-		break;
+	this->WaitIdle();
 
-		case Video_NintendoWii:
-		case Video_640x480:
-		{
-			iWidth = 640;
-			iHeight = 480;
-		}
-		break;
+	if (videoConfigure(0, &cVideoConfig, NULL, 0) != 0)
+		return FALSE;
 
-		case Video_800x600:
-		{
-			iWidth = 800;
-			iHeight = 600;
-		}
-		break;
+	if (videoGetState(0, 0, &cVideoState) != 0)
+		return FALSE;
 
-		case Video_1024x600:
-		{
-			iWidth = 1024;
-			iHeight = 600;
-		}
-		break;
+	gcmSetFlipMode(GCM_FLIP_VSYNC);
 
-		case Video_1024x768:
-		{
-			iWidth = 1024;
-			iHeight = 768;
-		}
-		break;
-
-		default:
-			Log(TAG "Invalid video mode!");
-		break;
-	}
+	iWidth = res.width;
+	iHeight = res.height;
 
 	fAspectRatio = (f32)iHeight / (f32)iWidth;
-	iFlags = SDL_DOUBLEBUF | SDL_HWSURFACE;
+
+	return TRUE;
 }
 
-bool Screen::Initialize()
+INLINE BOOL Screen::Initialize()
 {
 	Log(TAG "Initializing...");
 
@@ -185,95 +176,184 @@ bool Screen::Initialize()
 	bFading = FALSE;
 	iFadeStatus = 16;
 
-	if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
+	pHostAddr = memalign(1024 * 1024, HOST_SIZE);
+	pContext = rsxInit(0x100000, HOST_SIZE, pHostAddr);
+	if (!pContext)
 	{
-		Log(TAG "ERROR: Failed to initialize screen.");
-		Log(TAG "Initialization failed.");
+		Log(TAG "ERROR: Could not create a context");
 		return FALSE;
 	}
 
-	this->PrepareMode();
-	if (!videoInfo)
+	if (!this->PrepareMode())
 	{
-		Log(TAG "ERROR: You must set up a video mode!");
+		Log(TAG "ERROR: Could not initialize video.");
 		return FALSE;
 	}
 
-	if (!this->InitializeVideo())
+	for (int i = 0; i < 2; i++)
+	{
+		if (!this->MakeColorBuffer(&arColorBuffers[i], i))
+		{
+			Log(TAG "ERROR: Could not create rsx color buffer %d.", i);
+			return FALSE;
+		}
+	}
+
+	if (!this->MakeDepthBuffer(&sDepthBuffer))
+	{
+		Log(TAG "ERROR: Could not create rsx depth buffer.");
 		return FALSE;
+	}
 
-	Info(TAG "Video resolution is %dx%dx%d.", iWidth, iHeight, iBPP);
+	gcmResetFlipStatus();
 
-#if defined(DEBUG)
-	SDL_ShowCursor(1);
-#else
-	SDL_ShowCursor(0);
-#endif // DEBUG
+	this->SwapSurfaces();
+	iCurBuffer = 0;
+
+	this->SetRenderTarget(pColorBuffer);
+
+	Info(TAG "Video resolution is %dx%dx%d aspect %f.", iWidth, iHeight, iBPP, fAspectRatio);
 
 	Log(TAG "Initialization completed.");
 	return TRUE;
 }
 
-INLINE BOOL Screen::InitializeVideo()
+INLINE BOOL Screen::MakeColorBuffer(RSXBuffer *buf, s32 bid)
 {
-	BOOL ret = TRUE;
+	int pitch = iWidth * sizeof(u32);
+	int size = iHeight * pitch;
 
-	if (pSurface)
+	buf->pData = (u32 *)rsxMemalign(64, size);
+	if (!buf->pData)
+		return FALSE;
+
+	if (rsxAddressToOffset(buf->pData, &buf->iOffset) != 0)
 	{
-		SDL_FreeSurface(pSurface);
-		pSurface = NULL;
+		rsxFree(buf->pData);
+		return FALSE;
 	}
 
-	// Setup RSX?
+	gcmSetDisplayBuffer(bid, buf->iOffset, pitch, iWidth, iHeight);
+	buf->iId = bid;
 
-	SDL_WM_SetCaption(pConfiguration->GetApplicationTitle(), pConfiguration->GetApplicationTitle());
-	pSurface = SDL_SetVideoMode(iWidth, iHeight, iBPP, iFlags);
-	if (!pSurface)
-	{
-		Log(TAG "Could not set video mode: %s\n", SDL_GetError());
-		ret = FALSE;
-	}
-	else
-	{
-		SDL_Surface *icon = SDL_LoadBMP("icon.bmp");
-		if (icon)
-		{
-			Uint32 colorkey = SDL_MapRGB(icon->format, 255, 0, 255);
-			SDL_SetColorKey(icon, SDL_SRCCOLORKEY, colorkey);
-			SDL_WM_SetIcon(icon, NULL);
-		}
-	}
-
-	return ret;
+	return TRUE;
 }
 
-BOOL Screen::Shutdown()
+INLINE BOOL Screen::MakeDepthBuffer(RSXBuffer *buf)
+{
+	int pitch = iWidth * sizeof(u32);
+	int size = iHeight * pitch;
+
+	buf->pData = (u32 *)rsxMemalign(64, size * 2);
+	if (!buf->pData)
+		return FALSE;
+
+	if (rsxAddressToOffset(buf->pData, &buf->iOffset) != 0)
+	{
+		rsxFree(buf->pData);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+INLINE BOOL Screen::Shutdown()
 {
 	Log(TAG "Terminating...");
 
+	if (pContext)
+		gcmSetWaitFlip(pContext);
+
+	iCurBuffer  = 0;
 	iFadeStatus = 0;
 	fadeType	= FADE_IN;
 	iHeight		= PLATFORM_MAX_SCREEN_HEIGHT;
 	iWidth		= PLATFORM_MAX_SCREEN_WIDTH;
 	iBPP		= 32;
-	iFlags		= 0;
-	videoInfo	= NULL;
 
-	if (pSurface)
-		SDL_FreeSurface(pSurface);
-	pSurface = NULL;
+	if (arColorBuffers[0].pData)
+		rsxFree(arColorBuffers[0].pData);
+	arColorBuffers[0].pData = NULL;
 
-	SDL_QuitSubSystem(SDL_INIT_VIDEO);
+	if (arColorBuffers[1].pData)
+		rsxFree(arColorBuffers[1].pData);
+	arColorBuffers[1].pData = NULL;
+
+	if (sDepthBuffer.pData)
+		rsxFree(sDepthBuffer.pData);
+	sDepthBuffer.pData = NULL;
+
+	if (pContext)
+		rsxFinish(pContext, 0);
+	pContext = NULL;
+
+	if (pHostAddr)
+		free(pHostAddr);
+	pHostAddr = NULL;
+
+	pColorBuffer = NULL;
 
 	Log(TAG "Terminated.");
 
 	return TRUE;
 }
 
+INLINE void Screen::WaitIdle()
+{
+	rsxSetWriteBackendLabel(pContext, 255, iLabel);
+	rsxSetWaitLabel(pContext, 255, iLabel);
+	++iLabel;
+
+	rsxSetWriteBackendLabel(pContext, 255, iLabel);
+	rsxFlushBuffer(pContext);
+
+	while (*(vu32 *)gcmGetLabelAddress(255) != iLabel)
+		usleep(30);
+
+	++iLabel;
+}
+
 INLINE void Screen::Update()
 {
-	this->SwapSurfaces();
+	//this->SwapSurfaces();
+	this->WaitFlip();
 	pRendererDevice->Update();
+}
+
+INLINE void Screen::SetRenderTarget(RSXBuffer *buf)
+{
+	gcmSurface sf;
+
+	sf.colorFormat		= GCM_TF_COLOR_X8R8G8B8;
+	sf.colorTarget		= GCM_TF_TARGET_0;
+	sf.colorLocation[0]	= GCM_LOCATION_RSX;
+	sf.colorOffset[0]	= buf->iOffset;
+	sf.colorPitch[0]	= iWidth * sizeof(s32);
+
+	sf.colorLocation[1]	= GCM_LOCATION_RSX;
+	sf.colorLocation[2]	= GCM_LOCATION_RSX;
+	sf.colorLocation[3]	= GCM_LOCATION_RSX;
+	sf.colorOffset[1]	= 0;
+	sf.colorOffset[2]	= 0;
+	sf.colorOffset[3]	= 0;
+	sf.colorPitch[1]	= 64;
+	sf.colorPitch[2]	= 64;
+	sf.colorPitch[3]	= 64;
+
+	sf.depthFormat		= GCM_TF_ZETA_Z16;
+	sf.depthLocation	= GCM_LOCATION_RSX;
+	sf.depthOffset		= sDepthBuffer.iOffset;
+	sf.depthPitch		= iWidth * sizeof(s32);
+
+	sf.type				= GCM_TF_TYPE_LINEAR;
+	sf.antiAlias		= GCM_TF_CENTER_1;
+
+	sf.width			= iWidth;
+	sf.height			= iHeight;
+	sf.x				= 0;
+	sf.y				= 0;
+
+	rsxSetSurface(pContext, &sf);
 }
 
 INLINE void Screen::FadeOut()
@@ -302,10 +382,23 @@ INLINE void Screen::CancelFade()
 	iFadeStatus	= FADE_OUT_TRANS;
 }
 
+INLINE void Screen::WaitFlip()
+{
+	while (gcmGetFlipStatus() != 0)
+		usleep(200);
+
+	gcmResetFlipStatus();
+}
+
 INLINE void Screen::SwapSurfaces()
 {
-	if (iFlags & SDL_OPENGL)
-		SDL_GL_SwapBuffers();
+	gcmSetFlip(pContext, arColorBuffers[iCurBuffer].iId);
+	rsxFlushBuffer(pContext);
+	gcmSetWaitFlip(pContext);
+
+	iCurBuffer++;
+	if (iCurBuffer >= PS3_MAX_BUFFERS)
+		iCurBuffer = 0;
 }
 
 INLINE void Screen::ToggleFullscreen()
@@ -314,19 +407,17 @@ INLINE void Screen::ToggleFullscreen()
 
 INLINE void Screen::SetMode(eVideoMode mode)
 {
-	IScreen::SetMode(mode);
-	this->PrepareMode();
-	this->InitializeVideo();
+	UNUSED(mode);
 }
 
 INLINE BOOL Screen::HasWindowedMode() const
 {
-	return TRUE;
+	return FALSE;
 }
 
 INLINE BOOL Screen::IsFullscreen() const
 {
-	return bFullScreen;
+	return TRUE;
 }
 
 void Screen::ApplyFade()

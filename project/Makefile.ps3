@@ -16,7 +16,7 @@ GCC = $(CROSS)g++
 CC = $(CROSS)g++
 
 AR_PARAM = cru
-CFLAGS = -Wall -g -fPIC $(CDEFS) -I$(SEEDSDK)/seed/include -I$(SEEDSDK)/seed/contrib -I$(PS3DEV)/portlibs/ppu/include/
+CFLAGS = -Wall -g -fPIC $(CDEFS) -I$(SEEDSDK)/seed/include -I$(SEEDSDK)/seed/contrib -I$(PS3DEV)/portlibs/ppu/include/ -I$(PS3DEV)/psl1ght/ppu/include
 CDEFS = -D_PS3DEV_ -DDEBUG
 LFLAGS = `sdl-config --libs` -logg -lvorbis -lvorbisfile -loggz -loggplay -ltheora
 CPPFLAGS = $(CFLAGS)

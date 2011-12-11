@@ -41,9 +41,12 @@
 
 #define TAG 	"[Thread] "
 
+#define THREAD_STACK_SIZE		(16 * 1024)
+#define THREAD_PRIORITY			1000
+
 namespace Seed { namespace PS3 {
 
-static int __seed_thread_loop_callback(void *param)
+static void __seed_thread_loop_callback(void *param)
 {
 	Thread *pt = static_cast<Thread *>(param);
 	while (pt->Run());
@@ -51,12 +54,11 @@ static int __seed_thread_loop_callback(void *param)
 	pMemoryManager->DisableThreadCache();
 
 	pt->Destroy();
-	return 0;
 }
 
 Thread::Thread()
 	: bRunning(TRUE)
-	, pThread(NULL)
+	, cThread(0)
 {
 }
 
@@ -70,10 +72,10 @@ INLINE void Thread::Create(s32 priority)
 	UNUSED(priority);
 
 	bRunning = TRUE;
-	if (!pThread)
+	if (!cThread)
 	{
-		pThread = SDL_CreateThread(__seed_thread_loop_callback, this);
-		ASSERT_MSG(pThread != NULL, TAG "Failed to create thread.");
+		s32 ret = sysThreadCreate(&cThread, __seed_thread_loop_callback, this, THREAD_PRIORITY, THREAD_STACK_SIZE, THREAD_JOINABLE, "thread");
+		ASSERT_MSG(ret == 0, TAG "Failed to create thread.");
 	}
 }
 
@@ -81,10 +83,12 @@ INLINE void Thread::Destroy()
 {
 	bRunning = FALSE;
 
-	if (pThread)
-		SDL_KillThread(pThread);
+	u64 retval = 0;
 
-	pThread = NULL;
+	if (cThread)
+		sysThreadJoin(cThread, &retval);
+
+	cThread = 0;
 }
 
 INLINE BOOL Thread::Run()

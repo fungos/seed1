@@ -46,7 +46,9 @@
 #include "Enum.h"
 #include "Singleton.h"
 
-#define MAX_JOYSTICKS 32
+#include <io/pad.h>
+
+#define MAX_JOYSTICKS 7
 
 namespace Seed { namespace PS3 {
 
@@ -64,8 +66,6 @@ class SEED_CORE_API Input : public IInput, public IInputPointer, public IInputKe
 
 		// IInputJoystick
 		virtual u32 GetMaximumJoysticks() const;
-
-		// IInputKeyboard
 
 		// IInputPointer
 		// FIXME: This method is hidding Module::IsEnabled()
@@ -105,7 +105,9 @@ class SEED_CORE_API Input : public IInput, public IInputPointer, public IInputKe
 		f32 fX;
 		f32 fY;
 
-		SDL_Joystick *parJoy[MAX_JOYSTICKS];
+		padInfo		cPadInfo;
+		padInfo2	cPadInfo2;
+		padData		cData[MAX_JOYSTICKS];
 };
 
 #define pInput Input::GetInstance()

@@ -157,6 +157,7 @@ const void *Package::GetFile(const char *filename, u32 *filesize)
 	SKIP_STRUCT(ObjectHeader, ptr);
 	u32 foo;
 	READ_U32(foo, ptr);
+	UNUSED(foo);
 
 	for (u32 i = 0; i < iFilesAmount; i++)
 	{

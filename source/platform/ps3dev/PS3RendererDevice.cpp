@@ -48,52 +48,56 @@
 namespace Seed { namespace PS3 {
 
 SEED_SINGLETON_DEFINE(RSXRendererDevice)
-/*
-RSXRendererDevice::RSXRendererDevice()
-{
-	Log(TAG "Initializing...");
 
-	char *version = (char *)glGetString(GL_VERSION);
-	Info(TAG "OpenGL Version: %s", version);
-
-	if (this->CheckExtension("GL_EXT_bgra"))
-		Info(TAG "\tGL_EXT_bgra");
-
-	GLint maxSize;
-	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxSize);
-	Info(TAG "OpenGL Maximun Texture Size: %d", maxSize);
-
-	this->Reset();
-
-	Log(TAG "Initialization completed.");
-}
-
-RSXRendererDevice::~RSXRendererDevice()
-{
-	this->Reset();
-}
-*/
 INLINE BOOL RSXRendererDevice::Initialize()
 {
 	BOOL ret = IRendererDevice::Initialize();
 
 	u32 w = pScreen->GetWidth();
 	u32 h = pScreen->GetHeight();
-/*
-	glScissor(0, 0, w, h);
-	glViewport(0, 0, w, h);
 
-	glFrontFace(GL_CW); // defino os vertices em sentido horario
-	glDisable(GL_CULL_FACE); // desabilita back face culling
+	pContext = pScreen->pContext;
 
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_BLEND);
+	rsxSetColorMask(pContext, GCM_COLOR_MASK_B | GCM_COLOR_MASK_G | GCM_COLOR_MASK_R | GCM_COLOR_MASK_A);
+	rsxSetColorMaskMRT(pContext, 0); // Disable access to the Frame Buffer (Multi Render Target)
 
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	f32 scale[4];
+	f32 offset[4];
+	f32 min = 0.0f;
+	f32 max = 1.0f;
+	f32 x = 0.0f;
+	f32 y = 0.0f;
 
-	glClearStencil(0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-*/
+	scale[0] = w * 0.5f;
+	scale[1] = h * -0.5f;
+	scale[2] = (max - min )* 0.5f;
+	scale[3] = 0.0f;
+
+	offset[0] = x + w * 0.5f;
+	offset[1] = y + h * 0.5f;
+	offset[2] = (max + min) * 0.5f;
+	offset[3] = 0.0f;
+
+	rsxSetScissor(pContext, x, y, w, h);
+	rsxSetViewport(pContext, x, y, w, h, min, max, scale, offset);
+
+	rsxSetFrontFace(pContext, GCM_FRONTFACE_CW); // defino os vertices em sentido horario
+	rsxSetCullFaceEnable(pContext, GCM_FALSE); // desabilita back face culling
+
+	//glEnable(GL_TEXTURE_2D);
+	rsxSetBlendEnable(pContext, GCM_TRUE);
+
+//	rsxSetDepthTestEnable(pContext, GCM_TRUE);
+//	rsxSetDepthFunc(pContext, GCM_LESS);
+//	rsxSetShadeModel(pContext, GCM_SHADE_MODEL_SMOOTH);
+//	rsxSetDepthWriteEnable(pContext, 1);
+
+	rsxSetClearColor(pContext, PIXEL_COLOR(0u, 0u, 0u, 1u));
+
+	//glClearStencil(0);
+	rsxSetClearDepthValue(pContext, 0);
+	rsxClearSurface(pContext, GCM_CLEAR_M);
+
 	this->Enable2D();
 
 	return ret;
@@ -118,9 +122,11 @@ INLINE void RSXRendererDevice::BackbufferClear(const PIXEL color)
 		uPixel p;
 		p.pixel = color;
 
-//		glClearColor(p.rgba.r / 255.0f, p.rgba.g / 255.0f, p.rgba.b / 255.0f, p.rgba.a / 255.0f);
+		rsxSetClearColor(pContext, color);
 	}
-//	glClear(GL_COLOR_BUFFER_BIT);
+
+	rsxClearSurface(pContext, GCM_CLEAR_R | GCM_CLEAR_G | GCM_CLEAR_B | GCM_CLEAR_A);
+	rsxSetClearColor(pContext, PIXEL_COLOR(0u, 0u, 0u, 1u));
 }
 
 INLINE void RSXRendererDevice::Begin() const
@@ -135,6 +141,7 @@ INLINE void RSXRendererDevice::End() const
 {
 //	glPopMatrix();
 	pScreen->ApplyFade();
+	pScreen->SwapSurfaces();
 }
 
 INLINE void RSXRendererDevice::SetBlendingOperation(eBlendMode mode, PIXEL color) const
@@ -441,58 +448,89 @@ INLINE void RSXRendererDevice::UploadData(void *userData)
 
 int RSXRendererDevice::GetRSXMeshType(eMeshType type) const
 {
-	UNUSED(type);
-//	return GL_TRIANGLE_STRIP;
-	return 0;
+/*
+#define	GCM_TYPE_POINTS				1
+#define	GCM_TYPE_LINES				2
+#define	GCM_TYPE_LINE_LOOP			3
+#define	GCM_TYPE_LINE_STRIP			4
+#define	GCM_TYPE_TRIANGLES			5
+#define	GCM_TYPE_TRIANGLE_STRIP		6
+#define	GCM_TYPE_TRIANGLE_FAN		7
+#define	GCM_TYPE_QUADS				8
+#define	GCM_TYPE_QUAD_STRIP			9
+#define	GCM_TYPE_POLYGON			10
+*/
+	int val = GCM_TYPE_TRIANGLE_STRIP;
+
+	switch (type)
+	{
+		case Triangles:
+		{
+			val = GCM_TYPE_TRIANGLES;
+		}
+		break;
+
+		case LineStrip:
+		{
+			val = GCM_TYPE_LINE_STRIP;
+		}
+		break;
+
+		case Quads:
+		{
+			val = GCM_TYPE_QUADS;
+		}
+		break;
+
+		case TriangleStrip:
+		default:
+		{
+		}
+		break;
+	}
+
+	return v;
 }
 
 void RSXRendererDevice::BackbufferFill(PIXEL color)
 {
-/*
-	glPushAttrib(GL_TEXTURE_BIT | GL_ENABLE_BIT | GL_CURRENT_BIT | GL_COLOR_BUFFER_BIT);
+	rsxSetBlendEnable(pContext, GCM_TRUE);
+	// glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); // ?? frament shader?
+	rsxSetBlendFunc(pContext, GCM_SRC_ALPHA, GCM_ONE_MINUS_SRC_ALPHA, GCM_SRC_ALPHA, GCM_ONE_MINUS_SRC_ALPHA);
+	//glColor4ub(PIXEL_GET_R(color), PIXEL_GET_G(color), PIXEL_GET_B(color), PIXEL_GET_A(color));
 
-	const GLfloat vertices[] =
-	{
-		0.0f, 0.0f,
-		0.0f, 1.0f,
-		1.0f, 0.0f,
-		1.0f, 1.0f,
-	};
-
-	glVertexPointer(2, GL_FLOAT, 0, vertices);
-	glEnableClientState(GL_VERTEX_ARRAY);
-
-	glDisable(GL_TEXTURE_2D);
-
-	glEnable(GL_BLEND);
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	glColor4ub(PIXEL_GET_R(color), PIXEL_GET_G(color), PIXEL_GET_B(color), PIXEL_GET_A(color));
-
-	glPushMatrix();
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glPopMatrix();
-
-	//glEnable(GL_TEXTURE_2D);
-
-	glPopAttrib();
-*/
+	rsxDrawVertexBegin(pContext, GCM_TYPE_TRIANGLE_STRIP);
+		rsxDrawVertex2f(pContext, 0, 0.0f, 0.0f);
+		rsxDrawVertex2f(pContext, 1, 0.0f, 1.0f);
+		rsxDrawVertex2f(pContext, 2, 1.0f, 0.0f);
+		rsxDrawVertex2f(pContext, 3, 1.0f, 1.0f);
+	rsxDrawVertexEnd(pContext);
 }
 
 void RSXRendererDevice::SetViewport(const Rect<f32> &area) const
 {
-/*
-	GLint x, y;
-	GLsizei width, height;
+	f32 x = static_cast<f32>(area.x * pScreen->GetWidth());
+	f32 y = static_cast<f32>(area.y * pScreen->GetHeight());
+	f32 w = static_cast<f32>(area.width * pScreen->GetWidth());
+	f32 h = static_cast<f32>(area.height * pScreen->GetHeight());
 
-	x = static_cast<GLint>(area.x * pScreen->GetWidth());
-	y = static_cast<GLint>(area.y * pScreen->GetHeight());
-	width = static_cast<GLsizei>(area.width * pScreen->GetWidth());
-	height = static_cast<GLsizei>(area.height * pScreen->GetHeight());
+	f32 scale[4];
+	f32 offset[4];
+	f32 min = 0.0f;
+	f32 max = 1.0f;
 
-	glViewport(x, pScreen->GetHeight() - y - height, width, height);
-*/
+	scale[0] = w * 0.5f;
+	scale[1] = h * -0.5f;
+	scale[2] = (max - min )* 0.5f;
+	scale[3] = 0.0f;
+
+	// FIXME: Do the correct math... and test afterwards
+	offset[0] = x + (w * 0.5f);
+	offset[1] = y + (h * 0.5f);
+	offset[2] = (max + min) * 0.5f;
+	offset[3] = 0.0f;
+
+	rsxSetViewport(pContext, x, pScreen->GetHeight() - y - h, w, h, min, max, scale, offset);
 }
 
 INLINE void RSXRendererDevice::DrawRect(f32 x, f32 y, f32 w, f32 h, PIXEL color, BOOL fill) const

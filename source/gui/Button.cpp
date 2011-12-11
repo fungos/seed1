@@ -182,6 +182,7 @@ BOOL Button::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 
 		u32 labelid = 0;
 		READ_U32(labelid, ptr);
+		UNUSED(labelid);
 
 		//const char *sprite = NULL;
 		//READ_STR(sprite, ptr);

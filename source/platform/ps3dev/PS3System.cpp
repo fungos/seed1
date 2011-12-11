@@ -52,6 +52,28 @@
 
 namespace Seed { namespace PS3 {
 
+void sysutil_exit_callback(u64 status, u64 param, void *ptr)
+{
+	//System *this = (System *)ptr;
+	switch (status)
+	{
+		case SYSUTIL_EXIT_GAME:
+		{
+			pSystem->Shutdown();
+		}
+		break;
+
+		case SYSUTIL_DRAW_BEGIN:
+		case SYSUTIL_DRAW_END:
+		{
+		}
+		break;
+
+		defaut:
+		break;
+	}
+}
+
 SEED_SINGLETON_DEFINE(System);
 
 System::System()
@@ -78,26 +100,11 @@ BOOL System::Reset()
 BOOL System::Initialize()
 {
 	Log(TAG "Initializing...");
-	print_system_info();
-
 	iFrameRate = pConfiguration->GetFrameRate();
 
-	if (!pConfiguration->GetCanHaveMultipleInstances() && !system_check_multiple_instance())
-	{
-		exit(1);
-	}
-
-	if (SDL_Init(SDL_INIT_TIMER) < 0 ) // SDL_INIT_VIDEO
-	{
-		Info(TAG "Unable to init SDL: %s\n", SDL_GetError());
-		exit(1);
-	}
-	//atexit(SDL_Quit);
-	//freopen("CON", "w", stdout);
-	//freopen("CON", "w", stderr);
+	sysUtilRegisterCallback(0, sysutil_exit_callback, this);
 
 	Log(TAG "Initialization completed.");
-
 	return TRUE;
 }
 
@@ -113,29 +120,8 @@ BOOL System::Update(f32 dt)
 {
 	UNUSED(dt);
 
-	u8 state = SDL_GetAppState();
-	if ((state & SDL_APPACTIVE) != SDL_APPACTIVE || (state & SDL_APPINPUTFOCUS) != SDL_APPINPUTFOCUS)
-	{
-		if (!this->bSleeping)
-		{
-			this->bSleeping = TRUE;
+	sysUtilCheckCallback();
 
-			EventSystem ev;
-			this->SendEventSleep(&ev);
-		}
-	}
-	else
-	{
-		if (this->bSleeping)
-		{
-			this->bSleeping = FALSE;
-
-			EventSystem ev;
-			this->SendEventSleep(&ev);
-		}
-	}
-
-	//this->WaitForRetrace(this->iFrameRate);
 	return TRUE;
 }
 
@@ -161,6 +147,14 @@ INLINE BOOL System::IsResetting() const
 
 INLINE void System::WaitForRetrace(eSystemFrameRate rate)
 {
+	// Wait Flip
+	/*
+	while (gcmGetFlipStatus() != 0)
+		usleep(200);
+
+	gcmResetFlipStatus();
+	*/
+
 	++this->iRetraceCount;
 
 	if (!this->iLastFrameTime)
@@ -201,22 +195,22 @@ INLINE void System::WaitForRetrace(eSystemFrameRate rate)
 
 INLINE const FilePath *System::GetUsername() const
 {
-	return get_user_name();
+	return "USER_NAME";
 }
 
 INLINE const FilePath *System::GetHomeFolder() const
 {
-	return get_user_home_folder();
+	return "";
 }
 
 INLINE const FilePath *System::GetApplicationDataFolder() const
 {
-	return get_user_appdata_folder();
+	return "";
 }
 
 INLINE const FilePath *System::GetSaveGameFolder() const
 {
-	return get_user_savegame_folder();
+	return "";
 }
 
 INLINE void System::GoToMenu()
@@ -252,17 +246,22 @@ INLINE BOOL System::InitializeHome()
 
 INLINE void System::EnableHome()
 {
+	this->bSleeping = TRUE;
+
+	EventSystem ev;
+	this->SendEventSleep(&ev);
 }
 
 INLINE void System::DisableHome()
 {
+	this->bSleeping = FALSE;
+
+	EventSystem ev;
+	this->SendEventSleep(&ev);
 }
 
 INLINE void System::EnableDefaultCursor(BOOL b)
 {
-	ISystem::EnableDefaultCursor(b);
-
-	SDL_ShowCursor(b);
 }
 
 }} // namespace

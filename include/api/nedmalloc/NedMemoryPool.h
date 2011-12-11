@@ -44,7 +44,7 @@
 #include <stdlib.h>
 #include "interface/IMemoryPool.h"
 #include "interface/IMemoryManager.h"
-#include "../contrib/nedmalloc.h"
+#include "../contrib/nedmalloc/nedmalloc.h"
 
 namespace Seed {
 
@@ -80,5 +80,5 @@ class SEED_CORE_API NedMemoryPool : public IMemoryPool
 
 } // namespace
 
-#endif // SEED_USE_NEDMALLOC 
+#endif // SEED_USE_NEDMALLOC
 #endif // __NED_MEMORY_POOL_H__

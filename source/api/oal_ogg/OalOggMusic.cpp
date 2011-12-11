@@ -168,28 +168,28 @@ BOOL Music::Unload()
 	fVolume = 1.0f;
 
 	pSoundSystem->StopMusic(0, this);
-	ALenum err = AL_NO_ERROR;
+	//ALenum err = AL_NO_ERROR;
 
 	if (iSource)
 	{
 		int queued = 0;
 		alGetSourcei(iSource, AL_BUFFERS_QUEUED, &queued);
-		err = alGetError();
+		//err = alGetError();
 
 		while (queued--)
 		{
 			ALuint buffer;
 			alSourceUnqueueBuffers(iSource, 1, &buffer);
-			err = alGetError();
+			//err = alGetError();
 		}
 
 		alDeleteSources(1, &iSource);
-		err = alGetError();
+		//err = alGetError();
 		iSource = 0;
 	}
 
 	alDeleteBuffers(OPENAL_MUSIC_BUFFERS, iBuffers);
-	err = alGetError();
+	//err = alGetError();
 	memset(iBuffers, '\0', sizeof(iBuffers));
 
 	ov_clear(&oggStream);

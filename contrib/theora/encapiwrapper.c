@@ -44,20 +44,20 @@ int theora_encode_init(theora_state *_te,theora_info *_ci){
   th_info      info;
   ogg_uint32_t keyframe_frequency_force;
   /*Allocate our own combined API wrapper/theora_info struct.
-	We put them both in one malloc'd block so that when the API wrapper is
-	 freed, the info struct goes with it.
-	This avoids having to figure out whether or not we need to free the info
-	 struct in either theora_info_clear() or theora_clear().*/
+    We put them both in one malloc'd block so that when the API wrapper is
+     freed, the info struct goes with it.
+    This avoids having to figure out whether or not we need to free the info
+     struct in either theora_info_clear() or theora_clear().*/
   apiinfo=(th_api_info *)_ogg_malloc(sizeof(*apiinfo));
   if(apiinfo==NULL)return TH_EFAULT;
   /*Make our own copy of the info struct, since its lifetime should be
-	 independent of the one we were passed in.*/
+     independent of the one we were passed in.*/
   *&apiinfo->info=*_ci;
   oc_theora_info2th_info(&info,_ci);
   apiinfo->api.encode=th_encode_alloc(&info);
   if(apiinfo->api.encode==NULL){
-	_ogg_free(apiinfo);
-	return OC_EINVAL;
+    _ogg_free(apiinfo);
+    return OC_EINVAL;
   }
   apiinfo->api.clear=(oc_setup_clear_func)th_enc_api_clear;
   /*Provide entry points for ABI compatibility with old decoder shared libs.*/
@@ -113,7 +113,7 @@ int theora_encode_header(theora_state *_te,ogg_packet *_op){
   enc=api->encode;
   /*If we've already started encoding, fail.*/
   if(enc->packet_state>OC_PACKET_EMPTY||enc->state.granpos!=0){
-	return TH_EINVAL;
+    return TH_EINVAL;
   }
   /*Reset the state to make sure we output an info packet.*/
   enc->packet_state=OC_PACKET_INFO_HDR;
@@ -131,21 +131,21 @@ int theora_encode_comment(theora_comment *_tc,ogg_packet *_op){
   ret=oc_state_flushheader(NULL,&packet_state,&opb,NULL,NULL,
    th_version_string(),(th_comment *)_tc,_op);
   if(ret>=0){
-	/*The oggpack_buffer's lifetime ends with this function, so we have to
-	   copy out the packet contents.
-	  Presumably the application knows it is supposed to free this.
-	  This part works nothing like the Vorbis API, and the documentation on it
-	   has been wrong for some time, claiming libtheora owned the memory.*/
-	buf=_ogg_malloc(_op->bytes);
-	if(buf==NULL){
-	  _op->packet=NULL;
-	  ret=TH_EFAULT;
-	}
-	else{
-	  memcpy(buf,_op->packet,_op->bytes);
-	  _op->packet=(unsigned char *)buf;
-	  ret=0;
-	}
+    /*The oggpack_buffer's lifetime ends with this function, so we have to
+       copy out the packet contents.
+      Presumably the application knows it is supposed to free this.
+      This part works nothing like the Vorbis API, and the documentation on it
+       has been wrong for some time, claiming libtheora owned the memory.*/
+    buf=_ogg_malloc(_op->bytes);
+    if(buf==NULL){
+      _op->packet=NULL;
+      ret=TH_EFAULT;
+    }
+    else{
+      memcpy(buf,_op->packet,_op->bytes);
+      _op->packet=buf;
+      ret=0;
+    }
   }
   oggpack_writeclear(&opb);
   return ret;
@@ -159,7 +159,7 @@ int theora_encode_tables(theora_state *_te,ogg_packet *_op){
   enc=api->encode;
   /*If we've already started encoding, fail.*/
   if(enc->packet_state>OC_PACKET_EMPTY||enc->state.granpos!=0){
-	return TH_EINVAL;
+    return TH_EINVAL;
   }
   /*Reset the state to make sure we output a setup packet.*/
   enc->packet_state=OC_PACKET_SETUP_HDR;

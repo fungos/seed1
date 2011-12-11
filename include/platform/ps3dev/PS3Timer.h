@@ -59,6 +59,7 @@ class SEED_CORE_API Timer : public ITimer
 
 	public:
 		u64 fStart;
+		u64 fClock;
 
 	private:
 		SEED_DISABLE_COPY(Timer);

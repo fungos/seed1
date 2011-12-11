@@ -73,7 +73,7 @@ Theora::Theora()
 	, fTexScaleY(0.0f)
 	, fElapsedTime(0.0f)
 	, bLoaded(FALSE)
-	, bPaused(FALSE)
+	, bPaused(TRUE)
 	, bPlaying(FALSE)
 	, bFinished(FALSE)
 	, bTerminateThread(FALSE)
@@ -92,7 +92,7 @@ INLINE void Theora::Reset()
 	IRenderable::Reset();
 
 	bFinished = FALSE;
-	bPaused = FALSE;
+	bPaused = TRUE;
 	bPlaying = FALSE;
 	bTerminateThread = FALSE;
 
@@ -106,6 +106,7 @@ INLINE BOOL Theora::Unload()
 	bFinished = TRUE;
 	bTerminateThread = TRUE;
 	bPlaying = FALSE;
+	bPaused = TRUE;
 
 	if (pTexData)
 		pMemoryManager->Free(pTexData, pDefaultPool);
@@ -121,6 +122,7 @@ BOOL Theora::Run()
 	{
 		if (bPlaying && !bFinished)
 		{
+	test:
 			OggPlayErrorCode r = E_OGGPLAY_TIMEOUT;
 			SEM_CHECK(sem) SEM_WAIT(sem);
 
@@ -190,15 +192,15 @@ BOOL Theora::Load(const char *filename, ResourceManager *res, IMemoryPool *pool)
 					fFps = static_cast<f32>(iFpsNum) / static_cast<f32>(iFpsDenom);
 					fDelay = 1000 / fFps;
 					iTotalFrames = static_cast<u32>(iDuration * fFps / 1000) + 1;
-				}
 
-				if (oggplay_set_track_active(pPlayer, i) < 0)
-				{
-					Log(TAG "Note: Could not set this track active!");
-				}
-				else
-				{
-					iTrack = i;
+					if (oggplay_set_track_active(pPlayer, i) < 0)
+					{
+						Log(TAG "Note: Could not set this track active!");
+					}
+					else
+					{
+						iTrack = i;
+					}
 				}
 			}
 
@@ -330,6 +332,7 @@ INLINE BOOL Theora::GoToFrame(u32 frame)
 
 INLINE void Theora::Rewind()
 {
+	bPaused = TRUE;
 	iFrameCount = 0;
 	if (oggplay_seek(pPlayer, 0) == E_OGGPLAY_CANT_SEEK)
 	{
@@ -372,10 +375,7 @@ INLINE void Theora::DoPlay()
 			this->Rewind();
 
 		bFinished = FALSE;
-
-		if (bLoaded)
-			bPlaying = TRUE;
-
+		bPlaying = TRUE;
 		bPaused = FALSE;
 	}
 }
@@ -492,13 +492,14 @@ void Theora::ConfigureRendering()
 		iTexHeight = po2_height;
 	}
 
-	cTexture.Load(iWidth, iHeight, static_cast<PIXEL *>((void *)pTexData), iTexWidth, iTexHeight);
+	cTexture.Load(ROUND_UP(iWidth, 32), iHeight, static_cast<PIXEL *>((void *)pTexData), iTexWidth, iTexHeight);
 	Image::Load(&cTexture);
 
 	bTerminateThread = FALSE;
 	bLoaded = TRUE;
 	bPlaying = FALSE;
 	bFinished = FALSE;
+	bPaused = TRUE;
 
 	this->Create();
 	this->Run();

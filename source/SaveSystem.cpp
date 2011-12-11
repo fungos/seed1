@@ -144,7 +144,6 @@ eCartridgeError SaveSystem::Prepare(u32 myId, void *slotBlankData, u32 slotDataS
 		return error;
 	}
 
-	BOOL bError = FALSE;
 	eCartridgeError ret = Seed::ErrorNone;
 
 	// Check all shared data state
@@ -155,7 +154,6 @@ eCartridgeError SaveSystem::Prepare(u32 myId, void *slotBlankData, u32 slotDataS
 		error = this->ReadSharedData(sharedTestMemory);
 		if (error != Seed::ErrorNone)
 		{
-			bError = TRUE;
 			ret = error;
 
 			if (error == Seed::ErrorDataCorrupt)
@@ -178,7 +176,6 @@ eCartridgeError SaveSystem::Prepare(u32 myId, void *slotBlankData, u32 slotDataS
 
 			if (error != Seed::ErrorNone)
 			{
-				bError = TRUE;
 				ret = error;
 
 				if (error == Seed::ErrorDataCorrupt)

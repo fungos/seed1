@@ -50,7 +50,7 @@ size_t vorbis_read(void *ptr, size_t byteSize, size_t sizeToRead, void *datasour
 
 	if (actualSizeToRead)
 	{
-		memcpy(ptr, (char*)vorbisData->dataPtr + vorbisData->dataRead, actualSizeToRead);
+		MEMCOPY(ptr, (char*)vorbisData->dataPtr + vorbisData->dataRead, actualSizeToRead);
 		vorbisData->dataRead += (actualSizeToRead);
 	}
 
@@ -140,7 +140,6 @@ bool ogg_update_stream(OggVorbis_File *oggStream, ogg_int64_t rate, ALenum forma
 				else
 					break;
 			}
-
 	}
 
 	if (size == 0)

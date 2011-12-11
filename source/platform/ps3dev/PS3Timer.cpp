@@ -40,7 +40,7 @@
 #include "Timer.h"
 #include "Log.h"
 
-#include <SDL/SDL.h>
+#include <sys/systime.h>
 
 #define TAG "[Timer] "
 
@@ -50,6 +50,7 @@ SEED_SINGLETON_DEFINE(Timer);
 
 Timer::Timer()
 	: fStart(0)
+	, fClock(0)
 {
 }
 
@@ -60,7 +61,10 @@ Timer::~Timer()
 INLINE BOOL Timer::Initialize()
 {
 	Log(TAG "Initializing...");
+
+	fClock = sysGetTimebaseFrequency();
 	this->Reset();
+
 	Log(TAG "Initialization completed.");
 
 	return TRUE;
@@ -68,7 +72,11 @@ INLINE BOOL Timer::Initialize()
 
 INLINE BOOL Timer::Reset()
 {
-	fStart = SDL_GetTicks();
+	u64 sec = 0;
+	u64 nsec = 0;
+	sysGetCurrentTime(&sec, &nsec);
+
+	fStart = (sec * 1000ULL) + ((nsec / 1000ULL) / 1000ULL);
 
 	return TRUE;
 }
@@ -80,14 +88,21 @@ INLINE BOOL Timer::Shutdown()
 
 INLINE u64 Timer::GetMilliseconds() const
 {
-	u64 ret = SDL_GetTicks();
+	u64 sec = 0;
+	u64 ns = 0;
+	sysGetCurrentTime(&sec, &ns);
 
-	return (ret - fStart);
+	u64 us = ns / 1000ULL;
+	u64 ms = us / 1000ULL;
+	u64 x =  sec * 1000ULL;
+	u64 ret = x + ms - fStart;
+
+	return ret;
 }
 
 INLINE void Timer::Sleep(u32 ms) const
 {
-	SDL_Delay(ms);
+	sysUsleep(ms * 1000);
 }
 
 }} // namespace

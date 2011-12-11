@@ -1224,7 +1224,7 @@ size_t nedflushlogs(nedpool *p, char *filepath) THROWSPEC
 				#if defined(_MSC_VER)
 					if (pos1 == pos2)
 				#else
-					if (pos.__pos==pos2.__pos)
+					if (pos1.__pos==pos2.__pos)
 				#endif
 					fprintf(oh, "Timestamp, Pool, Operation, MSpace, Size, Block, Alignment, Flags, Returned,\"Stack Backtrace\"\n");
 				for(n=0; n<THREADCACHEMAXCACHES; n++)

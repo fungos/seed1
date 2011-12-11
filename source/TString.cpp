@@ -178,20 +178,14 @@ INLINE String &String::Set(const u16 *paramName, const char paramVal)
 
 INLINE String &String::Set(const u16 *paramName, const u16 paramVal)
 {
-	char *temp;
 	char tmp[4];
-	char tmp2[2];
 
-	temp = tmp2;
-
-	temp = (char*)&paramVal;
-
-	tmp[0] = tmp2[0];
-	tmp[1] = tmp2[1];
+	tmp[0] = (paramVal & 8) >> 8;
+	tmp[1] = (paramVal & 8);
 	tmp[2] = '\0';
 	tmp[3] = '\0';
 
-	this->Replace(paramName, (u16 *)paramVal);
+	this->Replace(paramName, (u16 *)tmp);
 
 	return *this;
 }
@@ -255,7 +249,7 @@ INLINE BOOL String::Copy(const u16 *str)
 		}
 	}
 
-	return FALSE;
+	return ret;
 }
 
 INLINE void String::Replace(const u16 *str, const u16 *val)

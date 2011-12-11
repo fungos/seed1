@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <ogg/ogg.h>
+#include "ogg/ogg.h"
 #include "vorbis/codec.h"
 #include "codebook.h"
 #include "scales.h"
