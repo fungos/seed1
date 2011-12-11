@@ -205,7 +205,7 @@ BOOL Initialize()
 	pUpdater->Add(pSystem);
 	pUpdater->Add(pResourceLoader);
 	pUpdater->Add(pParticleManager);
-	//pUpdater->Add(pRendererManager);
+	pUpdater->Add(pRendererManager);
 	pUpdater->Add(pSceneManager);
 
 	ResourceManager::Register(Seed::ObjectTexture,			TextureResourceLoader);
