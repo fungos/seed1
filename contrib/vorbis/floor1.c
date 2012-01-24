@@ -54,29 +54,29 @@ typedef struct lsfit_acc{
 static void floor1_free_info(vorbis_info_floor *i){
   vorbis_info_floor1 *info=(vorbis_info_floor1 *)i;
   if(info){
-    memset(info,0,sizeof(*info));
-    _ogg_free(info);
+	memset(info,0,sizeof(*info));
+	_ogg_free(info);
   }
 }
 
 static void floor1_free_look(vorbis_look_floor *i){
   vorbis_look_floor1 *look=(vorbis_look_floor1 *)i;
   if(look){
-    /*fprintf(stderr,"floor 1 bit usage %f:%f (%f total)\n",
-            (float)look->phrasebits/look->frames,
-            (float)look->postbits/look->frames,
-            (float)(look->postbits+look->phrasebits)/look->frames);*/
+	/*fprintf(stderr,"floor 1 bit usage %f:%f (%f total)\n",
+			(float)look->phrasebits/look->frames,
+			(float)look->postbits/look->frames,
+			(float)(look->postbits+look->phrasebits)/look->frames);*/
 
-    memset(look,0,sizeof(*look));
-    _ogg_free(look);
+	memset(look,0,sizeof(*look));
+	_ogg_free(look);
   }
 }
 
 static int ilog(unsigned int v){
   int ret=0;
   while(v){
-    ret++;
-    v>>=1;
+	ret++;
+	v>>=1;
   }
   return(ret);
 }
@@ -85,8 +85,8 @@ static int ilog2(unsigned int v){
   int ret=0;
   if(v)--v;
   while(v){
-    ret++;
-    v>>=1;
+	ret++;
+	v>>=1;
   }
   return(ret);
 }
@@ -102,17 +102,17 @@ static void floor1_pack (vorbis_info_floor *i,oggpack_buffer *opb){
   /* save out partitions */
   oggpack_write(opb,info->partitions,5); /* only 0 to 31 legal */
   for(j=0;j<info->partitions;j++){
-    oggpack_write(opb,info->partitionclass[j],4); /* only 0 to 15 legal */
-    if(maxclass<info->partitionclass[j])maxclass=info->partitionclass[j];
+	oggpack_write(opb,info->partitionclass[j],4); /* only 0 to 15 legal */
+	if(maxclass<info->partitionclass[j])maxclass=info->partitionclass[j];
   }
 
   /* save out partition classes */
   for(j=0;j<maxclass+1;j++){
-    oggpack_write(opb,info->class_dim[j]-1,3); /* 1 to 8 */
-    oggpack_write(opb,info->class_subs[j],2); /* 0 to 3 */
-    if(info->class_subs[j])oggpack_write(opb,info->class_book[j],8);
-    for(k=0;k<(1<<info->class_subs[j]);k++)
-      oggpack_write(opb,info->class_subbook[j][k]+1,8);
+	oggpack_write(opb,info->class_dim[j]-1,3); /* 1 to 8 */
+	oggpack_write(opb,info->class_subs[j],2); /* 0 to 3 */
+	if(info->class_subs[j])oggpack_write(opb,info->class_book[j],8);
+	for(k=0;k<(1<<info->class_subs[j]);k++)
+	  oggpack_write(opb,info->class_subbook[j][k]+1,8);
   }
 
   /* save out the post list */
@@ -121,9 +121,9 @@ static void floor1_pack (vorbis_info_floor *i,oggpack_buffer *opb){
   rangebits=ilog2(maxposit);
 
   for(j=0,k=0;j<info->partitions;j++){
-    count+=info->class_dim[info->partitionclass[j]];
-    for(;k<count;k++)
-      oggpack_write(opb,info->postlist[k+2],rangebits);
+	count+=info->class_dim[info->partitionclass[j]];
+	for(;k<count;k++)
+	  oggpack_write(opb,info->postlist[k+2],rangebits);
   }
 }
 
@@ -139,25 +139,25 @@ static vorbis_info_floor *floor1_unpack (vorbis_info *vi,oggpack_buffer *opb){
   /* read partitions */
   info->partitions=oggpack_read(opb,5); /* only 0 to 31 legal */
   for(j=0;j<info->partitions;j++){
-    info->partitionclass[j]=oggpack_read(opb,4); /* only 0 to 15 legal */
-    if(info->partitionclass[j]<0)goto err_out;
-    if(maxclass<info->partitionclass[j])maxclass=info->partitionclass[j];
+	info->partitionclass[j]=oggpack_read(opb,4); /* only 0 to 15 legal */
+	if(info->partitionclass[j]<0)goto err_out;
+	if(maxclass<info->partitionclass[j])maxclass=info->partitionclass[j];
   }
 
   /* read partition classes */
   for(j=0;j<maxclass+1;j++){
-    info->class_dim[j]=oggpack_read(opb,3)+1; /* 1 to 8 */
-    info->class_subs[j]=oggpack_read(opb,2); /* 0,1,2,3 bits */
-    if(info->class_subs[j]<0)
-      goto err_out;
-    if(info->class_subs[j])info->class_book[j]=oggpack_read(opb,8);
-    if(info->class_book[j]<0 || info->class_book[j]>=ci->books)
-      goto err_out;
-    for(k=0;k<(1<<info->class_subs[j]);k++){
-      info->class_subbook[j][k]=oggpack_read(opb,8)-1;
-      if(info->class_subbook[j][k]<-1 || info->class_subbook[j][k]>=ci->books)
-        goto err_out;
-    }
+	info->class_dim[j]=oggpack_read(opb,3)+1; /* 1 to 8 */
+	info->class_subs[j]=oggpack_read(opb,2); /* 0,1,2,3 bits */
+	if(info->class_subs[j]<0)
+	  goto err_out;
+	if(info->class_subs[j])info->class_book[j]=oggpack_read(opb,8);
+	if(info->class_book[j]<0 || info->class_book[j]>=ci->books)
+	  goto err_out;
+	for(k=0;k<(1<<info->class_subs[j]);k++){
+	  info->class_subbook[j][k]=oggpack_read(opb,8)-1;
+	  if(info->class_subbook[j][k]<-1 || info->class_subbook[j][k]>=ci->books)
+		goto err_out;
+	}
   }
 
   /* read the post list */
@@ -166,25 +166,25 @@ static vorbis_info_floor *floor1_unpack (vorbis_info *vi,oggpack_buffer *opb){
   if(rangebits<0)goto err_out;
 
   for(j=0,k=0;j<info->partitions;j++){
-    count+=info->class_dim[info->partitionclass[j]];
-    for(;k<count;k++){
-      int t=info->postlist[k+2]=oggpack_read(opb,rangebits);
-      if(t<0 || t>=(1<<rangebits))
-        goto err_out;
-    }
+	count+=info->class_dim[info->partitionclass[j]];
+	for(;k<count;k++){
+	  int t=info->postlist[k+2]=oggpack_read(opb,rangebits);
+	  if(t<0 || t>=(1<<rangebits))
+		goto err_out;
+	}
   }
   info->postlist[0]=0;
   info->postlist[1]=1<<rangebits;
 
   /* don't allow repeated values in post list as they'd result in
-     zero-length segments */
+	 zero-length segments */
   {
-    int *sortpointer[VIF_POSIT+2];
-    for(j=0;j<count+2;j++)sortpointer[j]=info->postlist+j;
-    qsort(sortpointer,count+2,sizeof(*sortpointer),icomp);
+	int *sortpointer[VIF_POSIT+2];
+	for(j=0;j<count+2;j++)sortpointer[j]=info->postlist+j;
+	qsort(sortpointer,count+2,sizeof(*sortpointer),icomp);
 
-    for(j=1;j<count+2;j++)
-      if(*sortpointer[j-1]==*sortpointer[j])goto err_out;
+	for(j=1;j<count+2;j++)
+	  if(*sortpointer[j-1]==*sortpointer[j])goto err_out;
   }
 
   return(info);
@@ -195,7 +195,7 @@ static vorbis_info_floor *floor1_unpack (vorbis_info *vi,oggpack_buffer *opb){
 }
 
 static vorbis_look_floor *floor1_look(vorbis_dsp_state *vd,
-                                      vorbis_info_floor *in){
+									  vorbis_info_floor *in){
 
   int *sortpointer[VIF_POSIT+2];
   vorbis_info_floor1 *info=(vorbis_info_floor1 *)in;
@@ -206,11 +206,11 @@ static vorbis_look_floor *floor1_look(vorbis_dsp_state *vd,
   look->n=info->postlist[1];
 
   /* we drop each position value in-between already decoded values,
-     and use linear interpolation to predict each new value past the
-     edges.  The positions are read in the order of the position
-     list... we precompute the bounding positions in the lookup.  Of
-     course, the neighbors can change (if a position is declined), but
-     this is an initial mapping */
+	 and use linear interpolation to predict each new value past the
+	 edges.  The positions are read in the order of the position
+	 list... we precompute the bounding positions in the lookup.  Of
+	 course, the neighbors can change (if a position is declined), but
+	 this is an initial mapping */
 
   for(i=0;i<info->partitions;i++)n+=info->class_dim[info->partitionclass[i]];
   n+=2;
@@ -230,40 +230,40 @@ static vorbis_look_floor *floor1_look(vorbis_dsp_state *vd,
   /* quantize values to multiplier spec */
   switch(info->mult){
   case 1: /* 1024 -> 256 */
-    look->quant_q=256;
-    break;
+	look->quant_q=256;
+	break;
   case 2: /* 1024 -> 128 */
-    look->quant_q=128;
-    break;
+	look->quant_q=128;
+	break;
   case 3: /* 1024 -> 86 */
-    look->quant_q=86;
-    break;
+	look->quant_q=86;
+	break;
   case 4: /* 1024 -> 64 */
-    look->quant_q=64;
-    break;
+	look->quant_q=64;
+	break;
   }
 
   /* discover our neighbors for decode where we don't use fit flags
-     (that would push the neighbors outward) */
+	 (that would push the neighbors outward) */
   for(i=0;i<n-2;i++){
-    int lo=0;
-    int hi=1;
-    int lx=0;
-    int hx=look->n;
-    int currentx=info->postlist[i+2];
-    for(j=0;j<i+2;j++){
-      int x=info->postlist[j];
-      if(x>lx && x<currentx){
-        lo=j;
-        lx=x;
-      }
-      if(x<hx && x>currentx){
-        hi=j;
-        hx=x;
-      }
-    }
-    look->loneighbor[i]=lo;
-    look->hineighbor[i]=hi;
+	int lo=0;
+	int hi=1;
+	int lx=0;
+	int hx=look->n;
+	int currentx=info->postlist[i+2];
+	for(j=0;j<i+2;j++){
+	  int x=info->postlist[j];
+	  if(x>lx && x<currentx){
+		lo=j;
+		lx=x;
+	  }
+	  if(x<hx && x>currentx){
+		hi=j;
+		hx=x;
+	  }
+	}
+	look->loneighbor[i]=lo;
+	look->hineighbor[i]=hi;
   }
 
   return(look);
@@ -274,14 +274,14 @@ static int render_point(int x0,int x1,int y0,int y1,int x){
   y1&=0x7fff;
 
   {
-    int dy=y1-y0;
-    int adx=x1-x0;
-    int ady=abs(dy);
-    int err=ady*(x-x0);
+	int dy=y1-y0;
+	int adx=x1-x0;
+	int ady=abs(dy);
+	int err=ady*(x-x0);
 
-    int off=err/adx;
-    if(dy<0)return(y0-off);
-    return(y0+off);
+	int off=err/adx;
+	if(dy<0)return(y0-off);
+	return(y0+off);
   }
 }
 
@@ -374,17 +374,17 @@ static void render_line(int n, int x0,int x1,int y0,int y1,float *d){
   if(n>x1)n=x1;
 
   if(x<n)
-    d[x]*=FLOOR1_fromdB_LOOKUP[y];
+	d[x]*=FLOOR1_fromdB_LOOKUP[y];
 
   while(++x<n){
-    err=err+ady;
-    if(err>=adx){
-      err-=adx;
-      y+=sy;
-    }else{
-      y+=base;
-    }
-    d[x]*=FLOOR1_fromdB_LOOKUP[y];
+	err=err+ady;
+	if(err>=adx){
+	  err-=adx;
+	  y+=sy;
+	}else{
+	  y+=base;
+	}
+	d[x]*=FLOOR1_fromdB_LOOKUP[y];
   }
 }
 
@@ -403,24 +403,24 @@ static void render_line0(int n, int x0,int x1,int y0,int y1,int *d){
   if(n>x1)n=x1;
 
   if(x<n)
-    d[x]=y;
+	d[x]=y;
 
   while(++x<n){
-    err=err+ady;
-    if(err>=adx){
-      err-=adx;
-      y+=sy;
-    }else{
-      y+=base;
-    }
-    d[x]=y;
+	err=err+ady;
+	if(err>=adx){
+	  err-=adx;
+	  y+=sy;
+	}else{
+	  y+=base;
+	}
+	d[x]=y;
   }
 }
 
 /* the floor has already been filtered to only include relevant sections */
 static int accumulate_fit(const float *flr,const float *mdct,
-                          int x0, int x1,lsfit_acc *a,
-                          int n,vorbis_info_floor1 *info){
+						  int x0, int x1,lsfit_acc *a,
+						  int n,vorbis_info_floor1 *info){
   long i;
 
   int xa=0,ya=0,x2a=0,y2a=0,xya=0,na=0, xb=0,yb=0,x2b=0,y2b=0,xyb=0,nb=0;
@@ -431,24 +431,24 @@ static int accumulate_fit(const float *flr,const float *mdct,
   if(x1>=n)x1=n-1;
 
   for(i=x0;i<=x1;i++){
-    int quantized=vorbis_dBquant(flr+i);
-    if(quantized){
-      if(mdct[i]+info->twofitatten>=flr[i]){
-        xa  += i;
-        ya  += quantized;
-        x2a += i*i;
-        y2a += quantized*quantized;
-        xya += i*quantized;
-        na++;
-      }else{
-        xb  += i;
-        yb  += quantized;
-        x2b += i*i;
-        y2b += quantized*quantized;
-        xyb += i*quantized;
-        nb++;
-      }
-    }
+	int quantized=vorbis_dBquant(flr+i);
+	if(quantized){
+	  if(mdct[i]+info->twofitatten>=flr[i]){
+		xa  += i;
+		ya  += quantized;
+		x2a += i*i;
+		y2a += quantized*quantized;
+		xya += i*quantized;
+		na++;
+	  }else{
+		xb  += i;
+		yb  += quantized;
+		x2b += i*i;
+		y2b += quantized*quantized;
+		xyb += i*quantized;
+		nb++;
+	  }
+	}
   }
 
   a->xa=xa;
@@ -469,68 +469,68 @@ static int accumulate_fit(const float *flr,const float *mdct,
 }
 
 static int fit_line(lsfit_acc *a,int fits,int *y0,int *y1,
-                    vorbis_info_floor1 *info){
+					vorbis_info_floor1 *info){
   double xb=0,yb=0,x2b=0,y2b=0,xyb=0,bn=0;
   int i;
   int x0=a[0].x0;
   int x1=a[fits-1].x1;
 
   for(i=0;i<fits;i++){
-    double weight = (a[i].bn+a[i].an)*info->twofitweight/(a[i].an+1)+1.;
+	double weight = (a[i].bn+a[i].an)*info->twofitweight/(a[i].an+1)+1.;
 
-    xb+=a[i].xb + a[i].xa * weight;
-    yb+=a[i].yb + a[i].ya * weight;
-    x2b+=a[i].x2b + a[i].x2a * weight;
-    y2b+=a[i].y2b + a[i].y2a * weight;
-    xyb+=a[i].xyb + a[i].xya * weight;
-    bn+=a[i].bn + a[i].an * weight;
+	xb+=a[i].xb + a[i].xa * weight;
+	yb+=a[i].yb + a[i].ya * weight;
+	x2b+=a[i].x2b + a[i].x2a * weight;
+	y2b+=a[i].y2b + a[i].y2a * weight;
+	xyb+=a[i].xyb + a[i].xya * weight;
+	bn+=a[i].bn + a[i].an * weight;
   }
 
   if(*y0>=0){
-    xb+=   x0;
-    yb+=  *y0;
-    x2b+=  x0 *  x0;
-    y2b+= *y0 * *y0;
-    xyb+= *y0 *  x0;
-    bn++;
+	xb+=   x0;
+	yb+=  *y0;
+	x2b+=  x0 *  x0;
+	y2b+= *y0 * *y0;
+	xyb+= *y0 *  x0;
+	bn++;
   }
 
   if(*y1>=0){
-    xb+=   x1;
-    yb+=  *y1;
-    x2b+=  x1 *  x1;
-    y2b+= *y1 * *y1;
-    xyb+= *y1 *  x1;
-    bn++;
+	xb+=   x1;
+	yb+=  *y1;
+	x2b+=  x1 *  x1;
+	y2b+= *y1 * *y1;
+	xyb+= *y1 *  x1;
+	bn++;
   }
 
   {
-    double denom=(bn*x2b-xb*xb);
+	double denom=(bn*x2b-xb*xb);
 
-    if(denom>0.){
-      double a=(yb*x2b-xyb*xb)/denom;
-      double b=(bn*xyb-xb*yb)/denom;
-      *y0=rint(a+b*x0);
-      *y1=rint(a+b*x1);
+	if(denom>0.){
+	  double a=(yb*x2b-xyb*xb)/denom;
+	  double b=(bn*xyb-xb*yb)/denom;
+	  *y0=rint(a+b*x0);
+	  *y1=rint(a+b*x1);
 
-      /* limit to our range! */
-      if(*y0>1023)*y0=1023;
-      if(*y1>1023)*y1=1023;
-      if(*y0<0)*y0=0;
-      if(*y1<0)*y1=0;
+	  /* limit to our range! */
+	  if(*y0>1023)*y0=1023;
+	  if(*y1>1023)*y1=1023;
+	  if(*y0<0)*y0=0;
+	  if(*y1<0)*y1=0;
 
-      return 0;
-    }else{
-      *y0=0;
-      *y1=0;
-      return 1;
-    }
+	  return 0;
+	}else{
+	  *y0=0;
+	  *y1=0;
+	  return 1;
+	}
   }
 }
 
 static int inspect_error(int x0,int x1,int y0,int y1,const float *mask,
-                         const float *mdct,
-                         vorbis_info_floor1 *info){
+						 const float *mdct,
+						 vorbis_info_floor1 *info){
   int dy=y1-y0;
   int adx=x1-x0;
   int ady=abs(dy);
@@ -549,28 +549,28 @@ static int inspect_error(int x0,int x1,int y0,int y1,const float *mask,
   mse*=mse;
   n++;
   if(mdct[x]+info->twofitatten>=mask[x]){
-    if(y+info->maxover<val)return(1);
-    if(y-info->maxunder>val)return(1);
+	if(y+info->maxover<val)return(1);
+	if(y-info->maxunder>val)return(1);
   }
 
   while(++x<x1){
-    err=err+ady;
-    if(err>=adx){
-      err-=adx;
-      y+=sy;
-    }else{
-      y+=base;
-    }
+	err=err+ady;
+	if(err>=adx){
+	  err-=adx;
+	  y+=sy;
+	}else{
+	  y+=base;
+	}
 
-    val=vorbis_dBquant(mask+x);
-    mse+=((y-val)*(y-val));
-    n++;
-    if(mdct[x]+info->twofitatten>=mask[x]){
-      if(val){
-        if(y+info->maxover<val)return(1);
-        if(y-info->maxunder>val)return(1);
-      }
-    }
+	val=vorbis_dBquant(mask+x);
+	mse+=((y-val)*(y-val));
+	n++;
+	if(mdct[x]+info->twofitatten>=mask[x]){
+	  if(val){
+		if(y+info->maxover<val)return(1);
+		if(y-info->maxunder>val)return(1);
+	  }
+	}
   }
 
   if(info->maxover*info->maxover/n>info->maxerr)return(0);
@@ -581,16 +581,16 @@ static int inspect_error(int x0,int x1,int y0,int y1,const float *mask,
 
 static int post_Y(int *A,int *B,int pos){
   if(A[pos]<0)
-    return B[pos];
+	return B[pos];
   if(B[pos]<0)
-    return A[pos];
+	return A[pos];
 
   return (A[pos]+B[pos])>>1;
 }
 
 int *floor1_fit(vorbis_block *vb,vorbis_look_floor1 *look,
-                          const float *logmdct,   /* in */
-                          const float *logmask){
+						  const float *logmdct,   /* in */
+						  const float *logmask){
   long i,j;
   vorbis_info_floor1 *info=look->vi;
   long n=look->n;
@@ -612,131 +612,131 @@ int *floor1_fit(vorbis_block *vb,vorbis_look_floor1 *look,
   for(i=0;i<posts;i++)memo[i]=-1;      /* no neighbor yet */
 
   /* quantize the relevant floor points and collect them into line fit
-     structures (one per minimal division) at the same time */
+	 structures (one per minimal division) at the same time */
   if(posts==0){
-    nonzero+=accumulate_fit(logmask,logmdct,0,n,fits,n,info);
+	nonzero+=accumulate_fit(logmask,logmdct,0,n,fits,n,info);
   }else{
-    for(i=0;i<posts-1;i++)
-      nonzero+=accumulate_fit(logmask,logmdct,look->sorted_index[i],
-                              look->sorted_index[i+1],fits+i,
-                              n,info);
+	for(i=0;i<posts-1;i++)
+	  nonzero+=accumulate_fit(logmask,logmdct,look->sorted_index[i],
+							  look->sorted_index[i+1],fits+i,
+							  n,info);
   }
 
   if(nonzero){
-    /* start by fitting the implicit base case.... */
-    int y0=-200;
-    int y1=-200;
-    fit_line(fits,posts-1,&y0,&y1,info);
+	/* start by fitting the implicit base case.... */
+	int y0=-200;
+	int y1=-200;
+	fit_line(fits,posts-1,&y0,&y1,info);
 
-    fit_valueA[0]=y0;
-    fit_valueB[0]=y0;
-    fit_valueB[1]=y1;
-    fit_valueA[1]=y1;
+	fit_valueA[0]=y0;
+	fit_valueB[0]=y0;
+	fit_valueB[1]=y1;
+	fit_valueA[1]=y1;
 
-    /* Non degenerate case */
-    /* start progressive splitting.  This is a greedy, non-optimal
-       algorithm, but simple and close enough to the best
-       answer. */
-    for(i=2;i<posts;i++){
-      int sortpos=look->reverse_index[i];
-      int ln=loneighbor[sortpos];
-      int hn=hineighbor[sortpos];
+	/* Non degenerate case */
+	/* start progressive splitting.  This is a greedy, non-optimal
+	   algorithm, but simple and close enough to the best
+	   answer. */
+	for(i=2;i<posts;i++){
+	  int sortpos=look->reverse_index[i];
+	  int ln=loneighbor[sortpos];
+	  int hn=hineighbor[sortpos];
 
-      /* eliminate repeat searches of a particular range with a memo */
-      if(memo[ln]!=hn){
-        /* haven't performed this error search yet */
-        int lsortpos=look->reverse_index[ln];
-        int hsortpos=look->reverse_index[hn];
-        memo[ln]=hn;
+	  /* eliminate repeat searches of a particular range with a memo */
+	  if(memo[ln]!=hn){
+		/* haven't performed this error search yet */
+		int lsortpos=look->reverse_index[ln];
+		int hsortpos=look->reverse_index[hn];
+		memo[ln]=hn;
 
-        {
-          /* A note: we want to bound/minimize *local*, not global, error */
-          int lx=info->postlist[ln];
-          int hx=info->postlist[hn];
-          int ly=post_Y(fit_valueA,fit_valueB,ln);
-          int hy=post_Y(fit_valueA,fit_valueB,hn);
+		{
+		  /* A note: we want to bound/minimize *local*, not global, error */
+		  int lx=info->postlist[ln];
+		  int hx=info->postlist[hn];
+		  int ly=post_Y(fit_valueA,fit_valueB,ln);
+		  int hy=post_Y(fit_valueA,fit_valueB,hn);
 
-          if(ly==-1 || hy==-1){
-            exit(1);
-          }
+		  if(ly==-1 || hy==-1){
+			exit(1);
+		  }
 
-          if(inspect_error(lx,hx,ly,hy,logmask,logmdct,info)){
-            /* outside error bounds/begin search area.  Split it. */
-            int ly0=-200;
-            int ly1=-200;
-            int hy0=-200;
-            int hy1=-200;
-            int ret0=fit_line(fits+lsortpos,sortpos-lsortpos,&ly0,&ly1,info);
-            int ret1=fit_line(fits+sortpos,hsortpos-sortpos,&hy0,&hy1,info);
+		  if(inspect_error(lx,hx,ly,hy,logmask,logmdct,info)){
+			/* outside error bounds/begin search area.  Split it. */
+			int ly0=-200;
+			int ly1=-200;
+			int hy0=-200;
+			int hy1=-200;
+			int ret0=fit_line(fits+lsortpos,sortpos-lsortpos,&ly0,&ly1,info);
+			int ret1=fit_line(fits+sortpos,hsortpos-sortpos,&hy0,&hy1,info);
 
-            if(ret0){
-              ly0=ly;
-              ly1=hy0;
-            }
-            if(ret1){
-              hy0=ly1;
-              hy1=hy;
-            }
+			if(ret0){
+			  ly0=ly;
+			  ly1=hy0;
+			}
+			if(ret1){
+			  hy0=ly1;
+			  hy1=hy;
+			}
 
-            if(ret0 && ret1){
-              fit_valueA[i]=-200;
-              fit_valueB[i]=-200;
-            }else{
-              /* store new edge values */
-              fit_valueB[ln]=ly0;
-              if(ln==0)fit_valueA[ln]=ly0;
-              fit_valueA[i]=ly1;
-              fit_valueB[i]=hy0;
-              fit_valueA[hn]=hy1;
-              if(hn==1)fit_valueB[hn]=hy1;
+			if(ret0 && ret1){
+			  fit_valueA[i]=-200;
+			  fit_valueB[i]=-200;
+			}else{
+			  /* store new edge values */
+			  fit_valueB[ln]=ly0;
+			  if(ln==0)fit_valueA[ln]=ly0;
+			  fit_valueA[i]=ly1;
+			  fit_valueB[i]=hy0;
+			  fit_valueA[hn]=hy1;
+			  if(hn==1)fit_valueB[hn]=hy1;
 
-              if(ly1>=0 || hy0>=0){
-                /* store new neighbor values */
-                for(j=sortpos-1;j>=0;j--)
-                  if(hineighbor[j]==hn)
-                    hineighbor[j]=i;
-                  else
-                    break;
-                for(j=sortpos+1;j<posts;j++)
-                  if(loneighbor[j]==ln)
-                    loneighbor[j]=i;
-                  else
-                    break;
-              }
-            }
-          }else{
-            fit_valueA[i]=-200;
-            fit_valueB[i]=-200;
-          }
-        }
-      }
-    }
+			  if(ly1>=0 || hy0>=0){
+				/* store new neighbor values */
+				for(j=sortpos-1;j>=0;j--)
+				  if(hineighbor[j]==hn)
+					hineighbor[j]=i;
+				  else
+					break;
+				for(j=sortpos+1;j<posts;j++)
+				  if(loneighbor[j]==ln)
+					loneighbor[j]=i;
+				  else
+					break;
+			  }
+			}
+		  }else{
+			fit_valueA[i]=-200;
+			fit_valueB[i]=-200;
+		  }
+		}
+	  }
+	}
 
-    output=_vorbis_block_alloc(vb,sizeof(*output)*posts);
+	output=_vorbis_block_alloc(vb,sizeof(*output)*posts);
 
-    output[0]=post_Y(fit_valueA,fit_valueB,0);
-    output[1]=post_Y(fit_valueA,fit_valueB,1);
+	output[0]=post_Y(fit_valueA,fit_valueB,0);
+	output[1]=post_Y(fit_valueA,fit_valueB,1);
 
-    /* fill in posts marked as not using a fit; we will zero
-       back out to 'unused' when encoding them so long as curve
-       interpolation doesn't force them into use */
-    for(i=2;i<posts;i++){
-      int ln=look->loneighbor[i-2];
-      int hn=look->hineighbor[i-2];
-      int x0=info->postlist[ln];
-      int x1=info->postlist[hn];
-      int y0=output[ln];
-      int y1=output[hn];
+	/* fill in posts marked as not using a fit; we will zero
+	   back out to 'unused' when encoding them so long as curve
+	   interpolation doesn't force them into use */
+	for(i=2;i<posts;i++){
+	  int ln=look->loneighbor[i-2];
+	  int hn=look->hineighbor[i-2];
+	  int x0=info->postlist[ln];
+	  int x1=info->postlist[hn];
+	  int y0=output[ln];
+	  int y1=output[hn];
 
-      int predicted=render_point(x0,x1,y0,y1,info->postlist[i]);
-      int vx=post_Y(fit_valueA,fit_valueB,i);
+	  int predicted=render_point(x0,x1,y0,y1,info->postlist[i]);
+	  int vx=post_Y(fit_valueA,fit_valueB,i);
 
-      if(vx>=0 && predicted!=vx){
-        output[i]=vx;
-      }else{
-        output[i]= predicted|0x8000;
-      }
-    }
+	  if(vx>=0 && predicted!=vx){
+		output[i]=vx;
+	  }else{
+		output[i]= predicted|0x8000;
+	  }
+	}
   }
 
   return(output);
@@ -744,21 +744,21 @@ int *floor1_fit(vorbis_block *vb,vorbis_look_floor1 *look,
 }
 
 int *floor1_interpolate_fit(vorbis_block *vb,vorbis_look_floor1 *look,
-                          int *A,int *B,
-                          int del){
+						  int *A,int *B,
+						  int del){
 
   long i;
   long posts=look->posts;
   int *output=NULL;
 
   if(A && B){
-    output=_vorbis_block_alloc(vb,sizeof(*output)*posts);
+	output=_vorbis_block_alloc(vb,sizeof(*output)*posts);
 
-    /* overly simpleminded--- look again post 1.2 */
-    for(i=0;i<posts;i++){
-      output[i]=((65536-del)*(A[i]&0x7fff)+del*(B[i]&0x7fff)+32768)>>16;
-      if(A[i]&0x8000 && B[i]&0x8000)output[i]|=0x8000;
-    }
+	/* overly simpleminded--- look again post 1.2 */
+	for(i=0;i<posts;i++){
+	  output[i]=((65536-del)*(A[i]&0x7fff)+del*(B[i]&0x7fff)+32768)>>16;
+	  if(A[i]&0x8000 && B[i]&0x8000)output[i]|=0x8000;
+	}
   }
 
   return(output);
@@ -766,8 +766,8 @@ int *floor1_interpolate_fit(vorbis_block *vb,vorbis_look_floor1 *look,
 
 
 int floor1_encode(oggpack_buffer *opb,vorbis_block *vb,
-                  vorbis_look_floor1 *look,
-                  int *post,int *ilogmask){
+				  vorbis_look_floor1 *look,
+				  int *post,int *ilogmask){
 
   long i,j;
   vorbis_info_floor1 *info=look->vi;
@@ -779,189 +779,189 @@ int floor1_encode(oggpack_buffer *opb,vorbis_block *vb,
 
   /* quantize values to multiplier spec */
   if(post){
-    for(i=0;i<posts;i++){
-      int val=post[i]&0x7fff;
-      switch(info->mult){
-      case 1: /* 1024 -> 256 */
-        val>>=2;
-        break;
-      case 2: /* 1024 -> 128 */
-        val>>=3;
-        break;
-      case 3: /* 1024 -> 86 */
-        val/=12;
-        break;
-      case 4: /* 1024 -> 64 */
-        val>>=4;
-        break;
-      }
-      post[i]=val | (post[i]&0x8000);
-    }
+	for(i=0;i<posts;i++){
+	  int val=post[i]&0x7fff;
+	  switch(info->mult){
+	  case 1: /* 1024 -> 256 */
+		val>>=2;
+		break;
+	  case 2: /* 1024 -> 128 */
+		val>>=3;
+		break;
+	  case 3: /* 1024 -> 86 */
+		val/=12;
+		break;
+	  case 4: /* 1024 -> 64 */
+		val>>=4;
+		break;
+	  }
+	  post[i]=val | (post[i]&0x8000);
+	}
 
-    out[0]=post[0];
-    out[1]=post[1];
+	out[0]=post[0];
+	out[1]=post[1];
 
-    /* find prediction values for each post and subtract them */
-    for(i=2;i<posts;i++){
-      int ln=look->loneighbor[i-2];
-      int hn=look->hineighbor[i-2];
-      int x0=info->postlist[ln];
-      int x1=info->postlist[hn];
-      int y0=post[ln];
-      int y1=post[hn];
+	/* find prediction values for each post and subtract them */
+	for(i=2;i<posts;i++){
+	  int ln=look->loneighbor[i-2];
+	  int hn=look->hineighbor[i-2];
+	  int x0=info->postlist[ln];
+	  int x1=info->postlist[hn];
+	  int y0=post[ln];
+	  int y1=post[hn];
 
-      int predicted=render_point(x0,x1,y0,y1,info->postlist[i]);
+	  int predicted=render_point(x0,x1,y0,y1,info->postlist[i]);
 
-      if((post[i]&0x8000) || (predicted==post[i])){
-        post[i]=predicted|0x8000; /* in case there was roundoff jitter
-                                     in interpolation */
-        out[i]=0;
-      }else{
-        int headroom=(look->quant_q-predicted<predicted?
-                      look->quant_q-predicted:predicted);
+	  if((post[i]&0x8000) || (predicted==post[i])){
+		post[i]=predicted|0x8000; /* in case there was roundoff jitter
+									 in interpolation */
+		out[i]=0;
+	  }else{
+		int headroom=(look->quant_q-predicted<predicted?
+					  look->quant_q-predicted:predicted);
 
-        int val=post[i]-predicted;
+		int val=post[i]-predicted;
 
-        /* at this point the 'deviation' value is in the range +/- max
-           range, but the real, unique range can always be mapped to
-           only [0-maxrange).  So we want to wrap the deviation into
-           this limited range, but do it in the way that least screws
-           an essentially gaussian probability distribution. */
+		/* at this point the 'deviation' value is in the range +/- max
+		   range, but the real, unique range can always be mapped to
+		   only [0-maxrange).  So we want to wrap the deviation into
+		   this limited range, but do it in the way that least screws
+		   an essentially gaussian probability distribution. */
 
-        if(val<0)
-          if(val<-headroom)
-            val=headroom-val-1;
-          else
-            val=-1-(val<<1);
-        else
-          if(val>=headroom)
-            val= val+headroom;
-          else
-            val<<=1;
+		if(val<0)
+		  if(val<-headroom)
+			val=headroom-val-1;
+		  else
+			val=-1-(val<<1);
+		else
+		  if(val>=headroom)
+			val= val+headroom;
+		  else
+			val<<=1;
 
-        out[i]=val;
-        post[ln]&=0x7fff;
-        post[hn]&=0x7fff;
-      }
-    }
+		out[i]=val;
+		post[ln]&=0x7fff;
+		post[hn]&=0x7fff;
+	  }
+	}
 
-    /* we have everything we need. pack it out */
-    /* mark nontrivial floor */
-    oggpack_write(opb,1,1);
+	/* we have everything we need. pack it out */
+	/* mark nontrivial floor */
+	oggpack_write(opb,1,1);
 
-    /* beginning/end post */
-    look->frames++;
-    look->postbits+=ilog(look->quant_q-1)*2;
-    oggpack_write(opb,out[0],ilog(look->quant_q-1));
-    oggpack_write(opb,out[1],ilog(look->quant_q-1));
+	/* beginning/end post */
+	look->frames++;
+	look->postbits+=ilog(look->quant_q-1)*2;
+	oggpack_write(opb,out[0],ilog(look->quant_q-1));
+	oggpack_write(opb,out[1],ilog(look->quant_q-1));
 
 
-    /* partition by partition */
-    for(i=0,j=2;i<info->partitions;i++){
-      int class=info->partitionclass[i];
-      int cdim=info->class_dim[class];
-      int csubbits=info->class_subs[class];
-      int csub=1<<csubbits;
-      int bookas[8]={0,0,0,0,0,0,0,0};
-      int cval=0;
-      int cshift=0;
-      int k,l;
+	/* partition by partition */
+	for(i=0,j=2;i<info->partitions;i++){
+	  int class=info->partitionclass[i];
+	  int cdim=info->class_dim[class];
+	  int csubbits=info->class_subs[class];
+	  int csub=1<<csubbits;
+	  int bookas[8]={0,0,0,0,0,0,0,0};
+	  int cval=0;
+	  int cshift=0;
+	  int k,l;
 
-      /* generate the partition's first stage cascade value */
-      if(csubbits){
-        int maxval[8];
-        for(k=0;k<csub;k++){
-          int booknum=info->class_subbook[class][k];
-          if(booknum<0){
-            maxval[k]=1;
-          }else{
-            maxval[k]=sbooks[info->class_subbook[class][k]]->entries;
-          }
-        }
-        for(k=0;k<cdim;k++){
-          for(l=0;l<csub;l++){
-            int val=out[j+k];
-            if(val<maxval[l]){
-              bookas[k]=l;
-              break;
-            }
-          }
-          cval|= bookas[k]<<cshift;
-          cshift+=csubbits;
-        }
-        /* write it */
-        look->phrasebits+=
-          vorbis_book_encode(books+info->class_book[class],cval,opb);
-
-#ifdef TRAIN_FLOOR1
-        {
-          FILE *of;
-          char buffer[80];
-          sprintf(buffer,"line_%dx%ld_class%d.vqd",
-                  vb->pcmend/2,posts-2,class);
-          of=fopen(buffer,"a");
-          fprintf(of,"%d\n",cval);
-          fclose(of);
-        }
-#endif
-      }
-
-      /* write post values */
-      for(k=0;k<cdim;k++){
-        int book=info->class_subbook[class][bookas[k]];
-        if(book>=0){
-          /* hack to allow training with 'bad' books */
-          if(out[j+k]<(books+book)->entries)
-            look->postbits+=vorbis_book_encode(books+book,
-                                               out[j+k],opb);
-          /*else
-            fprintf(stderr,"+!");*/
+	  /* generate the partition's first stage cascade value */
+	  if(csubbits){
+		int maxval[8];
+		for(k=0;k<csub;k++){
+		  int booknum=info->class_subbook[class][k];
+		  if(booknum<0){
+			maxval[k]=1;
+		  }else{
+			maxval[k]=sbooks[info->class_subbook[class][k]]->entries;
+		  }
+		}
+		for(k=0;k<cdim;k++){
+		  for(l=0;l<csub;l++){
+			int val=out[j+k];
+			if(val<maxval[l]){
+			  bookas[k]=l;
+			  break;
+			}
+		  }
+		  cval|= bookas[k]<<cshift;
+		  cshift+=csubbits;
+		}
+		/* write it */
+		look->phrasebits+=
+		  vorbis_book_encode(books+info->class_book[class],cval,opb);
 
 #ifdef TRAIN_FLOOR1
-          {
-            FILE *of;
-            char buffer[80];
-            sprintf(buffer,"line_%dx%ld_%dsub%d.vqd",
-                    vb->pcmend/2,posts-2,class,bookas[k]);
-            of=fopen(buffer,"a");
-            fprintf(of,"%d\n",out[j+k]);
-            fclose(of);
-          }
+		{
+		  FILE *of;
+		  char buffer[80];
+		  sprintf(buffer,"line_%dx%ld_class%d.vqd",
+				  vb->pcmend/2,posts-2,class);
+		  of=fopen(buffer,"a");
+		  fprintf(of,"%d\n",cval);
+		  fclose(of);
+		}
 #endif
-        }
-      }
-      j+=cdim;
-    }
+	  }
 
-    {
-      /* generate quantized floor equivalent to what we'd unpack in decode */
-      /* render the lines */
-      int hx=0;
-      int lx=0;
-      int ly=post[0]*info->mult;
-      int n=ci->blocksizes[vb->W]/2;
+	  /* write post values */
+	  for(k=0;k<cdim;k++){
+		int book=info->class_subbook[class][bookas[k]];
+		if(book>=0){
+		  /* hack to allow training with 'bad' books */
+		  if(out[j+k]<(books+book)->entries)
+			look->postbits+=vorbis_book_encode(books+book,
+											   out[j+k],opb);
+		  /*else
+			fprintf(stderr,"+!");*/
 
-      for(j=1;j<look->posts;j++){
-        int current=look->forward_index[j];
-        int hy=post[current]&0x7fff;
-        if(hy==post[current]){
+#ifdef TRAIN_FLOOR1
+		  {
+			FILE *of;
+			char buffer[80];
+			sprintf(buffer,"line_%dx%ld_%dsub%d.vqd",
+					vb->pcmend/2,posts-2,class,bookas[k]);
+			of=fopen(buffer,"a");
+			fprintf(of,"%d\n",out[j+k]);
+			fclose(of);
+		  }
+#endif
+		}
+	  }
+	  j+=cdim;
+	}
 
-          hy*=info->mult;
-          hx=info->postlist[current];
+	{
+	  /* generate quantized floor equivalent to what we'd unpack in decode */
+	  /* render the lines */
+	  int hx=0;
+	  int lx=0;
+	  int ly=post[0]*info->mult;
+	  int n=ci->blocksizes[vb->W]/2;
 
-          render_line0(n,lx,hx,ly,hy,ilogmask);
+	  for(j=1;j<look->posts;j++){
+		int current=look->forward_index[j];
+		int hy=post[current]&0x7fff;
+		if(hy==post[current]){
 
-          lx=hx;
-          ly=hy;
-        }
-      }
-      for(j=hx;j<vb->pcmend/2;j++)ilogmask[j]=ly; /* be certain */
-      return(1);
-    }
+		  hy*=info->mult;
+		  hx=info->postlist[current];
+
+		  render_line0(n,lx,hx,ly,hy,ilogmask);
+
+		  lx=hx;
+		  ly=hy;
+		}
+	  }
+	  for(j=hx;j<vb->pcmend/2;j++)ilogmask[j]=ly; /* be certain */
+	  return(1);
+	}
   }else{
-    oggpack_write(opb,0,1);
-    memset(ilogmask,0,vb->pcmend/2*sizeof(*ilogmask));
-    return(0);
+	oggpack_write(opb,0,1);
+	memset(ilogmask,0,vb->pcmend/2*sizeof(*ilogmask));
+	return(0);
   }
 }
 
@@ -975,84 +975,84 @@ static void *floor1_inverse1(vorbis_block *vb,vorbis_look_floor *in){
 
   /* unpack wrapped/predicted values from stream */
   if(oggpack_read(&vb->opb,1)==1){
-    int *fit_value=_vorbis_block_alloc(vb,(look->posts)*sizeof(*fit_value));
+	int *fit_value=_vorbis_block_alloc(vb,(look->posts)*sizeof(*fit_value));
 
-    fit_value[0]=oggpack_read(&vb->opb,ilog(look->quant_q-1));
-    fit_value[1]=oggpack_read(&vb->opb,ilog(look->quant_q-1));
+	fit_value[0]=oggpack_read(&vb->opb,ilog(look->quant_q-1));
+	fit_value[1]=oggpack_read(&vb->opb,ilog(look->quant_q-1));
 
-    /* partition by partition */
-    for(i=0,j=2;i<info->partitions;i++){
-      int class=info->partitionclass[i];
-      int cdim=info->class_dim[class];
-      int csubbits=info->class_subs[class];
-      int csub=1<<csubbits;
-      int cval=0;
+	/* partition by partition */
+	for(i=0,j=2;i<info->partitions;i++){
+	  int class=info->partitionclass[i];
+	  int cdim=info->class_dim[class];
+	  int csubbits=info->class_subs[class];
+	  int csub=1<<csubbits;
+	  int cval=0;
 
-      /* decode the partition's first stage cascade value */
-      if(csubbits){
-        cval=vorbis_book_decode(books+info->class_book[class],&vb->opb);
+	  /* decode the partition's first stage cascade value */
+	  if(csubbits){
+		cval=vorbis_book_decode(books+info->class_book[class],&vb->opb);
 
-        if(cval==-1)goto eop;
-      }
+		if(cval==-1)goto eop;
+	  }
 
-      for(k=0;k<cdim;k++){
-        int book=info->class_subbook[class][cval&(csub-1)];
-        cval>>=csubbits;
-        if(book>=0){
-          if((fit_value[j+k]=vorbis_book_decode(books+book,&vb->opb))==-1)
-            goto eop;
-        }else{
-          fit_value[j+k]=0;
-        }
-      }
-      j+=cdim;
-    }
+	  for(k=0;k<cdim;k++){
+		int book=info->class_subbook[class][cval&(csub-1)];
+		cval>>=csubbits;
+		if(book>=0){
+		  if((fit_value[j+k]=vorbis_book_decode(books+book,&vb->opb))==-1)
+			goto eop;
+		}else{
+		  fit_value[j+k]=0;
+		}
+	  }
+	  j+=cdim;
+	}
 
-    /* unwrap positive values and reconsitute via linear interpolation */
-    for(i=2;i<look->posts;i++){
-      int predicted=render_point(info->postlist[look->loneighbor[i-2]],
-                                 info->postlist[look->hineighbor[i-2]],
-                                 fit_value[look->loneighbor[i-2]],
-                                 fit_value[look->hineighbor[i-2]],
-                                 info->postlist[i]);
-      int hiroom=look->quant_q-predicted;
-      int loroom=predicted;
-      int room=(hiroom<loroom?hiroom:loroom)<<1;
-      int val=fit_value[i];
+	/* unwrap positive values and reconsitute via linear interpolation */
+	for(i=2;i<look->posts;i++){
+	  int predicted=render_point(info->postlist[look->loneighbor[i-2]],
+								 info->postlist[look->hineighbor[i-2]],
+								 fit_value[look->loneighbor[i-2]],
+								 fit_value[look->hineighbor[i-2]],
+								 info->postlist[i]);
+	  int hiroom=look->quant_q-predicted;
+	  int loroom=predicted;
+	  int room=(hiroom<loroom?hiroom:loroom)<<1;
+	  int val=fit_value[i];
 
-      if(val){
-        if(val>=room){
-          if(hiroom>loroom){
-            val = val-loroom;
-          }else{
-            val = -1-(val-hiroom);
-          }
-        }else{
-          if(val&1){
-            val= -((val+1)>>1);
-          }else{
-            val>>=1;
-          }
-        }
+	  if(val){
+		if(val>=room){
+		  if(hiroom>loroom){
+			val = val-loroom;
+		  }else{
+			val = -1-(val-hiroom);
+		  }
+		}else{
+		  if(val&1){
+			val= -((val+1)>>1);
+		  }else{
+			val>>=1;
+		  }
+		}
 
-        fit_value[i]=val+predicted&0x7fff;
-        fit_value[look->loneighbor[i-2]]&=0x7fff;
-        fit_value[look->hineighbor[i-2]]&=0x7fff;
+		fit_value[i]=(val+predicted)&0x7fff;
+		fit_value[look->loneighbor[i-2]]&=0x7fff;
+		fit_value[look->hineighbor[i-2]]&=0x7fff;
 
-      }else{
-        fit_value[i]=predicted|0x8000;
-      }
+	  }else{
+		fit_value[i]=predicted|0x8000;
+	  }
 
-    }
+	}
 
-    return(fit_value);
+	return(fit_value);
   }
  eop:
   return(NULL);
 }
 
 static int floor1_inverse2(vorbis_block *vb,vorbis_look_floor *in,void *memo,
-                          float *out){
+						  float *out){
   vorbis_look_floor1 *look=(vorbis_look_floor1 *)in;
   vorbis_info_floor1 *info=look->vi;
 
@@ -1061,32 +1061,32 @@ static int floor1_inverse2(vorbis_block *vb,vorbis_look_floor *in,void *memo,
   int j;
 
   if(memo){
-    /* render the lines */
-    int *fit_value=(int *)memo;
-    int hx=0;
-    int lx=0;
-    int ly=fit_value[0]*info->mult;
-    /* guard lookup against out-of-range values */
-    ly=(ly<0?0:ly>255?255:ly);
+	/* render the lines */
+	int *fit_value=(int *)memo;
+	int hx=0;
+	int lx=0;
+	int ly=fit_value[0]*info->mult;
+	/* guard lookup against out-of-range values */
+	ly=(ly<0?0:ly>255?255:ly);
 
-    for(j=1;j<look->posts;j++){
-      int current=look->forward_index[j];
-      int hy=fit_value[current]&0x7fff;
-      if(hy==fit_value[current]){
+	for(j=1;j<look->posts;j++){
+	  int current=look->forward_index[j];
+	  int hy=fit_value[current]&0x7fff;
+	  if(hy==fit_value[current]){
 
-        hx=info->postlist[current];
-        hy*=info->mult;
-        /* guard lookup against out-of-range values */
-        hy=(hy<0?0:hy>255?255:hy);
+		hx=info->postlist[current];
+		hy*=info->mult;
+		/* guard lookup against out-of-range values */
+		hy=(hy<0?0:hy>255?255:hy);
 
-        render_line(n,lx,hx,ly,hy,out);
+		render_line(n,lx,hx,ly,hy,out);
 
-        lx=hx;
-        ly=hy;
-      }
-    }
-    for(j=hx;j<n;j++)out[j]*=FLOOR1_fromdB_LOOKUP[ly]; /* be certain */
-    return(1);
+		lx=hx;
+		ly=hy;
+	  }
+	}
+	for(j=hx;j<n;j++)out[j]*=FLOOR1_fromdB_LOOKUP[ly]; /* be certain */
+	return(1);
   }
   memset(out,0,sizeof(*out)*n);
   return(0);

@@ -39,7 +39,7 @@
 #ifndef __OGGPLAY_PRIVATE_H__
 #define __OGGPLAY_PRIVATE_H__
 
-#if defined(_MSC_VER) // HAVE_CONFIG_H
+#if defined(_MSC_VER) || defined(WIN32) // HAVE_CONFIG_H
 #include "oggplay_config_win32.h"
 #else
 #include "oggplay_config.h"

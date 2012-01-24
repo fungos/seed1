@@ -139,8 +139,23 @@ oggplay_initialise(OggPlay *me, int block) {
 		return E_OGGPLAY_OUT_OF_MEMORY;
 
 	  case OGGZ_ERR_STOP_ERR:
-		/* */
+		/* error occured while initialising headers
+		 - only occures with bad OggPlay handle */
 		return E_OGGPLAY_BAD_OGGPLAY;
+
+	  case OGGZ_ERR_BAD_OGGZ:
+		/* bad Oggz handle */
+		return E_OGGPLAY_OGGZ_UNHAPPY;
+
+	  case OGGZ_ERR_STOP_OK:
+		/* while initialising the streams, we read the
+		   header packets in a packet-by-packet manner */
+		break;
+
+	  default:
+
+		if (i < 0)
+		  return E_OGGPLAY_BAD_INPUT;
 	}
 
 	if (me->all_tracks_initialised) {
@@ -306,6 +321,35 @@ oggplay_get_video_fps(OggPlay *me, int track, int* fps_denom, int* fps_num) {
 }
 
 OggPlayErrorCode
+oggplay_get_video_aspect_ratio(OggPlay *me, int track, int* aspect_denom, int* aspect_num) {
+  OggPlayTheoraDecode *decode;
+
+  if (me == NULL) {
+	return E_OGGPLAY_BAD_OGGPLAY;
+  }
+
+  if (track < 0 || track >= me->num_tracks) {
+	return E_OGGPLAY_BAD_TRACK;
+  }
+
+  if (me->decode_data[track]->decoded_type != OGGPLAY_YUV_VIDEO) {
+	return E_OGGPLAY_WRONG_TRACK_TYPE;
+  }
+
+  decode = (OggPlayTheoraDecode *)(me->decode_data[track]);
+
+  if ((decode->video_info.aspect_denominator == 0)
+	|| (decode->video_info.aspect_numerator == 0)) {
+	return E_OGGPLAY_UNINITIALISED;
+  }
+
+  (*aspect_denom) = decode->video_info.aspect_denominator;
+  (*aspect_num) = decode->video_info.aspect_numerator;
+
+  return E_OGGPLAY_OK;
+}
+
+OggPlayErrorCode
 oggplay_convert_video_to_rgb(OggPlay *me, int track, int convert, int swap_rgb) {
   OggPlayTheoraDecode *decode;
 
@@ -396,8 +440,7 @@ oggplay_get_video_uv_size(OggPlay *me, int track, int *uv_width, int *uv_height)
   return E_OGGPLAY_OK;
 
 }
-
-#ifdef HAVE_AUDIO
+#if 0
 OggPlayErrorCode
 oggplay_get_audio_channels(OggPlay *me, int track, int* channels) {
 
@@ -421,8 +464,8 @@ oggplay_get_audio_channels(OggPlay *me, int track, int* channels) {
 	return E_OGGPLAY_UNINITIALISED;
   }
   (*channels) = decode->sound_info.channels;
-
   return E_OGGPLAY_OK;
+
 }
 
 OggPlayErrorCode
@@ -448,11 +491,9 @@ oggplay_get_audio_samplerate(OggPlay *me, int track, int* rate) {
 	return E_OGGPLAY_UNINITIALISED;
   }
   (*rate) = decode->sound_info.samplerate;
-
   return E_OGGPLAY_OK;
 
 }
-#endif
 
 OggPlayErrorCode
 oggplay_get_kate_category(OggPlay *me, int track, const char** category) {
@@ -474,7 +515,7 @@ oggplay_get_kate_category(OggPlay *me, int track, const char** category) {
   decode = (OggPlayKateDecode *)(me->decode_data[track]);
 
 #ifdef HAVE_KATE
-  if (decode->decoder.initialised) {
+  if (decode->decoder.initialised == 1) {
 	(*category) = decode->k_state.ki->category;
 	return E_OGGPLAY_OK;
   }
@@ -504,7 +545,7 @@ oggplay_get_kate_language(OggPlay *me, int track, const char** language) {
   decode = (OggPlayKateDecode *)(me->decode_data[track]);
 
 #ifdef HAVE_KATE
-  if (decode->decoder.initialised) {
+  if (decode->decoder.initialised == 1) {
 	(*language) = decode->k_state.ki->language;
 	return E_OGGPLAY_OK;
   }
@@ -535,7 +576,7 @@ oggplay_set_kate_tiger_rendering(OggPlay *me, int track, int use_tiger, int swap
 
 #ifdef HAVE_KATE
 #ifdef HAVE_TIGER
-  if (decode->decoder.initialised && decode->tr) {
+  if (decode->decoder.initialised == 1 && decode->tr) {
 	decode->use_tiger = use_tiger;
 	decode->swap_rgb = swap_rgb;
 	decode->default_width = default_width;
@@ -597,6 +638,7 @@ oggplay_overlay_kate_track_on_video(OggPlay *me, int kate_track, int video_track
   return E_OGGPLAY_NO_KATE_SUPPORT;
 #endif
 }
+#endif
 
 #define MAX_CHUNK_COUNT   10
 
@@ -780,7 +822,7 @@ read_more_data:
    * abort decoding!
    */
   if (num_records < 0) {
-	return num_records;
+	return (OggPlayErrorCode)num_records;
   }
 
   /* if we received an shutdown event, dont try to read more data...*/

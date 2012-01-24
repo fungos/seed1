@@ -1,0 +1,27 @@
+NAME=Seed
+include Objects.in
+TARGET = ../bin/lib$(NAME).a
+
+AR = ar
+AR_PARAM = cru
+AS = as
+NM = nm
+STRIP = strip
+LD = ld
+GCC = g++
+CC = gcc
+
+DEPENDENCY = $(SEEDSDK)dependency/qtsdk/
+LFLAGS = -L$(DEPENDENCY)lib
+LIBS = -lSDLmain -lSDL -lSDL_image -lopenal32 -ld3d8 -lGL
+CDEFS = -D_SDL_ -DWIN32 -DSEED_BUILD -DSEED_USE_COMMERCIAL
+CFLAGS = -Wall -shared $(CDEFS) -I../contrib -I$(DEPENDENCY)include -I$(SEEDSDK)seed/include $(LFLAGS) $(LIBS)
+CPPFLAGS = $(CFLAGS)
+
+all:	$(TARGET)
+
+$(TARGET): $(OBJECTS)
+	$(AR) $(AR_PARAM) $(TARGET) $(OBJECTS)
+
+clean:
+	$(SEEDSDK)/seedtools/rmw $(OBJECTS) $(TARGET) *~

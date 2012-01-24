@@ -294,8 +294,7 @@ oggplay_data_initialise_header (const OggPlayDecode *decode,
   header->presentation_time = decode->current_loc;
   header->has_been_presented = 0;
 }
-
-#ifdef HAVE_AUDIO
+#if 0
 OggPlayErrorCode
 oggplay_data_handle_audio_data (OggPlayDecode *decode, void *data,
 								long samples, size_t samplesize) {
@@ -314,17 +313,17 @@ oggplay_data_handle_audio_data (OggPlayDecode *decode, void *data,
 
   ret = oggplay_mul_signed_overflow (samples, num_channels, &samples_size);
   if (ret == E_OGGPLAY_TYPE_OVERFLOW) {
-	return ret;
+	return (OggPlayErrorCode)ret;
   }
 
   ret = oggplay_mul_signed_overflow (samples_size, samplesize, &samples_size);
   if (ret == E_OGGPLAY_TYPE_OVERFLOW) {
-	return ret;
+	return (OggPlayErrorCode)ret;
   }
 
   ret = oggplay_check_add_overflow (record_size, samples_size, &record_size);
   if (ret == E_OGGPLAY_TYPE_OVERFLOW) {
-	return ret;
+	return (OggPlayErrorCode)ret;
   }
 
   /* try to allocate the memory for the record */
@@ -351,7 +350,6 @@ oggplay_data_handle_audio_data (OggPlayDecode *decode, void *data,
   return E_OGGPLAY_CONTINUE;
 }
 #endif
-
 OggPlayErrorCode
 oggplay_data_handle_cmml_data(OggPlayDecode *decode,
 							  unsigned char *data,
@@ -397,7 +395,24 @@ oggplay_data_handle_cmml_data(OggPlayDecode *decode,
   return E_OGGPLAY_CONTINUE;
 }
 
-int
+static int
+get_uv_offset(OggPlayTheoraDecode *decode, yuv_buffer *buffer)
+{
+  int xo=0, yo = 0;
+  if (decode->y_width != 0 &&
+	  decode->uv_width != 0 &&
+	  decode->y_width/decode->uv_width != 0) {
+	xo = (decode->video_info.offset_x/(decode->y_width/decode->uv_width));
+  }
+  if (decode->y_height != 0 &&
+	  decode->uv_height != 0 &&
+	  decode->y_height/decode->uv_height != 0) {
+	yo = (buffer->uv_stride)*(decode->video_info.offset_y/(decode->y_height/decode->uv_height));
+  }
+  return xo + yo;
+}
+
+OggPlayErrorCode
 oggplay_data_handle_theora_frame (OggPlayTheoraDecode *decode,
 								  const yuv_buffer *buffer) {
 
@@ -415,18 +430,18 @@ oggplay_data_handle_theora_frame (OggPlayTheoraDecode *decode,
   ret =
 	oggplay_mul_signed_overflow (buffer->y_height, buffer->y_stride, &y_size);
   if (ret == E_OGGPLAY_TYPE_OVERFLOW) {
-	return ret;
+	return (OggPlayErrorCode)ret;
   }
 
   ret =
 	oggplay_mul_signed_overflow (buffer->uv_height, buffer->uv_stride, &uv_size);
   if (ret == E_OGGPLAY_TYPE_OVERFLOW) {
-	return ret;
+	return (OggPlayErrorCode)ret;
   }
 
   ret = oggplay_mul_signed_overflow (uv_size, 2, &uv_size);
   if (ret == E_OGGPLAY_TYPE_OVERFLOW) {
-	return ret;
+	return (OggPlayErrorCode)ret;
   }
 
   if (buffer->y_stride < 0) {
@@ -436,12 +451,12 @@ oggplay_data_handle_theora_frame (OggPlayTheoraDecode *decode,
 
   ret = oggplay_check_add_overflow (size, y_size, &size);
   if (ret == E_OGGPLAY_TYPE_OVERFLOW) {
-	return ret;
+	return (OggPlayErrorCode)ret;
   }
 
   ret = oggplay_check_add_overflow (size, uv_size, &size);
   if (ret == E_OGGPLAY_TYPE_OVERFLOW) {
-	return ret;
+	return (OggPlayErrorCode)ret;
   }
 
   /*
@@ -475,9 +490,7 @@ oggplay_data_handle_theora_frame (OggPlayTheoraDecode *decode,
 	q += buffer->y_stride;
   }
 
-  uv_offset =
-	(decode->video_info.offset_x/(decode->y_width/decode->uv_width)) +
-	(buffer->uv_stride) * (decode->video_info.offset_y/(decode->y_height/decode->uv_height));
+  uv_offset = get_uv_offset(decode, buffer);
   p = data->u;
   q = buffer->u + uv_offset;
   p2 = data->v;
@@ -512,17 +525,17 @@ oggplay_data_handle_theora_frame (OggPlayTheoraDecode *decode,
 	ret = oggplay_mul_signed_overflow(decode->y_width, decode->y_height,
 									  &overlay_size);
 	if (ret == E_OGGPLAY_TYPE_OVERFLOW) {
-	  return ret;
+	  return (OggPlayErrorCode)ret;
 	}
 
 	ret = oggplay_mul_signed_overflow(overlay_size, 4, &overlay_size);
 	if (ret == E_OGGPLAY_TYPE_OVERFLOW) {
-	  return ret;
+	  return (OggPlayErrorCode)ret;
 	}
 
 	ret =  oggplay_check_add_overflow (size, overlay_size, &size);
 	if (ret == E_OGGPLAY_TYPE_OVERFLOW) {
-	  return ret;
+	  return (OggPlayErrorCode)ret;
 	}
 
 	/* allocate memory for the overlay record */
