@@ -1999,19 +1999,19 @@
 			Name="contrib"
 			>
 			<File
-				RelativePath="..\contrib\malloc.c.h"
+				RelativePath="..\contrib\nedmalloc\malloc.c.h"
 				>
 			</File>
 			<File
-				RelativePath="..\contrib\nedmalloc.c"
+				RelativePath="..\contrib\nedmalloc\nedmalloc.c"
 				>
 			</File>
 			<File
-				RelativePath="..\contrib\nedmalloc.h"
+				RelativePath="..\contrib\nedmalloc\nedmalloc.h"
 				>
 			</File>
 			<File
-				RelativePath="..\contrib\nedtrie.h"
+				RelativePath="..\contrib\nedmalloc\nedtrie.h"
 				>
 			</File>
 		</Filter>
