@@ -102,44 +102,44 @@ static int CoefsY[256];
 #define CLAMP(v)    ((v) > 255 ? 255 : (v) < 0 ? 0 : (v))
 
 #define VANILLA_YUV2RGB_PIXEL(y, ruv, guv, buv)	\
-r = (CoefsY[y] + ruv) >> prec;	\
-g = (CoefsY[y] + guv) >> prec;	\
-b = (CoefsY[y] + buv) >> prec;	\
+r = (CoefsY[y] + ruv) >> prec;			\
+g = (CoefsY[y] + guv) >> prec;			\
+b = (CoefsY[y] + buv) >> prec;			\
 
-#define VANILLA_RGBA_OUT(out, r, g, b) \
-out[0] = CLAMP(r); \
-out[1] = CLAMP(g); \
-out[2] = CLAMP(b); \
+#define VANILLA_RGBA_OUT(out, r, g, b)	\
+out[0] = CLAMP(r); 			\
+out[1] = CLAMP(g); 			\
+out[2] = CLAMP(b); 			\
 out[3] = 255;
 
-#define VANILLA_BGRA_OUT(out, r, g, b) \
-out[0] = CLAMP(b); \
-out[1] = CLAMP(g); \
-out[2] = CLAMP(r); \
+#define VANILLA_BGRA_OUT(out, r, g, b)	\
+out[0] = CLAMP(b); 			\
+out[1] = CLAMP(g); 			\
+out[2] = CLAMP(r); 			\
 out[3] = 255;
 
-#define VANILLA_ARGB_OUT(out, r, g, b) \
-out[0] = 255;	   \
-out[1] = CLAMP(r); \
+#define VANILLA_ARGB_OUT(out, r, g, b)	\
+out[0] = 255;	  			\
+out[1] = CLAMP(r); 			\
 out[2] = CLAMP(g); \
 out[3] = CLAMP(b);
 
-#define VANILLA_ABGR_OUT(out, r, g, b) \
-out[0] = 255;	   \
-out[1] = CLAMP(b); \
-out[2] = CLAMP(g); \
+#define VANILLA_ABGR_OUT(out, r, g, b)	\
+out[0] = 255;	   			\
+out[1] = CLAMP(b); 			\
+out[2] = CLAMP(g); 			\
 out[3] = CLAMP(r);
 
-#define LOOKUP_COEFFS int ruv = CoefsRV[*pv]; 			\
+#define LOOKUP_COEFFS int ruv = CoefsRV[*pv];     		\
 		      int guv = CoefsGU[*pu] + CoefsGV[*pv]; 	\
-		      int buv = CoefsBU[*pu]; 			\
+		      int buv = CoefsBU[*pu];			\
                       int r, g, b;
 
 /* yuv420p, yuv422p -> */
-#define CONVERT(OUTPUT_FUNC) LOOKUP_COEFFS				 \
-			     VANILLA_YUV2RGB_PIXEL(py[0], ruv, guv, buv) \
-			     OUTPUT_FUNC(dst, r, g, b)  \
-			     VANILLA_YUV2RGB_PIXEL(py[1], ruv, guv, buv) \
+#define CONVERT(OUTPUT_FUNC) LOOKUP_COEFFS					\
+			     VANILLA_YUV2RGB_PIXEL(py[0], ruv, guv, buv)	\
+			     OUTPUT_FUNC(dst, r, g, b)  			\
+			     VANILLA_YUV2RGB_PIXEL(py[1], ruv, guv, buv) 	\
 			     OUTPUT_FUNC((dst+4), r, g, b)
 
 #define CLEANUP
@@ -157,9 +157,9 @@ YUV_CONVERT(yuv422_to_argb_vanilla, CONVERT(VANILLA_ARGB_OUT), VANILLA_ARGB_OUT,
 #undef CONVERT
 
 /* yuv444p -> */
-#define CONVERT(OUTPUT_FUNC) LOOKUP_COEFFS				 \
-			     VANILLA_YUV2RGB_PIXEL(py[0], ruv, guv, buv) \
-			     OUTPUT_FUNC(dst, r, g, b)  
+#define CONVERT(OUTPUT_FUNC) LOOKUP_COEFFS                              	\
+                             VANILLA_YUV2RGB_PIXEL(py[0], ruv, guv, buv)	\
+                             OUTPUT_FUNC(dst, r, g, b)
 
 YUV_CONVERT(yuv444_to_rgba_vanilla, CONVERT(VANILLA_RGBA_OUT), VANILLA_RGBA_OUT, 1, 4, 1, 1, 1)
 YUV_CONVERT(yuv444_to_bgra_vanilla, CONVERT(VANILLA_BGRA_OUT), VANILLA_BGRA_OUT, 1, 4, 1, 1, 1)
@@ -237,13 +237,13 @@ init_yuv_converters(void)
 			yuv_conv.yuv422bgra = yuv422_to_bgra_sse2;
 			yuv_conv.yuv422argb = yuv422_to_argb_sse2;
 			yuv_conv.yuv444rgba = yuv444_to_rgba_sse2;
-  		yuv_conv.yuv444bgra = yuv444_to_bgra_sse2;
-  		yuv_conv.yuv444argb = yuv444_to_argb_sse2;
+			yuv_conv.yuv444bgra = yuv444_to_bgra_sse2;
+			yuv_conv.yuv444argb = yuv444_to_argb_sse2;
 			return;
 		}
 #endif /* SSE2 */
 #ifdef ENABLE_MMX
-#ifndef ENABLE_SSE2
+#ifdef ENABLE_SSE2
 		else
 #endif
 		if (features & OC_CPU_X86_MMXEXT)	
@@ -255,8 +255,8 @@ init_yuv_converters(void)
 			yuv_conv.yuv422bgra = yuv422_to_bgra_sse;
 			yuv_conv.yuv422argb = yuv422_to_argb_sse;
 			yuv_conv.yuv444rgba = yuv444_to_rgba_sse;
-  		yuv_conv.yuv444bgra = yuv444_to_bgra_sse;
-  		yuv_conv.yuv444argb = yuv444_to_argb_sse;
+			yuv_conv.yuv444bgra = yuv444_to_bgra_sse;
+			yuv_conv.yuv444argb = yuv444_to_argb_sse;
 			return;
 		}
 		else if (features & OC_CPU_X86_MMX)
@@ -268,8 +268,8 @@ init_yuv_converters(void)
 			yuv_conv.yuv422bgra = yuv422_to_bgra_mmx;
 			yuv_conv.yuv422argb = yuv422_to_argb_mmx;
 			yuv_conv.yuv444rgba = yuv444_to_rgba_mmx;
-  		yuv_conv.yuv444bgra = yuv444_to_bgra_mmx;
-  		yuv_conv.yuv444argb = yuv444_to_argb_mmx;
+			yuv_conv.yuv444bgra = yuv444_to_bgra_mmx;
+			yuv_conv.yuv444argb = yuv444_to_argb_mmx;
 			return;
 		}
 #elif defined(ENABLE_ALTIVEC)		
@@ -282,8 +282,8 @@ init_yuv_converters(void)
 			yuv_conv.yuv422bgra = yuv422_to_argb_vanilla;
 			yuv_conv.yuv422argb = yuv422_to_bgra_vanilla;
 			yuv_conv.yuv444rgba = yuv444_to_abgr_vanilla;
-  		yuv_conv.yuv444bgra = yuv444_to_argb_vanilla;
-  		yuv_conv.yuv444argb = yuv444_to_bgra_vanilla;
+			yuv_conv.yuv444bgra = yuv444_to_argb_vanilla;
+			yuv_conv.yuv444argb = yuv444_to_bgra_vanilla;
 			return;
 		}
 #endif
@@ -342,7 +342,8 @@ oggplay_yuv2bgra(const OggPlayYUVChannels* yuv, OggPlayRGBChannels * rgb)
 	else if (yuv->y_width!=yuv->uv_width)
 		yuv_conv.yuv422bgra(yuv,rgb);
 	else
-		yuv_conv.yuv444bgra(yuv,rgb);}
+		yuv_conv.yuv444bgra(yuv,rgb);
+}
 
 void 
 oggplay_yuv2argb(const OggPlayYUVChannels* yuv, OggPlayRGBChannels * rgb)

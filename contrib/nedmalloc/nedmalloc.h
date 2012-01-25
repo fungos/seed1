@@ -48,7 +48,7 @@ checking too.
 
 #define NEDMALLOC_DEBUG 1
 #define ENABLE_LOGGING 1
-#if !defined(_MSC_VER)
+#if !defined(_MSC_VER) && !defined(MAX_PATH)
 #define MAX_PATH 260
 #endif
 

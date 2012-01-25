@@ -533,7 +533,7 @@ static NEDMALLOCNOALIASATTR mstate nedblkmstate(void *RESTRICT mem) THROWSPEC
 #ifdef _MSC_VER
 		__try
 #elif defined(__MINGW32__)
-		__try1
+		//__try1
 #endif
 #endif
 		{
@@ -583,7 +583,7 @@ static NEDMALLOCNOALIASATTR mstate nedblkmstate(void *RESTRICT mem) THROWSPEC
 #ifdef _MSC_VER
 		__except(1) { }
 #elif defined(__MINGW32__)
-		__except1(1) { }
+		//__except1(1) { }
 #endif
 #endif
 #endif
@@ -1221,7 +1221,7 @@ size_t nedflushlogs(nedpool *p, char *filepath) THROWSPEC
 				fgetpos(oh, &pos1);
 				fseek(oh, 0, SEEK_END);
 				fgetpos(oh, &pos2);
-				#if defined(_MSC_VER) || defined(_IPHONE_)
+				#if defined(_MSC_VER) || defined(_IPHONE_) || defined(WIN32)
 					if (pos1 == pos2)
 				#else
 					if (pos1.__pos==pos2.__pos)
