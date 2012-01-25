@@ -48,6 +48,8 @@
 
 #include <OpenAL/al.h>
 
+ALvoid  alBufferDataStaticProc(const ALint bid, ALenum format, ALvoid *data, ALsizei size, ALsizei freq);
+
 namespace Seed { namespace iPhone {
 
 IResource *SoundResourceLoader(const char *filename, ResourceManager *res = pResourceManager, IMemoryPool *pool = pDefaultPool);

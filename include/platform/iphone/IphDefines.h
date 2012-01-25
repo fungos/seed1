@@ -74,7 +74,6 @@ typedef signed int 				s32;
 typedef signed short int 		s16;
 typedef signed char 			s8;
 typedef float 					f32;
-typedef char					FilePath;
 
 typedef float 					fixed32;
 
@@ -83,6 +82,18 @@ typedef int 					PIXEL;
 
 #define FALSE	0
 #define TRUE	1
+
+#if SEED_PATH_WIDE == 1
+typedef wchar_t					FilePath;
+#define PATHCOPY				wcsncpy
+#define PATHCAT					wcsncat
+#define PATHLEN					wcslen
+#else
+typedef char					FilePath;
+#define PATHCOPY				strncpy
+#define PATHCAT					strncat
+#define PATHLEN					strlen
+#endif
 
 #define LIB_SIZE_T				size_t
 

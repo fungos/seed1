@@ -62,6 +62,8 @@ class Screen : public IScreen
 		virtual BOOL Initialize();
 		virtual BOOL Reset();
 		virtual BOOL Shutdown();
+    
+        void Resize(int w, int h);
 
 	public:
 		/* OpenGL names for the renderbuffer and framebuffers used to render to this view */
@@ -72,8 +74,6 @@ class Screen : public IScreen
 	private:
 		SEED_DISABLE_COPY(Screen);
 
-		void CreateHardwareSurfaces();
-		void DestroyHardwareSurfaces();
 		void SwapSurfaces();
 
 	private:

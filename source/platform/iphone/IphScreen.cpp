@@ -93,12 +93,11 @@ BOOL Screen::Initialize()
 {
 	Log(TAG "Initializing...");
 	
-	nMode = pConfiguration->GetVideoMode();
+	//nMode = pConfiguration->GetVideoMode();
 
-	this->CreateHardwareSurfaces();
 	this->Reset();
 	
-	Info(TAG "Video resolution is %dx%d.", iModeWidth, iModeHeight);
+	
 	Log(TAG "Initialization completed.");
 
 	return TRUE;
@@ -109,7 +108,6 @@ BOOL Screen::Shutdown()
 	Log(TAG "Terminating...");
 	
 	BOOL r = this->Reset();
-	this->DestroyHardwareSurfaces();
 	
 	Log(TAG "Terminated.");
 
@@ -118,7 +116,7 @@ BOOL Screen::Shutdown()
 
 void Screen::Update()
 {
-	this->SwapSurfaces();
+	//this->SwapSurfaces();
 }
 
 void Screen::FadeOut()
@@ -152,47 +150,29 @@ void Screen::CancelFade()
 
 void Screen::SwapSurfaces()
 {
-	glFlush();
+	//glFlush();
 }
 
-void Screen::CreateHardwareSurfaces()
-{
-	glGenFramebuffers(1, &frameBuffer);
-	glGenRenderbuffers(1, &renderBuffer);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-	glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
-	iphPrepareGLContext();
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderBuffer);
-
-	glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &iWidth);
-	glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &iHeight);
-	
-	if (nMode == Seed::Video_iPhoneLandscape || nMode == Seed::Video_iPhoneLandscapeGoofy)
-	{
-		iModeWidth = iHeight;
-		iModeHeight = iWidth;
-	}
-	else
-	{
-		iModeWidth = iWidth;
-		iModeHeight = iHeight;
-	}
+void Screen::Resize(int w, int h)
+{	
+    if (w > h)
+    {
+        iModeWidth = h;
+        iModeHeight = w;
+        nMode = Seed::Video_iOSLandscape;
+    }
+    else
+    {
+        iModeWidth = w;
+		iModeHeight = h;
+        nMode = Seed::Video_iOSPortrait;
+    }
 	
 	iHeight = iModeHeight;
 	iWidth = iModeWidth;
 	fAspectRatio = (f32)iHeight / (f32)iWidth;
-	
-	//if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	// ...
-}
-
-void Screen::DestroyHardwareSurfaces()
-{
-	glDeleteFramebuffers(1, &frameBuffer);
-	frameBuffer = 0;
-	glDeleteRenderbuffers(1, &renderBuffer);
-	renderBuffer = 0;
+    
+    Info(TAG "Video resolution is %dx%d.", iModeWidth, iModeHeight);
 }
 
 void Screen::ApplyFade()
