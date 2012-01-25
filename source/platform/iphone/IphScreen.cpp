@@ -63,13 +63,9 @@ namespace Seed { namespace iPhone {
 SEED_SINGLETON_DEFINE(Screen);
 
 Screen::Screen()
-	: renderBuffer()
-	, frameBuffer()
-	, depthRenderbuffer()
+	: IScreen()
 	, iFadeStatus(0)
 	, fadeType(FADE_IN)
-	, iHeight(0)
-	, iWidth(0)
 	, iModeHeight(0)
 	, iModeWidth(0)
 {
@@ -93,7 +89,12 @@ BOOL Screen::Initialize()
 {
 	Log(TAG "Initializing...");
 	
-	//nMode = pConfiguration->GetVideoMode();
+	nMode = pConfiguration->GetVideoMode();
+    if (nMode == Seed::Video_iPad)
+    {
+        iWidth = iModeWidth = 1024;
+        iHeight = iModeHeight = 768;
+    }
 
 	this->Reset();
 	
@@ -154,11 +155,13 @@ void Screen::SwapSurfaces()
 }
 
 void Screen::Resize(int w, int h)
-{	
+{
     if (w > h)
     {
-        iModeWidth = h;
-        iModeHeight = w;
+        //iModeWidth = h;
+       // iModeHeight = w;
+        iModeWidth = w;
+		iModeHeight = h;
         nMode = Seed::Video_iOSLandscape;
     }
     else

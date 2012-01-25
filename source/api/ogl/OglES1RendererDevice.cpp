@@ -95,8 +95,8 @@ INLINE BOOL OGLES1RendererDevice::Initialize()
 	glClearStencil(0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	this->Enable2D();
-
+    this->Enable2D();
+    
 	return ret;
 }
 
@@ -109,6 +109,7 @@ INLINE BOOL OGLES1RendererDevice::Reset()
 
 INLINE BOOL OGLES1RendererDevice::Shutdown()
 {
+    this->Disable2D();
 	return IRendererDevice::Shutdown();
 }
 
@@ -617,26 +618,18 @@ INLINE void OGLES1RendererDevice::Enable2D() const
 	glLoadIdentity();
 
 	f32 aspect = pScreen->GetAspectRatio();
-	
+	/*
 	// portrait
 	if (pScreen->GetMode() == Seed::Video_iOSPortrait)
-	{
+	{*/
 		glOrthof(0.0f, 1.0f, aspect - 0.001f, 0.0f, -SEED_MAX_PRIORITY, 0);
-	}
+	/*}
 	// landscape
 	else if (pScreen->GetMode() == Seed::Video_iOSLandscape)
 	{
 		glOrthof(0.0f, aspect, 1.0f, 0.0f, -SEED_MAX_PRIORITY, 0);
 		glTranslatef(0.0f, 1.0f, 0.0f);
 		glRotatef(-90.0f, 0.0f, 0.0f, 1.0f);
-	}
-    /*
-	// landscape
-	else if (pScreen->GetMode() == Seed::Video_iOSLandscape)
-	{
-		glOrthof(1.0f-aspect, 1.0f, 1.0f, 0.0f, -SEED_MAX_PRIORITY, 0);
-		glTranslatef(1.0f, 0.0f, 0.0f);
-		glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
 	}*/
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();

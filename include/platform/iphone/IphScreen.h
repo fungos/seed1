@@ -65,12 +65,6 @@ class Screen : public IScreen
     
         void Resize(int w, int h);
 
-	public:
-		/* OpenGL names for the renderbuffer and framebuffers used to render to this view */
-		GLuint		renderBuffer;
-		GLuint		frameBuffer;
-		GLuint		depthRenderbuffer;
-
 	private:
 		SEED_DISABLE_COPY(Screen);
 
@@ -85,8 +79,6 @@ class Screen : public IScreen
 
 		s32 		iFadeStatus;
 		eFadeType 	fadeType;
-		GLint		iHeight;
-		GLint		iWidth;
 		GLint		iModeHeight;
 		GLint		iModeWidth;
 };
