@@ -40,7 +40,6 @@
 #define __VECTOR3_H__
 
 #include <math.h>
-#include "Log.h"
 
 namespace Seed {
 
