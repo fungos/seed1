@@ -1221,7 +1221,7 @@ size_t nedflushlogs(nedpool *p, char *filepath) THROWSPEC
 				fgetpos(oh, &pos1);
 				fseek(oh, 0, SEEK_END);
 				fgetpos(oh, &pos2);
-				#if defined(_MSC_VER) || defined(WIN32)
+				#if defined(_MSC_VER) || defined(_IPHONE_) || defined(WIN32)
 					if (pos1 == pos2)
 				#else
 					if (pos1.__pos==pos2.__pos)

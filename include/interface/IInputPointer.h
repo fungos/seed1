@@ -77,7 +77,6 @@ class SEED_CORE_API IInputPointer
 		void AddPointerListener(IEventInputPointerListener *listener);
 		void RemovePointerListener(IEventInputPointerListener *listener);
 
-	protected:
 		void SendEventPointerEnable(const EventInputPointer *ev);
 		void SendEventPointerDisable(const EventInputPointer *ev);
 		void SendEventPointerMove(const EventInputPointer *ev);

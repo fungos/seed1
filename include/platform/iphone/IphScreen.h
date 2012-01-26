@@ -62,18 +62,12 @@ class Screen : public IScreen
 		virtual BOOL Initialize();
 		virtual BOOL Reset();
 		virtual BOOL Shutdown();
-
-	public:
-		/* OpenGL names for the renderbuffer and framebuffers used to render to this view */
-		GLuint		renderBuffer;
-		GLuint		frameBuffer;
-		GLuint		depthRenderbuffer;
+    
+        void Resize(int w, int h);
 
 	private:
 		SEED_DISABLE_COPY(Screen);
 
-		void CreateHardwareSurfaces();
-		void DestroyHardwareSurfaces();
 		void SwapSurfaces();
 
 	private:
@@ -85,8 +79,6 @@ class Screen : public IScreen
 
 		s32 		iFadeStatus;
 		eFadeType 	fadeType;
-		GLint		iHeight;
-		GLint		iWidth;
 		GLint		iModeHeight;
 		GLint		iModeWidth;
 };

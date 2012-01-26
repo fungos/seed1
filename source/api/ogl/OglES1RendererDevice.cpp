@@ -81,12 +81,6 @@ INLINE BOOL OGLES1RendererDevice::Initialize()
 	u32 w = pScreen->GetWidth();
 	u32 h = pScreen->GetHeight();
 	
-	if (pScreen->GetMode() == Seed::Video_iPhoneLandscape || pScreen->GetMode() == Seed::Video_iPhoneLandscapeGoofy)
-	{
-		w = h;
-		h = pScreen->GetWidth();
-	}
-	
 	glScissor(0, 0, w, h);
 	glViewport(0, 0, w, h);
 
@@ -101,8 +95,8 @@ INLINE BOOL OGLES1RendererDevice::Initialize()
 	glClearStencil(0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	this->Enable2D();
-
+    this->Enable2D();
+    
 	return ret;
 }
 
@@ -115,6 +109,7 @@ INLINE BOOL OGLES1RendererDevice::Reset()
 
 INLINE BOOL OGLES1RendererDevice::Shutdown()
 {
+    this->Disable2D();
 	return IRendererDevice::Shutdown();
 }
 
@@ -132,15 +127,13 @@ INLINE void OGLES1RendererDevice::BackbufferClear(const PIXEL color)
 
 INLINE void OGLES1RendererDevice::Begin() const
 {
-#if defined(_IPHONE_)
-	iphSetContext();
-#endif
-
 	this->TextureRequestProcess();
 	
+#if !defined(_IPHONE_)
 	glBindFramebuffer(GL_FRAMEBUFFER, pScreen->frameBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, pScreen->renderBuffer);
-
+#endif
+    
 	//glClearColor(255.0f, 0.0f, 255.0f, 255.0f);
 	//glClear(GL_COLOR_BUFFER_BIT);
 	
@@ -161,10 +154,6 @@ INLINE void OGLES1RendererDevice::End() const
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
-	
-#if defined(_IPHONE_)
-	iphContextPresentRenderBuffer();
-#endif
 }
 
 BOOL OGLES1RendererDevice::CheckExtension(const char *extName)
@@ -426,23 +415,17 @@ INLINE void OGLES1RendererDevice::TextureRequestProcess() const
 
 INLINE void OGLES1RendererDevice::TextureUnload(ITexture *texture)
 {
-	void *texId = texture->GetTextureName();
+    GLuint texId = texture->iTextureId;
 	if (texId)
-	{
-		GLuint *t = static_cast<GLuint *>(texId);
-		GLuint tex = (GLuint)t;
-		glDeleteTextures(1, &tex);
-	}
+		glDeleteTextures(1, &texId);
 }
 
 INLINE void OGLES1RendererDevice::TextureDataUpdate(ITexture *texture)
 {
-	void *texId = texture->GetTextureName();
+	u32 texId = texture->iTextureId;
 	if (texId)
 	{
-		GLuint *t = static_cast<GLuint *>(texId);
-		GLuint tex = (GLuint)t;
-		glBindTexture(GL_TEXTURE_2D, tex);
+		glBindTexture(GL_TEXTURE_2D, texId);
 
 		GLuint w = texture->GetAtlasWidthInPixel();
 		GLuint h = texture->GetAtlasHeightInPixel();
@@ -479,8 +462,7 @@ INLINE void OGLES1RendererDevice::UploadData(void *userData)
 	RendererPacket *packet = static_cast<RendererPacket *>(userData);
 
 	ITexture *texture = packet->pTexture;
-	GLuint *t = static_cast<GLuint *>(texture->GetTextureName());
-	GLuint tex = (GLuint)t;
+	GLuint tex = texture->iTextureId;
 
 	sVertex *data = static_cast<sVertex *>(packet->pVertexData);
 
@@ -553,12 +535,6 @@ void OGLES1RendererDevice::SetViewport(const Rect<f32> &area) const
 	w = pScreen->GetWidth();
 	h = pScreen->GetHeight();
 	
-	if (pScreen->GetMode() == Seed::Video_iPhoneLandscape || pScreen->GetMode() == Seed::Video_iPhoneLandscapeGoofy)
-	{
-		w = h;
-		h = pScreen->GetWidth();
-	}
-	
 	x = static_cast<GLint>(area.x * w);
 	y = static_cast<GLint>(area.y * h);
 	width = static_cast<GLsizei>(area.width * w);
@@ -630,36 +606,31 @@ INLINE void OGLES1RendererDevice::DrawRect(f32 x, f32 y, f32 w, f32 h, PIXEL col
 // FIXME: Viewport aspect ratio...
 INLINE void OGLES1RendererDevice::Enable2D() const
 {
+    /*
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
 		Info(TAG "ERROR: Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));
 	}
+     */
 
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
 
 	f32 aspect = pScreen->GetAspectRatio();
-	
+	/*
 	// portrait
-	if (pScreen->GetMode() == Seed::Video_iPhonePortrait)
-	{
+	if (pScreen->GetMode() == Seed::Video_iOSPortrait)
+	{*/
 		glOrthof(0.0f, 1.0f, aspect - 0.001f, 0.0f, -SEED_MAX_PRIORITY, 0);
-	}
-	// landscape goofy
-	else if (pScreen->GetMode() == Seed::Video_iPhoneLandscapeGoofy)
+	/*}
+	// landscape
+	else if (pScreen->GetMode() == Seed::Video_iOSLandscape)
 	{
 		glOrthof(0.0f, aspect, 1.0f, 0.0f, -SEED_MAX_PRIORITY, 0);
 		glTranslatef(0.0f, 1.0f, 0.0f);
 		glRotatef(-90.0f, 0.0f, 0.0f, 1.0f);
-	}
-	// landscape
-	else if (pScreen->GetMode() == Seed::Video_iPhoneLandscape)
-	{
-		glOrthof(1.0f-aspect, 1.0f, 1.0f, 0.0f, -SEED_MAX_PRIORITY, 0);
-		glTranslatef(1.0f, 0.0f, 0.0f);
-		glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
-	}
+	}*/
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();

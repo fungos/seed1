@@ -57,7 +57,10 @@ class Input : public IInput, public IInputPointer
 		// IInputKeyboard dummy
 		virtual void AddKeyboardListener(void *) {};
 		virtual void RemoveKeyboardListener(void *) {};
-
+        virtual void AddJoystickListener(void *) {};
+        virtual void RemoveJoystickListener(void *) {};
+        virtual u32 GetMaximumJoysticks() const {return 0; };
+    
 		// IInputPointer
 		virtual BOOL IsEnabled(u16 joystick = 0) const;
 		virtual BOOL IsHold(u32 button, u16 joystick = 0) const;

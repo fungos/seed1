@@ -114,7 +114,7 @@ Use wide char paths
 /*
 Enable nedmalloc as default allocator
 */
-#define SEED_USE_NEDMALLOC				1
+#define SEED_USE_NEDMALLOC                  0
 
 /*
 String Pools - Define the amount of each pool

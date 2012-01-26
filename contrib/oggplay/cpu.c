@@ -125,7 +125,8 @@ static void oc_detect_cpuid_helper(ogg_uint32_t *_eax,ogg_uint32_t *_ebx){
 #   endif
 # endif
 
-static ogg_uint32_t oc_parse_intel_flags(ogg_uint32_t _edx,ogg_uint32_t _ecx){
+static ogg_uint32_t oc_parse_intel_flags(ogg_uint32_t _edx,ogg_uint32_t _ecx)
+{
   ogg_uint32_t flags;
   /*If there isn't even MMX, give up.*/
   if(!(_edx&0x00800000))return 0;

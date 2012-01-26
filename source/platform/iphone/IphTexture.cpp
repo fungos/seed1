@@ -150,7 +150,7 @@ BOOL Texture::Load(u32 width, u32 height, PIXEL *buffer, u32 atlasWidth, u32 atl
 		pData = buffer;
 		pixelFormat = kTexture2DPixelFormat_RGBA8888;
 
-		pRendererDevice->TextureRequest(this, &pTextureId);
+		pRendererDevice->TextureRequest(this);
 
 		bLoaded = TRUE;
 	}
@@ -281,7 +281,7 @@ INLINE void Texture::UnloadTexture()
 	}
 	else
 	{
-		pRendererDevice->TextureRequestAbort(this, &pTextureId);
+		pRendererDevice->TextureRequestAbort(this);
 	}
 
 	if (pData)
@@ -482,7 +482,7 @@ void Texture::LoadPNG(const char *file)
 	iPitch = CGImageGetBytesPerRow(image);
 	iReserved = height * width * iBytesPerPixel;
 
-	pRendererDevice->TextureRequest(this, &pTextureId);
+	pRendererDevice->TextureRequest(this);
 
 	CGContextRelease(context);
 
