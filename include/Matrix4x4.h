@@ -106,6 +106,7 @@
 #define __MATRIX4X4_H__
 
 #include "MathUtil.h"
+#include "Log.h"
 
 namespace Seed {
 
