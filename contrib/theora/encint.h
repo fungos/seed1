@@ -19,7 +19,7 @@
 # if defined(HAVE_CONFIG_H)
 #  include "config.h"
 # endif
-//# include "theora/theoraenc.h"
+# include "theora/theoraenc.h"
 # include "internal.h"
 # include "ocintrin.h"
 # include "mathops.h"
@@ -122,11 +122,11 @@ struct oc_mb_enc_info{
   /*Flags indicating which MB modes have been refined.*/
   unsigned char refined;
   /*Motion vectors for a macro block for the current frame and the
-     previous two frames.
-    Each is a set of 2 vectors against OC_FRAME_GOLD and OC_FRAME_PREV, which
-     can be used to estimate constant velocity and constant acceleration
-     predictors.
-    Uninitialized MVs are (0,0).*/
+	 previous two frames.
+	Each is a set of 2 vectors against OC_FRAME_GOLD and OC_FRAME_PREV, which
+	 can be used to estimate constant velocity and constant acceleration
+	 predictors.
+	Uninitialized MVs are (0,0).*/
   oc_mv2        analysis_mv[3];
   /*Current unrefined analysis MVs.*/
   oc_mv         unref_mv[2];
@@ -147,15 +147,15 @@ struct oc_mb_enc_info{
 /*State machine to estimate the opportunity cost of coding a MB mode.*/
 struct oc_mode_scheme_chooser{
   /*Pointers to the a list containing the index of each mode in the mode
-     alphabet used by each scheme.
-    The first entry points to the dynamic scheme0_ranks, while the remaining 7
-     point to the constant entries stored in OC_MODE_SCHEMES.*/
+	 alphabet used by each scheme.
+	The first entry points to the dynamic scheme0_ranks, while the remaining 7
+	 point to the constant entries stored in OC_MODE_SCHEMES.*/
   const unsigned char *mode_ranks[8];
   /*The ranks for each mode when coded with scheme 0.
-    These are optimized so that the more frequent modes have lower ranks.*/
+	These are optimized so that the more frequent modes have lower ranks.*/
   unsigned char        scheme0_ranks[OC_NMODES];
   /*The list of modes, sorted in descending order of frequency, that
-    corresponds to the ranks above.*/
+	corresponds to the ranks above.*/
   unsigned char        scheme0_list[OC_NMODES];
   /*The number of times each mode has been chosen so far.*/
   int                  mode_counts[OC_NMODES];
@@ -201,8 +201,8 @@ struct oc_rc_state{
   /*The current buffer fullness (bits available to be used).*/
   ogg_int64_t        fullness;
   /*The target buffer fullness.
-    This is where we'd like to be by the last keyframe the appears in the next
-     buf_delay frames.*/
+	This is where we'd like to be by the last keyframe the appears in the next
+	 buf_delay frames.*/
   ogg_int64_t        target;
   /*The maximum buffer fullness (total size of the buffer).*/
   ogg_int64_t        max;
@@ -213,11 +213,11 @@ struct oc_rc_state{
   /*The number of frames to distribute the buffer usage over.*/
   int                buf_delay;
   /*The total drop count from the previous frame.
-    This includes duplicates explicitly requested via the
-     TH_ENCCTL_SET_DUP_COUNT API as well as frames we chose to drop ourselves.*/
+	This includes duplicates explicitly requested via the
+	 TH_ENCCTL_SET_DUP_COUNT API as well as frames we chose to drop ourselves.*/
   ogg_uint32_t       prev_drop_count;
   /*The log of an estimated scale factor used to obtain the real framerate, for
-     VFR sources or, e.g., 12 fps content doubled to 24 fps, etc.*/
+	 VFR sources or, e.g., 12 fps content doubled to 24 fps, etc.*/
   ogg_int64_t        log_drop_scale;
   /*The log of estimated scale factor for the rate model in Q57 format.*/
   ogg_int64_t        log_scale[2];
@@ -236,15 +236,15 @@ struct oc_rc_state{
   int                inter_delay_target;
   oc_iir_filter      vfrfilter;
   /*Two-pass mode state.
-    0 => 1-pass encoding.
-    1 => 1st pass of 2-pass encoding.
-    2 => 2nd pass of 2-pass encoding.*/
+	0 => 1-pass encoding.
+	1 => 1st pass of 2-pass encoding.
+	2 => 2nd pass of 2-pass encoding.*/
   int                twopass;
   /*Buffer for current frame metrics.*/
   unsigned char      twopass_buffer[48];
   /*The number of bytes in the frame metrics buffer.
-    When 2-pass encoding is enabled, this is set to 0 after each frame is
-     submitted, and must be non-zero before the next frame will be accepted.*/
+	When 2-pass encoding is enabled, this is set to 0 after each frame is
+	 submitted, and must be non-zero before the next frame will be accepted.*/
   int                twopass_buffer_bytes;
   int                twopass_buffer_fill;
   /*Whether or not to force the next frame to be a keyframe.*/
@@ -260,7 +260,7 @@ struct oc_rc_state{
   /*The index of the current frame in the circular metric buffer.*/
   int                frame_metrics_head;
   /*The frame count of each type (keyframes, delta frames, and dup frames);
-     32 bits limits us to 2.268 years at 60 fps.*/
+	 32 bits limits us to 2.268 years at 60 fps.*/
   ogg_uint32_t       frames_total[3];
   /*The number of frames of each type yet to be processed.*/
   ogg_uint32_t       frames_left[3];
@@ -271,7 +271,7 @@ struct oc_rc_state{
   /*The end of the window over which the current scale sums are taken.*/
   int                scale_window_end;
   /*The frame count of each type in the current 2-pass window; this does not
-     include dup frames.*/
+	 include dup frames.*/
   int                nframes[3];
   /*The total accumulated estimation bias.*/
   ogg_int64_t        rate_bias;
@@ -306,9 +306,9 @@ struct th_enc_ctx{
   /*The number of coded macro blocks.*/
   size_t                   ncoded_mbis;
   /*Whether or not packets are ready to be emitted.
-    This takes on negative values while there are remaining header packets to
-     be emitted, reaches 0 when the codec is ready for input, and becomes
-     positive when a frame has been processed and data packets are ready.*/
+	This takes on negative values while there are remaining header packets to
+	 be emitted, reaches 0 when the codec is ready for input, and becomes
+	 positive when a frame has been processed and data packets are ready.*/
   int                      packet_state;
   /*The maximum distance between keyframes.*/
   ogg_uint32_t             keyframe_frequency_force;
@@ -327,9 +327,9 @@ struct th_enc_ctx{
   /*Whether or not previous frame was dropped.*/
   unsigned char            prevframe_dropped;
   /*Stores most recently chosen Huffman tables for each frame type, DC and AC
-     coefficients, and luma and chroma tokens.
-    The actual Huffman table used for a given coefficient depends not only on
-     the choice made here, but also its index in the zig-zag ordering.*/
+	 coefficients, and luma and chroma tokens.
+	The actual Huffman table used for a given coefficient depends not only on
+	 the choice made here, but also its index in the zig-zag ordering.*/
   unsigned char            huff_idxs[2][2][2];
   /*Current count of bits used by each MV coding mode.*/
   size_t                   mv_bits[2];
@@ -366,11 +366,11 @@ struct th_enc_ctx{
   oc_iquant               *enquant_tables[64][3][2];
   oc_iquant_table          enquant_table_data[64][3][2];
   /*An "average" quantizer for each quantizer type (INTRA or INTER) and qi
-     value.
-    This is used to paramterize the rate control decisions.
-    They are kept in the log domain to simplify later processing.
-    Keep in mind these are DCT domain quantizers, and so are scaled by an
-     additional factor of 4 from the pixel domain.*/
+	 value.
+	This is used to paramterize the rate control decisions.
+	They are kept in the log domain to simplify later processing.
+	Keep in mind these are DCT domain quantizers, and so are scaled by an
+	 additional factor of 4 from the pixel domain.*/
   ogg_int64_t              log_qavg[2][64];
   /*The buffer state used to drive rate control.*/
   oc_rc_state              rc;

@@ -142,15 +142,14 @@ void Screen::PrepareMode()
 		}
 		break;
 
-		case Video_iPhonePortrait:
+		case Video_iOSPortrait:
 		{
 			iWidth = 320;
 			iHeight = 480;
 		}
 		break;
 
-		case Video_iPhoneLandscape:
-		case Video_iPhoneLandscapeGoofy:
+		case Video_iOSLandscape:
 		case Video_480x320:
 		{
 			iWidth = 480;

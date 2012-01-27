@@ -3,8 +3,23 @@
  
  Commercial Usage
  Seed Framework is available under proprietary license for those who cannot,
- or choose not to, use LGPL and GPL code in their projects (eg. iPhone,
+ or choose not to, use LGPL and GPL code in their projects (eg. iOS,
  Nintendo Wii and others).
+
+ iOS LGPL Exception
+ Seed Framework is available under a free license for those who want to use
+ it with iOS (eg. iPhone, iPad, etc), subject to the following restrictions:
+ 
+   1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software.
+   2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+   3. This notice may not be removed or altered from any source distribution.
+   4. A credit line is required in the game credits, as the following line: 
+      Powered by Seed Framework
+   5. A Seed Framework logo should be displayed within a splash screen, or in
+   the case where the game haven't or cannot have a splash, a logo should be
+   displayed somewhere in the game (eg. menu, credits, other place).
  
  GNU Lesser General Public License Usage
  Alternatively, this file may be used under the terms of the GNU Lesser

@@ -691,13 +691,13 @@ void b2World::SolveTOI(b2Body* body)
 	solver.Initialize(contacts, count, body);
 
 	const float32 k_toiBaumgarte = 0.75f;
-	bool solved = false;
+//	bool solved = false;
 	for (int32 i = 0; i < 20; ++i)
 	{
 		bool contactsOkay = solver.Solve(k_toiBaumgarte);
 		if (contactsOkay)
 		{
-			solved = true;
+//			solved = true;
 			break;
 		}
 	}
@@ -925,6 +925,9 @@ void b2World::DrawShape(b2Fixture* fixture, const b2Transform& xf, const b2Color
 
 			m_debugDraw->DrawSolidPolygon(vertices, vertexCount, color);
 		}
+		break;
+
+	default:
 		break;
 	}
 }

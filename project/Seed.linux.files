@@ -1,4 +1,4 @@
-Makefile
+Makefile.linux
 Objects.in
 ../contrib/nedmalloc/malloc.c.h
 ../contrib/nedmalloc/nedmalloc.c

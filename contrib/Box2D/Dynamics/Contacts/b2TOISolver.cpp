@@ -38,7 +38,7 @@ b2TOISolver::b2TOISolver(b2StackAllocator* allocator)
 {
 	m_allocator = allocator;
 	m_constraints = NULL;
-	m_count = NULL;
+	m_count = 0;//NULL;
 	m_toiBody = NULL;
 }
 

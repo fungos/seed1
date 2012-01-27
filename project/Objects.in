@@ -1,4 +1,7 @@
-OBJECTS = \
+OBJECTS = 
+
+ifdef USE_CONTRIB_OGGVORBIS
+OBJECTS += \
 ../contrib/ogg/bitwise.o \
 ../contrib/ogg/framing.o \
 ../contrib/oggplay/oggplay.o \
@@ -60,8 +63,46 @@ OBJECTS = \
 ../contrib/vorbis/vorbisfile.o \
 ../contrib/vorbis/window.o \
 ../contrib/vorbis/synthesis.o \
-../contrib/vorbis/registry.o \
+../contrib/vorbis/registry.o
+endif
+
+OBJECTS += \
 ../contrib/nedmalloc/nedmalloc.o \
+../contrib/Box2D/Collision/b2BroadPhase.o \
+../contrib/Box2D/Collision/b2CollideCircle.o \
+../contrib/Box2D/Collision/b2CollidePolygon.o \
+../contrib/Box2D/Collision/b2Collision.o \
+../contrib/Box2D/Collision/b2Distance.o \
+../contrib/Box2D/Collision/b2DynamicTree.o \
+../contrib/Box2D/Collision/b2TimeOfImpact.o \
+../contrib/Box2D/Collision/Shapes/b2CircleShape.o \
+../contrib/Box2D/Collision/Shapes/b2PolygonShape.o \
+../contrib/Box2D/Common/b2BlockAllocator.o \
+../contrib/Box2D/Common/b2Math.o \
+../contrib/Box2D/Common/b2Settings.o \
+../contrib/Box2D/Common/b2StackAllocator.o \
+../contrib/Box2D/Dynamics/b2Body.o \
+../contrib/Box2D/Dynamics/b2ContactManager.o \
+../contrib/Box2D/Dynamics/b2Fixture.o \
+../contrib/Box2D/Dynamics/b2Island.o \
+../contrib/Box2D/Dynamics/b2World.o \
+../contrib/Box2D/Dynamics/b2WorldCallbacks.o \
+../contrib/Box2D/Dynamics/Contacts/b2CircleContact.o \
+../contrib/Box2D/Dynamics/Contacts/b2Contact.o \
+../contrib/Box2D/Dynamics/Contacts/b2ContactSolver.o \
+../contrib/Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.o \
+../contrib/Box2D/Dynamics/Contacts/b2PolygonContact.o \
+../contrib/Box2D/Dynamics/Contacts/b2TOISolver.o \
+../contrib/Box2D/Dynamics/Joints/b2DistanceJoint.o \
+../contrib/Box2D/Dynamics/Joints/b2FrictionJoint.o \
+../contrib/Box2D/Dynamics/Joints/b2GearJoint.o \
+../contrib/Box2D/Dynamics/Joints/b2Joint.o \
+../contrib/Box2D/Dynamics/Joints/b2LineJoint.o \
+../contrib/Box2D/Dynamics/Joints/b2MouseJoint.o \
+../contrib/Box2D/Dynamics/Joints/b2PrismaticJoint.o \
+../contrib/Box2D/Dynamics/Joints/b2PulleyJoint.o \
+../contrib/Box2D/Dynamics/Joints/b2RevoluteJoint.o \
+../contrib/Box2D/Dynamics/Joints/b2WeldJoint.o \
 ../source/extra/ymanager/yallocwrap.o \
 ../source/extra/ymanager/ymemorymanager.o \
 ../source/platform/iphone/IphInput.o \

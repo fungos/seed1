@@ -58,12 +58,12 @@
 
 #ifdef FLOAT_LOOKUP
 #include "lookup.c" /* catch this in the build system; we #include for
-                       compilers (like gcc) that can't inline across
-                       modules */
+					   compilers (like gcc) that can't inline across
+					   modules */
 
 /* side effect: changes *lsp to cosines of lsp */
 void vorbis_lsp_to_curve(float *curve,int *map,int n,int ln,float *lsp,int m,
-                            float amp,float ampoffset){
+							float amp,float ampoffset){
   int i;
   float wdel=M_PI/ln;
   vorbis_fpu_control fpu;
@@ -73,41 +73,41 @@ void vorbis_lsp_to_curve(float *curve,int *map,int n,int ln,float *lsp,int m,
 
   i=0;
   while(i<n){
-    int k=map[i];
-    int qexp;
-    float p=.7071067812f;
-    float q=.7071067812f;
-    float w=vorbis_coslook(wdel*k);
-    float *ftmp=lsp;
-    int c=m>>1;
+	int k=map[i];
+	int qexp;
+	float p=.7071067812f;
+	float q=.7071067812f;
+	float w=vorbis_coslook(wdel*k);
+	float *ftmp=lsp;
+	int c=m>>1;
 
-    while(c--){
-      q*=ftmp[0]-w;
-      p*=ftmp[1]-w;
-      ftmp+=2;
-    }
+	while(c--){
+	  q*=ftmp[0]-w;
+	  p*=ftmp[1]-w;
+	  ftmp+=2;
+	}
 
-    if(m&1){
-      /* odd order filter; slightly assymetric */
-      /* the last coefficient */
-      q*=ftmp[0]-w;
-      q*=q;
-      p*=p*(1.f-w*w);
-    }else{
-      /* even order filter; still symmetric */
-      q*=q*(1.f+w);
-      p*=p*(1.f-w);
-    }
+	if(m&1){
+	  /* odd order filter; slightly assymetric */
+	  /* the last coefficient */
+	  q*=ftmp[0]-w;
+	  q*=q;
+	  p*=p*(1.f-w*w);
+	}else{
+	  /* even order filter; still symmetric */
+	  q*=q*(1.f+w);
+	  p*=p*(1.f-w);
+	}
 
-    q=frexp(p+q,&qexp);
-    q=vorbis_fromdBlook(amp*
-                        vorbis_invsqlook(q)*
-                        vorbis_invsq2explook(qexp+m)-
-                        ampoffset);
+	q=frexp(p+q,&qexp);
+	q=vorbis_fromdBlook(amp*
+						vorbis_invsqlook(q)*
+						vorbis_invsq2explook(qexp+m)-
+						ampoffset);
 
-    do{
-      curve[i++]*=q;
-    }while(map[i]==k);
+	do{
+	  curve[i++]*=q;
+	}while(map[i]==k);
   }
   vorbis_fpu_restore(fpu);
 }
@@ -116,8 +116,8 @@ void vorbis_lsp_to_curve(float *curve,int *map,int n,int ln,float *lsp,int m,
 
 #ifdef INT_LOOKUP
 #include "lookup.c" /* catch this in the build system; we #include for
-                       compilers (like gcc) that can't inline across
-                       modules */
+					   compilers (like gcc) that can't inline across
+					   modules */
 
 static const int MLOOP_1[64]={
    0,10,11,11, 12,12,12,12, 13,13,13,13, 13,13,13,13,
@@ -138,7 +138,7 @@ static const int MLOOP_3[8]={0,1,2,2,3,3,3,3};
 
 /* side effect: changes *lsp to cosines of lsp */
 void vorbis_lsp_to_curve(float *curve,int *map,int n,int ln,float *lsp,int m,
-                            float amp,float ampoffset){
+							float amp,float ampoffset){
 
   /* 0 <= m < 256 */
 
@@ -151,90 +151,90 @@ void vorbis_lsp_to_curve(float *curve,int *map,int n,int ln,float *lsp,int m,
 
   i=0;
   while(i<n){
-    int j,k=map[i];
-    unsigned long pi=46341; /* 2**-.5 in 0.16 */
-    unsigned long qi=46341;
-    int qexp=0,shift;
-    long wi=vorbis_coslook_i(k*65536/ln);
+	int j,k=map[i];
+	unsigned long pi=46341; /* 2**-.5 in 0.16 */
+	unsigned long qi=46341;
+	int qexp=0,shift;
+	long wi=vorbis_coslook_i(k*65536/ln);
 
-    qi*=labs(ilsp[0]-wi);
-    pi*=labs(ilsp[1]-wi);
+	qi*=labs(ilsp[0]-wi);
+	pi*=labs(ilsp[1]-wi);
 
-    for(j=3;j<m;j+=2){
-      if(!(shift=MLOOP_1[(pi|qi)>>25]))
-        if(!(shift=MLOOP_2[(pi|qi)>>19]))
-          shift=MLOOP_3[(pi|qi)>>16];
-      qi=(qi>>shift)*labs(ilsp[j-1]-wi);
-      pi=(pi>>shift)*labs(ilsp[j]-wi);
-      qexp+=shift;
-    }
-    if(!(shift=MLOOP_1[(pi|qi)>>25]))
-      if(!(shift=MLOOP_2[(pi|qi)>>19]))
-        shift=MLOOP_3[(pi|qi)>>16];
+	for(j=3;j<m;j+=2){
+	  if(!(shift=MLOOP_1[(pi|qi)>>25]))
+		if(!(shift=MLOOP_2[(pi|qi)>>19]))
+		  shift=MLOOP_3[(pi|qi)>>16];
+	  qi=(qi>>shift)*labs(ilsp[j-1]-wi);
+	  pi=(pi>>shift)*labs(ilsp[j]-wi);
+	  qexp+=shift;
+	}
+	if(!(shift=MLOOP_1[(pi|qi)>>25]))
+	  if(!(shift=MLOOP_2[(pi|qi)>>19]))
+		shift=MLOOP_3[(pi|qi)>>16];
 
-    /* pi,qi normalized collectively, both tracked using qexp */
+	/* pi,qi normalized collectively, both tracked using qexp */
 
-    if(m&1){
-      /* odd order filter; slightly assymetric */
-      /* the last coefficient */
-      qi=(qi>>shift)*labs(ilsp[j-1]-wi);
-      pi=(pi>>shift)<<14;
-      qexp+=shift;
+	if(m&1){
+	  /* odd order filter; slightly assymetric */
+	  /* the last coefficient */
+	  qi=(qi>>shift)*labs(ilsp[j-1]-wi);
+	  pi=(pi>>shift)<<14;
+	  qexp+=shift;
 
-      if(!(shift=MLOOP_1[(pi|qi)>>25]))
-        if(!(shift=MLOOP_2[(pi|qi)>>19]))
-          shift=MLOOP_3[(pi|qi)>>16];
+	  if(!(shift=MLOOP_1[(pi|qi)>>25]))
+		if(!(shift=MLOOP_2[(pi|qi)>>19]))
+		  shift=MLOOP_3[(pi|qi)>>16];
 
-      pi>>=shift;
-      qi>>=shift;
-      qexp+=shift-14*((m+1)>>1);
+	  pi>>=shift;
+	  qi>>=shift;
+	  qexp+=shift-14*((m+1)>>1);
 
-      pi=((pi*pi)>>16);
-      qi=((qi*qi)>>16);
-      qexp=qexp*2+m;
+	  pi=((pi*pi)>>16);
+	  qi=((qi*qi)>>16);
+	  qexp=qexp*2+m;
 
-      pi*=(1<<14)-((wi*wi)>>14);
-      qi+=pi>>14;
+	  pi*=(1<<14)-((wi*wi)>>14);
+	  qi+=pi>>14;
 
-    }else{
-      /* even order filter; still symmetric */
+	}else{
+	  /* even order filter; still symmetric */
 
-      /* p*=p(1-w), q*=q(1+w), let normalization drift because it isn't
-         worth tracking step by step */
+	  /* p*=p(1-w), q*=q(1+w), let normalization drift because it isn't
+		 worth tracking step by step */
 
-      pi>>=shift;
-      qi>>=shift;
-      qexp+=shift-7*m;
+	  pi>>=shift;
+	  qi>>=shift;
+	  qexp+=shift-7*m;
 
-      pi=((pi*pi)>>16);
-      qi=((qi*qi)>>16);
-      qexp=qexp*2+m;
+	  pi=((pi*pi)>>16);
+	  qi=((qi*qi)>>16);
+	  qexp=qexp*2+m;
 
-      pi*=(1<<14)-wi;
-      qi*=(1<<14)+wi;
-      qi=(qi+pi)>>14;
+	  pi*=(1<<14)-wi;
+	  qi*=(1<<14)+wi;
+	  qi=(qi+pi)>>14;
 
-    }
+	}
 
 
-    /* we've let the normalization drift because it wasn't important;
-       however, for the lookup, things must be normalized again.  We
-       need at most one right shift or a number of left shifts */
+	/* we've let the normalization drift because it wasn't important;
+	   however, for the lookup, things must be normalized again.  We
+	   need at most one right shift or a number of left shifts */
 
-    if(qi&0xffff0000){ /* checks for 1.xxxxxxxxxxxxxxxx */
-      qi>>=1; qexp++;
-    }else
-      while(qi && !(qi&0x8000)){ /* checks for 0.0xxxxxxxxxxxxxxx or less*/
-        qi<<=1; qexp--;
-      }
+	if(qi&0xffff0000){ /* checks for 1.xxxxxxxxxxxxxxxx */
+	  qi>>=1; qexp++;
+	}else
+	  while(qi && !(qi&0x8000)){ /* checks for 0.0xxxxxxxxxxxxxxx or less*/
+		qi<<=1; qexp--;
+	  }
 
-    amp=vorbis_fromdBlook_i(ampi*                     /*  n.4         */
-                            vorbis_invsqlook_i(qi,qexp)-
-                                                      /*  m.8, m+n<=8 */
-                            ampoffseti);              /*  8.12[0]     */
+	amp=vorbis_fromdBlook_i(ampi*                     /*  n.4         */
+							vorbis_invsqlook_i(qi,qexp)-
+													  /*  m.8, m+n<=8 */
+							ampoffseti);              /*  8.12[0]     */
 
-    curve[i]*=amp;
-    while(map[++i]==k)curve[i]*=amp;
+	curve[i]*=amp;
+	while(map[++i]==k)curve[i]*=amp;
   }
 }
 
@@ -246,37 +246,37 @@ void vorbis_lsp_to_curve(float *curve,int *map,int n,int ln,float *lsp,int m,
 
 /* side effect: changes *lsp to cosines of lsp */
 void vorbis_lsp_to_curve(float *curve,int *map,int n,int ln,float *lsp,int m,
-                            float amp,float ampoffset){
+							float amp,float ampoffset){
   int i;
   float wdel=M_PI/ln;
   for(i=0;i<m;i++)lsp[i]=2.f*cos(lsp[i]);
 
   i=0;
   while(i<n){
-    int j,k=map[i];
-    float p=.5f;
-    float q=.5f;
-    float w=2.f*cos(wdel*k);
-    for(j=1;j<m;j+=2){
-      q *= w-lsp[j-1];
-      p *= w-lsp[j];
-    }
-    if(j==m){
-      /* odd order filter; slightly assymetric */
-      /* the last coefficient */
-      q*=w-lsp[j-1];
-      p*=p*(4.f-w*w);
-      q*=q;
-    }else{
-      /* even order filter; still symmetric */
-      p*=p*(2.f-w);
-      q*=q*(2.f+w);
-    }
+	int j,k=map[i];
+	float p=.5f;
+	float q=.5f;
+	float w=2.f*cos(wdel*k);
+	for(j=1;j<m;j+=2){
+	  q *= w-lsp[j-1];
+	  p *= w-lsp[j];
+	}
+	if(j==m){
+	  /* odd order filter; slightly assymetric */
+	  /* the last coefficient */
+	  q*=w-lsp[j-1];
+	  p*=p*(4.f-w*w);
+	  q*=q;
+	}else{
+	  /* even order filter; still symmetric */
+	  p*=p*(2.f-w);
+	  q*=q*(2.f+w);
+	}
 
-    q=fromdB(amp/sqrt(p+q)-ampoffset);
+	q=fromdB(amp/sqrt(p+q)-ampoffset);
 
-    curve[i]*=q;
-    while(map[++i]==k)curve[i]*=q;
+	curve[i]*=q;
+	while(map[++i]==k)curve[i]*=q;
   }
 }
 
@@ -288,10 +288,10 @@ static void cheby(float *g, int ord) {
 
   g[0] *= .5f;
   for(i=2; i<= ord; i++) {
-    for(j=ord; j >= i; j--) {
-      g[j-2] -= g[j];
-      g[j] += g[j];
-    }
+	for(j=ord; j >= i; j--) {
+	  g[j-2] -= g[j];
+	  g[j] += g[j];
+	}
   }
 }
 
@@ -309,53 +309,53 @@ static int comp(const void *a,const void *b){
 #define EPSILON 10e-7
 static int Laguerre_With_Deflation(float *a,int ord,float *r){
   int i,m;
-  double lastdelta=0.f;
+//  double lastdelta=0.f;
   double *defl=alloca(sizeof(*defl)*(ord+1));
   for(i=0;i<=ord;i++)defl[i]=a[i];
 
   for(m=ord;m>0;m--){
-    double new=0.f,delta;
+	double new=0.f,delta;
 
-    /* iterate a root */
-    while(1){
-      double p=defl[m],pp=0.f,ppp=0.f,denom;
+	/* iterate a root */
+	while(1){
+	  double p=defl[m],pp=0.f,ppp=0.f,denom;
 
-      /* eval the polynomial and its first two derivatives */
-      for(i=m;i>0;i--){
-        ppp = new*ppp + pp;
-        pp  = new*pp  + p;
-        p   = new*p   + defl[i-1];
-      }
+	  /* eval the polynomial and its first two derivatives */
+	  for(i=m;i>0;i--){
+		ppp = new*ppp + pp;
+		pp  = new*pp  + p;
+		p   = new*p   + defl[i-1];
+	  }
 
-      /* Laguerre's method */
-      denom=(m-1) * ((m-1)*pp*pp - m*p*ppp);
-      if(denom<0)
-        return(-1);  /* complex root!  The LPC generator handed us a bad filter */
+	  /* Laguerre's method */
+	  denom=(m-1) * ((m-1)*pp*pp - m*p*ppp);
+	  if(denom<0)
+		return(-1);  /* complex root!  The LPC generator handed us a bad filter */
 
-      if(pp>0){
-        denom = pp + sqrt(denom);
-        if(denom<EPSILON)denom=EPSILON;
-      }else{
-        denom = pp - sqrt(denom);
-        if(denom>-(EPSILON))denom=-(EPSILON);
-      }
+	  if(pp>0){
+		denom = pp + sqrt(denom);
+		if(denom<EPSILON)denom=EPSILON;
+	  }else{
+		denom = pp - sqrt(denom);
+		if(denom>-(EPSILON))denom=-(EPSILON);
+	  }
 
-      delta  = m*p/denom;
-      new   -= delta;
+	  delta  = m*p/denom;
+	  new   -= delta;
 
-      if(delta<0.f)delta*=-1;
+	  if(delta<0.f)delta*=-1;
 
-      if(fabs(delta/new)<10e-12)break;
-      lastdelta=delta;
-    }
+	  if(fabs(delta/new)<10e-12)break;
+//	  lastdelta=delta;
+	}
 
-    r[m-1]=new;
+	r[m-1]=new;
 
-    /* forward deflation */
+	/* forward deflation */
 
-    for(i=m;i>0;i--)
-      defl[i-1]+=new*defl[i];
-    defl++;
+	for(i=m;i>0;i--)
+	  defl[i-1]+=new*defl[i];
+	defl++;
 
   }
   return(0);
@@ -371,30 +371,30 @@ static int Newton_Raphson(float *a,int ord,float *r){
   for(i=0; i<ord;i++) root[i] = r[i];
 
   while(error>1e-20){
-    error=0;
+	error=0;
 
-    for(i=0; i<ord; i++) { /* Update each point. */
-      double pp=0.,delta;
-      double rooti=root[i];
-      double p=a[ord];
-      for(k=ord-1; k>= 0; k--) {
+	for(i=0; i<ord; i++) { /* Update each point. */
+	  double pp=0.,delta;
+	  double rooti=root[i];
+	  double p=a[ord];
+	  for(k=ord-1; k>= 0; k--) {
 
-        pp= pp* rooti + p;
-        p = p * rooti + a[k];
-      }
+		pp= pp* rooti + p;
+		p = p * rooti + a[k];
+	  }
 
-      delta = p/pp;
-      root[i] -= delta;
-      error+= delta*delta;
-    }
+	  delta = p/pp;
+	  root[i] -= delta;
+	  error+= delta*delta;
+	}
 
-    if(count>40)return(-1);
+	if(count>40)return(-1);
 
-    count++;
+	count++;
   }
 
   /* Replaced the original bubble sort with a real sort.  With your
-     help, we can eliminate the bubble sort in our lifetime. --Monty */
+	 help, we can eliminate the bubble sort in our lifetime. --Monty */
 
   for(i=0; i<ord;i++) r[i] = root[i];
   return(0);
@@ -426,10 +426,10 @@ int vorbis_lpc_to_lsp(float *lpc,float *lsp,int m){
   for(i=1;i<=g2_order;i++) g2[g2_order-i] = lpc[i-1]-lpc[m-i];
 
   if(g1_order>g2_order){
-    for(i=2; i<=g2_order;i++) g2[g2_order-i] += g2[g2_order-i+2];
+	for(i=2; i<=g2_order;i++) g2[g2_order-i] += g2[g2_order-i+2];
   }else{
-    for(i=1; i<=g1_order;i++) g1[g1_order-i] -= g1[g1_order-i+1];
-    for(i=1; i<=g2_order;i++) g2[g2_order-i] += g2[g2_order-i+1];
+	for(i=1; i<=g1_order;i++) g1[g1_order-i] -= g1[g1_order-i+1];
+	for(i=1; i<=g2_order;i++) g2[g2_order-i] += g2[g2_order-i+1];
   }
 
   /* Convert into polynomials in cos(alpha) */
@@ -438,8 +438,8 @@ int vorbis_lpc_to_lsp(float *lpc,float *lsp,int m){
 
   /* Find the roots of the 2 even polynomials.*/
   if(Laguerre_With_Deflation(g1,g1_order,g1r) ||
-     Laguerre_With_Deflation(g2,g2_order,g2r))
-    return(-1);
+	 Laguerre_With_Deflation(g2,g2_order,g2r))
+	return(-1);
 
   Newton_Raphson(g1,g1_order,g1r); /* if it fails, it leaves g1r alone */
   Newton_Raphson(g2,g2_order,g2r); /* if it fails, it leaves g2r alone */
@@ -448,9 +448,9 @@ int vorbis_lpc_to_lsp(float *lpc,float *lsp,int m){
   qsort(g2r,g2_order,sizeof(*g2r),comp);
 
   for(i=0;i<g1_order;i++)
-    lsp[i*2] = acos(g1r[i]);
+	lsp[i*2] = acos(g1r[i]);
 
   for(i=0;i<g2_order;i++)
-    lsp[i*2+1] = acos(g2r[i]);
+	lsp[i*2+1] = acos(g2r[i]);
   return(0);
 }
