@@ -219,6 +219,20 @@ struct SEED_CORE_API LayerObjectHeader
 	f32 fHeight;
 };
 
+struct SEED_CORE_API LayerMosaicHeader
+{
+	u32 iNameId;
+	f32 fPosX;
+	f32 fPosY;
+	f32 fAngle;
+	f32 fScale;
+	u32 iBlendType;
+	u32 iColor;
+	u32 iCollidable;
+	u32	iSpriteFileId;
+};
+
+
 BOOL SEED_CORE_API seed_validate_block(File *file, ObjectHeader *block, u32 magic, u32 version);
 
 } // namespace
