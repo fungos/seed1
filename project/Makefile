@@ -12,23 +12,26 @@ LD = ld
 GCC = g++
 CC = gcc
 
-CDEFS = -D_SDL_ -DSEED_BUILD 
+CDEFS = -D_SDL_ -DSEED_BUILD
 CFLAGS = -Wall -shared
 
 ifneq ($(mode),release)
 	CFLAGS += -g
 	CDEFS += -DDEBUG -DYMEM_DEBUG -DYMEM_PARANOID_CHECK -DSEED_ENABLE_PROFILER
+	mode = debug
 endif
 
 ifeq ($(license),commercial)
 	CDEFS += -DSEED_USE_COMMERCIAL
-	COMMERCIAL=YesPlease
+	COMMERCIAL = YesPlease
+else
+	license = LGPL
 endif
 
 CFLAGS += $(CDEFS) -I$(SEEDSDK)/seed/include -I$(SEEDSDK)/seeddemos/common/sdl -I.. -I../contrib
 CPPFLAGS = $(CFLAGS)
 LIBS = -lSeed -lSDL -lSDL_image
-LFLAGS = -L$(SEEDSDK)/seed/bin 
+LFLAGS = -L$(SEEDSDK)/seed/bin
 
 uname_S := $(shell sh -c 'uname -s 2>/dev/null || echo not')
 uname_M := $(shell sh -c 'uname -m 2>/dev/null || echo not')
@@ -94,7 +97,7 @@ include Objects.in
 
 all: $(TARGET)
 
-$(TARGET): $(OBJECTS)
+$(TARGET): info $(OBJECTS)
 ifdef WINDOWS
 ifdef COMMERCIAL
 	$(AR) $(AR_PARAM) $(TARGET) $(OBJECTS)
@@ -113,9 +116,15 @@ else
 endif
 
 info:
+	@echo
+	@echo ------------------------------------------------------------------------------------------------------------
 ifndef SEEDSDK
 	@echo Define the environment variable SEEDSDK to point to the base of the full Seed Framework
 else
 	@echo Using SEEDSDK=$(SEEDSDK)
 endif
 	@echo Platform: $(PLATFORM)
+	@echo Mode: $(mode)
+	@echo License: $(license)
+	@echo ------------------------------------------------------------------------------------------------------------
+	@echo
