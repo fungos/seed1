@@ -293,7 +293,8 @@ INLINE void OGL14RendererDevice::SetBlendingOperation(eBlendMode mode, PIXEL col
 		case BlendModulateAlpha:
 		{
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
 			u8 mA = PIXEL_GET_A(color);
 
@@ -611,7 +612,7 @@ INLINE void OGL14RendererDevice::Enable2D() const
 	// Save previous Renderer state
 	glPushAttrib(GL_DEPTH_BUFFER_BIT);
 	glDisable(GL_DEPTH_TEST);
-	glAlphaFunc(GL_GREATER, 0.1f);
+	//glAlphaFunc(GL_GREATER, 0.1f); /* Blending alpha png fudido, arrumar per-texture */
 	glEnable(GL_ALPHA_TEST);
 
 	glEnable(GL_TEXTURE_2D);
