@@ -205,6 +205,8 @@ struct SEED_CORE_API LayerHeader
 	u32 iNameId;
 	u32 iVisible;
 	f32 fOpacity;
+	f32 fWidth;
+	f32 fHeight;
 	u32 iDataIndex;
 };
 
@@ -225,7 +227,9 @@ struct SEED_CORE_API LayerMosaicHeader
 	f32 fPosX;
 	f32 fPosY;
 	f32 fAngle;
-	f32 fScale;
+	f32 fScaleX;
+	f32 fScaleY;
+	u32 iPriority;
 	u32 iBlendType;
 	u32 iColor;
 	u32 iCollidable;
